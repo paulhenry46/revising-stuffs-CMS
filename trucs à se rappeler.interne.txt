@@ -1,0 +1,30 @@
+trucs à se rappeler
+===Roles===
+//$role = Role::create(['name' => 'admin']);
+//$role = Role::create(['name' => 'contributor']);
+//$role = Role::create(['name' => 'moderator']);
+//$permission = Permission::create(['name' => 'manage own articles']);
+//$permission = Permission::create(['name' => 'create articles']);
+// $permission = Permission::create(['name' => 'manage all articles']);
+//$permission = Permission::create(['name' => 'publish all articles']);
+// $permission = Permission::create(['name' => 'publish own articles']);
+//$permission = Permission::create(['name' => 'manage users']);
+//$permission = Permission::create(['name' => 'manage own comments']);
+// $permission = Permission::create(['name' => 'manage all comments']);
+//$permission = Permission::create(['name' => 'manage courses']);
+// $permission = Permission::create(['name' => 'manage levels']);
+//$role->givePermissionTo(['edit articles', 'delete articles']);
+//$user = User::where('name','essai2222')->first();
+//dd($role);
+//$user->assignRole('super-admin');
+//$user->removeRole('admin');
+/*
+$role = Role::findByName('contributor');
+$role->syncPermissions(['publish own articles']);
+$role = Role::findByName('moderator');
+$role->syncPermissions(['publish all articles', 'manage all comments']);
+$role = Role::findByName('admin');
+$role->syncPermissions(['manage all articles', 'manage users','manage courses', 'manage levels']);*/
+//$role->delete();
+
+//$user->assignRole('student');

@@ -1,0 +1,23 @@
+<?php
+
+namespace App\View\Components;
+
+use Illuminate\View\Component;
+use Illuminate\View\View;
+
+class LevelEdit extends Component
+{
+    public $level;
+    public function __construct($level)
+    {
+        //
+        $this->level=$level;
+    }
+    /**
+     * Get the view / contents that represents the component.
+     */
+    public function render(): View
+    {
+        return view('components.courses-edit');
+    }
+}
