@@ -1,15 +1,151 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+    @php
+     $breadcrumb = array (
+  array(__('Dashboard'),NULL)
+        );
+    $user = Auth::user()
+      @endphp
 
+     <x-breadcrumb :items=$breadcrumb/>
+    </x-slot>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
-                <x-welcome />
+                <div class="p-6 lg:p-8 bg-white dark:bg-gray-800 dark:bg-gradient-to-bl dark:from-gray-700/50 dark:via-transparent border-b border-gray-200 dark:border-gray-700">
+                  <div class="sm:flex sm:items-center">
+                    <div class="sm:flex-auto">
+                      <h1 class="text-2xl font-semibold leading-6 text-gray-900 dark:text-white">{{__('Dashboard')}}</h1>
+                    </div>
+                   
+                  </div>
+                </div>
+                <div class="bg-gray-200 dark:bg-gray-800 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
+                    <x-info-message/>
+                    <div class="grid grid-cols-6 gap-4">
+                        <div class="col-span-2">
+                            <div class="pt-2">
+                                <div class="card bg-base-100 shadow-xl">
+                                    <div class="card-body">
+                                        <h2 class="card-title">Your profile</h2>
+                                        <div class="flex items-center justify-center">
+                                            <div class="avatar">
+                                                <div class="w-24 rounded-full ring ring-error ring-offset-base-100 ring-offset-2">
+                                                    <img src="{{$user->profile_photo_url}}" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center justify-center">
+                                            <h5>{{$user->name}} <span class="badge badge-error badge-sm">Admin</span></h5>
+                                        </div>
+                                        <div class="text-center justify-center">
+                                            <p>{{$user->bio}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-span-4">
+                            <div class="pt-2">
+                                <div class="stats shadow w-full">
+                                    <div class="stat">
+                                      <div class="stat-figure text-primary">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                                      </div>
+                                      <div class="stat-title">{{__('Total Thanks')}}</div>
+                                      <div class="stat-value text-primary"><span class="loading loading-spinner text-primary"></span></div>
+                                      
+                                    </div>
+                                    
+                                    <div class="stat">
+                                      <div class="stat-figure text-secondary">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                      </div>
+                                      <div class="stat-title">{{__('Published posts')}}</div>
+                                      <div class="stat-value text-secondary"><span class="loading loading-spinner"></span></div>
+                                      
+                                    </div>
+                                    
+                                    <div class="stat">
+                                        <div class="stat-figure text-success">
+                                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                        </div>
+                                        <div class="stat-title">{{__('Published cards')}}</div>
+                                        <div class="stat-value text-success"><span class="loading loading-spinner"></span></div>
+                                        
+                                      </div>
+                                    
+                                  </div>
+                        </div>
+                        <div class="pt-2">
+                            <div class="card bg-base-100 shadow-xl">
+                                <div class="card-body">
+                                    <h2 class="card-title">{{__('Your posts')}}</h2>
+                                    <a wire:navigate href="{{route('posts.index')}}" class="btn btn-primary">
+                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M120-160q-17 0-28.5-11.5T80-200q0-17 11.5-28.5T120-240h720q17 0 28.5 11.5T880-200q0 17-11.5 28.5T840-160H120Zm80-160q-17 0-28.5-11.5T160-360v-240q0-17 11.5-28.5T200-640q17 0 28.5 11.5T240-600v240q0 17-11.5 28.5T200-320Zm160 0q-17 0-28.5-11.5T320-360v-400q0-17 11.5-28.5T360-800q17 0 28.5 11.5T400-760v400q0 17-11.5 28.5T360-320Zm160 0q-17 0-28.5-11.5T480-360v-400q0-17 11.5-28.5T520-800q17 0 28.5 11.5T560-760v400q0 17-11.5 28.5T520-320Zm275-20q-14 8-30.5 3.5T740-355L620-565q-8-14-3.5-30.5T635-620q14-8 30.5-3.5T690-605l120 210q8 14 3.5 30.5T795-340Z"/></svg>
+                                        Manage
+                                    </a>
+                                    <a wire:navigate href="{{route('posts.create')}}" class="btn btn-secondary">
+                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M440-440v120q0 17 11.5 28.5T480-280q17 0 28.5-11.5T520-320v-120h120q17 0 28.5-11.5T680-480q0-17-11.5-28.5T640-520H520v-120q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640v120H320q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440h120ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Z"/></svg>
+                                        Create
+                                    </a>
+                                    <a wire:navigate href="{{route('comments.show')}}" class="btn btn-accent">
+                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M280-240q-17 0-28.5-11.5T240-280v-80h520v-360h80q17 0 28.5 11.5T880-680v503q0 27-24.5 37.5T812-148l-92-92H280Zm-40-200-92 92q-19 19-43.5 8.5T80-377v-463q0-17 11.5-28.5T120-880h520q17 0 28.5 11.5T680-840v360q0 17-11.5 28.5T640-440H240Z"/></svg>
+                                        View comments
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        @role('moderator')
+                        <div class="pt-2">
+                            <div class="card bg-base-100 shadow-xl">
+                                <div class="card-body">
+                                    <h2 class="card-title">{{__('Special functions')}}</h2>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                    <a wire:navigate href="{{route('comments.moderate')}}" class="btn btn-warning w-full">
+                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m694-273 142-142q12-12 28-11.5t28 12.5q11 12 11.5 28T892-358L722-188q-12 12-28 12t-28-12l-85-86q-11-11-11.5-27.5T581-330q11-11 28-11t28 11l57 57Zm-454 33-92 92q-19 19-43.5 8.5T80-177v-623q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v240q0 17-11.5 28.5T840-520H560q-33 0-56.5 23.5T480-440v160q0 17-11.5 28.5T440-240H240Z"/></svg>
+                                        Validate comments
+                                    </a>
+                                </div>
+                                <div>
+                                    <a wire:navigate href="{{route('posts.create')}}" class="btn btn-warning w-full">
+                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m424-408-86-86q-11-11-28-11t-28 11q-11 11-11 28t11 28l114 114q12 12 28 12t28-12l226-226q11-11 11-28t-11-28q-11-11-28-11t-28 11L424-408Zm56 328q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"/></svg>
+                                        Validate posts
+                                    </a>
+                                </div>
+                                @role('admin')
+                                <div class="col-span-2 divider"></div> 
+                                <div class="col-span-2">
+                                    <a wire:navigate href="{{route('users.index')}}" class="btn btn-error w-full">
+                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M80-240v-32q0-33 17-62t47-44q51-26 115-44t141-18h14q6 0 12 2-29 72-24 143t48 135H160q-33 0-56.5-23.5T80-240Zm600 0q33 0 56.5-23.5T760-320q0-33-23.5-56.5T680-400q-33 0-56.5 23.5T600-320q0 33 23.5 56.5T680-240ZM400-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Zm234 328-6-28q-12-5-22.5-10.5T584-204l-29 9q-13 4-25.5-1T510-212l-8-14q-7-12-5-26t13-23l22-19q-2-14-2-26t2-26l-22-19q-11-9-13-22.5t5-25.5l9-15q7-11 19-16t25-1l29 9q11-8 21.5-13.5T628-460l6-29q3-14 13.5-22.5T672-520h16q14 0 24.5 9t13.5 23l6 28q12 5 22.5 11t21.5 15l27-9q14-5 27 0t20 17l8 14q7 12 5 26t-13 23l-22 19q2 12 2 25t-2 25l22 19q11 9 13 22.5t-5 25.5l-9 15q-7 11-19 16t-25 1l-29-9q-11 8-21.5 13.5T732-180l-6 29q-3 14-13.5 22.5T688-120h-16q-14 0-24.5-9T634-152Z"/></svg>
+                                        Manage users
+                                    </a>
+                                </div>
+                                <div>
+                                    <a wire:navigate href="{{route('courses.index')}}" class="btn btn-error w-full">
+                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m297-581 149-243q6-10 15-14.5t19-4.5q10 0 19 4.5t15 14.5l149 243q6 10 6 21t-5 20q-5 9-14 14.5t-21 5.5H331q-12 0-21-5.5T296-540q-5-9-5-20t6-21ZM700-80q-75 0-127.5-52.5T520-260q0-75 52.5-127.5T700-440q75 0 127.5 52.5T880-260q0 75-52.5 127.5T700-80Zm-580-60v-240q0-17 11.5-28.5T160-420h240q17 0 28.5 11.5T440-380v240q0 17-11.5 28.5T400-100H160q-17 0-28.5-11.5T120-140Z"/></svg>                                        
+                                        Manage courses
+                                    </a>
+                                </div>
+                                <div>
+                                    <a wire:navigate href="{{route('levels.index')}}" class="btn btn-error w-full">
+                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M840-320v-236L518-381q-18 10-38 10t-38-10L104-565q-11-6-15.5-15T84-600q0-11 4.5-20t15.5-15l338-184q9-5 18.5-7.5T480-829q10 0 19.5 2.5T518-819l381 208q10 5 15.5 14.5T920-576v256q0 17-11.5 28.5T880-280q-17 0-28.5-11.5T840-320ZM442-141 242-249q-20-11-31-30t-11-41v-152l242 131q18 10 38 10t38-10l242-131v152q0 22-11 41t-31 30L518-141q-9 5-18.5 7.5T480-131q-10 0-19.5-2.5T442-141Z"/></svg>                                        Manage levels
+                                    </a>
+                                </div>
+                                @endrole
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endrole
+                    </div>
+                    <div class="col-span-4">
+                        <div class="pt-2">
+                            
+                    </div>
+                </div>
+                </div>
             </div>
         </div>
-    </div>
 </x-app-layout>
