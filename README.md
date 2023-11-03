@@ -21,8 +21,6 @@ RSCMS is a web app wich allow user to easily publish and share their revissing s
 - pin contents
 - create complementary documents attached to a content
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
 ## Tech Stack
 #### Back-end
 - Laravel 10
@@ -36,16 +34,16 @@ Laravel is accessible, powerful, and provides tools required for large, robust a
 - Vanilla JS for the flashcard Quiz and Learn Mode
 
 ## Installation
-- Create BDD
+- Create BDD 
 - Install Imagick and Ghostscript
-- Clone the app and install it
-- run composer install and npm install
+- Clone the app and move it to whre you want
+- run `composer install` and `npm install`
 - edit .env file
-- php artisan key:generate
-- php artisan migrate
-- php artisan seed
+- `php artisan key:generate`
+- `php artisan migrate`
+- `php artisan seed`
 
-An admin user is created, so you can login with : Mail : admin@system.localhost / Password : d4d5ehdpdepd81 
+An admin user is created, so you can login with : Mail : `admin@system.localhost` / Password : `d4d5ehdpdepd81 `
 
 Don't forget to change the password !
 
@@ -53,10 +51,6 @@ Don't forget to change the password !
 ## Contributing
 
 Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
 ## Security Vulnerabilities
 
