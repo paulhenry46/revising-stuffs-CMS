@@ -8,6 +8,7 @@ use App\Models\Comment;
 use App\Models\Post;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\NewComment;
 
 class CommentController extends Controller
 {
@@ -55,6 +56,9 @@ class CommentController extends Controller
     $comment->type = $request->type;
     $comment->post_id = $post->id;
     $comment->save();
+    if($comment->validated){
+    $post->user->notify(new NewComment($comment));
+    }
     return redirect()->route('post.public.view', [$post->slug, $post->id])->with('message', $message);
     }
 }
