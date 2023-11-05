@@ -159,7 +159,7 @@
                                     </div>
                                     <div class="chat-bubble chat-bubble-primary">{{$comment->content}}</div>
                                 </div>
-                                    @elseif($comment->user->hasRole('admin'))
+                                    @elseif($comment->user->hasRole('admin') and $comment->user_id != 1)
                                 <div class="chat chat-start">
                                     <div class="chat-image avatar">
                                         <div class="w-10 rounded-full">
@@ -172,7 +172,7 @@
                                     </div>
                                     <div class="chat-bubble chat-bubble-warning">{{$comment->content}}</div>
                                 </div>
-                                    @elseif($comment->user->hasRole('moderator'))
+                                    @elseif($comment->user->hasRole('moderator') and $comment->user_id != 1)
                                 <div class="chat chat-start">
                                     <div class="chat-image avatar">
                                         <div class="w-10 rounded-full">

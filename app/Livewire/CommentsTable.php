@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Comment;
 use App\Models\Post;
 use Livewire\WithPagination;
+use App\Notifications\NewComment;
 
 class CommentsTable extends Component
 {
@@ -81,6 +82,10 @@ class CommentsTable extends Component
 
     public function validateComments(array $ids){
         Comment::whereIn('id', $ids)->update(['validated' => 1]);
+        $comments = Comment::whereIn('id', $ids)->get();
+        foreach($comments as $comment){
+            $comment->post->user->notify(new NewComment($comment));
+        }
         $this->selection = [];
         $this->resetPage();
         session()->flash('message', __('The comment has been validated.'));
@@ -95,6 +100,8 @@ class CommentsTable extends Component
 
     public function validateComment($id){
         Comment::where('id', '=', $id)->update(['validated' => 1]);
+        $comment = Comment::where('id', '=', $id)->first();
+        $comment->post->user->notify(new NewComment($comment));
         $this->selection = [];
         $this->resetPage();
         session()->flash('message', __('The comment has been validated.'));
