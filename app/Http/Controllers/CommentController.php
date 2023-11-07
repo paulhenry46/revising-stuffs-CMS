@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Http\Requests\CommentCreateRequest;
 use App\Models\Comment;
 use App\Models\Post;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\NewComment;
 
