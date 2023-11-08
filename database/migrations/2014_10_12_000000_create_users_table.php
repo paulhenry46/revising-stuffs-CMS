@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('bio')->nullable();
             $table->string('social_network_link')->nullable();
             $table->integer('telegram_chat_id')->nullable();
-            $table->json('favorite_posts')->nullable();
+            $table->json('favorite_posts')->default('[0]')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
