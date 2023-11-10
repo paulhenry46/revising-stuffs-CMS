@@ -60,6 +60,10 @@ Route::middleware([
         Route::get('/moderateComments', [CommentController::class, 'indexModerator'])->name('comments.moderate');
     });
 
+    Route::group(['middleware' => ['can:manage all posts']], function () {
+        Route::get('/moderatePosts', [PostController::class, 'indexModerator'])->name('posts.moderate');
+    });
+
     Route::group(['middleware' => ['can:manage levels']], function () {
         Route::resource('levels', LevelController::class)->except(['show']);
     });

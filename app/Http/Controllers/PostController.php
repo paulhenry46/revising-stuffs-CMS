@@ -13,6 +13,11 @@ use Auth;
 
 class PostController extends Controller
 {
+    public function indexModerator()
+    {   //$posts = Post::where('validated', '=', 0)->get();
+        return view('posts.moderate');//->with('posts', $posts);
+    }
+
     public function viewPublic(string $slug, Post $post)
     {
         if($slug != $post->slug){
