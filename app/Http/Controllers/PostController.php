@@ -94,6 +94,9 @@ class PostController extends Controller
     }
     if($user->hasPermissionTo('manage all posts')){
         $post->pinned = $request->has('pinned');
+        if($request->date !== NULL){
+            $post->created_at = $request->date;
+        }
     }else{
         $post->pinned = false;
     }

@@ -157,6 +157,12 @@
       </div>
     </div>
   </div>
+  <div class="sm:col-span-3">
+    <label for="name" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Date')}}</label>
+    <div class="mt-2">
+      <input value="{{ old('date', $post->created_at) }}" type="datetime-local" name="date" id="date" class="input input-bordered max-w">
+    </div>
+  </div>
   @endcan
   </div>
 </fieldset>

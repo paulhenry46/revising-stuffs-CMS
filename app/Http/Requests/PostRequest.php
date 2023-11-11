@@ -32,7 +32,8 @@ class PostRequest extends FormRequest
             'dark_version' => '',
             'public' => '',
             'published' => '',
-            'pinned' => ''
+            'pinned' => '',
+            'date' => ''
 
         ];
     }
