@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Post;
 use Livewire\WithPagination;
 use App\Notifications\PostValidated;
+use App\Notifications\PostDeleted;
 use Illuminate\Support\Facades\Storage;
 
 class PostsTable extends Component
@@ -13,6 +14,8 @@ class PostsTable extends Component
     use WithPagination;
 
     public array $selection = [];
+    public string $reasons = '';
+    public string $mass_reasons = '';
     public function updating($name, $value){
     }
 
@@ -87,15 +90,22 @@ class PostsTable extends Component
              $event->delete();
          }
      //Delete the comments
+     $comments = $post->comments;
+         foreach ($comments as $comment) {
+             $comment->delete();
+         }
      //Delete the post
          $post->delete();
     }
     public function deletePosts(array $ids){
         $posts = Post::whereIn('id', $ids)->get();
         foreach($posts as $post){
+            $title = $post->title;
+            $post->user->notify(new PostDeleted($title, $this->mass_reasons));
             $this->destroyPost($post);
         }
         $this->selection = [];
+        $this->mass_reasons = '';
         $this->resetPage();
         session()->flash('message', __('The post has been deleted.'));
     }
@@ -112,11 +122,14 @@ class PostsTable extends Component
     }
 
     public function deletePost($id){
-        $post = Post::where('id', '=', $id)->get();
+        $post = Post::where('id', '=', $id)->first();
+        $title = $post->title;
+        $post->user->notify(new PostDeleted($title, $this->reasons));
         $this->destroyPost($post);
         $this->selection = [];
+        $this->reasons = '';
         $this->resetPage();
-        session()->flash('message', __('The comment has been deleted.'));
+        session()->flash('message', __('The post has been deleted.'));
     }
 
     public function validatePost($id){
@@ -125,7 +138,7 @@ class PostsTable extends Component
         $post->user->notify(new PostValidated($post));
         $this->selection = [];
         $this->resetPage();
-        session()->flash('message', __('The comment has been validated.'));
+        session()->flash('message', __('The post has been published.'));
     }
 
     public function render()

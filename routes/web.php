@@ -50,28 +50,21 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-
-    
     Route::group(['middleware' => ['can:manage courses']], function () {
         Route::resource('courses', CourseController::class)->except(['show']);
     });
-
     Route::group(['middleware' => ['can:manage all comments']], function () {
         Route::get('/moderateComments', [CommentController::class, 'indexModerator'])->name('comments.moderate');
     });
-
     Route::group(['middleware' => ['can:manage all posts']], function () {
         Route::get('/moderatePosts', [PostController::class, 'indexModerator'])->name('posts.moderate');
     });
-
     Route::group(['middleware' => ['can:manage levels']], function () {
         Route::resource('levels', LevelController::class)->except(['show']);
     });
-
     Route::group(['middleware' => ['can:manage users']], function () {
         Route::resource('users', UserController::class)->except(['show']);
     });
-
     Route::group(['middleware' => ['can:manage own posts']], function () {
         //Manage the posts
         Route::resource('posts', PostController::class);
