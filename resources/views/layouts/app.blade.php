@@ -4,7 +4,6 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <meta name="coucou" content="tg">
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
@@ -43,4 +42,15 @@
 
         @livewireScripts
     </body>
+    <footer class="footer footer-center p-10 bg-neutral text-neutral-content">
+        <aside>
+            <x-application-mark class="block h-9 w-auto" />
+          <p class="font-bold">
+            {{env('APP_NAME')}}
+          </p> 
+          <p>Copyright ©2019-2023 - All right reserved</p></br>
+          <p>Works thanks to RSCMS, under MIT license</p>
+        </aside> 
+        
+      </footer>
 </html>

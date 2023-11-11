@@ -1,4 +1,4 @@
-<div class="card h-full bg-base-100 shadow-xl">
+<div class="card h-full dark:bg-base-100 bg-{{str_replace('500', '100',$post->course->color)}} shadow-xl">
                                     <figure><img class="object-cover w-full h-48" src="{{url('storage/'.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png')}}" alt="Shoes" />
                                       <div class="right-0 top-0 absolute pin-t pin-l ">
                                         @auth

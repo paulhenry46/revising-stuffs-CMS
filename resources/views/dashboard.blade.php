@@ -23,7 +23,7 @@
                 <div class="bg-gray-200 dark:bg-gray-800 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
                     <x-info-message/>
                     <div class="grid grid-cols-6 gap-4">
-                        <div class="col-span-2">
+                        <div class="col-span-6 sm:col-span-2">
                             <div class="pt-2">
                                 <div class="card bg-base-100 shadow-xl">
                                     <div class="card-body">
@@ -65,7 +65,7 @@
 <livewire:notifications-dashboard :$user lazy/>
 
                         </div>
-                        <div class="col-span-4">
+                        <div class="col-span-6 sm:col-span-4">
                             <div class="pt-2">
                                 <div class="stats shadow w-full">
                                     <div class="stat">
@@ -97,8 +97,8 @@
                                     
                                   </div>
                         </div>
-                        <div class="pt-2">
-                            <div class="card bg-base-100 shadow-xl">
+                            <div class="pt-2">
+                                <div class="card bg-base-100 shadow-xl">
                                 <div class="card-body">
                                     <h2 class="card-title">{{__('Your posts')}}</h2>
                                     <a wire:navigate href="{{route('posts.index')}}" class="btn btn-primary">
@@ -114,8 +114,8 @@
                                         View comments
                                     </a>
                                 </div>
+                                </div>
                             </div>
-                        </div>
                         @role('moderator')
                         <div class="pt-2">
                             <div class="card bg-base-100 shadow-xl">
@@ -160,11 +160,6 @@
                         </div>
                         @endrole
                     </div>
-                    <div class="col-span-4">
-                        <div class="pt-2">
-                            
-                    </div>
-                </div>
                 </div>
             </div>
         </div>

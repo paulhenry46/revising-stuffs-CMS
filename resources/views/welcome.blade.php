@@ -3,7 +3,7 @@
     </x-slot>
     <div class="py-12">
         <div class="sm:px-6 px-2">
-            <div class="bg-white dark:bg-gray-900 overflow-hidden shadow-xl sm:rounded-lg">
+            <div class=" dark:bg-gray-900 overflow-hidden dark:shadow-xl sm:rounded-lg">
                 
                 <div class="">
                     <x-info-message/>
