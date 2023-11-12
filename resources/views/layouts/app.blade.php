@@ -49,7 +49,7 @@
             {{env('APP_NAME')}}
           </p> 
           <p>Copyright ©2019-2023 - All right reserved</p></br>
-          <p>Works thanks to RSCMS, under MIT license</p>
+          <p>Works thanks to <a href="https://github.com/paulhenry46/revising-stuffs-CMS">RSCMS</a>, under MIT license</p>
         </aside> 
         
       </footer>
