@@ -33,7 +33,7 @@ RSCMS is a web app wich allow user to easily publish and share their revissing s
 - edit .env file
 - `php artisan key:generate`
 - `php artisan migrate`
-- `php artisan seed`
+- `php artisan db:seed`
 
 An admin user is created, so you can login with : Mail : `admin@system.localhost` / Password : `d4d5ehdpdepd81 `
 
@@ -46,7 +46,7 @@ Thank you for considering contributing to the Laravel framework! The contributio
 
 ## Security Vulnerabilities
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [paulhenry@paulhenry.eu](mailto:paulhenry@paulhenry.eu). All security vulnerabilities will be promptly addressed.
+If you discover a security vulnerability within Laravel, please send an e-mail to Paulhenry via [paulhenry@paulhenry.eu](mailto:paulhenry@paulhenry.eu). All security vulnerabilities will be promptly addressed.
 
 ## License
 
