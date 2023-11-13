@@ -1,6 +1,6 @@
 <div class="p-6 lg:p-8 bg-white dark:bg-gray-800 dark:bg-gradient-to-bl dark:from-gray-700/50 dark:via-transparent border-b border-gray-200 dark:border-gray-700">
 
-    <h1 class=" text-2xl font-medium text-gray-900 dark:text-white">
+    <h1 class=" decoration-4 underline decoration-primary text-2xl font-medium text-gray-900 dark:text-white">
         {{__('New posts')}}
     </h1>
     <p>See the latest posts created</p>
