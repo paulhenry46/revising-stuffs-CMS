@@ -1,6 +1,34 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html data-theme="dark" class="dark" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
+    <script type="text/javascript">
+        function changeTheme() {
+            if (localStorage.theme === 'light' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: light)').matches)) {
+                document.querySelector('html').setAttribute('data-theme', 'light')
+                  document.querySelector('html').classList.remove('dark')
+                document.querySelector('html').classList.add('light')
+                localStorage.theme = 'light'
+ 
+} else {
+  document.querySelector('html').setAttribute('data-theme', 'dark')
+  document.querySelector('html').classList.remove('light')
+  document.querySelector('html').classList.add('dark')
+  localStorage.theme = 'dark'
+}
+        }
+
+        window.onload = changeTheme;
+    
+function editTheme(){
+    
+    if ( localStorage.theme === 'dark'){
+        localStorage.theme = 'light'
+    }else{
+        localStorage.theme = 'dark'
+    }
+    changeTheme()
+}
+      </script>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -44,6 +72,7 @@
     </body>
     <footer class="footer footer-center p-10 bg-neutral text-neutral-content">
         <aside>
+            <button onclick="editTheme()" class="btn btn-primary">{{__('Change theme')}}</button>
             <x-application-mark class="block h-9 w-auto" />
           <p class="font-bold">
             {{env('APP_NAME')}}
@@ -53,4 +82,5 @@
         </aside> 
         
       </footer>
+      
 </html>

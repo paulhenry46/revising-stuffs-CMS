@@ -17,7 +17,7 @@
                 <label for="location" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Course')}}</label>
                 <div class="mt-2">
                 <select wire:model.live="course" id="location" class="select select-primary w-full">
-                    <option value="">Any</option>
+                    <option value="">{{__('Any')}}</option>
                     @foreach($courses as $course)
                     <option value="{{ $course->id }}">{{ $course->name }}</option>
                 @endforeach
@@ -30,7 +30,7 @@
                 <label for="location" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Level')}}</label>
                 <div class="mt-2">
                 <select wire:model.live="level" id="location" class=" select select-primary w-full">
-                    <option value="">Any</option>
+                    <option value="">{{__('Any')}}</option>
                     @foreach($levels as $level)
                     <option value="{{ $level->id }}">{{ $level->name }}</option>
                 @endforeach
@@ -42,19 +42,19 @@
             <label for="location" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Particularities')}}</label>
             <div class="form-control w-52">
     <label class="cursor-pointer label">
-      <span class="label-text">{{('Only with Dark version')}}</span> 
+      <span class="label-text">{{__('Only with Dark version')}}</span> 
       <input wire:model.live="dark" type="checkbox" class="toggle toggle-primary" />
     </label>
   </div>
   <div class="form-control w-52">
     <label class="cursor-pointer label">
-      <span class="label-text">{{('Only with Quizlet')}}</span> 
+      <span class="label-text">{{__('Only with Quizlet')}}</span> 
       <input wire:model.live="quizlet" type="checkbox" class="toggle toggle-primary"  />
     </label>
   </div>
   <div class="form-control w-52">
     <label class="cursor-pointer label">
-      <span class="label-text">{{('Only with Cards')}}</span> 
+      <span class="label-text">{{__('Only with Cards')}}</span> 
       <input wire:model.live="cards" type="checkbox" class="toggle toggle-primary" disabled />
     </label>
   </div>
@@ -64,7 +64,7 @@
          <label for="location" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Type')}}</label>
         <div class="form-control">
   <label class="cursor-pointer label">
-    <span class="label-text">{{('Mindmap')}}</span>
+    <span class="label-text">{{__('Mindmap')}}</span>
     <input value="mindmap" wire:model.live="types" type="checkbox" class="checkbox checkbox-success" />
   </label>
 </div>
