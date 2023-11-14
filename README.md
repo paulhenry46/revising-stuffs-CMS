@@ -34,6 +34,7 @@ RSCMS is a web app wich allow user to easily publish and share their revissing s
 - `php artisan key:generate`
 - `php artisan migrate`
 - `php artisan db:seed`
+- `npm run build`
 
 An admin user is created, so you can login with : Mail : `admin@system.localhost` / Password : `d4d5ehdpdepd81 `
 
