@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('cards', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('front');
-            $table->string('back');
+            $table->mediumText('front');
+            $table->mediumText('back');
             $table->foreignId('post_id')
             ->constrained()
             ->onUpdate('restrict')
