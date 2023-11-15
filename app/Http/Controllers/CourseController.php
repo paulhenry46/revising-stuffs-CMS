@@ -35,6 +35,7 @@ class CourseController extends Controller
     $course = new Course;
     $course->name = $request->name;
     $course->color = $request->color;
+    $course->lang = $request->lang;
     $course->slug = Str::slug($request->name, '-');
     $course->save();
     return redirect()->route('courses.index')->with('message', __('The course has been created.'));
@@ -56,6 +57,7 @@ class CourseController extends Controller
     {
     $course->name = $request->name;
     $course->color = $request->color;
+    $course->lang = $request->lang;
     $course->slug = $slug = Str::slug($request->name, '-');
     $course->save();
     return redirect()->route('courses.index')->with('message', __('The course has been modified.'));

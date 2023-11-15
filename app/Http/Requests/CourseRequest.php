@@ -23,7 +23,8 @@ class CourseRequest extends FormRequest
     {
         return [
             'name' => 'bail|required|min:3',
-            'color' => 'bail|required|min:4'
+            'color' => 'bail|required|min:4',
+            'lang' => 'max:2'
         ];
     }
 }
