@@ -47,7 +47,7 @@ class Library extends Component
             })
             ->when($this->quizlet, function($query){
                 return $query->where('quizlet_url', '!=', NULL);
-            })
+            })->orderBy('id', 'desc')
             ->get(),
             'courses' => $courses = Course::all(),
             'levels' => $levels = Level::all()

@@ -19,8 +19,8 @@
                         <h1 class="text-2xl font-semibold leading-6 text-gray-900 dark:text-white">{{__('Cards attached to')}} {{$post->title}}</h1>
                       </div>
                      <div class="flex items-stretch justify-end mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                        <a href="{{route('post.public.cards.learn', [$post->slug, $post->id])}}" class=" ml-4 btn btn-primary">{{__('Learn mode')}}</a>
-                        <a href="{{route('post.public.cards.show', [$post->slug, $post->id])}}" class=" ml-4 btn btn-primary">{{__('View')}}</a>
+                        <a wire:navigate href="{{route('post.public.cards.learn', [$post->slug, $post->id])}}" class=" ml-4 btn btn-primary">{{__('Learn mode')}}</a>
+                        <a wire:navigate href="{{route('post.public.cards.show', [$post->slug, $post->id])}}" class=" ml-4 btn btn-primary">{{__('View')}}</a>
                       </div>
                     </div>
                 </div>
@@ -30,7 +30,7 @@
 <div class="grid grid-cols-3 gap-4">
   <div class="col-span-3">
     <div class="stack w-full h-64 sm:h-80">
-    <label id="cards" data-state="defaut" class=" duration-500 data-[state=success]:bg-success dark:data-[state=success]:bg-success-content data-[state=fail]:bg-warning dark:data-[state=fail]:bg-warning-content transition ease-in-out swap grid w-full h-full rounded dark:bg-base-100 bg-white text-primary-content place-content-center">
+    <label id="cards" data-state="defaut" class=" duration-500 data-[state=success]:bg-success dark:data-[state=success]:bg-success-content data-[state=fail]:bg-warning dark:data-[state=fail]:bg-warning-content transition ease-in-out swap grid w-full h-full rounded dark:bg-base-100 bg-white text-dark dark:text-primary-content place-content-center">
       <input type="checkbox" />
       <div id="back" class="swap-on text-center"></div>
       <div id="front" class="swap-off text-center"></div>

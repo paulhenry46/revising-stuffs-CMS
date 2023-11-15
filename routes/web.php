@@ -89,7 +89,7 @@ Route::middleware([
             });
         });
 
-        //Manage the files attached to the posts
+        //Manage the cards attached to the posts
         Route::controller(CardController::class)->prefix('/posts/{post}/cards')->name('cards.')->group(function () {
             Route::get('/', 'index')->name('index');
 
