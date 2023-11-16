@@ -139,7 +139,7 @@
 </div>
 <div class="relative flex items-start">
   <div class="flex h-6 items-center">
-    <input {{ (old('public', $post->public) == 'public' or old('public', $post->public) == 'on') ? 'checked' : '' }} id="public" aria-describedby="public-description" name="public" type="checkbox" checked="checked" class="checkbox checkbox-primary checkbox-sm" />
+    <input {{ (old('public', $post->public) == 'public') ? 'checked' : '' }} id="public" aria-describedby="public-description" name="public" type="checkbox" class="checkbox checkbox-primary checkbox-sm" />
 
   </div>
   <div class="ml-3 text-sm leading-6">
@@ -163,7 +163,7 @@
 <div class="sm:col-span-3">
 <div class="relative flex items-start">
   <div class="flex h-6 items-center">
-    <input id="published" aria-describedby="dark_version-description" name="published" type="checkbox" checked="checked" class="checkbox checkbox-primary checkbox-sm" />
+    <input {{ (old('published', $post->published) === 1) ? 'checked' : '' }} id="published" aria-describedby="dark_version-description" name="published" type="checkbox" class="checkbox checkbox-primary checkbox-sm" />
   </div>
   <div class="ml-3 text-sm leading-6">
     <label for="published" class="font-medium text-gray-900 dark:text-white">{{__('Publish post')}}</label>
@@ -175,7 +175,7 @@
 <div class="sm:col-span-3">
 <div class="relative flex items-start">
   <div class="flex h-6 items-center">
-    <input id="pinned" aria-describedby="public-description" name="pinned" type="checkbox" checked="checked" class="checkbox checkbox-warning checkbox-sm" />
+    <input {{ (old('pinned', $post->pinned) === 1) ? 'checked' : '' }} id="pinned" aria-describedby="public-description" name="pinned" type="checkbox"  class="checkbox checkbox-warning checkbox-sm" />
   </div>
   <div class="ml-3 text-sm leading-6">
     <label for="pinned" class="font-medium text-gray-900 dark:text-white">{{__('Pin post')}}</label>
