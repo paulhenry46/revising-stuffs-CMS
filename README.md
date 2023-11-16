@@ -26,9 +26,18 @@ RSCMS is a web app wich allow user to easily publish and share their revissing s
 - Vanilla JS for the flashcard Quiz and Learn Mode
 
 ## Installation
-- Create BDD 
+- Create and set up BDD :
+    - `sudo mysql -u root -p`
+    - `CREATE DATABASE yourDBName;`
+    - `CREATE USER 'yourDBUser'@'localhost' IDENTIFIED BY 'YourPassword';`
+    - `GRANT ALL PRIVILEGES ON yourDBName.* TO 'yourDBUser'@'localhost';`
 - Install Imagick and Ghostscript
-- Clone the app and move it to whre you want
+    - `apt install ghostscript`
+    - `apt install php8.2-imagick imagick`
+- In order to allow ImageMagick to process PDF files, you must SSH into your server as root and edit the following file: `/etc/ImageMagick-6/policy.xml`
+    - Locate `<policy domain="coder" rights="none" pattern="PDF" />`
+    - and comment it : `<!--<policy domain="coder" rights="none" pattern="PDF" />-->`
+- Clone the app and move it to where you want
 - run `composer install` and `npm install`
 - edit .env file
 - `php artisan key:generate`
@@ -39,14 +48,6 @@ RSCMS is a web app wich allow user to easily publish and share their revissing s
 An admin user is created, so you can login with : Mail : `admin@system.localhost` / Password : `d4d5ehdpdepd81 `
 
 Don't forget to change the password !
-
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Security Vulnerabilities
-
 If you discover a security vulnerability within Laravel, please send an e-mail to Paulhenry via [paulhenry@paulhenry.eu](mailto:paulhenry@paulhenry.eu). All security vulnerabilities will be promptly addressed.
 
 ## License
