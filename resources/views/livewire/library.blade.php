@@ -55,7 +55,7 @@
   <div class="form-control w-52">
     <label class="cursor-pointer label">
       <span class="label-text">{{__('Only with Cards')}}</span> 
-      <input wire:model.live="cards" type="checkbox" class="toggle toggle-primary" disabled />
+      <input wire:model.live="cards" type="checkbox" class="toggle toggle-primary" />
     </label>
   </div>
             

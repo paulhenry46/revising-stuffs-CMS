@@ -20,8 +20,8 @@ class Library extends Component
     public $types = ['mindmap', 'revision', 'metodo']; // Default is empty, so "All" is checked;
     #[Url(as: 'dark')]
     public $dark = false;
-    //#[Url(as: 'cards')]
-    //public $cards = false;
+    #[Url(as: 'cards')]
+    public $cards = false;
     #[Url(as: 'quizlet')]
     public $quizlet = false;
 
@@ -44,6 +44,9 @@ class Library extends Component
             })
             ->when($this->dark, function($query){
                 return $query->where('dark_version', 1);
+            })
+            ->when($this->cards, function($query){
+                return $query->where('cards', 1);
             })
             ->when($this->quizlet, function($query){
                 return $query->where('quizlet_url', '!=', NULL);
