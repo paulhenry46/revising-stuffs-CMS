@@ -33,7 +33,7 @@ class PostController extends Controller
 
     public function viewNews()
     {
-        $newPosts = Post::where('published', '=', 1)->where('pinned', '=', 0)->orderBy('id', 'desc')->limit(5)->get();
+        $newPosts = Post::where('published', '=', 1)->where('pinned', '=', 0)->latest()->limit(5)->get();
         $pinnedPosts = Post::where('pinned', '=', 1)->where('published', '=', 1)->get();
         return view('posts.news', compact('newPosts', 'pinnedPosts'));
     }
@@ -42,7 +42,7 @@ class PostController extends Controller
     {
         if (Auth::check()) {
         $user = Auth::user();
-        $posts = Post::where('published', '=', 1)->whereIn('id', $user->favorite_posts)->orderBy('id', 'desc')->get();
+        $posts = Post::where('published', '=', 1)->whereIn('id', $user->favorite_posts)->latest()->get();
         $logged = true;
     }else{
         $posts = null;
