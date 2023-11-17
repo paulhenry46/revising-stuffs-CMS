@@ -48,7 +48,15 @@ RSCMS is a web app wich allow user to easily publish and share their revissing s
 An admin user is created, so you can login with : Mail : `admin@system.localhost` / Password : `d4d5ehdpdepd81 `
 
 Don't forget to change the password !
-If you discover a security vulnerability within Laravel, please send an e-mail to Paulhenry via [paulhenry@paulhenry.eu](mailto:paulhenry@paulhenry.eu). All security vulnerabilities will be promptly addressed.
+
+## Update
+- Unzip the archive in release
+- cd into it and `composer install` then `npm run build`
+- edit `.env` file
+- `php artisan key:generate`
+
+## Security
+If you discover a security vulnerability within RSCMS, please send an e-mail to Paulhenry via [paulhenry@paulhenry.eu](mailto:paulhenry@paulhenry.eu). All security vulnerabilities will be promptly addressed.
 
 ## License
 
