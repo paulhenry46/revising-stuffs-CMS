@@ -57,7 +57,7 @@
                                                     @endforeach
                                                     @if($post->cards)
                                                     <li>
-                                                        <a>
+                                                        <a wire:navigate href="{{route('post.public.cards.show', [$post->slug, $post->id])}}">
                                                             <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
                                                                 <path d="m608-368 46-166-142-98-46 166 142 98ZM160-207l-33-16q-31-13-42-44.5t3-62.5l72-156v279Zm160 87q-33 0-56.5-24T240-201v-239l107 294q3 7 5 13.5t7 12.5h-39Zm206-5q-31 11-62-3t-42-45L245-662q-11-31 3-61.5t45-41.5l301-110q31-11 61.5 3t41.5 45l178 489q11 31-3 61.5T827-235L526-125Zm-28-75 302-110-179-490-301 110 178 490Zm62-300Z"/>
                                                             </svg>
@@ -266,18 +266,26 @@
                                 <div class="card bg-base-100 shadow-xl">
                                     <div class="card-body">
                                         <h2 class="card-title">Identification</h2>
-                                        <h5>Course : <span class="badge badge-warning badge-sm">{{$post->course->name}}</span></h5>
+                                        <h5>Course : <span class="text-white badge bg-{{$post->course->color}} badge-xm">{{$post->course->name}}</span></h5>
                                         <h5>Level : {{$post->level->name}}</h5>
                                         <h5>State : 
                                             @if($post->published)
-                                            <span class="badge badge-success badge-sm">Published</span>
+                                            <span class="badge badge-success badge-sm">{{__('Published')}}</span>
                                             @else
-                                            <span class="badge badge-error badge-sm">Pending</span>
+                                            <span class="badge badge-error badge-sm">{{__('Pending')}}</span>
                                             @endif 
                                             @if($post->pinned)
-                                            and <span class="badge badge-warning badge-sm">Pinned</span></h5>
+                                            and <span class="badge badge-neutral badge-sm">{{__('Pinned')}}</span></h5>
                                             @endif
-                                        <h5>Type : <span class="badge badge-warning badge-sm">{{$post->type}}</span></h5>
+                                        <h5>Type : 
+                                            @if($post->type == 'mindmap')
+                                            <span class="badge badge-success badge-sm">{{__('Mindmap')}}</span>
+                                            @elseif($post->type == 'metodo')
+                                            <span class="badge badge-warning badge-sm">{{__('Metodo')}}</span>
+                                            @else
+                                            <span class="badge badge-info badge-sm">{{__('Revision Sheet')}}</span>
+                                            @endif
+                                        </h5>
                                         <h5>Date : {{$post->created_at->format('d/m/Y')}}</h5>
                                         <h5>Author : {{$post->user->name}} </h5>
                                     </div>
