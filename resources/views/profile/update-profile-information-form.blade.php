@@ -58,6 +58,18 @@
             <x-input id="name" type="text" class="mt-1 block w-full" wire:model="state.name" required autocomplete="name" />
             <x-input-error for="name" class="mt-2" />
         </div>
+        <!-- Bio -->
+        <div class="col-span-6 sm:col-span-4">
+            <x-label for="bio" value="{{ __('Bio') }}" />
+            <x-input id="bio" type="text" class="mt-1 block w-full" wire:model="state.bio" />
+            <x-input-error for="bio" class="mt-2" />
+        </div>
+        <!-- Networks Link -->
+        <div class="col-span-6 sm:col-span-4">
+            <x-label for="net_link" value="{{ __('Networks Link') }}" />
+            <x-input placeholder="https://domain.com/@you" id="net_link" type="text" class="mt-1 block w-full" wire:model="state.net_link" />
+            <x-input-error for="net_link" class="mt-2" />
+        </div>
 
         <!-- Email -->
         <div class="col-span-6 sm:col-span-4">
