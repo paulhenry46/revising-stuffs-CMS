@@ -204,16 +204,20 @@
                                     @elseif(($comment->user->hasRole('student')) or ($comment->user_id == 1))
                                         @if($comment->type == 'comment')
                                 <div class="chat chat-end">
-                                    <div class="chat-image avatar">
-                                        <div class="w-10 rounded-full">
-                                            <img src="
-                                        @if($comment->user_id == 1)
-                                        https://ui-avatars.com/api/?name={{mb_substr($comment->pseudo, 0, 1)}}&color=7F9CF5&background=EBF4FF
-                                        @else
-                                        {{$comment->user->profile_photo_url}}
-                                        @endif" />
+                                @if($comment->user_id == 1)
+                                    <div class="chat-image">
+                                        <div class="w-10 bg-info text-info-content rounded-full flex h-10 justify-center items-center">
+                                            <div class="text-center"><p>{{strtoupper(mb_substr($comment->pseudo, 0, 1))}}</p></div>
+
                                         </div>
                                     </div>
+                                @else
+                                    <div class="chat-image avatar">
+                                        <div class="w-10 rounded-full">
+                                            <img src="{{$comment->user->profile_photo_url}}" />
+                                        </div>
+                                    </div>
+                                @endif
                                     <div class="chat-header">
                                         @if($comment->user_id == 1)
                                         {{$comment->pseudo}}
@@ -226,15 +230,22 @@
                                 </div>
                                         @elseif($comment->type =='error')
                                 <div class="chat chat-end">
-                                    <div class="chat-image avatar">
-                                        <div class="w-10 rounded-full">
-                                            <img src=" @if($comment->user_id == 1)
-                                        https://ui-avatars.com/api/?name={{mb_substr($comment->pseudo, 0, 1)}}&color=7F9CF5&background=EBF4FF
-                                        @else
-                                        {{$comment->user->profile_photo_url}}
-                                        @endif" />
+                                @if($comment->user_id == 1)
+                                    <div class="chat-image">
+                                        <div class="w-10 bg-info text-info-content rounded-full flex h-10 justify-center items-center">
+                                            <div class="text-center"><p>{{strtoupper(mb_substr($comment->pseudo, 0, 1))}}</p></div>
+
                                         </div>
                                     </div>
+                                @else
+                                    <div class="chat-image avatar">
+                                        <div class="w-10 rounded-full">
+                                            <img src="{{$comment->user->profile_photo_url}}" />
+                                        </div>
+                                    </div>
+                                @endif
+
+
                                     <div class="chat-header">
                                         @if($comment->user_id == 1)
                                         {{$comment->pseudo}}
@@ -249,9 +260,10 @@
                                     @endif
                                 @empty
                                 <div class="chat chat-start">
-                                    <div class="chat-image avatar">
-                                        <div class="w-10 rounded-full">
-                                            <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                                    <div class="chat-image">
+                                        <div class="w-10 bg-error text-error-content rounded-full flex h-10 justify-center items-center">
+                                            <div class="text-center"><p>CS</p></div>
+
                                         </div>
                                     </div>
                                     <div class="chat-header">
