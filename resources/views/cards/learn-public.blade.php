@@ -312,68 +312,7 @@ location.reload();
 
 });
 
-var Flashcards = [
-  {
-    "front": "<p>Acide</p>",
-    "back": "<p>espèce chimique susceptible de céder un ion hydrogène <math>   <msup>     <mi>H</mi>     <mn>+</mn>   </msup> </math> </p>"
-  },
-  {
-    "front": "<p>Base</p>",
-    "back": "<p>espèce chimique susceptible de capter un ion hydrogène <math>   <msup>     <mi>H</mi>     <mn>+</mn>   </msup> </math> </p>"
-  },
-  {
-    "front": "<p>Couple acide-base</p>",
-    "back": "<p>l'ensemble formé par un acide et sa base conjuguée liés par un transfert d'ions hydrogène H+</p>"
-  },
-  {
-    "front": "<p>demi-équation acidobasique d’un couple acide-base noté <math display=\"block\" class=\"tml-display\" style=\"display:block math;\"><mrow><mi>A</mi><mi>H</mi><mo lspace=\"0em\" rspace=\"0em\">⁄</mo><mrow><mrow><mi mathvariant=\"normal\">A</mi></mrow><msup><mrow></mrow><mo lspace=\"0em\" rspace=\"0em\">−</mo></msup></mrow></mrow></math></p>",
-    "back": "<p><math display=\"block\" class=\"tml-display\" style=\"display:block math;\"><mrow><mrow><mrow><mi mathvariant=\"normal\">A</mi></mrow><mrow><mi mathvariant=\"normal\">H</mi></mrow></mrow><mo>=</mo><mrow><mrow><mi mathvariant=\"normal\">A</mi></mrow><msup><mrow></mrow><mo lspace=\"0em\" rspace=\"0em\">−</mo></msup></mrow><mo>+</mo><mrow><mrow><mi mathvariant=\"normal\">H</mi></mrow><msup><mrow></mrow><mo lspace=\"0em\" rspace=\"0em\">+</mo></msup></mrow></mrow></math></p>"
-  },
-  {
-    "front": "<p>demi-équation acidobasique d’un couple acide-base noté <math display=\"block\" class=\"tml-display\" style=\"display:block math;\"><mrow><mi>A</mi><mi>H</mi><mo lspace=\"0em\" rspace=\"0em\">⁄</mo><mrow><mi mathvariant=\"normal\">A</mi></mrow></mrow></math></p>",
-    "back": "<p><math display=\"block\" class=\"tml-display\" style=\"display:block math;\"><mrow><mrow><mrow><mrow><mi mathvariant=\"normal\">A</mi></mrow><mrow><mi mathvariant=\"normal\">H</mi></mrow></mrow><msup><mrow></mrow><mo lspace=\"0em\" rspace=\"0em\">+</mo></msup></mrow><mo>=</mo><mrow><mi mathvariant=\"normal\">A</mi></mrow><mo>+</mo><mrow><mrow><mi mathvariant=\"normal\">H</mi></mrow><msup><mrow></mrow><mo lspace=\"0em\" rspace=\"0em\">+</mo></msup></mrow></mrow></math></p>"
-  },
-  {
-    "front": "<p>espèce amphotère</p>",
-    "back": "<p>Espèce pouvant jouer le rôle d'un acide et d'une base. Elle appartient donc à deux couples</p>"
-  },
-  {
-    "front": "<p>Couple de l’eau où elle joue le rôle d’acide</p>",
-    "back": "<p><math display=\"block\" class=\"tml-display\" style=\"display:block math;\"><mrow><mrow><mrow><mi mathvariant=\"normal\">H</mi></mrow><msub><mrow></mrow><mpadded height=\"0px\"><mn>2</mn></mpadded></msub><mrow><mi mathvariant=\"normal\">O</mi></mrow></mrow><mo lspace=\"0em\" rspace=\"0em\">⁄</mo><mrow><mrow><mrow><mi mathvariant=\"normal\">O</mi></mrow><mrow><mi mathvariant=\"normal\">H</mi></mrow></mrow><msup><mrow></mrow><mo lspace=\"0em\" rspace=\"0em\">−</mo></msup></mrow></mrow></math></p>"
-  },
-  {
-    "front": "<p>Couple de l’eau où elle joue le rôle de base</p>",
-    "back": "<p><math display=\"block\" class=\"tml-display\" style=\"display:block math;\"><mrow><mrow><mrow><mi mathvariant=\"normal\">H</mi></mrow><msub><mrow></mrow><mpadded height=\"0px\"><mn>3</mn></mpadded></msub><mrow><mi mathvariant=\"normal\">O</mi></mrow><msup><mrow></mrow><mo lspace=\"0em\" rspace=\"0em\">+</mo></msup></mrow><mo lspace=\"0em\" rspace=\"0em\">⁄</mo><mrow><mrow><mi mathvariant=\"normal\">H</mi></mrow><msub><mrow></mrow><mpadded height=\"0px\"><mn>2</mn></mpadded></msub><mrow><mi mathvariant=\"normal\">O</mi></mrow></mrow></mrow></math></p>"
-  },
-  {
-    "front": "<p>Couple de l’ion hydrogéno carbonate où il joue le rôle de base</p>",
-    "back": "<p><math display=\"block\" class=\"tml-display\" style=\"display:block math;\"><mrow><mrow><mrow><mrow><mi mathvariant=\"normal\">C</mi></mrow><mrow><mi mathvariant=\"normal\">O</mi></mrow></mrow><msub><mrow></mrow><mpadded height=\"0px\"><mn>2</mn></mpadded></msub><mo separator=\"true\" lspace=\"0em\" rspace=\"0em\">,</mo><mspace width=\"0.3333em\"></mspace><mrow><mi mathvariant=\"normal\">H</mi></mrow><msub><mrow></mrow><mpadded height=\"0px\"><mn>2</mn></mpadded></msub><mrow><mi mathvariant=\"normal\">O</mi></mrow></mrow><mo lspace=\"0em\" rspace=\"0em\">⁄</mo><mrow><mrow><mrow><mi mathvariant=\"normal\">H</mi></mrow><mrow><mi mathvariant=\"normal\">C</mi></mrow><mrow><mi mathvariant=\"normal\">O</mi></mrow></mrow><msub><mrow></mrow><mpadded height=\"0px\"><mn>3</mn></mpadded></msub><msup><mrow></mrow><mo lspace=\"0em\" rspace=\"0em\">−</mo></msup></mrow></mrow></math></p>"
-  },
-  {
-    "front": "<p>Couple de l’ion hydrogénocarbonate où il joue le rôle d’acide</p>",
-    "back": "<p><math display=\"block\" class=\"tml-display\" style=\"display:block math;\"><mrow><mrow><mrow><mrow><mi mathvariant=\"normal\">H</mi></mrow><mrow><mi mathvariant=\"normal\">C</mi></mrow><mrow><mi mathvariant=\"normal\">O</mi></mrow></mrow><msub><mrow></mrow><mpadded height=\"0px\"><mn>3</mn></mpadded></msub><msup><mrow></mrow><mo lspace=\"0em\" rspace=\"0em\">−</mo></msup></mrow><mo lspace=\"0em\" rspace=\"0em\">⁄</mo><mrow><mrow><mrow><mi mathvariant=\"normal\">C</mi></mrow><mrow><mi mathvariant=\"normal\">O</mi></mrow></mrow><msub><mrow></mrow><mpadded height=\"0px\"><mn>3</mn></mpadded></msub><msup><mrow></mrow><mrow><mn>2</mn><mo>−</mo></mrow></msup></mrow></mrow></math></p>"
-  },
-  {
-    "front": "<p>Couple des acides carboxyliques</p>",
-    "back": "<p><math display=\"block\" class=\"tml-display\" style=\"display:block math;\"><mrow><mrow><mrow><mi mathvariant=\"normal\">R</mi></mrow><mo lspace=\"0em\" rspace=\"0em\">−</mo><mrow><mrow><mi mathvariant=\"normal\">C</mi></mrow><mrow><mi mathvariant=\"normal\">O</mi></mrow><mrow><mi mathvariant=\"normal\">O</mi></mrow><mrow><mi mathvariant=\"normal\">H</mi></mrow></mrow></mrow><mo lspace=\"0em\" rspace=\"0em\">⁄</mo><mrow><mrow><mi mathvariant=\"normal\">R</mi></mrow><mo lspace=\"0em\" rspace=\"0em\">−</mo><mrow><mrow><mi mathvariant=\"normal\">C</mi></mrow><mrow><mi mathvariant=\"normal\">O</mi></mrow><mrow><mi mathvariant=\"normal\">O</mi></mrow></mrow><msup><mrow></mrow><mo lspace=\"0em\" rspace=\"0em\">−</mo></msup></mrow></mrow></math>. R étant le radical alkyle d'une chaîne carbonée</p>"
-  },
-  {
-    "front": "<p>Couple des amines</p>",
-    "back": "<p><math display=\"block\" class=\"tml-display\" style=\"display:block math;\"><mrow><mrow><mrow><mi mathvariant=\"normal\">R</mi></mrow><mo lspace=\"0em\" rspace=\"0em\">−</mo><mrow><mrow><mi mathvariant=\"normal\">N</mi></mrow><mrow><mi mathvariant=\"normal\">H</mi></mrow></mrow><msub><mrow></mrow><mpadded height=\"0px\"><mn>3</mn></mpadded></msub><msup><mrow></mrow><mo lspace=\"0em\" rspace=\"0em\">+</mo></msup></mrow><mo lspace=\"0em\" rspace=\"0em\">⁄</mo><mrow><mrow><mi mathvariant=\"normal\">R</mi></mrow><mo lspace=\"0em\" rspace=\"0em\">−</mo><mrow><mrow><mi mathvariant=\"normal\">N</mi></mrow><mrow><mi mathvariant=\"normal\">H</mi></mrow></mrow><msub><mrow></mrow><mpadded height=\"0px\"><mn>2</mn></mpadded></msub></mrow></mrow></math>. R étant le radical alkyle d'une chaîne carbonée</p>"
-  },
-  {
-    "front": "<p>Modèle de réaction acidobasique avec 2 couples</p>",
-    "back": "<p><math display=\"block\" class=\"tml-display\" style=\"display:block math;\"><mrow><mrow><mrow><mi mathvariant=\"normal\">A</mi></mrow><msub><mrow></mrow><mpadded height=\"0px\"><mn>1</mn></mpadded></msub><mrow><mi mathvariant=\"normal\">H</mi></mrow></mrow><mo>+</mo><mrow><mrow><mi mathvariant=\"normal\">A</mi></mrow><msub><mrow></mrow><mpadded height=\"0px\"><mn>2</mn></mpadded></msub><msup><mrow></mrow><mo lspace=\"0em\" rspace=\"0em\">−</mo></msup></mrow><mrow><mspace width=\"0.2778em\"></mspace><mover accent=\"false\"><mo stretchy=\"true\" lspace=\"0\" rspace=\"0\">→</mo><mspace width=\"2.8571em\"></mspace></mover><mspace width=\"0.2778em\"></mspace></mrow><mrow><mrow><mi mathvariant=\"normal\">A</mi></mrow><msub><mrow></mrow><mpadded height=\"0px\"><mn>1</mn></mpadded></msub><msup><mrow></mrow><mo lspace=\"0em\" rspace=\"0em\">−</mo></msup></mrow><mo>+</mo><mrow><mrow><mi mathvariant=\"normal\">A</mi></mrow><msub><mrow></mrow><mpadded height=\"0px\"><mn>2</mn></mpadded></msub><mrow><mi mathvariant=\"normal\">H</mi></mrow></mrow></mrow></math></p>"
-  },
-  {
-    "front": "<p>Comment obtenir le nom de l’acide conjugué d’un amine ?</p>",
-    "back": "<p>On remplace la terminaison -aline par la terminaison -amonium</p>"
-  },
-  {
-    "front": "<p>Une solution est acide si elle contient plus d’ions __ que d’ions __.</p>",
-    "back": "<p>Une solution est acide si elle contient plus d’ions H3O+ que d’ions HO-.</p>"
-  }
-];
+var Flashcards = {!!$cards!!};
 var start; // used to initialize the app
 if(localStorage.getItem("{{'id'.$post['id'].''}}cycleLength") === null){
 var cycleLength = 5;
