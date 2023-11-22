@@ -50,10 +50,10 @@ Mot 3   Définition 3">{{ old('content')}}</textarea>
     <div>
   <label for="location" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Separator between front and back of a card')}}</label>
   <div class="mt-2">
-  <select id="separator_front_back" name="separator_front_back" class="select select-bordered w-full">
+  <select id="separator_cards" name="separator_cards" class="select select-bordered w-full">
                     <option  @if(old('separator_cards') == 'tab') selected @endif value="tab">{{__('Tabulation')}}</option>
-                    <option  @if(old('separator_cards') == 'coma') selected @endif value="coma">{{__('Coma')}}</option>
-                    <option  @if(old('separator_cards') == 'semicolon') selected @endif value="semicolon">{{__('Tabulation')}}</option>
+                    <option  @if(old('separator_cards') == 'egual') selected @endif value="egual">{{__('Egual (=)')}}</option>
+                    <option  @if(old('separator_cards') == 'semicolon') selected @endif value="semicolon">{{__('SemiColon')}}</option>
   </select>
   </div>
 </div>
@@ -68,7 +68,7 @@ Mot 3   Définition 3">{{ old('content')}}</textarea>
                   </div>
                   <div class="mt-6 flex items-center justify-end gap-x-6">
                     <a wire:navigate href="{{route('cards.index', $post->id)}}" class="text-sm font-semibold leading-6 text-red-500">{{__('Cancel')}}</a>
-                    <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">{{__('Import')}}</button>
+                    <button type="submit" class="btn btn-primary">{{__('Import')}}</button>
                  </div>
                 </form>
                 </div>

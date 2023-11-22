@@ -11,6 +11,18 @@ use Illuminate\Support\Facades\Auth;
 class CardController extends Controller
 {
     /**
+     * Used for chose the html tags which need to be escaped when importing/creating cards
+     */
+    private array $forbiden_tags =[
+        '<div>', '</div>', 
+        '<script>', '</script>', 
+        '<link>', '</link>', 
+        '<a>', '</a>', 
+        '<td>', '</td>', 
+        '<th>', '</th>', 
+        '<iframe>', '</iframe>'
+    ];
+    /**
      * Display a listing of the resource.
      */
     public function quizPublic(string $slug, Post $post){
@@ -76,41 +88,9 @@ class CardController extends Controller
                 'front' => 'required|max:255',
                 'back' => 'required|max:255',
             ]);
-                $value = $request->front;
-            
-                $value = str_ireplace('<div>', '', $value);
-                $value = str_ireplace('</div>', '', $value);
-                $value = str_ireplace('<script>', '', $value);
-                $value = str_ireplace('</script>', '', $value);
-                $value = str_ireplace('<link>', '', $value);
-                $value = str_ireplace('</link>', '', $value);
-                $value = str_ireplace('<a>', '', $value);
-                $value = str_ireplace('</a>', '', $value);
-                $value = str_ireplace('<td>', '', $value);
-                $value = str_ireplace('</td>', '', $value);
-                $value = str_ireplace('<th>', '', $value);
-                $value = str_ireplace('</th>', '', $value);
-                $value = str_ireplace('<iframe>', '', $value);
-                $value = str_ireplace('</iframe>', '', $value);
-
-                $front = $value;
-                $value = $request->back;
-            
-                $value = str_ireplace('<div>', '', $value);
-                $value = str_ireplace('</div>', '', $value);
-                $value = str_ireplace('<script>', '', $value);
-                $value = str_ireplace('</script>', '', $value);
-                $value = str_ireplace('<link>', '', $value);
-                $value = str_ireplace('</link>', '', $value);
-                $value = str_ireplace('<a>', '', $value);
-                $value = str_ireplace('</a>', '', $value);
-                $value = str_ireplace('<td>', '', $value);
-                $value = str_ireplace('</td>', '', $value);
-                $value = str_ireplace('<th>', '', $value);
-                $value = str_ireplace('</th>', '', $value);
-                $value = str_ireplace('<iframe>', '', $value);
-                $value = str_ireplace('</iframe>', '', $value);
-                $back = $value;
+                
+                $front = str_ireplace($this->forbiden_tags, '', $request->front);
+                $back = str_ireplace($this->forbiden_tags, '', $request->back);
 
             $card = New Card;
             $card->front = $front;
@@ -140,30 +120,21 @@ class CardController extends Controller
 
     public function storeImport(Request $request, Post $post)
     {
-
         $input = $request->content;
-
+        $separator = "/\t+/";
+        if($request->separator_cards == 'egual'){
+            $separator = "/=+/";
+        }elseif($request->separator_cards == 'semicolon'){
+            $separator = "/;+/";
+        }
         $cols = ["front","back", "id", "created_at", "updated_at"];
         $output = [];
 
         foreach (preg_split("/((\r?\n)|(\r\n?))/", $input) as $line){
             $newLine = [];
-            $values = preg_split("/\t+/", $line);
+            $values = preg_split($separator, $line);
             foreach ($values as $col_index => $value) {
-                $value = str_ireplace('<div>', '', $value);
-                $value = str_ireplace('</div>', '', $value);
-                $value = str_ireplace('<script>', '', $value);
-                $value = str_ireplace('</script>', '', $value);
-                $value = str_ireplace('<link>', '', $value);
-                $value = str_ireplace('</link>', '', $value);
-                $value = str_ireplace('<a>', '', $value);
-                $value = str_ireplace('</a>', '', $value);
-                $value = str_ireplace('<td>', '', $value);
-                $value = str_ireplace('</td>', '', $value);
-                $value = str_ireplace('<th>', '', $value);
-                $value = str_ireplace('</th>', '', $value);
-                $value = str_ireplace('<iframe>', '', $value);
-                $value = str_ireplace('</iframe>', '', $value);
+                $value = str_ireplace($this->forbiden_tags, '', $value);
                 $newLine[$cols[$col_index]] = $value;
             }
             $newLine['post_id'] = $post->id;
@@ -204,8 +175,8 @@ class CardController extends Controller
                 'front' => 'required|max:255',
                 'back' => 'required|max:255',
             ]);
-            $card->front = $request->front;
-            $card->back = $request->back;
+            $card->front = str_ireplace($this->forbiden_tags, '', $request->front);
+            $card->back = str_ireplace($this->forbiden_tags, '', $request->back);
             $card->save();
             return redirect()->route('cards.index', $post->id)->with('message', __('The card has been updated.'));
         }else{ 
