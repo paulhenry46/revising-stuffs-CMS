@@ -2,7 +2,6 @@
     <x-slot name="header">
     @php
      $breadcrumb = array (
-  array(__('Posts'),'post.public.library'),
   array($post->title,NULL),
   array(__('Cards'),NULL)
         );
@@ -42,16 +41,16 @@
 <div class="col-span-3">
 <div class="grid grid-cols-2 gap-4 mt-2">
 <div class="col-span-1">
-<button id="fail" class="btn btn-warning w-full">Échec</button>
+<button id="fail" class="btn btn-warning w-full">{{__('Fail')}}</button>
 </div>
 <div class="col-span-1">
 <button id="success" class="btn btn-success w-full">OK</button>
 </div>
 <div class="col-span-1">
-<button class="btn btn-success w-full" id="missed" type="button">Réessayer les manquées</button>
+<button class="btn btn-success w-full" id="missed" type="button">{{__('Retry misses')}}</button>
 </div>
 <div class="col-span-1">
-<button class="btn btn-info w-full" id="full" type="button">Tout réessayer</button>
+<button class="btn btn-info w-full" id="full" type="button">{{__('Retry all')}}</button>
 </div>
 </div>
 </div>
@@ -80,7 +79,7 @@
     <div class="modal-action">
       <form method="dialog">
         <!-- if there is a button in form, it will close the modal -->
-        <button class="btn">Close</button>
+        <button class="btn">{{__('Close')}}</button>
       </form>
     </div>
   </div>
@@ -88,8 +87,6 @@
 <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-  //TODO faire mode où l'on écrit du texte et on valide pour savoir si c'est juste : avec getElementById("success").addEventListener
-
 //it doesn't shuffle missed anymore
 /* use a filter method to show only missed cards, like
 console.log(ancestry.filter(function(person) {
@@ -190,7 +187,7 @@ function setUp() {
   $("#full").hide();
   $("#missed").hide();
   document.getElementById("success").innerHTML = "OK";
-  document.getElementById("fail").innerHTML = "Échec";
+  document.getElementById("fail").innerHTML = "{{__('Fail')}}";
   //intializing the progress bar
   var percentage = (1 / numberCards) * 100;
   document.getElementById("percent").value = percentage;
@@ -241,7 +238,7 @@ function setUpMissed() {
   document.getElementById("back").innerHTML = missedCards[indexCounter].back;
 
   document.getElementById("success").innerHTML = "OK";
-  document.getElementById("fail").innerHTML = "Échec";
+  document.getElementById("fail").innerHTML = "{{__('Fail')}}";
   //progress bar
   
   var percentage = (1 / numberCards) * 100;
@@ -260,7 +257,7 @@ function nextCard() {
   } else if (successCounter === fullCards.length) {
 
     //when someone reaches the end of a set and got them all right!
-    document.getElementById("full").innerHTML = "Recommencer";
+    document.getElementById("full").innerHTML = "{{__('Retry')}}";
     $("#full").show();
     $("#success").hide();
     $("#fail").hide();
@@ -279,10 +276,10 @@ function nextCard() {
     indexCounter = 0;
     failCounter = 0;
     successCounter = 0;
-    document.getElementById("full").innerHTML = "Recommencer";
+    document.getElementById("full").innerHTML = "{{__('Retry')}}";
     $("#full").show();
 
-    document.getElementById("successRate").innerHTML = "Aie ! On dirait que toutes les cartes sont manquées. Mais pas d'inquiétude, c'est comme ça qu'on apprend !";
+    document.getElementById("successRate").innerHTML = "{{__('Ouch! Looks like all the cards are missed. But don\'t worry, that\'s how you learn!')}}";
     $("#successRate").show();
   } else {
     //when someone reaches the end of a set having missed some
@@ -319,8 +316,8 @@ const data = {
     successCounter = 0;
     failCounter = 0;
     document.getElementById("success").innerHTML = "OK";
-    document.getElementById("fail").innerHTML = "Échec";
-    document.getElementById("full").innerHTML = "Tout réessayer";
+    document.getElementById("fail").innerHTML = "{{__('Fail')}}";
+    document.getElementById("full").innerHTML = "{{__('Retry all')}}";
     $("#full").show();
     $("#missed").show();
     $("#success").hide();
@@ -346,7 +343,7 @@ function nextCardMissed() {
   } else if (successCounter === missedCards.length) {
     //when someone reaches the end of a set and got them all right!
 
-    document.getElementById("full").innerHTML = "Recommencer";
+    document.getElementById("full").innerHTML = "{{__('Retry')}}";
     $("#full").show();
     $("#success").hide();
     $("#fail").hide();
@@ -354,7 +351,7 @@ function nextCardMissed() {
     indexCounter = 0;
     successCounter = 0;
     failCounter = 0;
-    document.getElementById("successRate").innerHTML = "Bravo ! <br> J'ai l'impression que vous les conaissez toutes... pour cette fois-ci ! Revenez régulièrement pour fixer les cartes dansla mémoire à long terme.";
+    document.getElementById("successRate").innerHTML = "{{__('I think you know them all... just this once! Come back regularly to fix the cards in your long-term memory.')}}";
 
     $("#successRate").show();
   } else if (failCounter === missedCards.length) {

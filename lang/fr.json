@@ -289,5 +289,21 @@
     "See all your favorite posts" : "Voir toutes vos ressources favorites",
     "You should consider this." : "Vous devriez faire attention à cela...",
     "You must be connected to view and manage your favorite posts" : "Vous devez être connecté pour voir et gérer vos ressources favorites.",
-    "Change theme" : "Changer le thème"
+    "Change theme" : "Changer le thème",
+    "View the cards attached to" : "Voir les cartes attachées à",
+    "Learn mode" : "Apprendre",
+    "Quiz Mode" : "Réviser",
+    "Cards" : "Cartes",
+    "Term" : "Terme",
+    "Definition" : "Définition",
+    "View" : "Voir",
+    "Cards attached to" : "Cartes attachées à",
+    "Fail" : "Échec",
+    "Retry misses" : "Réessayer les manquées",
+    "Retry all" : "Tout ressayer",
+    "Congrats" : "Félicitations",
+    "You know all the cards" : "Vous savez toutes les cartes !",
+    "Retry" : "Recommencer",
+    "Ouch! Looks like all the cards are missed. But don't worry, that's how you learn!" : "Aie ! On dirait que toutes les cartes sont manquées. Mais pas d'inquiétude, c'est comme ça qu'on apprend !",
+    "I think you know them all... just this once! Come back regularly to fix the cards in your long-term memory." : "Bravo ! J'ai l'impression que vous les conaissez toutes... pour cette fois-ci ! Revenez régulièrement pour fixer les cartes dans la mémoire à long terme."
 }
