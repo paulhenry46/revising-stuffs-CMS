@@ -57,7 +57,7 @@ class PostController extends Controller
     public function index()
     {   
         $user = Auth::user();
-        $posts = $user->posts()->get();
+        $posts = $user->posts()->latest()->get();
         //$posts = Post::all();
         return view('posts.show')->with('posts', $posts);
     }
