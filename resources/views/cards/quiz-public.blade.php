@@ -39,20 +39,27 @@
 </div>
 </div>
 <div class="col-span-3">
-<div class="grid grid-cols-2 gap-4 mt-2">
-<div class="col-span-1">
-<button id="fail" class="btn btn-warning w-full">{{__('Fail')}}</button>
-</div>
-<div class="col-span-1">
-<button id="success" class="btn btn-success w-full">OK</button>
-</div>
-<div class="col-span-1">
-<button class="btn btn-success w-full" id="missed" type="button">{{__('Retry misses')}}</button>
-</div>
-<div class="col-span-1">
-<button class="btn btn-info w-full" id="full" type="button">{{__('Retry all')}}</button>
-</div>
-</div>
+  <div class="grid grid-cols-12 gap-4 mt-2">
+  <div class="col-span-2">
+  <button class="btn btn-primary w-full" id="return" >
+    <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="48">
+      <path d="M289-200q-13 0-21.5-8.5T259-230q0-13 8.5-21.5T289-260h280q70 0 120.5-46.5T740-422q0-69-50.5-115.5T569-584H274l93 93q9 9 9 21t-9 21q-9 9-21 9t-21-9L181-593q-5-5-7-10t-2-11q0-6 2-11t7-10l144-144q9-9 21-9t21 9q9 9 9 21t-9 21l-93 93h294q95 0 163.5 64T800-422q0 94-68.5 158T568-200H289Z"/>
+    </svg>
+  </button>
+    </div>
+    <div class="col-span-5">
+      <button id="fail" class="btn btn-warning w-full">{{__('Fail')}}</button>
+    </div>
+    <div class="col-span-5">
+      <button id="success" class="btn btn-success w-full">OK</button>
+    </div>
+    <div class="col-span-6">
+      <button class="btn btn-success w-full" id="missed" type="button">{{__('Retry misses')}}</button>
+    </div>
+    <div class="col-span-6">
+      <button class="btn btn-info w-full" id="full" type="button">{{__('Retry all')}}</button>
+    </div>
+  </div>
 </div>
 <div class="col-span-3">
 <div id="progress">
@@ -94,45 +101,6 @@ console.log(ancestry.filter(function(person) {
 }));
 // → [{name: "Carolus Haverbeke", …}]
 */
-//tabs
-$('ul.tabs').each(function() {
-  // for each set of tabs keep track of active/not
-  var $active, $content, $links = $(this).find('a');
-
-  // default to open on first tab
-  $active = $($links.filter('[href="' + location.hash + '"]')[0] || $links[0]);
-  $active.addClass('active');
-
-  $content = $($active[0].hash);
-
-  // hide everything else
-  $links.not($active).each(function() {
-    $(this.hash).hide();
-  });
-
-  $(this).on('click', 'a', function(e) {
-    // make the old tab inactive
-    $active.removeClass('active');
-    $content.hide();
-
-    $active = $(this);
-    $content = $(this.hash);
-
-    // make tab active
-    $active.addClass('active');
-    $content.show();
-
-    e.preventDefault();
-  });
-});
-
-$(document).on("click", 'a', function() {
-  $('a').removeClass('active');
-  $(this).addClass('active');
-});
-//end tabs
-
-//flip the card when it's clicked:
 
 
 //card Array:
@@ -153,7 +121,58 @@ var indexCounter = 0;
 var successCounter = 0;
 var failCounter = 0;
 var isMissed = false;
+  //variables for the return function
+var oldState = 'known';
+function OldCard() {
+  //document.getElementById("cards").setAttribute('data-state', 'defaulte');
+  //what happens when they're going through a deck:
+  if(indexCounter === 1){
+    document.getElementById("return").disabled = true;
+  }
 
+  //missedCards[indexCounter].status = "missed";
+  //fullCards[indexCounter].status = "known";
+    indexCounter = indexCounter - 1;
+    var cardCounter = indexCounter + 1;
+
+    if(isMissed === true){
+      if(missedCards[indexCounter].status === 'missed'){
+        failCounter = failCounter - 1;
+        document.getElementById("fail").innerHTML = "Échec (" + failCounter + ")";
+      }else if(missedCards[indexCounter].status === 'known'){
+        successCounter = successCounter - 1;
+        document.getElementById("success").innerHTML = "OK (" + successCounter + ")";
+      }
+      document.getElementById("percent").value = (cardCounter / missedCards.length) * 100;
+    }else{
+      if(fullCards[indexCounter].status === 'missed'){
+        failCounter = failCounter - 1;
+        document.getElementById("fail").innerHTML = "Échec (" + failCounter + ")";
+      }else if(fullCards[indexCounter].status === 'known'){
+        successCounter = successCounter - 1;
+        document.getElementById("success").innerHTML = "OK (" + successCounter + ")";
+      }
+      document.getElementById("percent").value = (cardCounter / numberCards) * 100;
+    }
+
+
+    /*if(oldState === 'missed'){
+      failCounter = failCounter - 1;
+      document.getElementById("fail").innerHTML = "Échec (" + failCounter + ")";
+    }else if(oldState === 'known'){
+      successCounter = successCounter - 1;
+      document.getElementById("success").innerHTML = "OK (" + successCounter + ")";
+    }
+    var cardCounter = indexCounter + 1;
+    if(isMissed === true){
+      document.getElementById("percent").value = (cardCounter / missedCards.length) * 100;
+    }else{
+      document.getElementById("percent").value = (cardCounter / numberCards) * 100;
+    }*/
+    cardFront(indexCounter);
+    cardBack(indexCounter);
+
+}
 function shuffle(arr) {
   //derived from the Fisher-Yates Shuffle
   //https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
@@ -191,10 +210,12 @@ function setUp() {
   //intializing the progress bar
   var percentage = (1 / numberCards) * 100;
   document.getElementById("percent").value = percentage;
+  document.getElementById("return").disabled = true;
 }
 setUp();
 //this is the 're-set' of cards for someone who just wants to retry their missed cards
 function setUpMissed() {
+  document.getElementById("return").disabled = true;
   if (missedCards.length > 0) {
     for (var j = 0; j < missedCards.length; j++) {
       if (missedCards[j].status === "known") {
@@ -249,6 +270,9 @@ function setUpMissed() {
 function nextCard() {
   //document.getElementById("cards").setAttribute('data-state', 'defaulte');
   //what happens when they're going through a deck:
+  if(indexCounter == 0){
+    document.getElementById("return").disabled = false;
+  }
   if (indexCounter < fullCards.length - 1) {
     indexCounter = indexCounter + 1;
     cardFront(indexCounter);
@@ -287,30 +311,30 @@ function nextCard() {
 
     $("#successRate").show();
     shuffle(fullCards);
-Chart.overrides.doughnut.plugins.legend.display = false;
-const ctx = document.getElementById('myChart');
-const data = {
-  labels: [
-    'Connues',
-    'Apprises lors de ce cycle',
-    'En cours'
-  ],
-  datasets: [{
-    label: 'Répartition',
-    data: [fullCards.length - failCounter - successCounter, successCounter, failCounter],//data: [successCounter, failCounter],
-    backgroundColor: [
-      'rgb(54, 211, 153)',
-      'rgb(58, 191, 248)',
-      'rgb(251, 189, 35)'
-    ],
-    hoverOffset: 4
-  }]
-};
+    Chart.overrides.doughnut.plugins.legend.display = false;
+    const ctx = document.getElementById('myChart');
+    const data = {
+                  labels: [
+                    'Connues',
+                    'Apprises lors de ce cycle',
+                    'En cours'
+                  ],
+                  datasets: [{
+                    label: 'Répartition',
+                    data: [fullCards.length - failCounter - successCounter, successCounter, failCounter],//data: [successCounter, failCounter],
+                    backgroundColor: [
+                      'rgb(54, 211, 153)',
+                      'rgb(58, 191, 248)',
+                      'rgb(251, 189, 35)'
+                    ],
+                  hoverOffset: 4
+                  }]
+                  };
 
-  new Chart(ctx, {
-  type: 'doughnut',
-  data: data,
-});
+    new Chart(ctx, {
+      type: 'doughnut',
+      data: data,
+    });
 
     indexCounter = 0;
     successCounter = 0;
@@ -332,6 +356,9 @@ const data = {
 
 function nextCardMissed() {
   //what happens when they're going through a deck:
+  if(indexCounter == 0){
+    document.getElementById("return").disabled = false;
+  }
   if (indexCounter < missedCards.length - 1) {
 
     indexCounter = indexCounter + 1;
@@ -363,29 +390,29 @@ function nextCardMissed() {
     $("#progress").hide();
     document.getElementById("successRate").innerHTML = "<div>\r\n  <div>\r\n    <div class=\"d-flex align-items-center\">\r\n\r\n   <\/div>\r\n  <\/div>\r\n  <div class=\"card-body p-3\">\r\n    <div class=\"grid grid-cols-4 gap-4 mt-2\">\r\n      <div class=\"col-span-2 text-center\">\r\n        <div class=\"flex justify-center h-56 chart\">\r\n          <canvas id=\"myChart\" class=\" h-56 chart-canvas\"><\/canvas>\r\n        <\/div>\r\n        \r\n      <\/div>\r\n      <div class=\" col-span-2\">\r\n        <div class=\"table-responsive\">\r\n          <table class=\"table align-items-center mb-0\">\r\n            <tbody>\r\n              <tr>\r\n                <td>\r\n                  <div class=\"d-flex px-2 py-0\">\r\n               \r\n                    <div class=\"d-flex flex-column justify-content-center\">\r\n                      <h6 class=\"mb-0 text-sm\">Connues<\/h6>\r\n                    <\/div>\r\n                  <\/div>\r\n                <\/td>\r\n                <td class=\"align-middle text-center text-sm\">\r\n                  <span class=\"badge badge-success\">" + (fullCards.length - failCounter - successCounter) + "</span>\r\n                <\/td>\r\n              <\/tr>\r\n<tr>\r\n                <td>\r\n                  <div class=\"d-flex px-2 py-0\">\r\n                    \r\n                    <div class=\"d-flex flex-column justify-content-center\">\r\n                      <h6 class=\"mb-0 text-sm\">Apprises<\/h6>\r\n                    <\/div>\r\n                  <\/div>\r\n                <\/td>\r\n                <td class=\"align-middle text-center text-sm\">\r\n                  <span class=\"badge badge-info\">" + successCounter + "</span>\r\n                <\/td>\r\n              <\/tr>\r\n              <tr>\r\n                <td>\r\n                  <div class=\"d-flex px-2 py-0\">\r\n                    \r\n                    <div class=\"d-flex flex-column justify-content-center\">\r\n                      <h6 class=\"mb-0 text-sm\">En cours<\/h6>\r\n                    <\/div>\r\n                  <\/div>\r\n                <\/td>\r\n                <td class=\"align-middle text-center text-sm\">\r\n                  <span class=\"badge badge-warning\">" + failCounter + "</span>\r\n                <\/td>\r\n              <\/tr>\r\n            <\/tbody>\r\n          <\/table>\r\n        <\/div>\r\n      <\/div>\r\n    <\/div>\r\n  <\/div>\r\n<\/div>";
     Chart.overrides.doughnut.plugins.legend.display = false;
-const ctx = document.getElementById('myChart');
-const data = {
-  labels: [
-    'Connues',
-    'Apprises lors de ce cycle',
-    'En cours'
-  ],
-  datasets: [{
-    label: 'Répartition',
-    data: [fullCards.length - failCounter - successCounter, successCounter, failCounter],//data: [successCounter, failCounter],
-    backgroundColor: [
-      'rgb(54, 211, 153)',
-      'rgb(58, 191, 248)',
-      'rgb(251, 189, 35)'
-    ],
-    hoverOffset: 4
-  }]
-};
+    const ctx = document.getElementById('myChart');
+    const data = {
+      labels: [
+        'Connues',
+        'Apprises lors de ce cycle',
+        'En cours'
+      ],
+      datasets: [{
+        label: 'Répartition',
+        data: [fullCards.length - failCounter - successCounter, successCounter, failCounter],//data: [successCounter, failCounter],
+        backgroundColor: [
+          'rgb(54, 211, 153)',
+          'rgb(58, 191, 248)',
+          'rgb(251, 189, 35)'
+        ],
+        hoverOffset: 4
+      }]
+    };
 
-  new Chart(ctx, {
-  type: 'doughnut',
-  data: data,
-});
+      new Chart(ctx, {
+      type: 'doughnut',
+      data: data,
+    });
     indexCounter = 0;
     failCounter = 0;
     successCounter = 0;
@@ -395,29 +422,29 @@ const data = {
     //when someone reaches the end of a set having missed some
     document.getElementById("successRate").innerHTML = "<div>\r\n  <div>\r\n    <div class=\"d-flex align-items-center\">\r\n\r\n   <\/div>\r\n  <\/div>\r\n  <div class=\"card-body p-3\">\r\n    <div class=\"grid grid-cols-4 gap-4 mt-2\">\r\n      <div class=\"col-span-2 text-center\">\r\n        <div class=\"flex justify-center h-56 chart\">\r\n          <canvas id=\"myChart\" class=\" h-56 chart-canvas\"><\/canvas>\r\n        <\/div>\r\n        \r\n      <\/div>\r\n      <div class=\" col-span-2\">\r\n        <div class=\"table-responsive\">\r\n          <table class=\"table align-items-center mb-0\">\r\n            <tbody>\r\n              <tr>\r\n                <td>\r\n                  <div class=\"d-flex px-2 py-0\">\r\n               \r\n                    <div class=\"d-flex flex-column justify-content-center\">\r\n                      <h6 class=\"mb-0 text-sm\">Connues<\/h6>\r\n                    <\/div>\r\n                  <\/div>\r\n                <\/td>\r\n                <td class=\"align-middle text-center text-sm\">\r\n                  <span class=\"badge badge-success\">" + (fullCards.length - failCounter - successCounter) + "</span>\r\n                <\/td>\r\n              <\/tr>\r\n<tr>\r\n                <td>\r\n                  <div class=\"d-flex px-2 py-0\">\r\n                    \r\n                    <div class=\"d-flex flex-column justify-content-center\">\r\n                      <h6 class=\"mb-0 text-sm\">Apprises<\/h6>\r\n                    <\/div>\r\n                  <\/div>\r\n                <\/td>\r\n                <td class=\"align-middle text-center text-sm\">\r\n                  <span class=\"badge badge-info\">" + successCounter + "</span>\r\n                <\/td>\r\n              <\/tr>\r\n              <tr>\r\n                <td>\r\n                  <div class=\"d-flex px-2 py-0\">\r\n                    \r\n                    <div class=\"d-flex flex-column justify-content-center\">\r\n                      <h6 class=\"mb-0 text-sm\">En cours<\/h6>\r\n                    <\/div>\r\n                  <\/div>\r\n                <\/td>\r\n                <td class=\"align-middle text-center text-sm\">\r\n                  <span class=\"badge badge-warning\">" + failCounter + "</span>\r\n                <\/td>\r\n              <\/tr>\r\n            <\/tbody>\r\n          <\/table>\r\n        <\/div>\r\n      <\/div>\r\n    <\/div>\r\n  <\/div>\r\n<\/div>";
     Chart.overrides.doughnut.plugins.legend.display = false;
-const ctx = document.getElementById('myChart');
-const data = {
-  labels: [
-    'Connues',
-    'Apprises',
-    'En cours'
-  ],
-  datasets: [{
-    label: 'Répartition',
-    data: [fullCards.length - failCounter - successCounter, successCounter, failCounter],//data: [successCounter, failCounter],
-    backgroundColor: [
-      'rgb(54, 211, 153)',
-      'rgb(58, 191, 248)',
-      'rgb(251, 189, 35)'
-    ],
-    hoverOffset: 4
-  }]
-};
+    const ctx = document.getElementById('myChart');
+    const data = {
+      labels: [
+        'Connues',
+        'Apprises',
+        'En cours'
+      ],
+      datasets: [{
+        label: 'Répartition',
+        data: [fullCards.length - failCounter - successCounter, successCounter, failCounter],//data: [successCounter, failCounter],
+        backgroundColor: [
+          'rgb(54, 211, 153)',
+          'rgb(58, 191, 248)',
+          'rgb(251, 189, 35)'
+        ],
+        hoverOffset: 4
+      }]
+    };
 
-  new Chart(ctx, {
-  type: 'doughnut',
-  data: data,
-});
+      new Chart(ctx, {
+      type: 'doughnut',
+      data: data,
+    });
     $("#successRate").show();
     indexCounter = 0;
     successCounter = 0;
@@ -439,30 +466,26 @@ const data = {
 
 //a success counter goes up by 1 each time someone presses the 'got it' button
 document.getElementById("success").addEventListener("click", function addOneSuccessCounter() {
+  oldState = "known";
   successCounter = successCounter + 1;
   document.getElementById("cards").setAttribute('data-state', 'success');
-  function resetAttribute()
-{
+  function resetAttribute(){
   document.getElementById("cards").setAttribute('data-state', 'default');
-}
-
+  }
   setTimeout(resetAttribute, 300);
   //changes the button to show how many known
   document.getElementById("success").innerHTML = "OK (" + successCounter + ")";
-
 });
 
 //fail counter goes up by one if 'Missed it' is clicked
 document.getElementById("fail").addEventListener("click", function addOneFailCounter() {
+  oldState = "missed";
   failCounter = failCounter + 1;
   document.getElementById("cards").setAttribute('data-state', 'fail');
-  function resetAttribute()
-{
+  function resetAttribute(){
   document.getElementById("cards").setAttribute('data-state', 'default');
-}
-
+  }
   setTimeout(resetAttribute, 300);
-
   //changes the button to show how many missed
   document.getElementById("fail").innerHTML = "Échec (" + failCounter + ")";
 });
@@ -470,6 +493,10 @@ document.getElementById("fail").addEventListener("click", function addOneFailCou
 document.getElementById("missed").addEventListener("click", function() {
   isMissed = true;
 });
+
+document.getElementById("return").addEventListener("click", OldCard);
+
+
 document.getElementById("full").addEventListener("click", function() {
   isMissed = false;
 });
@@ -517,17 +544,7 @@ function whichCardSet() {
 }
 document.getElementById("fail").addEventListener("click", whichCardSet);
 document.getElementById("success").addEventListener("click", whichCardSet);
-//end of 'Quiz Mode'
-//'Study Mode' - show all the cards in order
-function showAll(arr) {
-  for (var i = 0; i < arr.length; i++) {
-    var frontContent = arr[i].front;
-    var backContent = arr[i].back;
-    $("#studyCards").append("<div class =\"card front study\">" + frontContent + "</div>")
-    $("#studyCards").append("<div class = \"card back study\">" + backContent + "</div><br>")
-  }
-}
-showAll(startingCards);
+
 </script>
 
 </x-app-layout>
