@@ -54,7 +54,7 @@ Don't forget to change the password !
 - Unzip the archive in release
 - cd into it and `composer install` then `npm run build`
 - edit `.env` file
-- `php artisan key:generate`
+- `php artisan storage:link`
 
 ## Security
 If you discover a security vulnerability within RSCMS, please send an e-mail to Paulhenry via [paulhenry@paulhenry.eu](mailto:paulhenry@paulhenry.eu). All security vulnerabilities will be promptly addressed.
