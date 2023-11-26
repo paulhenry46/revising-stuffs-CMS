@@ -38,7 +38,8 @@ RSCMS is a web app wich allow user to easily publish and share their revissing s
     - Locate `<policy domain="coder" rights="none" pattern="PDF" />`
     - and comment it : `<!--<policy domain="coder" rights="none" pattern="PDF" />-->`
 - Clone the app and move it to where you want
-- run `composer install` and `npm install`
+- run `composer install`
+- run `npm install` and `npm run build`
 - edit .env file
 - `php artisan key:generate`
 - `php artisan migrate`
