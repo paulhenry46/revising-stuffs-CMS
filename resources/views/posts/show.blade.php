@@ -105,6 +105,7 @@
         @endforeach
       </tbody>
     </table>
+    {{$posts->links()}}
     <div class="text-blue-500 text-red-500 text-orange-500 text-green-500 text-yellow-500 text-purple-500  text-pink-500" style="display: none;"></div>
   </div>
 </div>

@@ -57,7 +57,7 @@ class PostController extends Controller
     public function index()
     {   
         $user = Auth::user();
-        $posts = $user->posts()->latest()->get();
+        $posts = $user->posts()->orderBy('pinned', 'DESC')->latest()->paginate(15);
         //$posts = Post::all();
         return view('posts.show')->with('posts', $posts);
     }
