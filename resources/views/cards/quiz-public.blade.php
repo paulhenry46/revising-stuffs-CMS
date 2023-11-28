@@ -29,7 +29,7 @@
 <div class="grid grid-cols-3 gap-4">
   <div class="col-span-3">
     <div class="stack w-full h-64 sm:h-80">
-    <label id="cards" data-state="defaut" class=" duration-500 data-[state=success]:bg-success dark:data-[state=success]:bg-success-content data-[state=fail]:bg-warning dark:data-[state=fail]:bg-warning-content transition ease-in-out swap grid w-full h-full rounded dark:bg-base-100 bg-white text-dark dark:text-primary-content place-content-center">
+    <label id="cards" data-state="defaut" class=" duration-500 data-[state=success]:bg-success dark:data-[state=success]:bg-success data-[state=fail]:bg-warning dark:data-[state=fail]:bg-warning transition ease-in-out swap grid w-full h-full rounded dark:bg-base-100 bg-white text-dark dark:text-white place-content-center">
       <input type="checkbox" />
       <div id="back" class="swap-on text-center"></div>
       <div id="front" class="swap-off text-center"></div>
