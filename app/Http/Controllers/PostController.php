@@ -62,6 +62,19 @@ class PostController extends Controller
         return view('posts.show')->with('posts', $posts);
     }
 
+    public function CourseView(string $level_chosen, string $course_chosen)
+    {   
+        $course = Course::where('slug', $course_chosen)->first();
+        $level = Level::where('slug', $level_chosen)->first();
+        return view('posts.course', compact('level', 'course'));
+    }
+
+    public function Library()
+    {   
+        $courses = Course::All();
+        return view('posts.library', compact('courses'));
+    }
+
     /**
      * Show the form for creating a new resource.
      */

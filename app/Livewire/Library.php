@@ -12,10 +12,10 @@ class Library extends Component
 {
     #[Url(as: 'query')]
     public $search = '';
-     #[Url(as: 'course')]
-    public $course = '';
-    #[Url(as: 'level')]
-    public $level = '';
+    //#[Url(as: 'course')]
+    public $course;
+    //#[Url(as: 'level')]
+    public $level;
     #[Url(as: 'type')]
     public $types = ['mindmap', 'revision', 'metodo']; // Default is empty, so "All" is checked;
     #[Url(as: 'dark')]
@@ -25,20 +25,27 @@ class Library extends Component
     #[Url(as: 'quizlet')]
     public $quizlet = false;
 
+    public function mount(Level $level, Course $course)
+    {
+        $this->course = $course;
+        $this->level = $level;
+    }
 
     public function render()
     {
         return view('livewire.library', [
             'posts' => Post::where('published', '=', 1)
+            ->where('course_id', '=', $this->course->id)
+            ->where('level_id', '=', $this->level->id)
             ->when($this->search, function($query, $search){
                 return $query->where('title', 'LIKE', "%{$this->search}%")->orWhere('description', 'LIKE', "%{$this->search}%");
             })
-            ->when($this->course, function($query, $course){
+            /*->when($this->course, function($query, $course){
                 return $query->where('course_id', '=', $this->course);
             })
             ->when($this->level, function($query, $level){
                 return $query->where('level_id', '=', $this->level);
-            })
+            })*/
             ->when(count(array_filter($this->types)), function ($query) {
                     return $query->whereIn('type', $this->types);
             })
@@ -52,7 +59,7 @@ class Library extends Component
                 return $query->where('quizlet_url', '!=', NULL);
             })->orderBy('id', 'desc')
             ->get(),
-            'courses' => $courses = Course::all(),
+            //'courses' => $courses = Course::all(),
             'levels' => $levels = Level::all()
         ]);
     }

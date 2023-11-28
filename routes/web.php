@@ -26,8 +26,14 @@ Route::get('/', function () {
 
 //Public Routes
 Route::name('post.public.')->group(function() {
+    //The route to accces to all courses of all levels
+    Route::get('/courses/{level_chosen}/{course_chosen}', [PostController::class, 'CourseView'])
+    ->name('courseView')
+    ->where(['level' => '[a-z0-9-]+'])
+    ->where(['course' => '[a-z0-9-]+']);
+    //Other routes
     Route::get('/news', [PostController::class, 'viewNews'])->name('news');
-    Route::get('/library', function () {return view('posts.library');})->name('library');
+    Route::get('/library', [PostController::class, 'Library'])->name('library');
     Route::get('/favorites', [PostController::class, 'viewFavorites'])->name('favorites');
 
     Route::prefix('/post/{slug}-{post}')->where(['slug' => '[a-z0-9-]+'])->group(function () {

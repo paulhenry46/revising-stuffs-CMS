@@ -3,7 +3,7 @@
                 <div class="p-6 lg:p-8 bg-white dark:bg-gray-800 dark:bg-gradient-to-bl dark:from-gray-700/50 dark:via-transparent border-b border-gray-200 dark:border-gray-700">
 
     <h1 class=" decoration-4 underline decoration-warning text-2xl font-medium text-gray-900 dark:text-white">
-        {{__('All posts')}}
+        {{$level->name}} - {{$course->name}}
     </h1>
     <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
         <div class="sm:col-span-2">
@@ -11,33 +11,12 @@
           <div class="mt-2">
             <input wire:model.live.debounce.400ms="search" type="text" name="title" id="name" autocomplete="given-name" class="input input-bordered input-primary w-full">
           </div>
-        </div>
-        <div class="sm:col-span-2">
-            <div>
-                <label for="location" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Course')}}</label>
-                <div class="mt-2">
-                <select wire:model.live="course" id="location" class="select select-primary w-full">
-                    <option value="">{{__('Any')}}</option>
-                    @foreach($courses as $course)
-                    <option value="{{ $course->id }}">{{ $course->name }}</option>
-                @endforeach
-                </select>
-                </div>
+
+          <div>
             </div>
+
         </div>
-        <div class="sm:col-span-2">
-            <div>
-                <label for="location" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Level')}}</label>
-                <div class="mt-2">
-                <select wire:model.live="level" id="location" class=" select select-primary w-full">
-                    <option value="">{{__('Any')}}</option>
-                    @foreach($levels as $level)
-                    <option value="{{ $level->id }}">{{ $level->name }}</option>
-                @endforeach
-                </select>
-            </div>
-            </div>
-        </div>
+        
         <div class="sm:col-span-2">
             <label for="location" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Particularities')}}</label>
             <div class="form-control w-52">
