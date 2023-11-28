@@ -20,7 +20,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 py-2">
 
             @foreach($courses as $course)
-            <div onclick="my_modal_{{$course->id}}.showModal()" class="col-span-1 flex rounded-md shadow-sm">
+            <div onclick="my_modal_{{$course->id}}.showModal()" class="cursor-pointer col-span-1 flex rounded-md shadow-sm">
             <div class="flex w-16 flex-shrink-0 items-center justify-center bg-{{str_replace('500', '500',$course->color)}} rounded-l-md text-sm font-medium text-white">{{strtoupper(mb_substr($course->name, 0, 1))}}</div>
             <div class="flex flex-1 items-center justify-between truncate rounded-r-md  dark:bg-gray-800 bg-white">
                 <div class="flex-1 truncate px-4 py-2 text-sm">
