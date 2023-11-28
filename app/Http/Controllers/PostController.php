@@ -72,7 +72,8 @@ class PostController extends Controller
     public function Library()
     {   
         $courses = Course::All();
-        return view('posts.library', compact('courses'));
+        $levels = Level::All();
+        return view('posts.library', compact('courses', 'levels'));
     }
 
     /**
