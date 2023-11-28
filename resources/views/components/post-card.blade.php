@@ -8,7 +8,7 @@
                                   </figure>
                                     <div class="card-body">
                                       <div class="flex flex-items">
-                                      <a wire:navigate href="{{secure_url("/library?course=$post->course_id")}}" class="badge badge-md bg-{{$post->course->color}} text-white">{{$post->course->name}}</a>
+                                      <a wire:navigate href="{{route('post.public.courseView', ['level_chosen' => $post->level->slug, 'course_chosen' => $post->course->slug])}}" class="badge badge-md bg-{{$post->course->color}} text-white">{{$post->course->name}}</a>
                                       @if($post->pinned)<span class="badge badge-md badge-neutral">Pinned</span>
                                       @endif
                                       </div>
