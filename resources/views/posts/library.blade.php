@@ -34,7 +34,7 @@
         <dialog id="my_modal_{{$course->id}}" class="modal">
                     <div class="modal-box">
                         <h3 class="font-bold text-lg">{{$course->name}}</h3>
-                        <p class="py-4">Please chose your level !</p>
+                        <p class="py-4">{{__('Please chose your level !')}}</p>
                         @foreach($levels as $level)
                         <a wire:navigate href="{{route('post.public.courseView', ['level_chosen' => $level->slug, 'course_chosen' => $course->slug])}}" class="btn btn-primary">{{$level->name}}</a>
                         @endforeach

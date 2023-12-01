@@ -81,7 +81,7 @@
                                 <div class="pt-6">
                                     <div class="rounded-lg navbar dark:bg-base-100">
                                         <div class="flex-1">
-                                            <a class="btn btn-ghost normal-case text-xl">Comments</a>
+                                            <a class="btn btn-ghost normal-case text-xl">{{__('Comments')}}</a>
                                         </div>
                                         <div class="flex-none">
                                             <button onclick="add_comment.showModal()" class="btn btn-square btn-ghost dark:bg-base-200">
@@ -93,7 +93,7 @@
                                         <!--Modal for adding a comment-->
                                         <dialog id="add_comment" class="modal">
                                             <div class="modal-box">
-                                                <h3 class="font-bold text-lg">Add a new comment</h3>
+                                                <h3 class="font-bold text-lg">{{__('Add a new comment')}}</h3>
                                                 <form action="{{route('post.public.comment.create', [$post->slug, $post->id])}}" method="POST">
                                                     @csrf
                                                     <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8">
@@ -112,11 +112,11 @@
                                                         </div>
                                                     </div>
                                                     <div class="modal-action">
-                                                        <button type="submit" class="btn btn-success">Submit</button>
+                                                        <button type="submit" class="btn btn-success">{{__('Submit')}}</button>
                                                 </form>
                                                 <form method="dialog">
                                                 <!-- if there is a button in form, it will close the modal -->
-                                                <button class="btn">Close</button>
+                                                <button class="btn">{{__('Close')}}</button>
                                                 </form>
                                                 </div>
                                             </div>
@@ -131,7 +131,7 @@
                                         </div>
                                         <dialog id="report_error" class="modal">
                                             <div class="modal-box">
-                                                <h3 class="font-bold text-lg">Report an error</h3>
+                                                <h3 class="font-bold text-lg">{{__('Report an error')}}</h3>
                                                 <form action="{{route('post.public.comment.create', [$post->slug, $post->id])}}" method="POST">
                                                     @csrf
                                                     <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8">
@@ -150,11 +150,11 @@
                                                         </div>
                                                     </div>
                                                     <div class="modal-action">
-                                                        <button type="submit" class="btn btn-success">Submit</button>
+                                                        <button type="submit" class="btn btn-success">{{__('Submit')}}</button>
                                                 </form>
                                                 <form method="dialog">
                                                 <!-- if there is a button in form, it will close the modal -->
-                                                <button class="btn">Close</button>
+                                                <button class="btn">{{__('Close')}}</button>
                                                 </form>
                                                 </div>
                                             </div>
@@ -254,7 +254,7 @@
                                         @endif
                                         <time class="text-xs opacity-50">{{$comment->created_at->format('d/m/y')}}</time>
                                     </div>
-                                    <div class="chat-bubble chat-bubble-error">This user reported an error : {{$comment->content}}</div>
+                                    <div class="chat-bubble chat-bubble-error">{{('This user reported an error')}} : {{$comment->content}}</div>
                                 </div>
                                         @endif
                                     @endif
@@ -277,10 +277,10 @@
                             <div class="col-span-3 lg:col-span-1">
                                 <div class="card bg-base-100 shadow-xl">
                                     <div class="card-body">
-                                        <h2 class="card-title">Identification</h2>
-                                        <h5>Course : <span class="text-white badge bg-{{$post->course->color}} badge-xm">{{$post->course->name}}</span></h5>
-                                        <h5>Level : {{$post->level->name}}</h5>
-                                        <h5>State : 
+                                        <h2 class="card-title">{{__('Identification')}}</h2>
+                                        <h5>{{__('Course')}} : <span class="text-white badge bg-{{$post->course->color}} badge-xm">{{$post->course->name}}</span></h5>
+                                        <h5>{{__('Level')}} : {{$post->level->name}}</h5>
+                                        <h5>{{__('State')}} : 
                                             @if($post->published)
                                             <span class="badge badge-success badge-sm">{{__('Published')}}</span>
                                             @else
@@ -298,8 +298,8 @@
                                             <span class="badge badge-info badge-sm">{{__('Revision Sheet')}}</span>
                                             @endif
                                         </h5>
-                                        <h5>Date : {{$post->created_at->format('d/m/Y')}}</h5>
-                                        <h5>Author : {{$post->user->name}} </h5>
+                                        <h5>{{__('Date')}} : {{$post->created_at->format('d/m/Y')}}</h5>
+                                        <h5>{{__('Author')}} : {{$post->user->name}} </h5>
                                     </div>
                                 </div>
                                 @if( ($files->contains('type', 'source')) or ($files->contains('type', 'exercise')) or ($files->contains('type', 'exercise correction')))
@@ -348,7 +348,7 @@
                                 <div class="pt-6">
                                     <div class="card bg-base-100 shadow-xl">
                                         <div class="card-body">
-                                            <h2 class="card-title">History</h2>
+                                            <h2 class="card-title">{{__('History')}}</h2>
                                             <ol class="relative border-l border-gray-200 dark:border-gray-700">
                                                 @foreach($events as $event)
                                                 @if($event->type == 'bugfix')
@@ -358,7 +358,7 @@
                                                             <path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z"/>
                                                         </svg>
                                                     </span>
-                                                    <h3 class="flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white">Error Fix</h3>
+                                                    <h3 class="flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white">{{__('Error Fix')}}</h3>
                                                     <time class="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">{{$event->created_at->format('d/m/Y')}}</time>
                                                     <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">{{$event->content}}</p>
                                                 </li>
@@ -369,7 +369,7 @@
                                                             <path d="M440-280h80v-160h160v-80H520v-160h-80v160H280v80h160v160Zm40 200q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
                                                         </svg>
                                                     </span>
-                                                    <h3 class="flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white">Add new content</h3>
+                                                    <h3 class="flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white">{{__('Add new content')}}</h3>
                                                     <time class="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">{{$event->created_at->format('d/m/Y')}}</time>
                                                     <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">{{$event->content}}</p>
                                                 </li>
@@ -381,9 +381,9 @@
                                                             <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/>
                                                         </svg>
                                                     </span>
-                                                    <h3 class="flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white">Post Created</h3>
+                                                    <h3 class="flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white">{{__('Post Created')}}</h3>
                                                     <time class="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">{{$post->created_at->format('d/m/Y')}}</time>
-                                                    <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">Post created by {{$post->user->name}}</p>
+                                                    <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">{{__('Post created by')}} {{$post->user->name}}</p>
                                                 </li>
                                             </ol>
                                         </div>
@@ -392,7 +392,7 @@
                                 <div class="pt-6">
                                     <div class="card bg-base-100 shadow-xl">
                                         <div class="card-body">
-                                            <h2 class="card-title">Author</h2>
+                                            <h2 class="card-title">{{__('Author')}}</h2>
                                             <div class="flex items-center justify-center">
                                                 <div class="avatar">
                                                     <div class="w-24 rounded-full ring 
@@ -412,11 +412,11 @@
                                             <div class="flex items-center justify-center">
                                                 <h5>{{$post->user->name}}
                                                 @if($post->user->hasRole('admin'))
-                                                <span class="badge badge-error badge-sm">Admin</span>
+                                                <span class="badge badge-error badge-sm">{{__('Administrator')}}</span>
                                                 @elseif($post->user->hasRole('moderator'))
-                                                <span class="badge badge-warning badge-sm">Moderator</span>
+                                                <span class="badge badge-warning badge-sm">{{__('Moderator')}}</span>
                                                 @elseif($post->user->hasRole('contributor'))
-                                                <span class="badge badge-info badge-sm">Contributor</span>
+                                                <span class="badge badge-info badge-sm">{{__('Contributor')}}</span>
                                                 @endif
                                                 </h5>
                                             </div>
