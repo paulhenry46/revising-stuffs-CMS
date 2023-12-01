@@ -50,4 +50,5 @@
                 </div>
             </div>
         </div>
+        <x-nav-bottom :active=-1/>
 </x-app-layout>
