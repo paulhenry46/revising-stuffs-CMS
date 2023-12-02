@@ -5,6 +5,9 @@
                                     <livewire:favorite-button :post=$post :user=Auth::user() lazy/>
                                     @endauth
                                     </div>
+                                    <div class="left-0 top-0 absolute pin-t pin-l ">
+                                    <livewire:like :post=$post lazy/>
+                                    </div>
                                   </figure>
                                     <div class="card-body">
                                       <div class="flex flex-items">
@@ -14,6 +17,7 @@
                                       </div>
                                         <h2 class="card-title">{{$post->title}}</h2>
                                         <p>{{$post->description}}</p>
+                                        
                                         <div class="card-actions items-center justify-center flex">
                                             <div class="items-center justify-center flex min-h-[6rem] min-w-[18rem] max-w-4xl flex-wrap gap-2">
                                                 <ul class="menu menu-horizontal bg-base-200 rounded-box">
