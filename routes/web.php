@@ -8,6 +8,7 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\AboutController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,6 +48,11 @@ Route::name('post.public.')->group(function() {
                     });
             });
         });
+Route::name('about.')->prefix('/about')->group(function() {
+        Route::get('/licensing', [AboutController::class, 'licensing'])->name('licensing');
+     // Route::get('/team', [PostController::class, 'Library'])->name('team');
+            
+                });
 //Users Routes
 Route::middleware([
     'auth:sanctum',

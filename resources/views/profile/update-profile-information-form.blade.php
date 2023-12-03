@@ -71,6 +71,21 @@
             <x-input-error for="net_link" class="mt-2" />
         </div>
 
+        <!-- License -->
+        <div class="col-span-6 sm:col-span-4">
+            <x-label for="license" value="{{ __('License of your work') }}" />
+        <div class="flex">
+            <select id="license" class="select select-bordered w-1/2 " wire:model="state.license">
+                <option value="CC-BY-SA">CC-BY-SA</option>
+                <option value="CC-BY" >CC-BY</option>
+                <option value="CC-0"> CC-0</option>
+            </select>
+            <div class="w-1/2"><a wire:navigate href="{{route('about.licensing')}}" class="ml-4 btn btn-primary">Help ?</a></div>
+            </div>
+            <x-input-error for="license" class="mt-2" />
+
+        </div>
+
         <!-- Email -->
         <div class="col-span-6 sm:col-span-4">
             <x-label for="email" value="{{ __('Email') }}" />
