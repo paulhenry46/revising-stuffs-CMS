@@ -7,12 +7,12 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\FileRequest;
 use App\Http\Requests\FilePrimaryRequest;
 use App\Http\Requests\FilePrimaryUpdateRequest;
-use Spatie\PdfToImage\Pdf;
 use App\Models\Post;
 use App\Models\File;
 use App\Models\Event;
 use Illuminate\Support\Str;
 use Auth;
+use App\Jobs\CreateThumbnail;
 
 class FileController extends Controller
 {
@@ -84,8 +84,9 @@ class FileController extends Controller
                 $file->file_path = $path_light;
                 $file->post_id = $post->id;
                 $file->save();
-                $pdf = new Pdf(storage_path('app/public/'.$path_light.''));
-                $pdf->saveImage(storage_path('app/public/'.$folder.'/'.$filename_path_thumbnail.''));
+                //$pdf = new Pdf(storage_path('app/public/'.$path_light.''));
+                //$pdf->saveImage(storage_path('app/public/'.$folder.'/'.$filename_path_thumbnail.''));
+                dispatch(new CreateThumbnail($path_light, $filename_path_thumbnail, $folder ));
                 /*for the dark file*/
                 if($post->dark_version){
                 $filename_path_dark = ''.$post->id.'-'.$post->slug.'.dark.pdf';
@@ -171,8 +172,7 @@ class FileController extends Controller
                 //Update the thumbnail
                 $filename_path_thumbnail = ''.$post->id.'-'.$post->slug.'.thumbnail.png';
                 $delete = Storage::disk('public')->delete(''.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png');
-                $pdf = new Pdf(storage_path('app/public/'.$path_light.''));
-                $pdf->saveImage(storage_path('app/public/'.$folder.'/'.$filename_path_thumbnail.''));
+                dispatch(new CreateThumbnail($path_light, $filename_path_thumbnail, $folder ));
 
                 /*for the dark file*/
                 if($post->dark_version){
