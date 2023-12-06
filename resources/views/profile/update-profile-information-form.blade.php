@@ -66,9 +66,9 @@
         </div>
         <!-- Networks Link -->
         <div class="col-span-6 sm:col-span-4">
-            <x-label for="net_link" value="{{ __('Networks Link') }}" />
-            <x-input placeholder="https://domain.com/@you" id="net_link" type="text" class="mt-1 block w-full" wire:model="state.net_link" />
-            <x-input-error for="net_link" class="mt-2" />
+            <x-label for="social_network_link" value="{{ __('Networks Link') }}" />
+            <x-input placeholder="https://domain.com/@you" id="social_network_link" type="text" class="mt-1 block w-full" wire:model="state.social_network_link" />
+            <x-input-error for="social_network_link" class="mt-2" />
         </div>
 
         <!-- License -->

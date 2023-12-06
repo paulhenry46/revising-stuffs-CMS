@@ -20,7 +20,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
             'bio' => ['max:255'],
-            'net_link' => ['max:255'],
+            'social_network_link' => ['max:255'],
             'license' => [Rule::in(['CC-0', 'CC-BY', 'CC-BY-SA', 'CC-BY-NC', 'CC-BY-NC-SA', 'CC-BY-ND', 'CC-BY-NC-ND'])],
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
@@ -34,8 +34,8 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             $user instanceof MustVerifyEmail) {
             $this->updateVerifiedUser($user, $input);
         } else {
-            if(!isset($input['net_link'])){
-                $input['net_link'] = NULL;
+            if(!isset($input['social_network_link'])){
+                $input['social_network_link'] = NULL;
             }
             if(!isset($input['bio'])){
                 $input['bio'] = NULL;
@@ -46,7 +46,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             $user->forceFill([
                 'name' => $input['name'],
                 'bio' => $input['bio'],
-                'social_network_link' => $input['net_link'],
+                'social_network_link' => $input['social_network_link'],
                 'license' => $input['license'],
                 'email' => $input['email'],
             ])->save();
@@ -63,7 +63,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
         $user->forceFill([
             'name' => $input['name'],
             'bio' => $input['bio'],
-            'social_network_link' => $input['net_link'],
+            'social_network_link' => $input['social_network_link'],
             'license' => $input['license'],
             'email' => $input['email'],
             'email_verified_at' => null,
