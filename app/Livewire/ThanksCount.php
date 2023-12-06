@@ -12,14 +12,6 @@ class ThanksCount extends Component
     public $count;
     public $user;
 
-    public function count()
-    {
-        $this->count = 0;
-        foreach($this->posts as $post){
-            $this->count =  $this->count + $post->thanks;
-        }
-        return $this->count;
-    }
     public function render()
     {
         return view('livewire.thanks-count');
@@ -31,7 +23,7 @@ class ThanksCount extends Component
         $this->posts = $this->user->posts;
         $this->count = 0;
         foreach($this->posts as $post){
-            $this->count =  $this->count + $post->thanks;
+            $this->count =  $this->count + $post->likes_count;
         }
     }
 
