@@ -49,9 +49,8 @@ Route::name('post.public.')->group(function() {
             });
         });
 Route::name('about.')->prefix('/about')->group(function() {
+        Route::get('/', [AboutController::class, 'index'])->name('about');
         Route::get('/licensing', [AboutController::class, 'licensing'])->name('licensing');
-     // Route::get('/team', [PostController::class, 'Library'])->name('team');
-            
                 });
 //Users Routes
 Route::middleware([

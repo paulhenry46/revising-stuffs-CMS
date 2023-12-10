@@ -11,4 +11,9 @@ public function licensing(){
     return view('about.licensing');
 }
 
+public function index(){
+    $contributors=User::where('id', '!=', 1)->role('contributor')->get();
+    return view('about.index', compact(['contributors']));
+}
+
 }
