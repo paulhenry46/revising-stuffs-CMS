@@ -30,7 +30,7 @@ Route::get('/', function () {
 //Public Routes
 Route::name('post.public.')->group(function() {
     //The route to accces to all courses of all levels
-    Route::get('/courses/{level_chosen}/{course_chosen}', [PostController::class, 'CourseView'])
+    Route::get('/courses/{level_chosen}/{course_chosen}', [ReadPostController::class, 'course'])
     ->name('courseView')
     ->where(['level' => '[a-z0-9-]+'])
     ->where(['course' => '[a-z0-9-]+']);
@@ -69,7 +69,7 @@ Route::middleware([
     Route::group(['middleware' => ['can:manage all comments']], function () {
         Route::get('/moderateComments', [CommentController::class, 'moderate'])->name('comments.moderate');
     });
-    Route::group(['middleware' => ['can:manage all posts']], function () {
+    Route::group(['middleware' => ['can:publish all posts']], function () {
         Route::get('/moderatePosts', [PostController::class, 'moderate'])->name('posts.moderate');
     });
     Route::group(['middleware' => ['can:manage all posts']], function () {
