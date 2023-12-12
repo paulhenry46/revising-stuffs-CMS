@@ -84,7 +84,7 @@ class PostController extends Controller
         $post->level_id = $request->level_id;
         $post->user_id = $user->id;
         $post->save();
-        return redirect()->route('posts.index')->with('message', __('The post has been created.'));
+        return redirect()->route('files.primary.create', $post)->with('message', __('The post has been created. Now, you can upload your primary file.'));
     }
 
     /**
