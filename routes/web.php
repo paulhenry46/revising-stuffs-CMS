@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\Public\ReadPostController;
+use App\Http\Controllers\Public\ReadCardController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CardController;
@@ -33,18 +35,18 @@ Route::name('post.public.')->group(function() {
     ->where(['level' => '[a-z0-9-]+'])
     ->where(['course' => '[a-z0-9-]+']);
     //Other routes
-    Route::get('/news', [PostController::class, 'viewNews'])->name('news');
-    Route::get('/library', [PostController::class, 'Library'])->name('library');
-    Route::get('/favorites', [PostController::class, 'viewFavorites'])->name('favorites');
+    Route::get('/news', [ReadPostController::class, 'news'])->name('news');
+    Route::get('/library', [ReadPostController::class, 'library'])->name('library');
+    Route::get('/favorites', [ReadPostController::class, 'favorites'])->name('favorites');
 
     Route::prefix('/post/{slug}-{post}')->where(['slug' => '[a-z0-9-]+'])->group(function () {
-            Route::get('/', [PostController::class, 'viewPublic'])->name('view');
+            Route::get('/', [ReadPostController::class, 'view'])->name('view');
             Route::post('/addComment', [CommentController::class, 'store'])->name('comment.create');
 
             Route::prefix('/cards')->name('cards.')->group(function() {
-                Route::get('/', [CardController::class, 'showPublic'])->name('show');
-                Route::get('/learn', [CardController::class, 'learnPublic'])->name('learn');
-                Route::get('/quiz', [CardController::class, 'quizPublic'])->name('quiz');
+                Route::get('/', [ReadCardController::class, 'show'])->name('show');
+                Route::get('/learn', [ReadCardController::class, 'learn'])->name('learn');
+                Route::get('/quiz', [ReadCardController::class, 'quiz'])->name('quiz');
                     });
             });
         });
@@ -65,10 +67,13 @@ Route::middleware([
         Route::resource('courses', CourseController::class)->except(['show']);
     });
     Route::group(['middleware' => ['can:manage all comments']], function () {
-        Route::get('/moderateComments', [CommentController::class, 'indexModerator'])->name('comments.moderate');
+        Route::get('/moderateComments', [CommentController::class, 'moderate'])->name('comments.moderate');
     });
     Route::group(['middleware' => ['can:manage all posts']], function () {
-        Route::get('/moderatePosts', [PostController::class, 'indexModerator'])->name('posts.moderate');
+        Route::get('/moderatePosts', [PostController::class, 'moderate'])->name('posts.moderate');
+    });
+    Route::group(['middleware' => ['can:manage all posts']], function () {
+        Route::get('/allPosts', [PostController::class, 'all'])->name('posts.all');
     });
     Route::group(['middleware' => ['can:manage levels']], function () {
         Route::resource('levels', LevelController::class)->except(['show']);

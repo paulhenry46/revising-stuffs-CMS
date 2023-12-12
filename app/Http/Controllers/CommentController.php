@@ -23,7 +23,7 @@ class CommentController extends Controller
     }
 
 //Display all comments wich need to be validated
-    public function indexModerator()
+    public function moderate()
     {   $comments = Comment::where('validated', '=', 0)->get();
         return view('comments.moderate')->with('comments', $comments);
     }
@@ -33,31 +33,31 @@ class CommentController extends Controller
      */
     public function store(CommentCreateRequest $request, string $slug, Post $post)
     {
-    $comment = new Comment;
-    if (Auth::check()) {
-        $comment->user_id = Auth::id();
-        
-        if(Auth::user()->hasRole('contributor')){
-                $comment->validated = true;
-                $message = 'Your comment has been created.';
-        }else{
-                $comment->validated = false;
-                $message = 'Your comment has been created. It will be visible once approved by a moderator.';
-            }
+        $comment = new Comment;
+        if (Auth::check()) {
+            $comment->user_id = Auth::id();
+            
+            if(Auth::user()->hasRole('contributor')){
+                    $comment->validated = true;
+                    $message = 'Your comment has been created.';
+            }else{
+                    $comment->validated = false;
+                    $message = 'Your comment has been created. It will be visible once approved by a moderator.';
+                }
 
-    }else{
-        $comment->user_id = 1;
-        $comment->pseudo = $request->pseudo;
-        $comment->validated = false;
-        $message = 'Your comment has been created. It will be visible once approved by a moderator.';
-    }
-    $comment->content = $request->content;
-    $comment->type = $request->type;
-    $comment->post_id = $post->id;
-    $comment->save();
-    if($comment->validated){
-    $post->user->notify(new NewComment($comment));
-    }
-    return redirect()->route('post.public.view', [$post->slug, $post->id])->with('message', $message);
+        }else{
+            $comment->user_id = 1;
+            $comment->pseudo = $request->pseudo;
+            $comment->validated = false;
+            $message = 'Your comment has been created. It will be visible once approved by a moderator.';
+        }
+        $comment->content = $request->content;
+        $comment->type = $request->type;
+        $comment->post_id = $post->id;
+        $comment->save();
+        if($comment->validated){
+            $post->user->notify(new NewComment($comment));
+        }
+        return redirect()->route('post.public.view', [$post->slug, $post->id])->with('message', $message);
     }
 }
