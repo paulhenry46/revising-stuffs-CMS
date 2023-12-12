@@ -23,6 +23,14 @@ class PostPolicy
         return $user->hasPermissionTo('manage all posts');
     }
 
+     /**
+     * Determine whether the user can moderate any posts (='moderate' function).
+     */
+    public function moderate(User $user): bool
+    {
+        return $user->hasPermissionTo('publish all posts');
+    }
+
     /**
      * Determine whether the user can view the model.
      */

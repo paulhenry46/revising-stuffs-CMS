@@ -15,6 +15,7 @@ class PostController extends Controller
 {
     public function moderate()
     {   
+        $this->authorize('moderate', Post::class);
         //$posts = Post::where('validated', '=', 0)->get();
         return view('posts.moderate');//->with('posts', $posts);
     }
@@ -143,7 +144,7 @@ class PostController extends Controller
     public function destroy(Post $post)
     { 
         $this->authorize('destroy', $post);
-        
+
         //Delete the primary file(s) and complementary file(s)
             $files = $post->files;
             foreach ($files as $file) {
