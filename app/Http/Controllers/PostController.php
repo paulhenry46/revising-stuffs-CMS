@@ -21,6 +21,7 @@ class PostController extends Controller
 
     public function all()
     {   
+        $this->authorize('viewAny', Post::class);
         $posts = Post::orderBy('pinned', 'DESC')->latest()->paginate(15);
         return view('posts.all')->with('posts', $posts);
     }
@@ -41,6 +42,8 @@ class PostController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Post::class);
+
         $courses = Course::all();
         $levels = Level::all();
         $post = new Post;
@@ -53,6 +56,7 @@ class PostController extends Controller
      */
     public function store(PostCreateRequest $request)
     {
+        $this->authorize('create', Post::class);
             $user = Auth::user();
         $post = new Post;
         $post->title = $request->title;
@@ -92,6 +96,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+        $this->authorize('update', $post);
         $courses = Course::all();
         $levels = Level::all();
         return view('posts.edit', compact('post', 'courses', 'levels'));
@@ -102,6 +107,7 @@ class PostController extends Controller
      */
     public function update(PostEditRequest $request, Post $post)
     {
+        $this->authorize('update', $post);
         $user = Auth::user();
         $post->title = $request->title;
         $post->description = $request->description;
@@ -136,8 +142,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     { 
-        $user = Auth::user();
-        if(($user->id == $post->user_id) or ($user->hasPermissionTo('manage all posts'))){
+        $this->authorize('destroy', $post);
+        
         //Delete the primary file(s) and complementary file(s)
             $files = $post->files;
             foreach ($files as $file) {
@@ -155,7 +161,7 @@ class PostController extends Controller
         //Delete the post
             $post->delete();
             return redirect()->route('posts.index')->with('message', __('The post has been deleted.'));
-        }
+        
     }
 
 }
