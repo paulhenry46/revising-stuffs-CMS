@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PostCreateRequest;
-use App\Http\Requests\PostEditRequest;
+
+use App\Http\Requests\PostRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Post;
@@ -55,7 +55,7 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(PostCreateRequest $request)
+    public function store(PostRequest $request)
     {
         $this->authorize('create', Post::class);
             $user = Auth::user();
@@ -106,7 +106,7 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(PostEditRequest $request, Post $post)
+    public function update(PostRequest $request, Post $post)
     {
         $this->authorize('update', $post);
         $user = Auth::user();
