@@ -11,11 +11,7 @@ class CardImportRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if(($this->user()->id == $this->post->id) or ($this->user()->hasPermissionTo('manage all posts'))){
-            return true;
-        }else{
-            return false;
-        }
+        return true;
     }
 
     /**

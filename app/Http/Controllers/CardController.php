@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Card;
 use App\Models\Post;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\CardCreateRequest;
-use App\Http\Requests\CardEditRequest;
+use App\Http\Requests\CardRequest;
 use App\Http\Requests\CardImportRequest;
 
 class CardController extends Controller
@@ -31,12 +28,8 @@ class CardController extends Controller
 
     public function index(Post $post)
     {   
-        $user = Auth::user();
-        if($user->id == $post->user_id){
-            return view('cards.show', compact('post'));
-        }else{ 
-            return redirect()->route('posts.index')->with('warning', __('You didn\'t created this post. As a result, you can\'t view its cards.')); 
-        }
+        $this->authorize('list', [Card::class, $post]);
+        return view('cards.show', compact('post'));
     }
 
     /**
@@ -44,22 +37,18 @@ class CardController extends Controller
      */
     public function create(Post $post)
     {
-        $user = Auth::user();
-        if($user->id == $post->user_id){
-            $card = new Card;
-            $card->id = 0;
-            return view('cards.edit', compact('card', 'post'));
-        }else{ 
-            return redirect()->route('posts.index')->with('warning', __('You didn\'t created this post. As a result, you can\'t view its cards.')); 
-        }
-
+        $this->authorize('create', [Card::class, $post]);
+        $card = new Card;
+        $card->id = 0;
+        return view('cards.edit', compact('card', 'post'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CardCreateRequest $request, Post $post)
+    public function store(CardRequest $request, Post $post)
     {
+        $this->authorize('create',[Card::class, $post]);
         $front = str_ireplace($this->forbiden_tags, '', $request->front);
         $back = str_ireplace($this->forbiden_tags, '', $request->back);
 
@@ -77,17 +66,13 @@ class CardController extends Controller
 
     public function import(Post $post)
     {
-        $user = Auth::user();
-        if($user->id == $post->user_id){
-            return view('cards.import', compact('post'));
-        }else{ 
-            return redirect()->route('posts.index')->with('warning', __('You didn\'t created this post. As a result, you can\'t view its cards.')); 
-        }
-
+        $this->authorize('create', [Card::class, $post]);
+        return view('cards.import', compact('post'));
     }
 
     public function storeImport(CardImportRequest $request, Post $post)
     {
+        $this->authorize('create', [Card::class, $post]);
         $input = $request->content;
         //The separator by defalut is a tabulation
         $separator = "/\t+/";
@@ -130,20 +115,17 @@ class CardController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(Post $post, Card $card)
-    {
-        $user = Auth::user();
-        if($user->id == $card->post->user_id){
-            return view('cards.edit', compact('card', 'post'));
-        }else{ 
-            return redirect()->route('posts.index')->with('warning', __('You didn\'t created this post. As a result, you can\'t view its cards.')); 
-        }
+    {   
+        $this->authorize('update', $card);
+        return view('cards.edit', compact('card', 'post'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(CardEditRequest $request, Post $post, Card $card)
+    public function update(CardRequest $request, Post $post, Card $card)
     {
+        $this->authorize('update', $card);
         $card->front = str_ireplace($this->forbiden_tags, '', $request->front);
         $card->back = str_ireplace($this->forbiden_tags, '', $request->back);
         $card->save();
@@ -155,17 +137,7 @@ class CardController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Post $post, Card $card)
-    {   $user = Auth::user();
-        if($user->id == $card->post->user_id){
-            $card->delete();
-            if(Card::where('post_id', '=', $card->post->id)->count() == 0){
-                $post->cards = false;
-                $post->save();
-            }
-            return redirect()->route('cards.index', $post->id)->with('message', __('The card has been deleted.'));
-        }else{ 
-            return redirect()->route('posts.index')->with('warning', __('You didn\'t created this post. As a result, you can\'t edit its cards.')); 
-        }
-
+    {   
+        //See App\Livewire\CardsTable for this function
     }
 }

@@ -11,7 +11,6 @@ use App\Models\Post;
 use App\Models\File;
 use App\Models\Event;
 use Illuminate\Support\Str;
-use Auth;
 use App\Jobs\CreateThumbnail;
 
 class FileController extends Controller
@@ -20,50 +19,38 @@ class FileController extends Controller
      * Display a listing of the files attached to a specific ressource.
      */
     public function index(Post $post)
-    {   $user = Auth::user();
-        if($user->id == $post->user_id){
-            $files = $post->files;
-            return view('files.show', compact('files', 'post'));
-        }else{ 
-            return view('posts.show')->with('warning', __('You didn\'t created this post. As a result, you can\'t view its files.')); 
-        }
+    {   
+        $this->authorize('list', [File::class, $post]);
+        $files = $post->files;
+        return view('files.show', compact('files', 'post'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new complementary file.
      */
     public function create(Post $post)
     {
+        $this->authorize('create', [File::class, $post]);
         $file = new File;
         $file->id = 0;
         $file->type = 'none';
-
-        $user = Auth::user();
-        if($user->id == $post->user_id){
-            return view('files.edit', compact('file', 'post'));
-        }else{ 
-            return view('posts.show')->with('warning', __('You didn\'t created this post. As a result, you can\'t add files.')); 
-        }
+        return view('files.edit', compact('file', 'post'));
     }
     /**
      * Show the form for creating the primary files
      */
     public function createPrimary(Post $post)
     {
+        $this->authorize('create', [File::class, $post]);
         $state ="create";
-        $user = Auth::user();
-        if($user->id == $post->user_id and $post->files->where('type', '=', 'primary light')->count() == 0){
-            return view('files.primary-edit', compact('state', 'post'));
-        }else{ 
-            return redirect()->route('files.index', $post->id)->with('warning', __('There is already primary file for this post. ')); 
-        }
+        return view('files.primary-edit', compact('state', 'post'));
     }
     /**
      * Save the primary files in filesystem
      */
     public function storePrimary(FilePrimaryRequest $request, Post $post)
     {
-        if(Auth::user()->id == $post->user_id){
+        $this->authorize('create', [File::class, $post]);
             if(($post->dark_version) == 1 and (!$request->has('file_dark'))){
                 $files = $post->files;
                 return redirect()->route('files.index', compact('files', 'post'))->with('warning', __('The post has a dark version but you didn\'t provided dark file. Please retry providing a dark version.'));
@@ -106,35 +93,28 @@ class FileController extends Controller
                 return redirect()->route('files.index', compact('files', 'post'))->with('message', __('The primary file(s) has been created.'));
             }
             
-        }else{ 
-            return view('posts.show')->with('warning', __('You didn\'t created this post. As a result, you can\'t add files.')); 
-        }
+       
 }
-
-
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created complementary file in storage.
      */
     public function store(FileRequest $request, Post $post)
     {
-        if(Auth::user()->id == $post->user_id){
-                $folder = ''.$post->level->slug.'/'.$post->course->slug.'';
-                $filename_path = ''.$post->id.'.'.Str::slug($request->name, '-').'.'.$request->file->extension().'';
-                $filename = $request->name;
-                $path = $request->file->storeAs($folder, $filename_path, 'public');
-                $file = new File;
-                $file->type = $request->type;
-                $file->name = $filename;
-                $file->file_path = $path;
-                $file->post_id = $post->id;
-                $file->save();
-            
-        }else{ 
-            return view('posts.show')->with('warning', __('You didn\'t created this post. As a result, you can\'t add files.')); 
-        }
+        $this->authorize('create', [File::class, $post]);
 
-    $files = $post->files;
-    return redirect()->route('files.index', compact('files', 'post'))->with('message', __('The file has been created.'));
+        $folder = ''.$post->level->slug.'/'.$post->course->slug.'';
+        $filename_path = ''.$post->id.'.'.Str::slug($request->name, '-').'.'.$request->file->extension().'';
+        $filename = $request->name;
+        $path = $request->file->storeAs($folder, $filename_path, 'public');
+        $file = new File;
+        $file->type = $request->type;
+        $file->name = $filename;
+        $file->file_path = $path;
+        $file->post_id = $post->id;
+        $file->save();
+        $files = $post->files;
+
+        return redirect()->route('files.index', compact('files', 'post'))->with('message', __('The file has been created.'));
     }
 
 
@@ -143,12 +123,9 @@ class FileController extends Controller
      */
     public function editPrimary(Post $post)
     {
-
+        $this->authorize('create', [File::class, $post]);
         $state ="update";
-        $user = Auth::user();
-        if($user->id == $post->user_id){
-            return view('files.primary-edit', compact('state', 'post'));
-        }
+        return view('files.primary-edit', compact('state', 'post'));
     }
 
     /**
@@ -156,7 +133,7 @@ class FileController extends Controller
      */
     public function updatePrimary(FilePrimaryUpdateRequest $request, Post $post)
     {
-        if(Auth::user()->id == $post->user_id){
+        $this->authorize('create', [File::class, $post]);
             if(($post->dark_version) == 1 and (!$request->has('file_dark'))){
                 $files = $post->files;
                 return redirect()->route('files.index', compact('files', 'post'))->with('warning', __('The post has a dark version but you didn\'t provided dark file. Please retry providing a dark version.'));
@@ -192,18 +169,15 @@ class FileController extends Controller
                 $files = $post->files;
                 return redirect()->route('files.index', compact('files', 'post'))->with('message', __('The primary file(s) has been updated.'));
             }
-            
-        }else{ 
-            return view('posts.show')->with('warning', __('You didn\'t created this post. As a result, you can\'t add files.')); 
-        }
     }
 
     /**
      * Remove the from filesystem and database, but not the primary files
      */
     public function destroy(Post $post, File $file)
-    { 
-            if(Auth::user()->id == $file->post->user_id){
+    {
+        $this->authorize('delete', $file);
+
                 if(!str_contains($file->type, 'primary')){
 
                     $delete = Storage::disk('public')->delete($file->file_path);
@@ -213,7 +187,6 @@ class FileController extends Controller
                 }else{
                     return redirect()->route('files.index')->with('warning', __('You can\'t delete primary file.'));
                 }
-            }
         }
 
     }
