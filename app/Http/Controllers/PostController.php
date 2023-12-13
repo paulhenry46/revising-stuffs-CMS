@@ -135,6 +135,14 @@ class PostController extends Controller
         $post->course_id = $request->course_id;
         $post->level_id = $request->level_id;
         $post->save();
+        //Move files to the new directory if course or level is changed :
+            $files = $post->files;
+            foreach ($files as $file) {
+                $name = $file->name;
+                Storage::disk('public')->move($file->file_path, ''.$post->level->slug.'/'.$post->course->slug.'/'.$name.'');
+                $file->file_path = ''.$post->level->slug.'/'.$post->course->slug.'/'.$name.'';
+                $file->save();
+            }
         return redirect()->route('posts.index')->with('message', __('The post has been modified.'));
     }
 
@@ -159,6 +167,15 @@ class PostController extends Controller
                 $event->delete();
             }
         //Delete the comments
+        $comments = $post->comments;
+        foreach ($comments as $comment) {
+            $comment->delete();
+        }
+         //Delete the cards
+         $cards = $post->cards()->get();
+         foreach ($cards as $card) {
+             $card->delete();
+         }
         //Delete the post
             $post->delete();
             return redirect()->route('posts.index')->with('message', __('The post has been deleted.'));
