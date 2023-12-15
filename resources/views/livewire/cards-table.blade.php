@@ -49,7 +49,7 @@
             <tr>
               <td><input value="{{$card->id}}" x-model="selection" type="checkbox" class="checkbox checkbox-success" /></td>
                 <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium dark:text-gray-100 text-gray-900 sm:pl-0">{{ $card->id }}</td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm dark:text-gray-100 text-gray-500">{{ $card->front }}</td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm dark:text-gray-100 text-gray-500">{!! $card->front !!}</td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm dark:text-gray-100 text-gray-500">{!! $card->back !!}</td>
                 <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                     <a href="{{route('cards.edit', [$post->id, $card->id])}}" class="text-indigo-600 hover:text-indigo-400" wire:navigate>{{__('Edit')}}</a>

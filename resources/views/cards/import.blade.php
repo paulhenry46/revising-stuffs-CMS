@@ -60,7 +60,8 @@ Mot 3   Définition 3">{{ old('content')}}</textarea>
         </div>
         <div class="sm:col-span-6">
                           <div class="mt-2">
-                           {{__('You can use HTML tags to add images, MathML commands, use Tailwind CSS. However, there is forbiden tags wich are escaped : <div>, <script>, <link>, <th>, <td>, <a>, <iframe>')}}
+                           {{__('You can use HTML tags to add images, MathML commands, use Tailwind CSS. However, there is forbiden tags wich are escaped :')}} &lt;div&gt;, &lt;script&gt;, &lt;link&gt;, &lt;th&gt;, &lt;td&gt;, &lt;a&gt;, &lt;iframe&gt;</br>
+                           {{('For example, to underline a part of text,')}} <span class="underline decoration-warning">{{__('like')}}</span> <span class="underline decoration-error">{{__('this')}}</span>, use &lt;span class="underline decoration-warning"&gt;{{__('like')}}&lt;/span&gt; &lt;span class="underline decoration-error"&gt;{{__('this')}}&lt;/span&gt;
                           </div>
                         </div>
                       </div>
