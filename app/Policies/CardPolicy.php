@@ -12,9 +12,9 @@ class CardPolicy
 {
     public function before(User $user, $ability)
     {
-       /* if ($user->hasRole('admin')) {
+        if ($user->hasRole('admin')) {
             return true;
-        }*/
+        }
     }
     public function list(User $user, Post $post): bool
     {
