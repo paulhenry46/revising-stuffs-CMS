@@ -6,14 +6,15 @@ use App\Models\Card;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Auth;
 
 class CardPolicy
 {
     public function before(User $user, $ability)
     {
-        if ($user->hasRole('admin')) {
+       /* if ($user->hasRole('admin')) {
             return true;
-        }
+        }*/
     }
     public function list(User $user, Post $post): bool
     {
@@ -41,6 +42,13 @@ class CardPolicy
     public function delete(User $user, Card $card): bool
     {
         return $user->id === $card->post->user_id;
+    }
+
+    public function export(?User $user, Post $post)
+    {
+        return Auth::check()
+        ? Response::allow()
+        : Response::deny('You must to login to export cards.');
     }
 
 }

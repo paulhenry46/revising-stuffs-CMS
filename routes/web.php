@@ -45,6 +45,7 @@ Route::name('post.public.')->group(function() {
 
             Route::prefix('/cards')->name('cards.')->group(function() {
                 Route::get('/', [ReadCardController::class, 'show'])->name('show');
+                Route::get('/export', [CardController::class, 'export'])->name('export');
                 Route::get('/learn', [ReadCardController::class, 'learn'])->name('learn');
                 Route::get('/quiz', [ReadCardController::class, 'quiz'])->name('quiz');
                     });

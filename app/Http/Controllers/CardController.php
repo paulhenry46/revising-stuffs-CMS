@@ -7,6 +7,7 @@ use App\Models\Post;
 use Illuminate\Support\Str;
 use App\Http\Requests\CardRequest;
 use App\Http\Requests\CardImportRequest;
+use Illuminate\Support\Facades\Response;
 
 class CardController extends Controller
 {
@@ -139,5 +140,27 @@ class CardController extends Controller
     public function destroy(Post $post, Card $card)
     {   
         //See App\Livewire\CardsTable for this function
+    }
+
+    public function export(string $slug, Post $post)
+    {
+        $this->authorize('export', [Card::class, $post]);
+        $cards = Card::where('post_id', '=', $post->id)->get();
+        $csvFileName = 'cards-'.$post->title.'-'.$post->id.'.csv';
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $csvFileName . '"',
+        ];
+
+        $handle = fopen('php://output', 'w');
+        fputcsv($handle, ['front', 'back']); // Add more headers as needed
+
+        foreach ($cards as $card) {
+            fputcsv($handle, [$card->front, $card->back]); // Add more fields as needed
+        }
+
+        fclose($handle);
+
+        return Response::make('', 200, $headers);
     }
 }
