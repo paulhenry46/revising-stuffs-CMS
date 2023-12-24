@@ -13,8 +13,8 @@ class CourseController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {   $courses = Course::all();
-        return view('courses.show')->with('courses', $courses);
+    {   
+        return redirect()->route('levels.index');
     }
 
     /**
@@ -38,7 +38,7 @@ class CourseController extends Controller
     $course->lang = $request->lang;
     $course->slug = Str::slug($request->name, '-');
     $course->save();
-    return redirect()->route('courses.index')->with('message', __('The course has been created.'));
+    return redirect()->route('levels.index')->with('message', __('The course has been created.'));
     }
 
 
@@ -60,7 +60,7 @@ class CourseController extends Controller
     $course->lang = $request->lang;
     $course->slug = $slug = Str::slug($request->name, '-');
     $course->save();
-    return redirect()->route('courses.index')->with('message', __('The course has been modified.'));
+    return redirect()->route('levels.index')->with('message', __('The course has been modified.'));
     }
 
     /**
@@ -69,9 +69,9 @@ class CourseController extends Controller
     public function destroy(Course $course)
     {   if($course->posts()->count() == 0){
             $course->delete();
-            return redirect()->route('courses.index')->with('message', __('The course has been deleted.'));
+            return redirect()->route('levels.index')->with('message', __('The course has been deleted.'));
         }else{
-            return redirect()->route('courses.index')->with('warning', __('The course has posts attached. Please delete all of this posts or change their course before deleting this category.'));
+            return redirect()->route('levels.index')->with('warning', __('The course has posts attached. Please delete all of this posts or change their course before deleting this category.'));
         }
 
     }

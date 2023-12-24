@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\LevelRequest;
 use App\Models\Level;
+use App\Models\Course;
+use App\Models\Type;
 use Illuminate\Support\Str;
 
 class LevelController extends Controller
@@ -14,7 +16,9 @@ class LevelController extends Controller
      */
     public function index()
     {   $levels = Level::all();
-        return view('levels.show')->with('levels', $levels);
+        $courses = Course::where('id', '!=', '1')->get();
+        $types = Type::all();
+        return view('levels.show', compact(['levels', 'courses', 'types']));
     }
 
     /**
@@ -24,7 +28,8 @@ class LevelController extends Controller
     {
         $level = new Level;
         $level->id = 0;
-        return view('levels.edit', compact('level'));
+        $courses = Course::where('id', '!=', '1')->get();
+        return view('levels.edit', compact(['level', 'courses']));
     }
 
     /**
@@ -36,6 +41,7 @@ class LevelController extends Controller
     $level->name = $request->name;
     $level->slug = $slug = Str::slug($request->name, '-');
     $level->save();
+    $level->courses()->attach($request->courses);
     return redirect()->route('levels.index')->with('message', __('The level has been created.'));
     }
 
@@ -44,7 +50,8 @@ class LevelController extends Controller
      */
     public function edit(Level $level)
     {
-        return view('levels.edit', compact('level'));
+        $courses = Course::where('id', '!=', '1')->get();
+        return view('levels.edit', compact(['level', 'courses']));
     }
 
     /**
@@ -55,6 +62,7 @@ class LevelController extends Controller
     $level->name = $request->name;
     $level->slug = $slug = Str::slug($request->name, '-');
     $level->save();
+    $level->courses()->sync($request->courses);
     return redirect()->route('levels.index')->with('message', __('The course has been modified.'));
     }
 

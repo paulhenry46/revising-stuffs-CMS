@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\TypeController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\Public\ReadPostController;
@@ -66,6 +67,7 @@ Route::middleware([
     })->name('dashboard');
     Route::group(['middleware' => ['can:manage courses']], function () {
         Route::resource('courses', CourseController::class)->except(['show']);
+        Route::resource('types', TypeController::class)->except(['show']);
     });
     Route::group(['middleware' => ['can:manage all comments']], function () {
         Route::get('/moderateComments', [CommentController::class, 'moderate'])->name('comments.moderate');

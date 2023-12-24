@@ -52,9 +52,9 @@ class ReadPostController extends Controller
 
     public function library()
     {   
-        $courses = Course::All();
-        $levels = Level::All();
-        return view('posts.library', compact('courses', 'levels'));
+        $courses = Course::where('id', '!=', '1')->get();
+        //$levels = Level::All();
+        return view('posts.library', compact('courses'));
     }
 
 }

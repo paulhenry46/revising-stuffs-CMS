@@ -50,59 +50,12 @@
       </div>
     </div>
 
-    <div class="sm:col-span-3">
-    <div>
-<label class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Type')}}</label>
-<fieldset class="mt-4">
-<legend class="sr-only">{{__('Type')}}</legend>
-<div class="space-y-4">
-  <div class="flex items-center">
-    <input @if(old('type', $post->type) == "mindmap") selected @endif value="mindmap" id="email" name="type" type="radio" checked class="radio checked:bg-success">
-    <label for="email" class="ml-3 block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Mindmap')}}</label>
   </div>
-  <div class="flex items-center">
-    <input @if(old('type', $post->type) == "revision") selected @endif value="revision" id="sms" name="type" type="radio" class="radio checked:bg-info">
-    <label for="sms" class="dark:text-white ml-3 block text-sm font-medium leading-6 text-gray-900">{{__('Revision sheet')}}</label>
-  </div>
-  <div class="flex items-center">
-    <input @if(old('type', $post->type) == "metodo") selected @endif value="metodo" id="push" name="type" type="radio" class="radio checked:bg-warning">
-    <label for="push" class=" dark:text-white ml-3 block text-sm font-medium leading-6 text-gray-900">{{__('Methodology worksheet')}}</label>
-  </div>
-</div>
-</fieldset>
-</div>
-    </div>
-
-  </div>
-
-    <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-    <div class="sm:col-span-3">
-<div>
-<label for="location" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Course')}}</label>
-<div class="mt-2">
-<select id="location" name="course_id" class="select select-bordered w-full">
-                @foreach($courses as $course)
-                <option  @if(old('course_id', $post->course_id) == $course->id) selected @endif value="{{ $course->id }}">{{ $course->name }}</option>
-            @endforeach
-</select>
-</div>
-</div>
-    </div>
-
-    <div class="sm:col-span-3">
-    <div>
-<label for="location" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Level')}}</label>
-<div class="mt-2">
-<select id="location" name="level_id" class="select select-bordered w-full">
-@foreach($levels as $level)
-<option @if (old('level_id', $post->level_id) == $level->id) selected @endif value="{{ $level->id }}">{{ $level->name }}</option>
-@endforeach
-</select>
-</div>
-</div>
-    </div>
-
-  </div>
+  @if($post->id !== 0)
+  @livewire('level-course-dropdown', ['level'=>old('level_id', $post->level->id), 'course'=>old('course_id', $post->course->id), 'type'=> old('type_id', $post->type_id)])
+  @else
+  @livewire('level-course-dropdown', ['level'=>old('level_id', NULL), 'course'=>old('course_id', NULL), 'type'=> old('type_id', NULL)])
+@endif
 </div>
 <div class="border-b dark:border-white/10 border-gray-900/10 pb-12">
   <h2 class="text-base font-semibold leading-7 text-gray-900 dark:text-white">{{__('Detailed Informations')}}</h2>

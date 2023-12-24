@@ -17,6 +17,10 @@ class Post extends Model
     { 
     return $this->belongsTo(Level::class); 
     }
+    public function type()
+    { 
+    return $this->belongsTo(Type::class);
+    }
     public function user()
     { 
     return $this->belongsTo(User::class); 

@@ -45,11 +45,9 @@ class PostController extends Controller
     {
         $this->authorize('create', Post::class);
 
-        $courses = Course::all();
-        $levels = Level::all();
         $post = new Post;
         $post->id = 0;
-        return view('posts.edit', compact('post', 'courses', 'levels'));
+        return view('posts.edit', compact('post'));
     }
 
     /**
@@ -62,7 +60,8 @@ class PostController extends Controller
         $post = new Post;
         $post->title = $request->title;
         $post->description = $request->description;
-        $post->type = $request->type;
+        $post->type_id = $request->type_id;
+        $post->legacy_type = $request->type_id;
         $post->quizlet_url = $request->quizlet_url;
         $post->dark_version = $request->has('dark_version');
         $post->thanks = 0;
@@ -112,7 +111,8 @@ class PostController extends Controller
         $user = Auth::user();
         $post->title = $request->title;
         $post->description = $request->description;
-        $post->type = $request->type;
+        $post->type_id = $request->type_id;
+        $post->legacy_type = $request->type_id;
         $post->quizlet_url = $request->quizlet_url;
         $post->dark_version = $request->has('dark_version');
         $post->thanks = 0;

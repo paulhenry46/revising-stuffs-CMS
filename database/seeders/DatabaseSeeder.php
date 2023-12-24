@@ -6,6 +6,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use App\Models\Course;
 use Spatie\Permission\Models\Permission;
 use App\Models\User;
 
@@ -50,5 +51,12 @@ class DatabaseSeeder extends Seeder
         $user->email_verified_at = now();
         $user->save();
         $user->syncRoles(['admin', 'student', 'contributor', 'moderator']);
+        
+        //Create Course which stand for all courses
+        $course = new Course;
+        $course->name = 'All courses';
+        $course->slug = 'all-courses';
+        $course->color = 'red-500';
+        $course->save();
     }
 }

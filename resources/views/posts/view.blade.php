@@ -240,14 +240,8 @@
                                             @if($post->pinned)
                                             and <span class="badge badge-neutral badge-sm">{{__('Pinned')}}</span></h5>
                                             @endif
-                                        <h5>Type : 
-                                            @if($post->type == 'mindmap')
-                                            <span class="badge badge-success badge-sm">{{__('Mindmap')}}</span>
-                                            @elseif($post->type == 'metodo')
-                                            <span class="badge badge-warning badge-sm">{{__('Metodo')}}</span>
-                                            @else
-                                            <span class="badge badge-info badge-sm">{{__('Revision Sheet')}}</span>
-                                            @endif
+                                        <h5>{{__('Type')}} : 
+                                            <span class="text-white badge bg-{{$post->type->color}} badge-xm">{{$post->type->name}}</span>
                                         </h5>
                                         <h5>{{__('Date')}} : {{$post->created_at->format('d/m/Y')}}</h5>
                                         <h5>{{__('Author')}} : {{$post->user->name}} </h5>

@@ -24,7 +24,7 @@ class PostRequest extends FormRequest
         return [
             'title' => 'bail|required|min:4',
             'description' => 'bail|required|min:10',
-            'type' => 'bail|required|min:3',
+            'type_id' => 'bail|required|int',
             'course_id' => 'bail|required|numeric',
             'level_id' => 'bail|required|numeric',
             'description' => 'bail|required|max:200',
