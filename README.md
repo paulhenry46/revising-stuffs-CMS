@@ -21,7 +21,7 @@ RSCMS is a web app wich allow user to easily publish and share their revissing s
 - PDF to image package by Spatie
 #### Front-end
 - Tailwind CSS with DaisyUI components
-- Laravel Livewire
+- Livewire
 - Alpine.js
 - Vanilla JS for the flashcard Quiz and Learn Mode
 
