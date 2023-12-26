@@ -37,26 +37,24 @@
 <div class="mt-8 flow-root">
 <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
   <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-    <table class="min-w-full divide-y divide-gray-300">
+    <table class="table table-zebra">
       <thead>
         <tr>
-          <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-medium uppercase tracking-wide dark:text-gray-100 text-gray-500 sm:pl-0">ID</th>
-          <th scope="col" class="px-3 py-3 text-left text-xs font-medium uppercase tracking-wide dark:text-gray-100 text-gray-500">{{__('Title')}}</th>
-          <th scope="col" class="px-3 py-3 text-left text-xs font-medium uppercase tracking-wide dark:text-gray-100 text-gray-500">{{__('Course')}}</th>
-          <th scope="col" class="px-3 py-3 text-left text-xs font-medium uppercase tracking-wide dark:text-gray-100 text-gray-500">{{__('State')}}</th>
-          <th scope="col" class="px-3 py-3 text-left text-xs font-medium uppercase tracking-wide dark:text-gray-100 text-gray-500">{{__('Thanks')}}</th>
-          <th scope="col" class="relative py-3 pl-3 pr-4 sm:pr-0">
-            <span class="sr-only">Edit</span>
-          </th>
+          <th>ID</th>
+          <th>{{__('Title')}}</th>
+          <th>{{__('Course')}}</th>
+          <th>{{__('State')}}</th>
+          <th>{{__('Thanks')}}</th>
+          <th></th>
         </tr>
       </thead>
-      <tbody class="divide-y divide-gray-200 dark:bg-gray-800 bg-white">
+      <tbody>
         @foreach($posts as $post)
         <tr>
-            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium dark:text-gray-100 text-gray-900 sm:pl-0">{{ $post->id }}</td>
-            <td class="whitespace-nowrap px-3 py-4 text-sm dark:text-gray-100 text-gray-500">{{ $post->title }}</td>
-            <td class="whitespace-nowrap px-3 py-4 text-sm text-{{ $post->course->color }}">{{ $post->course->name }}</td>
-            <td class="flex items-center whitespace-nowrap px-3 py-4 text-sm dark:text-gray-100 text-gray-500">
+            <td>{{ $post->id }}</td>
+            <td>{{ $post->title }}</td>
+            <td class="text-{{ $post->course->color }}">{{ $post->course->name }}</td>
+            <td class="flex items-center whitespace-nowrap px-3 py-4 text-sm">
               @if ($post->files->where('type', '=', 'primary light')->count() == 0)
               <div class="text-red-500">
               <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M200-800v640-640 200-200Zm80 400h147q11-23 25.5-43t32.5-37H280v80Zm0 160h123q-3-20-3-40t3-40H280v80ZM200-80q-33 0-56.5-23.5T120-160v-640q0-33 23.5-56.5T200-880h320l240 240v92q-19-6-39-9t-41-3v-40H480v-200H200v640h227q11 23 25.5 43T485-80H200Zm480-400q83 0 141.5 58.5T880-280q0 83-58.5 141.5T680-80q-83 0-141.5-58.5T480-280q0-83 58.5-141.5T680-480Zm0 320q11 0 18.5-7.5T706-186q0-11-7.5-18.5T680-212q-11 0-18.5 7.5T654-186q0 11 7.5 18.5T680-160Zm-18-76h36v-10q0-11 6-19.5t14-16.5q14-12 22-23t8-31q0-29-19-46.5T680-400q-23 0-41.5 13.5T612-350l32 14q3-12 12.5-21t23.5-9q15 0 23.5 7.5T712-336q0 11-6 18.5T692-302q-6 6-12.5 12T668-276q-3 6-4.5 12t-1.5 14v14Z"/></svg>
@@ -73,8 +71,8 @@
               <div class="ml-2 text-orange-500">
               <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m640-480 80 80v80H520v240l-40 40-40-40v-240H240v-80l80-80v-280h-40v-80h400v80h-40v280Zm-286 80h252l-46-46v-314H400v314l-46 46Zm126 0Z"/></svg></div>
         @endif </td>
-            <td class="whitespace-nowrap px-3 py-4 text-sm dark:text-gray-100 text-gray-500">{{ $post->thanks }}</td>
-            <td class="flex items-stretch justify-end relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+            <td>{{ $post->thanks }}</td>
+            <td class="flex items-stretch justify-end relative  text-right">
             <a href="{{route('post.public.view', [$post->slug, $post->id])}}" class="ml-4 text-indigo-600 hover:text-indigo-400">
             <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
               <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"/>
