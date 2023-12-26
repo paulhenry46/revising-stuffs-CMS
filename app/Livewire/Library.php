@@ -6,18 +6,19 @@ use Livewire\Component;
 use Livewire\Attributes\Url;
 use App\Models\Post;
 use App\Models\Course;
+use App\Models\Type;
 use App\Models\Level;
 
 class Library extends Component
 {
     #[Url(as: 'query')]
-    public $search = '';
+    public $search;
     //#[Url(as: 'course')]
     public $course;
     //#[Url(as: 'level')]
     public $level;
     #[Url(as: 'type')]
-    public $types = ['mindmap', 'revision', 'metodo']; // Default is empty, so "All" is checked;
+    public $types = []; // Default is empty, so "All" is checked;
     #[Url(as: 'dark')]
     public $dark = false;
     #[Url(as: 'cards')]
@@ -29,6 +30,10 @@ class Library extends Component
     {
         $this->course = $course;
         $this->level = $level;
+        /*$this->types = Type::where(function ($query) {
+            $query->where('course_id', $this->course->id) //Get types for this courses
+                  ->orWhere('course_id', 1); //Get types for all courses
+        })->pluck('id')->toArray();*/
     }
 
     public function render()
@@ -47,8 +52,9 @@ class Library extends Component
                 return $query->where('level_id', '=', $this->level);
             })*/
             ->when(count(array_filter($this->types)), function ($query) {
-                    return $query->whereIn('type', $this->types);
+                    return $query->whereIn('type_id', $this->types);
             })
+            //->whereIn('type_id', $this->types)
             ->when($this->dark, function($query){
                 return $query->where('dark_version', 1);
             })
@@ -60,7 +66,11 @@ class Library extends Component
             })->orderBy('id', 'desc')
             ->get(),
             //'courses' => $courses = Course::all(),
-            'levels' => $levels = Level::all()
+            'levels' => $levels = Level::all(),
+            'types_view' => Type::where(function ($query) {
+                $query->where('course_id', $this->course->id) //Get types for this courses
+                      ->orWhere('course_id', 1); //Get types for all courses
+            })->get(),
         ]);
     }
 }

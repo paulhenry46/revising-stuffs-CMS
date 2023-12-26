@@ -2,11 +2,11 @@
                                     <figure><img class="object-cover w-full h-48" src="{{url('storage/'.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png')}}" alt="Shoes" />
                                       <div class="right-0 top-0 absolute pin-t pin-l ">
                                         @auth
-                                    <livewire:favorite-button :post=$post :user=Auth::user() lazy/>
+                                    <livewire:favorite-button wire:key="fav_{{$post->id}}" :post=$post :user=Auth::user() lazy/>
                                     @endauth
                                     </div>
                                     <div class="left-0 top-0 absolute pin-t pin-l ">
-                                    <livewire:like :post=$post lazy/>
+                                    <livewire:like wire:key="like_{{$post->id}}" :post=$post lazy/>
                                     </div>
                                   </figure>
                                     <div class="card-body">

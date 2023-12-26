@@ -41,24 +41,15 @@
         </div>
         <div class="sm:col-span-2">
          <label for="location" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Type')}}</label>
-        <div class="form-control">
+        @foreach($types_view as $type)
+<div wire:key="type_{{ $type->id }}" class="form-control">
   <label class="cursor-pointer label">
-    <span class="label-text">{{__('Mindmap')}}</span>
-    <input value="mindmap" wire:model.live="types" type="checkbox" class="checkbox checkbox-success" />
+    <span class="label-text">{{$type->name}}</span>
+    <input value="{{$type->id}}" wire:model.live="types" type="checkbox" class="checkbox checkbox-info"/>
   </label>
 </div>
-<div class="form-control">
-  <label class="cursor-pointer label">
-    <span class="label-text">{{__('Revision sheet')}}</span>
-    <input value="revision" wire:model.live="types" type="checkbox" class="checkbox checkbox-info"/>
-  </label>
+@endforeach
 </div>
-<div class="form-control">
-  <label class="cursor-pointer label">
-    <span class="label-text">{{__('Methodology worksheet')}}</span>
-    <input value="metodo" wire:model.live="types" type="checkbox" class="checkbox checkbox-warning "/>
-  </label>
-</div></div>
         
         
     </div>
@@ -70,8 +61,8 @@
 
 <div class="grid grid-cols-4 gap-4">
 @foreach($posts as $post)
-<div wire:key="{{ $post->id }}" class="pt-4 col-span-4 lg:col-span-1">
-<x-post-card :post=$post/>
+<div wire:key="post_{{ $post->id }}" class="pt-4 col-span-4 lg:col-span-1">
+<x-post-card wire:key="post_nested{{$post->id}}" :post=$post/>
                                 </div>
                                 @endforeach
 
