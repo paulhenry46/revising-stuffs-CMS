@@ -1,7 +1,7 @@
 
 ## About Revising Stuffs CMS (RSCMS)
 
-RSCMS is a web app wich allow user to easily publish and share their revissing stuffs with their community. There are a lot of features, including
+RSCMS is a web app wich allow user to easily publish and share their revissing stuffs with their community.
 ## Sreenshots
 ![Cards](https://raw.githubusercontent.com/paulhenry46/RSCMS-Docs/main/screenshots/cards.png "Cards")
 ![Courses](https://raw.githubusercontent.com/paulhenry46/RSCMS-Docs/main/screenshots/courses.png "Courses")
