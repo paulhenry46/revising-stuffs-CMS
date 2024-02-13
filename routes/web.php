@@ -103,6 +103,12 @@ Route::middleware([
             Route::prefix('/Primary')->group(function () {
                 Route::get('/create', 'createPrimary')->name('primary.create');
                 Route::post('/', 'storePrimary')->name('primary.store');
+                
+                Route::post('/images', 'handleImages')->name('primary.handle');
+                Route::get('/images/sort', 'sortForm')->name('primary.sortForm');
+                Route::post('/images/sorted', 'sort')->name('primary.sort');
+                
+                Route::get('/update', 'editPrimary')->name('edit');
                 Route::get('/update', 'editPrimary')->name('edit');
                 Route::put('/edit', 'updatePrimary')->name('update');
             });

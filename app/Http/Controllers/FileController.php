@@ -7,11 +7,14 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\FileRequest;
 use App\Http\Requests\FilePrimaryRequest;
 use App\Http\Requests\FilePrimaryUpdateRequest;
+use App\Http\Requests\ImagesRequest;
 use App\Models\Post;
 use App\Models\File;
 use App\Models\Event;
 use Illuminate\Support\Str;
 use App\Jobs\CreateThumbnail;
+
+use function PHPUnit\Framework\isEmpty;
 
 class FileController extends Controller
 {
@@ -71,8 +74,6 @@ class FileController extends Controller
                 $file->file_path = $path_light;
                 $file->post_id = $post->id;
                 $file->save();
-                //$pdf = new Pdf(storage_path('app/public/'.$path_light.''));
-                //$pdf->saveImage(storage_path('app/public/'.$folder.'/'.$filename_path_thumbnail.''));
                 dispatch(new CreateThumbnail($path_light, $filename_path_thumbnail, $folder ));
                 /*for the dark file*/
                 if($post->dark_version){
@@ -189,4 +190,91 @@ class FileController extends Controller
                 }
         }
 
+     /**
+     * ========Process to generate pdf from images=======
+     */
+
+    /**
+     * Handle the images uploaded and place them in a temporaty public folder "temp/Images"
+     */
+    public function handleImages(ImagesRequest $request, Post $post)
+    {
+        $this->authorize('create', [File::class, $post]);
+
+        $i=1;
+        $imagesDatas =[];
+        foreach ($request->file('files') as $image) {
+            $name = ''.$post->id.'_Image'.$i.'';
+            $image->storeAs('temp/img', $name, 'public');
+            $imagesDatas[$name] = $i;
+            $i++;
+        }
+        
+        $request->session()->put('imagesDatas', $imagesDatas);
+        return redirect()->route('files.primary.sortForm', compact('post'))->with('message', __('The file has been uploaded.'))->with('imagesDatas', $imagesDatas);
     }
+
+     /**
+     * Show the form for sorting the primary files ONLY.
+     */
+    public function sortForm(Post $post)
+    {
+
+        $imagesDatas = session()->get('imagesDatas');
+        if($imagesDatas == NULL){
+            return redirect()->route('files.primary.create', compact('post'));
+        }else{
+        return view('files.sort', compact('imagesDatas', 'post'));
+        }
+    }
+
+    /**
+     * Order the upoaded images before converting them
+     */
+    public function sort(Request $request, Post $post)
+    {
+
+        $this->authorize('create', [File::class, $post]);
+
+        $imagesOrderedDatas = [];
+        $i = 1;
+        $NameImage = ''.$post->id.'_Image'.$i.'';
+
+        while($request->has($NameImage)){
+            $path = Storage::path('/public/temp/img/'.$NameImage.'');
+            $imagesOrderedDatas[$path] = $request->input($NameImage);
+            $i++;
+            $NameImage = ''.$post->id.'_Image'.$i.'';
+        }
+
+        asort($imagesOrderedDatas);
+        $imagesOrderedDatas = array_flip($imagesOrderedDatas);//Sort array by order selected by user and flip in order to have the name as key.
+
+        return $this->convertImages($post, $imagesOrderedDatas);
+    }
+
+    private function convertImages(Post $post, array $imagesOrderedDatas)
+    {
+                /*Prepare the values*/
+                $folder = ''.$post->level->slug.'/'.$post->course->slug.'';
+                $filename_path_light = ''.$post->id.'-'.$post->slug.'.light.pdf';
+                $filename_path_thumbnail = ''.$post->id.'-'.$post->slug.'.thumbnail.png';
+                $path_light = ''.storage_path().'/app/public/'.$folder.'/'.$filename_path_light.'';
+                /*Convert file*/
+                $converter_command = 'convert '.implode( ' ', $imagesOrderedDatas ).' -quality 100 '.$path_light.' 2>&1';
+                exec($converter_command);
+                /*create the file in bdd*/
+                $file = new File;
+                $file->type = 'primary light';
+                $file->name = $filename_path_light;
+                $file->file_path = ''.$folder.'/'.$filename_path_light.'';
+                $file->post_id = $post->id;
+                $file->save();
+                $pdf_path = ''.$folder.'/'.$filename_path_light.'';
+                dispatch(new CreateThumbnail($pdf_path, $filename_path_thumbnail, $folder ));
+
+                $files = $post->files;
+                return redirect()->route('files.index', compact('files', 'post'))->with('message', __('The primary file(s) has been created.'));
+    }
+
+}
