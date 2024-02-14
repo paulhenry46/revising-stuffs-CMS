@@ -262,7 +262,13 @@ class FileController extends Controller
                 $path_light = ''.storage_path().'/app/public/'.$folder.'/'.$filename_path_light.'';
                 /*Convert file*/
                 $converter_command = 'convert '.implode( ' ', $imagesOrderedDatas ).' -quality 100 '.$path_light.' 2>&1';
-                exec($converter_command);
+                $result = [];
+                exec($converter_command, $result);
+                if($result == []){
+                    foreach($imagesOrderedDatas as $i => $path){
+                        unlink($path);
+                    }
+                }
                 /*create the file in bdd*/
                 $file = new File;
                 $file->type = 'primary light';
