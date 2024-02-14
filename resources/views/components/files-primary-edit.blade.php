@@ -65,6 +65,9 @@
     <button type="submit" class="btn btn-primary">@if($state == 'update') {{__('Update')}} @else {{__('Create')}} @endif</button>
   </div>
   </form>
+  @if($state != 'update' and $post->dark_version == 0)
+  
+  
   <form method="POST" action="@if($state == 'update') {{route('files.update', $post->id)}} @else {{route('files.primary.handle', $post->id)}} @endif" enctype="multipart/form-data">
     @csrf
     @if($state == 'update') @method('put') @endif
@@ -110,8 +113,9 @@
   </div>
   </div>
   
-  
 </form>
+@endif
+
   </div>
   
 
