@@ -8,9 +8,15 @@
 
 <div class="bg-gray-200 dark:bg-gray-800 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
 <x-info-message/>
-<form method="POST" action="@if($state == 'update') {{route('files.update', $post->id)}} @else {{route('files.primary.store', $post->id)}} @endif" enctype="multipart/form-data">
+<form method="POST" action="{{route('files.primary.handle', $post->id)}}" enctype="multipart/form-data">
     @csrf
-    @if($state == 'update') @method('put') @endif
+    <input type="hidden" id="file_type" name="file_type" value="pdf" />
+    @if($state == 'update') 
+    @method('put') 
+    <input type="hidden" id="op_type" name="op_type" value="update" />
+    @else
+    <input type="hidden" id="op_type" name="op_type" value="create" />
+    @endif
   <div class="space-y-12">
     @if($state == 'update')
     <div class="border-b dark:border-white/10 border-gray-900/10 pb-12">
@@ -65,12 +71,19 @@
     <button type="submit" class="btn btn-primary">@if($state == 'update') {{__('Update')}} @else {{__('Create')}} @endif</button>
   </div>
   </form>
-  @if($state != 'update' and $post->dark_version == 0)
+  @if($post->dark_version == 0)
   
-  
-  <form method="POST" action="@if($state == 'update') {{route('files.update', $post->id)}} @else {{route('files.primary.handle', $post->id)}} @endif" enctype="multipart/form-data">
+  <form method="POST" action="{{route('files.primary.handle', $post->id)}}" enctype="multipart/form-data">
     @csrf
-    @if($state == 'update') @method('put') @endif
+    <input type="hidden" id="file_type" name="file_type" value="image" />
+    <input type="hidden" id="step" name="step" value="1" />
+    @if($state == 'update') 
+    @method('put') 
+    <input type="hidden" id="op_type" name="op_type" value="update" />
+    @else
+    <input type="hidden" id="op_type" name="op_type" value="create" />
+    @endif
+
   <div class="space-y-12">
     @if($state == 'update')
     <div class="border-b dark:border-white/10 border-gray-900/10 pb-12">

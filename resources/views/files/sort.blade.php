@@ -27,8 +27,11 @@
 
 <div class="bg-gray-200 dark:bg-gray-800 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
 <x-info-message/>
-<form method="POST" action="{{route('files.primary.sort', $post->id)}}" enctype="multipart/form-data">
+<form method="POST" action="{{route('files.primary.handle', $post->id)}}" enctype="multipart/form-data">
 @csrf
+<input type="hidden" id="file_type" name="file_type" value="image" />
+    <input type="hidden" id="step" name="step" value="2" />
+    
 <div class="space-y-12">
 
 <div class="border-b dark:border-white/10 border-gray-900/10 pb-12">
