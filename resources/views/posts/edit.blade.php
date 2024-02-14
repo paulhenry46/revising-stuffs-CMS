@@ -87,7 +87,8 @@
   </div>
   <div class="ml-3 text-sm leading-6">
     <label for="dark_version" class="font-medium text-gray-900 dark:text-white">{{__('Dark Version')}}</label>
-    <p id="dark_version-description" class="text-gray-500 dark:text-gray-400">{{__('You provide a dark version of this ressource. If it is checked, you wont be able to upload images of handwritten ressources.')}}</p>
+    <p id="dark_version-description" class="text-gray-500 dark:text-gray-400">{{__('You provide a dark version of this ressource.')}}</p>
+    <p id="dark_version-description" class="text-error">{{__('If it is checked, you wont be able to upload images of handwritten ressources.')}}</p>
   </div>
 </div>
 <div class="relative flex items-start">
