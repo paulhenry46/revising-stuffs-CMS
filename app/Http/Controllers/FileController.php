@@ -102,6 +102,19 @@ class FileController extends Controller
                 }
         }
 
+        public function sortForm(Post $post)
+    {
+
+        $imagesDatas = session()->get('imagesDatas');
+        if($imagesDatas == NULL){
+            return redirect()->route('files.primary.create', compact('post'));
+        }else{
+        return view('files.sort', compact('imagesDatas', 'post'));
+        }
+    }
+
+
+
     private function putFileInDB(string $type, string $name, string $path, int $id){
                 $file = new File;
                 $file->type = $type;
@@ -135,11 +148,45 @@ class FileController extends Controller
         }
     }
 
+    private function validateRequest(Request $request, Post $post){
+        if($request->file_type == 'pdf'){
+            if($request->op_type == 'create'){
+                $request->validate([
+                    'file_light' => 'required|mimes:pdf',
+                    'file_dark' => 'mimes:pdf',
+                ]);
+            }else{
+                $request->validate([
+                    'file_light' => 'required|mimes:pdf',
+                    'file_dark' => 'mimes:pdf',
+                    'update_type' => 'required|string',
+                    'update_content' => 'required|string',
+                ]);
+            }
+        }else{
+            if($request->op_type == 'create'){
+                $request->validate([
+                    'files' => 'required',
+                    'files.*' => 'required|mimes:jpg,png,jpeg|max:2048'
+                ]);
+            }else{
+                $request->validate([
+                    'files' => 'required',
+                    'files.*' => 'required|mimes:jpg,png,jpeg|max:2048',
+                    'update_type' => 'required|string',
+                    'update_content' => 'required|string',
+                ]);
+            }
+        }
+    }
+
     private function processPdf(Request $request, Post $post){
         if(($post->dark_version) == 1 and (!$request->has('file_dark'))){
             $files = $post->files;
             return redirect()->route('files.index', compact('files', 'post'))->with('warning', __('The post has a dark version but you didn\'t provided dark file. Please retry providing a dark version.'));
         }else{
+
+            $validated = $this->validateRequest($request,$post);//Validate request
 
             $fileDatas = $this->storePdf($request, 'light', $post);
             if($request->op_type == 'create'){
@@ -179,6 +226,8 @@ class FileController extends Controller
 
     private function processImage(Request $request, Post $post){
         if($request->step == '1'){ //Step where we upload the files
+            $validated = $this->validateRequest($request,$post);//Validate request
+
             if($request->op_type == 'update'){
                 session(['update_type' => $request->update_type]); //We put datas of the update sent to use them in the step 2
                 session(['update_content' => $request->update_content]);

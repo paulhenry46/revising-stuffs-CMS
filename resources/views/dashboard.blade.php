@@ -175,10 +175,18 @@
                                         {{__('Manage posts')}}
                                     </a>
                                 </div>
-                                <div class="col-span-2">
+                                <div class="">
                                     <a wire:navigate href="{{route('levels.index')}}" class="btn btn-error w-full">
                                         <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m297-581 149-243q6-10 15-14.5t19-4.5q10 0 19 4.5t15 14.5l149 243q6 10 6 21t-5 20q-5 9-14 14.5t-21 5.5H331q-12 0-21-5.5T296-540q-5-9-5-20t6-21ZM700-80q-75 0-127.5-52.5T520-260q0-75 52.5-127.5T700-440q75 0 127.5 52.5T880-260q0 75-52.5 127.5T700-80Zm-580-60v-240q0-17 11.5-28.5T160-420h240q17 0 28.5 11.5T440-380v240q0 17-11.5 28.5T400-100H160q-17 0-28.5-11.5T120-140Z"/></svg>                                        
                                         {{__('Manage Courses, Levels and types')}}
+                                    </a>
+                                </div>
+                                <div class="">
+                                    <a wire:navigate href="{{route('settings')}}" class="btn btn-error w-full">
+                                    <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+                                        <path d="m620-284 56-56q6-6 6-14t-6-14L540-505q4-11 6-22t2-25q0-57-40.5-97.5T410-690q-11 0-21 1t-20 5q-9 4-11 14t5 17l74 74-56 56-74-74q-7-7-17-5t-14 11q-3 10-4.5 20t-1.5 21q0 57 40.5 97.5T408-412q13 0 24.5-2t22.5-6l137 136q6 6 14 6t14-6ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+                                </svg>
+                                        {{__('Admin settings')}}
                                     </a>
                                 </div>
                                 

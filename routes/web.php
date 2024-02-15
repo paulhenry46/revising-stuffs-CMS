@@ -12,6 +12,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\AboutController;
+use App\Http\Controllers\AdminSettingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -77,6 +78,9 @@ Route::middleware([
     });
     Route::group(['middleware' => ['can:manage all posts']], function () {
         Route::get('/allPosts', [PostController::class, 'all'])->name('posts.all');
+        Route::get('/settings', [AdminSettingsController::class, 'show'])->name('settings');
+        Route::get('/allPosts/download', [AdminSettingsController::class, 'createZipOfStorage'])->name('settings.downloadFiles');
+        Route::get('/allPosts/downloadDB', [AdminSettingsController::class, 'createBackupOfDB'])->name('settings.downloadDB');
     });
     Route::group(['middleware' => ['can:manage levels']], function () {
         Route::resource('levels', LevelController::class)->except(['show']);
