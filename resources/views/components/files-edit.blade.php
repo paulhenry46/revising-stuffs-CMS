@@ -19,9 +19,9 @@
         <div class="sm:col-span-3">
         <label for="type" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Type')}}</label>
         <select id="type" name="type" class="form-select mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-white/5 dark:text-white dark:ring-white/10">
-                    <option  @if(old('type') == 'source') selected @endif value="source">Source File</option>
-                    <option  @if(old('type') == 'exercise') selected @endif value="exercise">Exercise</option>
-                    <option  @if(old('type') == 'exercise correction') selected @endif value="exercise correction">Exercise correction</option>
+                    <option  @if(old('type') == 'source') selected @endif value="source">{{__('Source File')}}</option>
+                    <option  @if(old('type') == 'exercise') selected @endif value="exercise">{{__('Exercise')}}</option>
+                    <option  @if(old('type') == 'exercise correction') selected @endif value="exercise correction">{{__('Exercise correction')}}</option>
   </select>
         </div>
         <div class="sm:col-span-3">

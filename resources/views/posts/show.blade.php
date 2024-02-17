@@ -31,7 +31,7 @@
   <p class="mt-2 text-sm text-gray-700 dark:text-white">{{__('List of your posts')}}</p>
 </div>
 <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-  <a href="{{route('posts.create')}}" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">{{__('New post')}}</a>
+  <a href="{{route('posts.create')}}" class="btn btn-primary">{{__('New post')}}</a>
 </div>
 </div>
 <div class="mt-8 flow-root">

@@ -27,7 +27,7 @@
                             <div class="pt-2">
                                 <div class="card bg-base-100 shadow-xl">
                                     <div class="card-body">
-                                        <h2 class="card-title">Your profile
+                                        <h2 class="card-title">{{__('Your profile')}}
                                         <a href="{{route('profile.show')}}" class="text-primary hover:text-indigo-400">
                                         <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
                                             <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/>
@@ -53,11 +53,11 @@
                                         <div class="flex items-center justify-center">
                                             <h5>{{$user->name}} 
                                                 @if($user->hasRole('admin'))
-                                                <span class="badge badge-error badge-sm">Admin</span>
+                                                <span class="badge badge-error badge-sm">{{__('Administrator')}}</span>
                                                 @elseif($user->hasRole('moderator'))
-                                                <span class="badge badge-warning badge-sm">Moderator</span>
+                                                <span class="badge badge-warning badge-sm">{{__('Moderator')}}</span>
                                                 @elseif($user->hasRole('contributor'))
-                                                <span class="badge badge-info badge-sm">Contributor</span>
+                                                <span class="badge badge-info badge-sm">{{__('Contributor')}}</span>
                                                 @endif
                                                 </h5>
                                         </div>
@@ -178,7 +178,7 @@
                                 <div class="">
                                     <a wire:navigate href="{{route('levels.index')}}" class="btn btn-error w-full">
                                         <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m297-581 149-243q6-10 15-14.5t19-4.5q10 0 19 4.5t15 14.5l149 243q6 10 6 21t-5 20q-5 9-14 14.5t-21 5.5H331q-12 0-21-5.5T296-540q-5-9-5-20t6-21ZM700-80q-75 0-127.5-52.5T520-260q0-75 52.5-127.5T700-440q75 0 127.5 52.5T880-260q0 75-52.5 127.5T700-80Zm-580-60v-240q0-17 11.5-28.5T160-420h240q17 0 28.5 11.5T440-380v240q0 17-11.5 28.5T400-100H160q-17 0-28.5-11.5T120-140Z"/></svg>                                        
-                                        {{__('Manage Courses, Levels and types')}}
+                                        {{__('Manage courses, levels and types')}}
                                     </a>
                                 </div>
                                 <div class="">
