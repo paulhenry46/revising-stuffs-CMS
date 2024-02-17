@@ -380,7 +380,17 @@
     "Exercise correction" : "Correction d'exercice",
     "Upload your file" : "Envoi de votre fichier",
     "Your file" : "Votre fichier",
-    "Create files" : "Ajouter des fichiers"
+    "Create files" : "Ajouter des fichiers",
+    "Comments which need to be validated" : "Commentaires à valider",
+    "Posts which need to be validated" : "Ressources à valider",
+    "Manage the users" : "Gestion des utilisateurs",
+    "Users" : "Utilisateurs",
+    "List of the users" : "Liste des utilisateurs",
+    "New user" : "Nouvel utilisateur",
+    "Manage all posts" : "Gestion des ressources",
+    "List of the posts" : "Liste des ressources",
+    "Manage levels, courses and specific types of post" : "Gestion des classes, cours et types de ressources"
+
 
 
 }
