@@ -38,7 +38,7 @@ public function createZipOfStorage(){
 
 public function createBackupOfDB(){
     $path =''.storage_path().'/app/export.sql';
-    if(env('DB_CONNEXION') == 'mysql'){
+    if(env('DB_CONNECTION') == 'mysql'){
         exec('MYSQL_PWD="'.env('DB_PASSWORD').'" mysqldump -u '.env('DB_USERNAME').' '.env('DB_DATABASE').' > '.$path.' 2>&1');
     }
     return response()->download($path)->deleteFileAfterSend(true);
