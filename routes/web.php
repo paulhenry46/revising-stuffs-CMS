@@ -13,6 +13,7 @@ use App\Http\Controllers\CardController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\AdminSettingsController;
+use App\Http\Controllers\RssController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,9 @@ use App\Http\Controllers\AdminSettingsController;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('/rss/posts', [RssController::class, 'posts'])->name('rss.posts');
 
 //Public Routes
 Route::name('post.public.')->group(function() {
