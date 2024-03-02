@@ -94,8 +94,8 @@ class UserController extends Controller
         
         }
         $user->save();
-        dd($user);
-        return 'ok';
+        
+        return redirect()->route('dashboard')->with('message', __('You have updated your cursus informations.'));
         
     }
 
