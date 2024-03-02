@@ -31,6 +31,16 @@ class User extends Authenticatable
         }
     }
 
+    public function hasCourse(int $course_id): bool
+    {
+        
+        if(in_array($course_id, $this->courses_id)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public function removeFavorite(int $post_id, User $user)
     {
         if (($key = array_search($post_id, $user->favorite_posts)) !== false) 
@@ -94,7 +104,8 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'favorite_posts' => 'array'
+        'favorite_posts' => 'array',
+        'courses_id' => 'array'
     ];
 
     /**

@@ -40,7 +40,11 @@
 <div class="space-y-12">
 
 <div class="border-b border-gray-900/10 pb-12">
-<div class="bg-blue-100 bg-green-100 bg-purple-100 bg-yellow-100 bg-orange-100 bg-gray-100 bg-pink-100 bg-red-100 bg-blue-700 bg-green-700 bg-purple-700 bg-yellow-700 bg-orange-700 bg-gray-700 bg-pink-700 bg-red-700" style="display:none;"></div>
+<div class="border-blue-500 border-green-500 border-purple-500 border-yellow-500 border-orange-500 border-gray-500 border-pink-500 border-red-500
+ checked:border-blue-500 checked:border-green-500 checked:border-purple-500 checked:border-yellow-500 checked:border-orange-500 checked:border-gray-500 checked:border-pink-500 checked:border-red-500 
+ [--chkbg:theme(colors.blue.500)] [--chkbg:theme(colors.green.500)] [--chkbg:theme(colors.purple.500)] [--chkbg:theme(colors.yellow.500)] [--chkbg:theme(colors.orange.500)] [--chkbg:theme(colors.gray.500)] [--chkbg:theme(colors.pink.500)] [--chkbg:theme(colors.red.500)]
+ bg-blue-100 bg-green-100 bg-purple-100 bg-yellow-100 bg-orange-100 bg-gray-100 bg-pink-100 bg-red-100 
+ bg-blue-700 bg-green-700 bg-purple-700 bg-yellow-700 bg-orange-700 bg-gray-700 bg-pink-700 bg-red-700" style="display:none;"></div>
   <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
     <div class="sm:col-span-3">
       <label for="name" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Name')}}</label>

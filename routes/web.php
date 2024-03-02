@@ -70,6 +70,8 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+    Route::get('/user/updateCursus', [UserController::class, 'cursusForm'])->name('user.update-cursus-form');
+    Route::post('/user/updateCursus', [UserController::class, 'cursusUpdate'])->name('user.update-cursus');
     Route::group(['middleware' => ['can:manage courses']], function () {
         Route::resource('courses', CourseController::class)->except(['show']);
         Route::resource('types', TypeController::class)->except(['show']);

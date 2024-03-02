@@ -67,8 +67,40 @@ class UserController extends Controller
         return view('users.edit', compact('user'));
     }
 
+    public function cursusForm()
+    {
+        $user = auth()->user();
+        return view('profile.update-cursus', compact('user'));
+    }
+
+    public function cursusUpdate(Request $request)
+    {
+        $user = auth()->user();
+        $validated = $request->validate([
+            'level_id' => 'required|exists:levels,id',
+            'course_*' => 'required|exists:courses,id',
+        ]);
+
+
+        $user->level_id = $request->level_id;
+        $user->courses_id = [0]; //Reinitialise the value before updating
+        foreach($request->all() as $key => $value) {
+  
+            if(str_starts_with($key, 'course_')){
+                $value = intval($value);
+                $new_array = array_merge((array)$value, $user->courses_id);
+                $user->courses_id = $new_array;
+            }
+        
+        }
+        $user->save();
+        dd($user);
+        return 'ok';
+        
+    }
+
     /**
-     * Update the specified resource in storage.
+     * Update the specified user.
      */
     public function update(UserUpdateRequest $request, User $user)
     {
