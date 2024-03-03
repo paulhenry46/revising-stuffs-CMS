@@ -51,7 +51,7 @@ class SendPushNotification implements ShouldQueue
         ]; 
         
         $data['notification'] =  $content_data;
-        $data['webpush']['fcm_options']['link'] = "https://blog.paulhenry.eu/news";
+        $data['webpush']['fcm_options']['link'] = route('post.public.news');
         $data['token'] = $this->user_fcm_token;
     
         $payload['message'] = $data;
