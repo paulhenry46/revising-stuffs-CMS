@@ -31,7 +31,8 @@ Route::get('/', function () {
 });
 
 
-Route::get('/rss/posts', [RssController::class, 'posts'])->name('rss.posts');
+Route::get('/rss/all', [RssController::class, 'posts'])->name('rss.posts');
+Route::get('/rss/{user}', [RssController::class, 'user'])->name('rss.user');
 
 //Public Routes
 Route::name('post.public.')->group(function() {
