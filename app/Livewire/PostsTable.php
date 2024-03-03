@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Jobs\InformUserOfNewPost;
 use Livewire\Component;
 use App\Models\Post;
 use Livewire\WithPagination;
@@ -115,6 +116,7 @@ class PostsTable extends Component
         $posts = Post::whereIn('id', $ids)->get();
         foreach($posts as $post){
             $post->user->notify(new PostValidated($post));
+            dispatch(new InformUserOfNewPost($post));
         }
         $this->selection = [];
         $this->resetPage();
@@ -136,6 +138,7 @@ class PostsTable extends Component
         Post::where('id', '=', $id)->update(['published' => 1]);
         $post = Post::where('id', '=', $id)->first();
         $post->user->notify(new PostValidated($post));
+        dispatch(new InformUserOfNewPost($post));
         $this->selection = [];
         $this->resetPage();
         session()->flash('message', __('The post has been published.'));

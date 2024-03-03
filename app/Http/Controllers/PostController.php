@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Http\Requests\PostRequest;
+use App\Jobs\InformUserOfNewPost;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Post;
@@ -88,6 +89,9 @@ class PostController extends Controller
         $post->level_id = $request->level_id;
         $post->user_id = $user->id;
         $post->save();
+        if($post->published){
+            dispatch(new InformUserOfNewPost($post));
+        }
         return redirect()->route('files.primary.create', $post)->with('message', __('The post has been created. Now, you can upload your primary file.'));
     }
 

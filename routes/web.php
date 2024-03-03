@@ -14,6 +14,8 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\AdminSettingsController;
 use App\Http\Controllers\RssController;
+use App\Http\Controllers\PushNotificationsController;
+use App\Http\Controllers\PushNotif;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +35,10 @@ Route::get('/', function () {
 
 Route::get('/rss/all', [RssController::class, 'posts'])->name('rss.posts');
 Route::get('/rss/{user}', [RssController::class, 'user'])->name('rss.user');
+
+Route::patch('/fcm-token', [PushNotificationsController::class, 'updateToken'])->name('push.fcmToken');
+Route::get('/send-notification',[PushNotificationsController::class,'sendPushNotification'])->name('push.notification');
+
 
 //Public Routes
 Route::name('post.public.')->group(function() {
