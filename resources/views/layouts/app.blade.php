@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html data-theme="dark" class="dark" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
+        @if(env('PWA')==true)
+        <link rel="manifest" href="/manifest.webmanifest" />
+        @endif
     <script type="text/javascript">
         function changeTheme() {
             if (localStorage.theme === 'light' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: light)').matches)) {
