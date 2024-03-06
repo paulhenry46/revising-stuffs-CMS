@@ -10,9 +10,40 @@
         </div> 
         @auth 
         @if(env('FirebasePush') == true) <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none justify-center">
-          <button onclick="initFirebaseMessagingRegistration()" class="btn btn-primary">{{__('Notifications Push')}}</button>
-        </div> 
-        @endif <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none justify-center">
+          <button onclick="SWProcess.showModal()" class="btn btn-primary">{{__('Notifications Push')}}</button>
+        </div>
+
+        <dialog id="SWProcess" class="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Receive Push Notifications !</h3>
+    <p class="py-4">Two step before activating the Push Notifications !</p>
+    <button id="grantButton" class="btn btn-primary">{{__('Grant Notifications Access')}}</button>
+    <button id="registerButton" class="btn btn-primary">{{__('Active Push Notifications')}}</button>
+    <div class="modal-action">
+      <form method="dialog">
+        <!-- if there is a button in form, it will close the modal -->
+        <button class="btn">Close</button>
+      </form>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="SWSuccess" class="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Receive Push Notifications !</h3>
+    <p class="py-4">Push Notifications have been activated on this device. Remember that you can activate push notifications on only one device !</p>
+    <div class="modal-action">
+      <form method="dialog">
+        <!-- if there is a button in form, it will close the modal -->
+        <button class="btn btn-success">OK</button>
+      </form>
+    </div>
+  </div>
+</dialog>
+
+        @endif
+        
+        <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none justify-center">
           <a href="{{route('rss.user', auth()->id())}}" class="btn btn-warning">{{__('Your RSS feed')}}</a>
         </div>
         <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none justify-center">

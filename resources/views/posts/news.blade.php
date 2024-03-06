@@ -25,19 +25,44 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-messaging.js";
 
 
-const firebaseConfig = {
-    apiKey: "AIzaSyAMnBdGZEJ9hDUDnbHySypHrj6A792p00o",
-    authDomain: "blog-paulhenry-eu.firebaseapp.com",
-    projectId: "blog-paulhenry-eu",
-    storageBucket: "blog-paulhenry-eu.appspot.com",
-    messagingSenderId: "631699317087",
-    appId: "1:631699317087:web:26586c0d0e276eadcf56ea"
+const firebaseConfig = {//TODO Add Firebase config
+    apiKey: "XXX",
+    authDomain: "XXX.firebaseapp.com",
+    projectId: "XXX",
+    storageBucket: "XXX.appspot.com",
+    messagingSenderId: "XXX",
+    appId: "1:XXX:web:XXX"
 };
 
 const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
 
-navigator.serviceWorker.register("firebase-messaging-sw.js").then(registration => {
+grantButton = document.querySelector('#grantButton');
+registerButton = document.querySelector('#registerButton');
+
+grantButton.addEventListener('click', requestNotiffactionPermission);
+registerButton.addEventListener('click', registerSW);
+
+
+function requestNotiffactionPermission(){
+    Notification.requestPermission().then((permission) => {
+                if (permission === 'granted') {
+                    console.log('Notification permission granted.');
+                    grantButton.classList.add('btn-success');
+                    grantButton.classList.remove('btn-primary');
+                    grantButton.classList.remove('btn-error');
+
+                }else{
+                    console.log('Notification permission denied.');
+                    grantButton.classList.add('btn-error');
+                    grantButton.classList.remove('btn-primary');
+                }
+            })
+}
+
+function registerSW(){
+
+    navigator.serviceWorker.register("firebase-messaging-sw.js").then(registration => {
     getToken(messaging, {
         serviceWorkerRegistration: registration,
         vapidKey: 'BPSAojUccMHZujJZpLF-W2CzKZG7xw5aqSjrE97V2SPIuLPDCnjbPvx831KHRhT2Z8WzqjQvFMSIaUiZpMg_KRQ'
@@ -49,23 +74,21 @@ navigator.serviceWorker.register("firebase-messaging-sw.js").then(registration =
                 _method: "PATCH",
                 currentToken
             })
-            // Send the token to your server and update the UI if necessary
-            // ...
-        } else {
-            // Show permission request UI
-            console.log('No registration token available. Request permission to generate one.');
-            Notification.requestPermission().then((permission) => {
-                if (permission === 'granted') {
-                    console.log('Notification permission granted.');
 
-                }
-            })
+            registerButton.classList.add('btn-success');
+            registerButton.classList.remove('btn-primary');
+            registerButton.classList.remove('btn-error');
+        document.getElementById("SWProcess").close();
+        document.getElementById("SWSuccess").showModal();
         }
     }).catch((err) => {
         console.log('An error occurred while retrieving token. ', err);
-        // ...
+        registerButton.classList.add('btn-error');
+        registerButton.classList.remove('btn-primary');
     });
 });
+
+}
 </script>
 @endif
 @endauth

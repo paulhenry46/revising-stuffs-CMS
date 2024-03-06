@@ -1,9 +1,9 @@
 {
-    "name": "Fiches et Cartes",
-    "short_name": "F&C",
+    "name": "LONGNAME",
+    "short_name": "NAME",
     "start_url": "./",
-    "display": "fullscreen",
-    "description": "Une superbe description.",
+    "display": "standalone",
+    "description": "DESCRIPTION.",
     "orientation":"portrait-primary",
 
     "background_color": "#641ae6",
