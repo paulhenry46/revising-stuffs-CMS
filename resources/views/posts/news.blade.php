@@ -65,7 +65,7 @@ function registerSW(){
     navigator.serviceWorker.register("firebase-messaging-sw.js").then(registration => {
     getToken(messaging, {
         serviceWorkerRegistration: registration,
-        vapidKey: 'BPSAojUccMHZujJZpLF-W2CzKZG7xw5aqSjrE97V2SPIuLPDCnjbPvx831KHRhT2Z8WzqjQvFMSIaUiZpMg_KRQ'
+        vapidKey: 'XXXXXXXXXXXXXXXX'
     }).then((currentToken) => {
         if (currentToken) {
             console.log("Token is: " + currentToken);
