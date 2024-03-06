@@ -15,49 +15,57 @@
 <x-nav-bottom :active=0/>
 @auth
 @if(env('FirebasePush') == true)
-<!-- The core Firebase JS SDK is always required and must be listed first -->
-<script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-messaging.js"></script>
+<script type = "module" >
+    import {
+        initializeApp
+    } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+import {
+    getMessaging,
+    getToken
+} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-messaging.js";
 
-<script>
-    // Your web app's Firebase configuration
-    var firebaseConfig = {
-        apiKey: "{{env('FCM_apiKey')}}",
-        authDomain: "{{env('FCM_authDomain')}}.firebaseapp.com",
-        projectId: "{{env('FCM_projectId')}}",
-        storageBucket: "{{env('FCM_storageBucket')}}.appspot.com",
-        messagingSenderId: "{{env('FCM_messagingSenderId')}}",
-        appId: "{{env('FCM_appId')}}"
-    };
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
 
-    const messaging = firebase.messaging();
+const firebaseConfig = {
+    apiKey: "AIzaSyAMnBdGZEJ9hDUDnbHySypHrj6A792p00o",
+    authDomain: "blog-paulhenry-eu.firebaseapp.com",
+    projectId: "blog-paulhenry-eu",
+    storageBucket: "blog-paulhenry-eu.appspot.com",
+    messagingSenderId: "631699317087",
+    appId: "1:631699317087:web:26586c0d0e276eadcf56ea"
+};
 
-    function initFirebaseMessagingRegistration() {
-        messaging.requestPermission().then(function () {
-            return messaging.getToken()
-        }).then(function(token) {
-            
-            axios.post("{{ route('push.fcmToken') }}",{
-                _method:"PATCH",
-                token
-            }).then(({data})=>{
-                console.log(data)
-            }).catch(({response:{data}})=>{
-                console.error(data)
+const app = initializeApp(firebaseConfig);
+const messaging = getMessaging(app);
+
+navigator.serviceWorker.register("firebase-messaging-sw.js").then(registration => {
+    getToken(messaging, {
+        serviceWorkerRegistration: registration,
+        vapidKey: 'BPSAojUccMHZujJZpLF-W2CzKZG7xw5aqSjrE97V2SPIuLPDCnjbPvx831KHRhT2Z8WzqjQvFMSIaUiZpMg_KRQ'
+    }).then((currentToken) => {
+        if (currentToken) {
+            console.log("Token is: " + currentToken);
+
+            axios.post("/fcm-token", {
+                _method: "PATCH",
+                currentToken
             })
+            // Send the token to your server and update the UI if necessary
+            // ...
+        } else {
+            // Show permission request UI
+            console.log('No registration token available. Request permission to generate one.');
+            Notification.requestPermission().then((permission) => {
+                if (permission === 'granted') {
+                    console.log('Notification permission granted.');
 
-        }).catch(function (err) {
-            console.log(`Token Error :: ${err}`);
-        });
-    }
-
-    //initFirebaseMessagingRegistration();
-  
-    messaging.onMessage(function({data:{body,title}}){
-        new Notification(title, {body});
+                }
+            })
+        }
+    }).catch((err) => {
+        console.log('An error occurred while retrieving token. ', err);
+        // ...
     });
+});
 </script>
 @endif
 @endauth
