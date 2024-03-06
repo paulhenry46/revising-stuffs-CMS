@@ -27,18 +27,22 @@ use App\Http\Controllers\PushNotif;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+if(env('APP_DEBUG')){ //Debug Routes
+    Route::get('/send-notification',[PushNotificationsController::class,'sendPushNotification'])->name('push.notification');
+}
 
 Route::get('/', function () {
     return view('welcome');
 });
 
+//RSS Routes
+Route::get('/rss/all', [RssController::class, 'posts'])->name('rss.posts');//General RSS including all the levels and courses
+Route::get('/rss/{user}', [RssController::class, 'user'])->name('rss.user');//RSS specific to one user
 
-Route::get('/rss/all', [RssController::class, 'posts'])->name('rss.posts');
-Route::get('/rss/{user}', [RssController::class, 'user'])->name('rss.user');
-
+//Routes USED to use the notifications push
+if(env('FirebasePush')){
 Route::patch('/fcm-token', [PushNotificationsController::class, 'updateToken'])->name('push.fcmToken');
-Route::get('/send-notification',[PushNotificationsController::class,'sendPushNotification'])->name('push.notification');
-
+}
 
 //Public Routes
 Route::name('post.public.')->group(function() {

@@ -5,8 +5,8 @@
   array(__('New posts'),NULL)
 );
 
-     @endphp   
-     <x-breadcrumb :items=$breadcrumb/>  
+     @endphp
+     <x-breadcrumb :items=$breadcrumb/>
     </x-slot>
     <div class="py-12">
         @livewire('new-posts')
@@ -37,8 +37,8 @@ const firebaseConfig = {//TODO Add Firebase config
 const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
 
-grantButton = document.querySelector('#grantButton');
-registerButton = document.querySelector('#registerButton');
+const grantButton = document.querySelector('#grantButton');
+const registerButton = document.querySelector('#registerButton');
 
 grantButton.addEventListener('click', requestNotiffactionPermission);
 registerButton.addEventListener('click', registerSW);
