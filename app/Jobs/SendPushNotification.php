@@ -56,7 +56,6 @@ class SendPushNotification implements ShouldQueue
     
         $payload['message'] = $data;
         $payload = json_encode($payload);
-        //dd($payload);
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $apiurl);
         curl_setopt($ch, CURLOPT_POST, true);

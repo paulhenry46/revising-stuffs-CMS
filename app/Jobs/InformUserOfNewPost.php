@@ -35,7 +35,7 @@ class InformUserOfNewPost implements ShouldQueue
         ->where('courses_id', 'like', '%'.$this->post->course->id.',%')
         ->pluck('fcm_token');
         $title = __('New post of :course was created', ['course' => $this->post->course->name]);
-        $body = __('It\s about :title . Tap to open', ['title' => $this->post->title]);
+        $body = __('It\'s about :title . Tap to open', ['title' => $this->post->title]);
         //dd($users_token);
         foreach($users_token as $token){
             dispatch(new SendPushNotification($title, $body, $token ));
