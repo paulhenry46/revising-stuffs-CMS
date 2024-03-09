@@ -2,16 +2,9 @@
 ## About Revising Stuffs CMS (RSCMS)
 
 RSCMS is a web app wich allow user to easily publish and share their revissing stuffs with their community.
-## Sreenshots
-![Cards](https://raw.githubusercontent.com/paulhenry46/RSCMS-Docs/main/screenshots/cards.png "Cards")
-![Courses](https://raw.githubusercontent.com/paulhenry46/RSCMS-Docs/main/screenshots/courses.png "Courses")
-![Create](https://raw.githubusercontent.com/paulhenry46/RSCMS-Docs/main/screenshots/create.png "Create")
-![Dashboard](https://raw.githubusercontent.com/paulhenry46/RSCMS-Docs/main/screenshots/dashboard.png "Dashboard")
-![Home](https://raw.githubusercontent.com/paulhenry46/RSCMS-Docs/main/screenshots/home.png "Home")
-![Levels](https://raw.githubusercontent.com/paulhenry46/RSCMS-Docs/main/screenshots/levels.png "Levels")
-![Types](https://raw.githubusercontent.com/paulhenry46/RSCMS-Docs/main/screenshots/types.png "Types")
-![Posts](https://raw.githubusercontent.com/paulhenry46/RSCMS-Docs/main/screenshots/posts.png "Posts")
-![View post](https://raw.githubusercontent.com/paulhenry46/RSCMS-Docs/main/screenshots/view_post.png "View post")
+
+For more screenchots, informations about setup and features, see [the Wiki](https://github.com/paulhenry46/revising-stuffs-CMS/wiki).
+
 ## Tech Stack
 #### Back-end
 - Laravel 10
@@ -29,7 +22,4 @@ If you discover a security vulnerability within RSCMS, please send an e-mail to 
 
 ## License
 RSCMR is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-
-## More
-For more informations about setup and features, see [Docs Repo](https://github.dev/paulhenry46/RSCMS-Docs).
 
