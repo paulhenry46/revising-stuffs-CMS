@@ -389,8 +389,22 @@
     "New user" : "Nouvel utilisateur",
     "Manage all posts" : "Gestion des ressources",
     "List of the posts" : "Liste des ressources",
-    "Manage levels, courses and specific types of post" : "Gestion des classes, cours et types de ressources"
-
-
+    "Manage levels, courses and specific types of post" : "Gestion des classes, cours et types de ressources",
+    "Update Type" : "Type de mise à jour",
+    "Update Content" : "Contenu de la mise à jour",
+    "Explain why you are updating your post." : "Expliquez pourquoi vous mettez à jour cette ressource.",
+    "Images of light version" : "Images de la version claire",
+    "Images of dark version" : "Images de la version sombre",
+    "Images Only" : "Fichier images seulement",
+    "Change" : "Changer",
+    "Crop" : "Rogner",
+    "Add images" : "Ajouter des images",
+    "OR" : "OU",
+    "Light File" : "Fichier de la version claire",
+    "Only PDF" : "Fichier PDF seulement",
+    "Dark File" : "Fichier de la version sombre",
+    "Fix issue(s)" : "Correction de problèmes",
+    "Update Informations" : "Informations de la mise à jour",
+    "Update Primary Files" : "Mise à jour des fichiers primaires"
 
 }

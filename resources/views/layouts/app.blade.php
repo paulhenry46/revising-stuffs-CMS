@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html data-theme="dark" class="dark" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
+    @if(Route::is('files.primary.*') )
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" />
+
+    {{-- Sortable.js --}}
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.1/Sortable.min.js"></script>
+@endif
+    
         @if(env('PWA')==true)
         <link rel="manifest" href="/manifest.webmanifest" />
         @endif
