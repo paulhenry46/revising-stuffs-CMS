@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html data-theme="dark" class="dark" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-    @if(Route::is('files.primary.*') )
+    @if(Route::is('files.*') )
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" />
 
