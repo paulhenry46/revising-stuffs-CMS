@@ -33,7 +33,7 @@
 </div>
 @endif
 <div class="border-b dark:border-white/10 border-gray-900/10 pb-12">
-      <h2 class="pt-6 pb-3 text-base font-semibold leading-7 text-gray-900 dark:text-white">{{__('Update Primary Files')}}</h2>
+      <h2 class="pt-6 pb-3 text-base font-semibold leading-7 text-gray-900 dark:text-white">@if($update){{__('Update Primary Files')}}@else{{__('Create Primary Files')}}@endif</h2>
 <div class=" grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
 <div class="sm:col-span-3">
 <x-mary-image-library

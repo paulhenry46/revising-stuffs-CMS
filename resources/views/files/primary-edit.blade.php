@@ -6,7 +6,6 @@
   array(__('Dashboard'),'dashboard'),
   array(__('Posts'),'posts.index'),
   array(__($post->title),'posts.index'),
-  array(__($post->title),'posts.index'),
   array(__('Files'),NULL),
   array(__('Edit'),NULL)
         );
@@ -16,7 +15,6 @@
      $breadcrumb = array (
   array(__('Dashboard'),'dashboard'),
   array(__('Posts'),'posts.index'),
-  array(__($post->title),'posts.index'),
   array(__('Files'),NULL),
   array(__('Create'),NULL)
         );
