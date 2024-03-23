@@ -52,7 +52,7 @@ class EditPrimaryFiles extends Component
         $this->post = $post;
         $this->storage_subpath = ''.$post->level->slug.'/'.$post->course->slug.'';
         $this->dark_version = $post->dark_version;
-        if($state = 'update'){
+        if($state == 'update'){
             $this->update = true; //If the state is update, we set the variable, else, we don't do anything because it is already set to false
         }
     }
@@ -146,7 +146,7 @@ class EditPrimaryFiles extends Component
                 $this->createFile($dark_data, 'primary dark');
             }
         }
-        $this->success('success', redirectTo: '/posts', timeout: 10000,);
+        $this->success(__('Primary File(s) Updated/Created'), redirectTo: '/posts', timeout: 100000,);
        }else{
         $this->error($validator->errors(), timeout: 10000,);
        }
