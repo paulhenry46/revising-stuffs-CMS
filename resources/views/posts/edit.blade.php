@@ -88,7 +88,6 @@
   <div class="ml-3 text-sm leading-6">
     <label for="dark_version" class="font-medium text-gray-900 dark:text-white">{{__('Dark Version')}}</label>
     <p id="dark_version-description" class="text-gray-500 dark:text-gray-400">{{__('You provide a dark version of this ressource.')}}</p>
-    <p id="dark_version-description" class="text-error">{{__('If it is checked, you wont be able to upload images of handwritten ressources.')}}</p>
   </div>
 </div>
 <div class="relative flex items-start">
@@ -151,7 +150,7 @@
 </div>
 @endcan
 <div class="mt-6 flex items-center justify-end gap-x-6">
-<a href="{{route('posts.index')}}" class="btn btn-error">{{__('Cancel')}}</a>
+<a href="{{route('posts.index')}}" class="link link-hover link-error">{{__('Cancel')}}</a>
 <button type="submit" class="btn btn-primary">@if($post->id !== 0) {{__('Edit')}} @else {{__('Create')}} @endif</button>
 </div>
 </form>
