@@ -59,7 +59,7 @@
       <div class="px-4 sm:px-6 lg:px-8">
         <div class="sm:flex sm:items-center">
           <div class="sm:flex-auto">
-            <h1 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">{{__('Cards')}}</h1>
+            <h1 class="w-1/2 text-base font-semibold leading-6 text-gray-900 dark:text-white">{{__('Cards')}}</h1>
           </div>
         </div>
         <div class="mt-8 flow-root">
@@ -72,11 +72,11 @@
                         <div class="grid sm:grid-cols-3 space-y-6 sm:space-y-0">
                             <div>
                                 <span class="text-xs text-gray-500 uppercase">{{__('Term')}}</span>
-                                <p class="font-medium dark:text-white text-gray-900">{!!$card->front!!}</p>
+                                <p class="gap-3 align-middle flex flex-row swap-off text-center dark:text-white text-gray-900 sm:col-span-2">{!!$card->front!!}</p>
                             </div>
                             <div>
                                 <span class="text-xs text-gray-500 uppercase">{{__('Definition')}}</span>
-                                <p class="dark:text-white text-gray-900 sm:col-span-2">{!!$card->back!!}</p>
+                                <p class="gap-3 align-middle flex flex-row swap-off text-center dark:text-white text-gray-900 sm:col-span-2">{!!$card->back!!}</p>
                             </div>
                         </div>
                     </div>

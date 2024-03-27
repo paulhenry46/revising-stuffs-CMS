@@ -31,8 +31,8 @@
     <div class="stack w-full h-64 sm:h-80">
     <label id="cards" data-state="defaut" class=" duration-500 data-[state=success]:bg-success dark:data-[state=success]:bg-success data-[state=fail]:bg-warning dark:data-[state=fail]:bg-warning transition ease-in-out swap grid w-full h-full rounded dark:bg-base-100 bg-white text-dark dark:text-white place-content-center">
       <input type="checkbox" />
-      <div id="back" class="swap-on text-center"></div>
-      <div id="front" class="swap-off text-center"></div>
+      <div id="back" class="place-content-center align-middle flex flex-col swap-on text-center"></div>
+      <div id="front" class="place-content-center align-middle flex flex-col swap-off text-center"></div>
     </label>
   <div class="grid w-full h-full rounded bg-primary text-secondary-content place-content-center"></div>
   <div class="grid w-full h-full rounded bg-success text-secondary-content place-content-center"></div>

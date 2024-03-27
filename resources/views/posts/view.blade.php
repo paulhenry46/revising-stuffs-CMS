@@ -219,7 +219,7 @@
                                 
 
                                 @if( ($files->contains('type', 'source')) or ($files->contains('type', 'exercise')) or ($files->contains('type', 'exercise correction')))
-                                <div class="pt-6">
+                                <div class="">
                                     <div class="card bg-base-100 shadow-xl">
                                         <div class="card-body">
                                             <h2 class="card-title">Complementary files</h2>
