@@ -216,22 +216,25 @@
                                 @endforelse
                             </div>
                             <div class="col-span-3 lg:col-span-1">
-                                
-
-                                @if( ($files->contains('type', 'source')) or ($files->contains('type', 'exercise')) or ($files->contains('type', 'exercise correction')))
-                                <div class="">
-                                    <div class="card bg-base-100 shadow-xl">
-                                        <div class="card-body">
-                                            <h2 class="card-title">Complementary files</h2>
-                                            <div class="flex items-center justify-center">
-                                                <ul class="menu bg-base-200 w-56 rounded-box">
-                                                    @foreach($files as $file)
+                            @if( ($files->contains('type', 'source')) or ($files->contains('type', 'exercise')) or ($files->contains('type', 'other')) or ($files->contains('type', 'exercise correction')))
+                            <ul class="menu bg-base-100 w-full rounded-box">
+  <li>
+    <h2 class="card-title ">{{__('Complementary files')}}</h2>
+    <ul>
+    @foreach($files as $file)
                                                     @if($file->type == 'source')
                                                     <li>
                                                         <a href="{{url('storage/'.$file->file_path.'')}}">
                                                             <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
                                                                 <path d="M200-200v-560 560Zm80-400h400v-80H280v80Zm0 160h190q20-24 43.5-44.5T565-520H280v80Zm0 160h122q2-21 7.5-41t13.5-39H280v80Zm-80 160q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v223q-19-8-39-13.5t-41-7.5v-202H200v560h202q2 21 7.5 41t13.5 39H200Zm520 80q-73 0-127.5-45.5T524-200h62q13 44 49.5 72t84.5 28q58 0 99-41t41-99q0-58-41-99t-99-41q-29 0-54 10.5T622-340h58v60H520v-160h60v57q27-26 63-41.5t77-15.5q83 0 141.5 58.5T920-240q0 83-58.5 141.5T720-40Z"/>
                                                             </svg>
+                                                            {{$file->name}}
+                                                        </a>
+                                                    </li>
+                                                    @elseif($file->type == 'other')
+                                                    <li>
+                                                        <a href="{{url('storage/'.$file->file_path.'')}}">
+                                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M280-420q25 0 42.5-17.5T340-480q0-25-17.5-42.5T280-540q-25 0-42.5 17.5T220-480q0 25 17.5 42.5T280-420Zm200 0q25 0 42.5-17.5T540-480q0-25-17.5-42.5T480-540q-25 0-42.5 17.5T420-480q0 25 17.5 42.5T480-420Zm200 0q25 0 42.5-17.5T740-480q0-25-17.5-42.5T680-540q-25 0-42.5 17.5T620-480q0 25 17.5 42.5T680-420ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>
                                                             {{$file->name}}
                                                         </a>
                                                     </li>
@@ -255,11 +258,10 @@
                                                     </li>
                                                     @endif
                                                     @endforeach
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+    </ul>
+  </li>
+</ul>
+
                                 <div class="pt-6">
                                     @else
                                     <div class="">

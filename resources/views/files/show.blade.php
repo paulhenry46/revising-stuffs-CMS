@@ -49,10 +49,12 @@
     <div class="card bg-base-100 shadow-xl">
         <div class="card-body">
             <h2 class="card-title">{{ $file->name }}</h2><div class="badge 
-            @if(!str_contains($file->type, 'primary'))
-            badge-neutral 
-            @else 
+            @if(str_contains($file->type, 'primary'))
             badge-success 
+            @elseif(str_contains($file->type, 'card'))
+            badge-warning
+            @else
+            badge-neutral 
             @endif">{{$file->type}}</div>  
             <div class="justify-end card-actions">
                 <a href="{{url('storage/'.$file->file_path.'')}}" class="btn btn-primary">See</a>

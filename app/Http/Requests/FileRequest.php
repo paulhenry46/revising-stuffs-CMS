@@ -29,6 +29,14 @@ class FileRequest extends FormRequest
 
         ];
         
+    }elseif($this->input('type') == 'card image'){
+            return [
+            'type' => 'bail|required|min:4',
+            'name' => 'bail|required|min:4',
+            'file' => 'required|max:10000|mimes:svg,png,jpg,jpeg,gif,webp'
+
+        ];
+        
         }else{
             return [
             'type' => 'bail|required|min:4',
