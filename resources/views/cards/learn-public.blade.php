@@ -29,10 +29,10 @@
 <div class="grid grid-cols-6 gap-4">
   <div class="col-span-6">
     <div class="stack w-full h-64 sm:h-80">
-    <label class="swap grid w-full h-full rounded dark:bg-base-100 bg-white text-primary-content place-content-center">
+    <label class="swap grid w-full h-full rounded dark:bg-base-100 bg-white text-primary-content place-content-center text-dark dark:text-white">
       <input type="checkbox" />
-      <div id="back" class="swap-on text-center"></div>
-      <div id="front" class="swap-off text-center"></div>
+      <div id="back" class="place-content-center align-middle flex flex-col swap-on text-center"></div>
+      <div id="front" class="place-content-center align-middle flex flex-col swap-off text-center"></div>
     </label>
   <div class="grid w-full h-full rounded bg-primary text-secondary-content place-content-center">3</div>
   <div class="grid w-full h-full rounded bg-success text-secondary-content place-content-center">3</div>
@@ -197,11 +197,13 @@
   function buildFrontHTML(rawFront) {
     var frontEl, backEl;
 
-    frontEl = document.createElement('p');
-    frontEl.innerHTML = rawFront.front;
+    //  frontEl = document.createElement('p'); Deleted due to CSS issue with Images
+    //  frontEl.innerHTML = rawFront.front;
 
-    backEl = document.createElement('p');
-    backEl.innerHTML = rawFront.back.replace(/\n/g, '<br>');
+    //  backEl = document.createElement('p');
+    //  backEl.innerHTML = rawFront.back.replace(/\n/g, '<br>');
+    frontEl = rawFront.front;
+    backEl = rawFront.back.replace(/\n/g, '<br>');
 
     return {front: frontEl, back: backEl};
   }
