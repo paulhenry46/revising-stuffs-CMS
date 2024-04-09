@@ -1,6 +1,6 @@
 <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
   <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
-    <div class="p-6 lg:p-8 bg-white dark:bg-gray-800 dark:bg-gradient-to-bl dark:from-gray-700/50 dark:via-transparent border-b border-gray-200 dark:border-gray-700">
+    <div class="p-6 lg:p-8">
       <div class="sm:flex sm:items-center">
         <div class="sm:flex-auto">
           <h1 class=" decoration-4 underline decoration-primary text-2xl font-medium text-gray-900 dark:text-white">
@@ -15,8 +15,8 @@
 
         <dialog id="SWProcess" class="modal">
   <div class="modal-box">
-    <h3 class="font-bold text-lg">Receive Push Notifications !</h3>
-    <p class="py-4">Two step before activating the Push Notifications !</p>
+    <h3 class="font-bold text-lg">{{__('Receive Push Notifications !')}}</h3>
+    <p class="py-4">{{__('Two step before activating the Push Notifications !')}}</p>
     <button id="grantButton" class="btn btn-primary">{{__('Grant Notifications Access')}}</button>
     <button id="registerButton" class="btn btn-primary">{{__('Active Push Notifications')}}</button>
     <div class="modal-action">
@@ -30,8 +30,8 @@
 
 <dialog id="SWSuccess" class="modal">
   <div class="modal-box">
-    <h3 class="font-bold text-lg">Receive Push Notifications !</h3>
-    <p class="py-4">Push Notifications have been activated on this device. Remember that you can activate push notifications on only one device !</p>
+    <h3 class="font-bold text-lg">{{__('Receive Push Notifications !')}}</h3>
+    <p class="py-4">{{__('Push Notifications have been activated on this device. Remember that you can activate push notifications on only one device !')}}</p>
     <div class="modal-action">
       <form method="dialog">
         <!-- if there is a button in form, it will close the modal -->
