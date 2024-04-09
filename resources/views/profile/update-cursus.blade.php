@@ -34,7 +34,7 @@
 </div>
 
 <div class="mt-6 flex items-center justify-end gap-x-6">
-<a href="{{route('posts.index')}}" class="btn btn-error">{{__('Cancel')}}</a>
+<a href="{{route('posts.index')}}" class="link link-error">{{__('Cancel')}}</a>
 <button type="submit" class="btn btn-primary">{{__('Update')}}</button>
 </div>
 </form>
