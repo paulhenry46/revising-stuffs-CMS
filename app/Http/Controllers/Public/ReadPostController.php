@@ -6,14 +6,15 @@ use App\Models\Post;
 use App\Models\Course;
 use App\Models\Level;
 use Auth;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 
 class ReadPostController extends Controller
 {
     public function view(string $slug, Post $post)
     {
         if($slug != $post->slug){
-            return redirect()->route('post.public.view', [$post->slug, $post->id]);
-
+            abort(404);
         }else{
             $comments = $post->comments->where('validated', '=', 1);
             $events = $post->events;
@@ -24,9 +25,8 @@ class ReadPostController extends Controller
 
     public function news()
     {
-        $newPosts = Post::where('published', '=', 1)->where('pinned', '=', 0)->latest()->limit(5)->get();
-        $pinnedPosts = Post::where('pinned', '=', 1)->where('published', '=', 1)->get();
-        return view('posts.news', compact('newPosts', 'pinnedPosts'));
+        //Logic moved to Livewire Component NewPosts
+        return view('posts.news');
     }
 
     public function favorites()
@@ -34,12 +34,18 @@ class ReadPostController extends Controller
             if (Auth::check()) {
             $user = Auth::user();
             $posts = Post::where('published', '=', 1)->whereIn('id', $user->favorite_posts)->latest()->get();
+            $RevisePosts = Post::whereHas('steps', function ($query) {
+                $query->where('user_id', Auth::id());
+                $query->where('next_step', '<=', Carbon::today());
+                $query->where('next_step', '!=', null);
+            })->get();
             $logged = true;
         }else{
             $posts = null;
+            $RevisePosts = null;
             $logged = false;
         }
-            return view('posts.favorites', compact('posts', 'logged'));
+            return view('posts.favorites', compact('posts', 'RevisePosts', 'logged'));
     }
 
 

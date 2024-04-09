@@ -25,9 +25,17 @@ class Post extends Model
     { 
     return $this->belongsTo(User::class); 
     }
+    public function group()
+    { 
+    return $this->belongsTo(Group::class);
+    }
     public function files() 
     { 
     return $this->hasMany(File::class); 
+    }
+    public function steps() 
+    { 
+    return $this->hasMany(Step::class); 
     }
     public function events() 
     { 

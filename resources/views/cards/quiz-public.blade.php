@@ -116,6 +116,25 @@ var fullCards = startingCards.slice();
 var missedCards = [];
 
 //initializing some variables
+var firstTry = true;
+var percent;
+function sentResult(){
+  @auth
+  if(firstTry == true){
+    var percent = Math.round((successCounter / fullCards.length) * 100);
+
+    $.post('{{route('step.add')}}',
+    {
+        '_token': $('meta[name=csrf-token]').attr('content'),
+        percent: percent,
+        postId: '{{$post->id}}'
+    });
+}
+@endauth
+    firstTry = false;
+  }
+
+
 var numberCards = fullCards.length;
 var indexCounter = 0;
 var successCounter = 0;
@@ -280,6 +299,7 @@ function nextCard() {
 
   } else if (successCounter === fullCards.length) {
 
+    sentResult();
     //when someone reaches the end of a set and got them all right!
     document.getElementById("full").innerHTML = "{{__('Retry')}}";
     $("#full").show();
@@ -292,6 +312,7 @@ function nextCard() {
     masterclass.showModal();
 
   } else if (failCounter === fullCards.length) {
+    sentResult();
     //when someone reaches the end of the set and got them all wrong
     $("#success").hide();
     $("#fail").hide();
@@ -306,6 +327,7 @@ function nextCard() {
     document.getElementById("successRate").innerHTML = "{{__('Ouch! Looks like all the cards are missed. But don\'t worry, that\'s how you learn!')}}";
     $("#successRate").show();
   } else {
+    sentResult();
     //when someone reaches the end of a set having missed some
     document.getElementById("successRate").innerHTML = "<div>\r\n  <div>\r\n    <div class=\"d-flex align-items-center\">\r\n\r\n   <\/div>\r\n  <\/div>\r\n  <div class=\"card-body p-3\">\r\n    <div class=\"grid grid-cols-4 gap-4 mt-2\">\r\n      <div class=\"col-span-2 text-center\">\r\n        <div class=\"flex justify-center h-56 chart\">\r\n          <canvas id=\"myChart\" class=\" h-56 chart-canvas\"><\/canvas>\r\n        <\/div>\r\n        \r\n      <\/div>\r\n      <div class=\" col-span-2\">\r\n        <div class=\"table-responsive\">\r\n          <table class=\"table align-items-center mb-0\">\r\n            <tbody>\r\n              <tr>\r\n                <td>\r\n                  <div class=\"d-flex px-2 py-0\">\r\n               \r\n                    <div class=\"d-flex flex-column justify-content-center\">\r\n                      <h6 class=\"mb-0 text-sm\">Connues<\/h6>\r\n                    <\/div>\r\n                  <\/div>\r\n                <\/td>\r\n                <td class=\"align-middle text-center text-sm\">\r\n                  <span class=\"badge badge-success\">" + (fullCards.length - failCounter - successCounter) + "</span>\r\n                <\/td>\r\n              <\/tr>\r\n<tr>\r\n                <td>\r\n                  <div class=\"d-flex px-2 py-0\">\r\n                    \r\n                    <div class=\"d-flex flex-column justify-content-center\">\r\n                      <h6 class=\"mb-0 text-sm\">Apprises<\/h6>\r\n                    <\/div>\r\n                  <\/div>\r\n                <\/td>\r\n                <td class=\"align-middle text-center text-sm\">\r\n                  <span class=\"badge badge-info\">" + successCounter + "</span>\r\n                <\/td>\r\n              <\/tr>\r\n              <tr>\r\n                <td>\r\n                  <div class=\"d-flex px-2 py-0\">\r\n                    \r\n                    <div class=\"d-flex flex-column justify-content-center\">\r\n                      <h6 class=\"mb-0 text-sm\">En cours<\/h6>\r\n                    <\/div>\r\n                  <\/div>\r\n                <\/td>\r\n                <td class=\"align-middle text-center text-sm\">\r\n                  <span class=\"badge badge-warning\">" + failCounter + "</span>\r\n                <\/td>\r\n              <\/tr>\r\n            <\/tbody>\r\n          <\/table>\r\n        <\/div>\r\n      <\/div>\r\n    <\/div>\r\n  <\/div>\r\n<\/div>";
 

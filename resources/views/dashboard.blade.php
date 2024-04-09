@@ -58,17 +58,28 @@
                                         </div>
                                         <div class="flex items-center justify-center">
                                             <h5>{{$user->name}} 
-                                                @if($user->hasRole('admin'))
-                                                <span class="badge badge-error badge-sm">{{__('Administrator')}}</span>
-                                                @elseif($user->hasRole('moderator'))
-                                                <span class="badge badge-warning badge-sm">{{__('Moderator')}}</span>
-                                                @elseif($user->hasRole('contributor'))
-                                                <span class="badge badge-info badge-sm">{{__('Contributor')}}</span>
-                                                @endif
+                                                
                                                 </h5>
                                         </div>
                                         <div class="text-center justify-center">
                                             <p>{{$user->bio}}</p>
+                                        </div>
+                                        <div class="divider"></div>
+                                        <div class="">
+                                        @foreach($user->groups as $group)
+                                        @if($group->public)
+                                        <span class="badge mr-2 badge-primary"><svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="24"><path d="M40-240q-17 0-28.5-11.5T0-280v-23q0-43 44-70t116-27q13 0 25 .5t23 2.5q-14 21-21 44t-7 48v65H40Zm240 0q-17 0-28.5-11.5T240-280v-25q0-32 17.5-58.5T307-410q32-20 76.5-30t96.5-10q53 0 97.5 10t76.5 30q32 20 49 46.5t17 58.5v25q0 17-11.5 28.5T680-240H280Zm500 0v-65q0-26-6.5-49T754-397q11-2 22.5-2.5t23.5-.5q72 0 116 26.5t44 70.5v23q0 17-11.5 28.5T920-240H780Zm-455-80h311q-10-20-55.5-35T480-370q-55 0-100.5 15T325-320ZM160-440q-33 0-56.5-23.5T80-520q0-34 23.5-57t56.5-23q34 0 57 23t23 57q0 33-23 56.5T160-440Zm640 0q-33 0-56.5-23.5T720-520q0-34 23.5-57t56.5-23q34 0 57 23t23 57q0 33-23 56.5T800-440Zm-320-40q-50 0-85-35t-35-85q0-51 35-85.5t85-34.5q51 0 85.5 34.5T600-600q0 50-34.5 85T480-480Zm0-80q17 0 28.5-11.5T520-600q0-17-11.5-28.5T480-640q-17 0-28.5 11.5T440-600q0 17 11.5 28.5T480-560Zm1 240Zm-1-280Z"/></svg> {{$group->name}}</span>
+                                        @else
+                                        <span class="badge mr-2 badge-primary"><svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="24"><path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z"/></svg> {{$group->name}}</span>
+                                        @endif
+                                        @endforeach
+                                        @if($user->hasRole('admin'))
+                                                <span class="badge badge-error">{{__('Administrator')}}</span>
+                                                @elseif($user->hasRole('moderator'))
+                                                <span class="badge badge-warning">{{__('Moderator')}}</span>
+                                                @elseif($user->hasRole('contributor'))
+                                                <span class="badge badge-info">{{__('Contributor')}}</span>
+                                                @endif
                                         </div>
                                     </div>
                                 </div>
@@ -193,6 +204,14 @@
                                         <path d="m620-284 56-56q6-6 6-14t-6-14L540-505q4-11 6-22t2-25q0-57-40.5-97.5T410-690q-11 0-21 1t-20 5q-9 4-11 14t5 17l74 74-56 56-74-74q-7-7-17-5t-14 11q-3 10-4.5 20t-1.5 21q0 57 40.5 97.5T408-412q13 0 24.5-2t22.5-6l137 136q6 6 14 6t14-6ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
                                 </svg>
                                         {{__('Admin settings')}}
+                                    </a>
+                                </div>
+                                <div class="sm:col-span-1 col-span-2">
+                                    <a wire:navigate href="{{route('groups.index')}}" class=" btn btn-neutral w-full">
+                                    <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+                                        <path d="m620-284 56-56q6-6 6-14t-6-14L540-505q4-11 6-22t2-25q0-57-40.5-97.5T410-690q-11 0-21 1t-20 5q-9 4-11 14t5 17l74 74-56 56-74-74q-7-7-17-5t-14 11q-3 10-4.5 20t-1.5 21q0 57 40.5 97.5T408-412q13 0 24.5-2t22.5-6l137 136q6 6 14 6t14-6ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+                                </svg>
+                                        {{__('Manage groups')}}
                                     </a>
                                 </div>
                                 

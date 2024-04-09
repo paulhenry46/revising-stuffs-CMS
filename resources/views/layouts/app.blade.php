@@ -8,6 +8,9 @@
     {{-- Sortable.js --}}
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.1/Sortable.min.js"></script>
 @endif
+@if(Route::is('post.public.view') )
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+@endif
     
         @if(env('PWA')==true)
         <link rel="manifest" href="/manifest.webmanifest" />
@@ -57,9 +60,10 @@ function editTheme(){
         @livewireStyles
     </head>
     <body class="font-sans antialiased">
+    <x-mary-toast />
         <x-banner />
 
-        <div class="min-h-screen bg-gray-200 /*bg-gray-100*/ dark:bg-gray-900">
+        <div class="min-h-screen /*bg-gray-200*/ /*bg-gray-100*/ dark:bg-gray-900 bg-gray-100">
             @livewire('navigation-menu')
 
             <!-- Page Heading -->

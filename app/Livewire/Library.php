@@ -8,6 +8,8 @@ use App\Models\Post;
 use App\Models\Course;
 use App\Models\Type;
 use App\Models\Level;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class Library extends Component
 {
@@ -38,8 +40,22 @@ class Library extends Component
 
     public function render()
     {
+        $user = auth()->user();
         return view('livewire.library', [
             'posts' => Post::where('published', '=', 1)
+
+            ->where('group_id', '!=', 1)
+            ->when(Auth::check(), function ( $query) {
+                $query->where(function ($query) {
+                    $query->whereRelation('group', 'public', true)
+                          ->orwhereIn('group_id', auth()->user()->groups->pluck('id')->toArray());
+                });
+            })
+            ->when(Auth::check() !== true, function ( $query) {
+                $query->where(function ($query) {
+                    $query->whereRelation('group', 'public', true);
+                });
+            })
             ->where('course_id', '=', $this->course->id)
             ->where('level_id', '=', $this->level->id)
             ->when($this->search, function($query, $search){

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Post;
 use App\Models\Course;
+use App\Models\Group;
 use App\Models\Level;
 use Illuminate\Support\Str;
 
@@ -48,7 +49,14 @@ class PostController extends Controller
 
         $post = new Post;
         $post->id = 0;
-        return view('posts.edit', compact('post'));
+
+        $user = auth()->user();
+      if($user->hasPermissionTo('publish all posts')){
+        $groups = Group::All();
+      }else{
+        $groups = $user->groups;
+      }
+        return view('posts.edit', compact('post', 'groups'));
     }
 
     /**
@@ -62,7 +70,6 @@ class PostController extends Controller
         $post->title = $request->title;
         $post->description = $request->description;
         $post->type_id = $request->type_id;
-        $post->legacy_type = $request->type_id;
         $post->quizlet_url = $request->quizlet_url;
         $post->dark_version = $request->has('dark_version');
         $post->thanks = 0;
@@ -103,7 +110,13 @@ class PostController extends Controller
         $this->authorize('update', $post);
         $courses = Course::all();
         $levels = Level::all();
-        return view('posts.edit', compact('post', 'courses', 'levels'));
+        $user = auth()->user();
+      if($user->hasPermissionTo('publish all posts')){
+        $groups = Group::where('id', '!=', '1')->where('id', '!=', '2')->get();
+      }else{
+        $groups = $user->groups;
+      }
+        return view('posts.edit', compact('post', 'courses', 'levels', 'groups'));
     }
 
     /**
@@ -116,10 +129,20 @@ class PostController extends Controller
         $post->title = $request->title;
         $post->description = $request->description;
         $post->type_id = $request->type_id;
-        $post->legacy_type = $request->type_id;
         $post->quizlet_url = $request->quizlet_url;
         $post->dark_version = $request->has('dark_version');
-        $post->thanks = 0;
+       
+        if($request->visibility == 1 or $request->visibility == 2){
+            $post->group_id = $request->visibility;
+        }else{
+            $groups = $user->groups->pluck('id')->toArray();
+            if(in_array($request->visibility, $groups) or $user->hasPermissionTo('publish all posts')){
+
+                $post->group_id = $request->visibility;
+            }else{
+                $post->group_id = 2;
+            }
+        }
         if($user->hasPermissionTo('publish own posts')){
             $post->published = $request->has('published');
         }else{
@@ -131,11 +154,6 @@ class PostController extends Controller
             $post->pinned = false;
         }
         $post->slug = Str::slug($request->title, '-');
-        if($request->has('public')){
-        $post->public = 'public';
-        }else{
-            $post->public = 'specific';
-        }
         $post->course_id = $request->course_id;
         $post->level_id = $request->level_id;
         $post->save();

@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 use App\Models\Post;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class NewPosts extends Component
@@ -13,8 +14,19 @@ class NewPosts extends Component
         $user = auth()->user();
         return view('livewire.new-posts', [
             'posts' => Post::where('published', '=', 1)
-            
-            //->whereIn('type_id', $this->types)
+            ->where('group_id', '!=', 1)
+            ->when(Auth::check(), function ( $query) {
+                $query->where(function ($query) {
+                    $query->whereRelation('group', 'public', true)
+                          ->orwhereIn('group_id', auth()->user()->groups->pluck('id')->toArray());
+                });
+            })
+            ->when(Auth::check() !== true, function ( $query) {
+                $query->where(function ($query) {
+                    $query->whereRelation('group', 'public', true);
+                });
+            })
+
             ->when($this->restricted, function($query){
                 return $query->where('level_id', auth()->user()->level_id)
                              ->whereIn('course_id', auth()->user()->courses_id);

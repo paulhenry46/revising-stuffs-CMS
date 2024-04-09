@@ -29,6 +29,7 @@
                         <div class="grid grid-cols-3 gap-4">
                             <div class="col-span-3 lg:col-span-2">
                                 <x-post-card :post=$post/>
+                                <livewire:step-history :$post lazy/>
                                 <div class="pt-6">
                                     <div class="rounded-lg navbar dark:bg-base-100">
                                         <div class="flex-1">
@@ -216,6 +217,7 @@
                                 @endforelse
                             </div>
                             <div class="col-span-3 lg:col-span-1">
+                            
                             @if( ($files->contains('type', 'source')) or ($files->contains('type', 'exercise')) or ($files->contains('type', 'other')) or ($files->contains('type', 'exercise correction')))
                             <ul class="menu bg-base-100 w-full rounded-box">
   <li>
@@ -316,28 +318,35 @@
                                             <h2 class="card-title">{{__('Author')}}</h2>
                                             <div class="flex items-center justify-center">
                                                 <div class="avatar">
-                                                    <div class="w-24 rounded-full ring 
-                                                    @if($post->user->hasRole('admin'))
-                                                ring-error 
-                                                @elseif($post->user->hasRole('moderator'))
-                                                ring-warning
-                                                @else
-                                                ring-info
-                                                @endif
-                                                    
-                                                    ring-offset-base-100 ring-offset-2">
+                                                    <div class="w-24 rounded-full 
+                                                   
+                                               ">
                                                         <img src="{{$post->user->profile_photo_url}}" />
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="flex items-center justify-center">
-                                                <h5>{{$post->user->name}}
-                                                @if($post->user->hasRole('admin'))
-                                                <span class="badge badge-error badge-sm">{{__('Administrator')}}</span>
-                                                @elseif($post->user->hasRole('moderator'))
-                                                <span class="badge badge-warning badge-sm">{{__('Moderator')}}</span>
-                                                @elseif($post->user->hasRole('contributor'))
-                                                <span class="badge badge-info badge-sm">{{__('Contributor')}}</span>
+                                                <h5 class="flex">
+                                                    <p class="mr-1">{{$post->user->name}}</p>
+                                                    @if($post->user->hasRole('admin'))
+                                                    <p class="text-error">
+                                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20">
+                                                            <path d="m438-452-58-57q-11-11-27.5-11T324-508q-11 11-11 28t11 28l86 86q12 12 28 12t28-12l170-170q12-12 11.5-28T636-592q-12-12-28.5-12.5T579-593L438-452ZM326-90l-58-98-110-24q-15-3-24-15.5t-7-27.5l11-113-75-86q-10-11-10-26t10-26l75-86-11-113q-2-15 7-27.5t24-15.5l110-24 58-98q8-13 22-17.5t28 1.5l104 44 104-44q14-6 28-1.5t22 17.5l58 98 110 24q15 3 24 15.5t7 27.5l-11 113 75 86q10 11 10 26t-10 26l-75 86 11 113q2 15-7 27.5T802-212l-110 24-58 98q-8 13-22 17.5T584-74l-104-44-104 44q-14 6-28 1.5T326-90Z"/>
+                                                        </svg>
+                                                    </p>
+                                                    @elseif($post->user->hasRole('moderator'))
+                                                    <p class="text-warning">
+                                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20">
+                                                            <path d="m438-452-58-57q-11-11-27.5-11T324-508q-11 11-11 28t11 28l86 86q12 12 28 12t28-12l170-170q12-12 11.5-28T636-592q-12-12-28.5-12.5T579-593L438-452ZM326-90l-58-98-110-24q-15-3-24-15.5t-7-27.5l11-113-75-86q-10-11-10-26t10-26l75-86-11-113q-2-15 7-27.5t24-15.5l110-24 58-98q8-13 22-17.5t28 1.5l104 44 104-44q14-6 28-1.5t22 17.5l58 98 110 24q15 3 24 15.5t7 27.5l-11 113 75 86q10 11 10 26t-10 26l-75 86 11 113q2 15-7 27.5T802-212l-110 24-58 98q-8 13-22 17.5T584-74l-104-44-104 44q-14 6-28 1.5T326-90Z"/>
+                                                        </svg>
+                                                    </p>
+                                                    @elseif($post->user->hasRole('contributor'))
+                                                    <p class="text-primary">
+                                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20">
+                                                            <path d="m438-452-58-57q-11-11-27.5-11T324-508q-11 11-11 28t11 28l86 86q12 12 28 12t28-12l170-170q12-12 11.5-28T636-592q-12-12-28.5-12.5T579-593L438-452ZM326-90l-58-98-110-24q-15-3-24-15.5t-7-27.5l11-113-75-86q-10-11-10-26t10-26l75-86-11-113q-2-15 7-27.5t24-15.5l110-24 58-98q8-13 22-17.5t28 1.5l104 44 104-44q14-6 28-1.5t22 17.5l58 98 110 24q15 3 24 15.5t7 27.5l-11 113 75 86q10 11 10 26t-10 26l-75 86 11 113q2 15-7 27.5T802-212l-110 24-58 98q-8 13-22 17.5T584-74l-104-44-104 44q-14 6-28 1.5T326-90Z"/>
+                                                        </svg>
+                                                    </p>
+                                                    
                                                 @endif
                                                 </h5>
                                             </div>

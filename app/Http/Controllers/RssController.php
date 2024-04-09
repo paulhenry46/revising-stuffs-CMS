@@ -8,7 +8,7 @@ class RssController extends Controller
 {
     public function posts() {
 
-    	$posts = Post::where('published', '=', 1)->latest()->limit(10)->get();
+    	$posts = Post::where('published', '=', 1)->whereRelation('group', 'public', true)->where('group_id', '!=', 1)->latest()->limit(10)->get();
 
     	if ($posts->first()) {
 			return response()

@@ -15,7 +15,9 @@ use App\Http\Controllers\AboutController;
 use App\Http\Controllers\AdminSettingsController;
 use App\Http\Controllers\RssController;
 use App\Http\Controllers\PushNotificationsController;
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\PushNotif;
+use App\Http\Controllers\StepController;
 
 /*
 |--------------------------------------------------------------------------
@@ -105,6 +107,18 @@ Route::middleware([
     Route::group(['middleware' => ['can:manage users']], function () {
         Route::resource('users', UserController::class)->except(['show']);
     });
+
+    //Groups
+    Route::group(['middleware' => ['can:manage groups']], function () {
+        Route::prefix('/groups')->group(function () {
+            Route::get('/', [GroupController::class, 'index'])->name('groups.index');
+            Route::get('/{group}/edit', [GroupController::class, 'edit'])->name('groups.edit');
+            Route::get('/create', [GroupController::class, 'create'])->name('groups.create');
+        });
+    });
+
+    Route::post('/step', [StepController::class, 'create'])->name('step.add');
+
     Route::group(['middleware' => ['can:manage own posts']], function () {
         //Manage the posts
         Route::resource('posts', PostController::class);
@@ -150,6 +164,7 @@ Route::middleware([
 
             Route::get('/{card}/update', 'edit')->name('edit');
             Route::put('/{card}/edit', 'update')->name('update');
+            Route::post('/step', 'step')->name('step');
         });
     });
 });
