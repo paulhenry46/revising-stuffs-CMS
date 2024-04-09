@@ -52,7 +52,7 @@ class PostController extends Controller
 
         $user = auth()->user();
       if($user->hasPermissionTo('publish all posts')){
-        $groups = Group::All();
+        $groups = Group::where('id', '!=', 1)->where('id', '!=', 2)->get();
       }else{
         $groups = $user->groups;
       }
