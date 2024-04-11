@@ -6,7 +6,9 @@ use App\Models\Post;
 use App\Models\Step;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Livewire\Attributes\Lazy;
 
+#[Lazy(isolate: false)] 
 class ProgressBar extends Component
 {
     public function render()

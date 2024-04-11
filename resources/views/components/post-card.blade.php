@@ -79,9 +79,7 @@
                                                 </ul>
                                             </div>
                                         </div>
-                                                        @auth
-                                        <livewire:progress-bar wire:key="progress_{{$post->id}}" :post=$post lazy/>
-                                                        @endauth
+                                                        
                                         <div class="flex flex-items">
                                         <a wire:navigate href="{{route('post.public.courseView', ['level_chosen' => $post->level->slug, 'course_chosen' => $post->course->slug])}}" class="badge badge-md bg-{{$post->course->color}} text-white">{{$post->course->name}}</a>
                                         @if($post->pinned)<span class="ml-1 badge badge-md badge-neutral">Pinned</span>

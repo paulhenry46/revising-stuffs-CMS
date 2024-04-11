@@ -35,7 +35,7 @@ if(env('APP_DEBUG')){ //Debug Routes
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
 //RSS Routes
 Route::get('/rss/all', [RssController::class, 'posts'])->name('rss.posts');//General RSS including all the levels and courses
@@ -73,6 +73,7 @@ Route::name('post.public.')->group(function() {
 Route::name('about.')->prefix('/about')->group(function() {
         Route::get('/', [AboutController::class, 'index'])->name('about');
         Route::get('/licensing', [AboutController::class, 'licensing'])->name('licensing');
+        Route::get('/legal', [AboutController::class, 'legal'])->name('legal');
                 });
 //Users Routes
 Route::middleware([

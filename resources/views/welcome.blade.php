@@ -1,6 +1,4 @@
 <x-app-layout>
-    <x-slot name="header">
-    </x-slot>
     <div class="py-12">
         <div class="sm:px-6 px-2">
             <div class=" dark:bg-gray-900 overflow-hidden dark:shadow-xl sm:rounded-lg">
@@ -26,7 +24,7 @@
                           </div>
                     </div>
                     <div class="col-span-1 col-span-1">
-                        <div class="card w-full bg-success text-success-content">
+                        <div class="card w-full bg-secondary text-success-content">
                             <div class="card-body">
                               <h2 class="card-title">{{__('Library')}}</h2>
                               <p>{{__('Need to consult the resources already added to get a head start or review a concept? Just click here!')}}</p>
@@ -37,7 +35,7 @@
                           </div>
                     </div>
                     <div class="col-span-1 col-span-1 h-full">
-                        <div class="card w-full h-full bg-warning text-warning-content">
+                        <div class="card w-full h-full bg-success text-warning-content">
                             <div class="card-body">
                               <h2 class="card-title">{{__('Participate')}}</h2>
                               <p>{{__('Want to suggest resources? Create an account and let\'s get started!')}}</p>
@@ -50,5 +48,4 @@
                 </div>
             </div>
         </div>
-        <x-nav-bottom :active=-1/>
 </x-app-layout>
