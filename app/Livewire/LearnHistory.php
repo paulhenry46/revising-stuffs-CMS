@@ -82,7 +82,7 @@ private function masteryOfWeek($steps){
         $this->HistoryChart = [
             'type' => 'line',
             'data' => [
-                'labels' => [__('3 weeks ago'),__('2 weeks ago'),__('1 weeks ago'),__('This week')],
+                'labels' => [__('3 weeks ago'),__('2 weeks ago'),__('1 week ago'),__('This week')],
                 'datasets' => [
                     [
                         'label' => __('Learning'),
@@ -115,7 +115,7 @@ private function masteryOfWeek($steps){
                     ],
 
                     [
-                        'label' => __('Exelent mastery'),
+                        'label' => __('Excelent mastery'),
                         'data' => [$datas[4][4], $datas[3][4], $datas[2][4], $datas[1][4]],
                         'fill' => true,
                         'borderColor' => 'rgb(0, 169, 110)',

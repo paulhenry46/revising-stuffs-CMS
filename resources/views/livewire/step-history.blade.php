@@ -17,7 +17,7 @@
     {{__('Revise now')}}</a>
     @endif
 </p> 
-    <p class="float-right"><button class="btn" onclick="my_modal_1.showModal()">{{('Reinitialize your progress')}}</button></p>
+    <p class="float-right"><button class="btn" onclick="my_modal_1.showModal()">{{__('Reinitialize your progress')}}</button></p>
 </div>
 
 
