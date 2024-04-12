@@ -77,9 +77,15 @@ function editTheme(){
         <li>
           <a>{{__('Your profile')}}</a>
           <ul class="p-2">
+          @auth
             <li><a @if(Route::is('dashboard')) class="active" @endif wire:navigate href="{{route('dashboard')}}" >{{__('Dashboard')}}</a></li>
             <li><a @if(Route::is('profile.show')) class="active" @endif wire:navigate href="{{route('profile.show')}}" >{{__('Settings')}}</a></li>
             <li><a @if(Route::is('posts.create')) class="active" @endif wire:navigate href="{{route('posts.create')}}" >{{__('Create a post')}}</a></li>
+            @endauth
+            @guest
+            <li><a @if(Route::is('login')) class="active" @endif wire:navigate href="{{route('login')}}" >{{__('Login')}}</a></li>
+            <li><a @if(Route::is('register')) class="active" @endif wire:navigate href="{{route('register')}}" >{{__('Register')}}</a></li>
+            @endguest
           </ul>
         </li>
       </ul>
@@ -95,9 +101,15 @@ function editTheme(){
         <details>
           <summary>{{__('Your profile')}}</summary>
           <ul class="p-2">
+          @auth
             <li><a @if(Route::is('dashboard')) class="active" @endif wire:navigate href="{{route('dashboard')}}" >{{__('Dashboard')}}</a></li>
             <li><a @if(Route::is('profile.show')) class="active" @endif wire:navigate href="{{route('profile.show')}}" >{{__('Settings')}}</a></li>
             <li><a @if(Route::is('posts.create')) class="active" @endif wire:navigate href="{{route('posts.create')}}" >{{__('Create a post')}}</a></li>
+            @endauth
+            @guest
+            <li><a @if(Route::is('login')) class="active" @endif wire:navigate href="{{route('login')}}" >{{__('Login')}}</a></li>
+            <li><a @if(Route::is('register')) class="active" @endif wire:navigate href="{{route('register')}}" >{{__('Register')}}</a></li>
+            @endguest
           </ul>
         </details>
       </li>
