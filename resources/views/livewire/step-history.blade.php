@@ -1,5 +1,5 @@
-<div class="mt-6 mb-3 card bg-base-100 shadow-xl">
-    <div class="card-body">
+<div class="mt-6 mb-3 card bg-base-100 shadow-xl @guest z-0 @endguest">
+    <div class="card-body @guest opacity-25 @endguest">
         <h2 class="card-title">{{__('Progression')}}</h2>
         <x-mary-chart wire:model="HistoryChart" />
 
@@ -20,7 +20,6 @@
     <p class="float-right"><button class="btn" onclick="my_modal_1.showModal()">{{__('Reinitialize your progress')}}</button></p>
 </div>
 
-
         
     </div>
 <dialog id="my_modal_1" class="modal">
@@ -35,4 +34,7 @@
     </div>
   </div>
 </dialog>
+<div class="absolute inset-0 flex justify-center items-center z-10">
+      <p class="text-xl">{{__('To save your progress on this post, you must be connected.')}}</p>
+    </div>
 </div>

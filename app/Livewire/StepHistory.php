@@ -43,6 +43,7 @@ class StepHistory extends Component
 
     public function mount(Post $post)
     {
+        if(Auth::check()){
         $this->post = $post;
         $this->post_id = $post->id;
         $steps = Step::where('user_id', Auth::id())->where('post_id', $post->id)->orderBy('created_at', 'ASC')->get();
@@ -119,5 +120,56 @@ class StepHistory extends Component
                         ]
                     ]
         ];
+    }else{
+        $this->HistoryChart = [
+            'type' => 'line',
+            'data' => [
+                'labels' => [Carbon::today()->format('d M'), Carbon::yesterday()->format('d M'), Carbon::today()->subDays(2)->format('d M')],
+                'datasets' => [
+                    [
+                        'label' => __('Score'),
+                        'data' => [50, 80, 70],
+                        'fill' => true,
+                        'borderColor' => 'rgb(116, 128, 255)',
+                        'backgroundColor'=> 'rgba(116, 128, 255, 0.2)',
+                        'tension' => 0.3,
+                        'yAxisID'=> 'y'
+                    ],
+
+                    [
+                        'label' => __('Mastery'),
+                        'data' => [7, 6, 7],
+                        'fill' => true,
+                        'borderColor' => 'rgb(0, 169, 110)',
+                        'backgroundColor'=> 'rgba(0, 169, 110, 0.2)',
+                        'tension' => 0.3,
+                        'yAxisID'=> 'y1'
+                    ]
+                ]
+                    ],
+                    'options' => [
+                        'scale' => [
+                            'y' => [
+                                'type'=> 'linear',
+                                'display'=> true,
+                                'position'=> 'left',
+                                'max' => 100,
+                                'min' => 0,
+                            ],
+
+                            'y1' => [
+                                'type'=> 'linear',
+                                'display'=> true,
+                                'position'=> 'right',
+                                'max' => 9,
+                                'min' => 0,
+                                'grid' => [
+                                    'drawOnChartArea'=> false
+                                ]
+                            ],
+                        ]
+                    ]
+        ];
+    }
     }
 }
