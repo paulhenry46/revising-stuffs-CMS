@@ -18,7 +18,9 @@
                         <div class="grid grid-cols-3 gap-4">
                             <div class="col-span-3 lg:col-span-2">
                                 <x-post-card :post=$post/>
+                                @if($post->cards)
                                 <livewire:step-history :$post lazy/>
+                                @endif
                                 <div class="pt-6">
                                     <div class="rounded-lg navbar dark:bg-base-100">
                                         <div class="flex-1">
