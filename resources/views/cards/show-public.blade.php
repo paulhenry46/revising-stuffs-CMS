@@ -44,6 +44,10 @@
 
             @endguest
           </div>
+          <div role="alert" class="mt-4 alert alert-success">
+  <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+  <span>{{__('To track your progress in learning the cards in this resource, you can use the "Review" mode, which will automatically record your score. Depending on your level of mastery, the site will then suggest that you revisit the cards at different intervals to fix them in your long-term memory. ')}} </br>{{__('You must be logged in to use this function.')}}</span>
+</div>
       </div>
         <div class="bg-gray-200 dark:bg-gray-800 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
           <x-info-message/>

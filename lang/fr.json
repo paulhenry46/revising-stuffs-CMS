@@ -452,5 +452,7 @@
     "Our Team" : "Notre équipe",
     "In case of emergency, issues with this instance or to get more info, you can email us to :" : "En cas de problème critique ou de sujet urgent concernant ce site, veuillez nous contacter à : ",
     "RSS Feed" : "Flux RSS",
-    "Follow us" : "Suivez nous"
+    "Follow us" : "Suivez nous",
+    "To track your progress in learning the cards in this resource, you can use the \"Review\" mode, which will automatically record your score. Depending on your level of mastery, the site will then suggest that you revisit the cards at different intervals to fix them in your long-term memory. " : "Pour suivre la progression de votre apprentissage des cartes de cette ressource, vous pouvez utiliser le mode \"Réviser\" qui enregistrera automatiquement votre score. Selon votre niveau de maitrise, le site vous proposera ensuite de revoir les cartes à différents intervalles de temps pour les fixer dans la mémoire à long terme.",
+    "You must be logged in to use this function." : "Vous devez etre connecté pour utiliser cette fonction."
 }
