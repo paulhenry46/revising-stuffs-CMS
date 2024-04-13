@@ -6,7 +6,6 @@
     <h1 class=" decoration-4 underline decoration-success text-2xl font-medium text-gray-900 dark:text-white">
         {{__('Your favorite posts')}}
     </h1>
-    <p>{{__('See all your favorite posts')}}</p>
     @guest
     <div class="mt-2">
     <div class="alert alert-warning">
@@ -46,7 +45,6 @@
     <h1 class=" decoration-4 underline decoration-warning text-2xl font-medium text-gray-900 dark:text-white">
         {{__('Posts that need revision')}}
     </h1>
-    <p>{{__('See the posts which need revision')}}</p>
 </div>
 </div>
 <div class="grid grid-cols-4 gap-4">

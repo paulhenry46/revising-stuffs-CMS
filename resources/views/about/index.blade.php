@@ -110,7 +110,7 @@
   @endforeach
   </div>
   <h2 class="mt-2 text-xl font-medium text-gray-900 dark:text-white">{{__('Contact')}}</h2>
-  {{('In case of emergency, issues with this instance or to get more info, you can email us to :')}} {{str_replace('@', '[->AT<-]',env('INSTANCE_MAIL'))}}.
+  {{__('In case of emergency, issues with this instance or to get more info, you can email us to :')}} {{str_replace('@', '[->AT<-]',env('INSTANCE_MAIL'))}}.
   <h2 class="mt-2 text-xl font-medium text-gray-900 dark:text-white">{{__('Follow us')}}</h2>
   <a class="btn btn-warning" href="{{route('rss.posts')}}">
   <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
