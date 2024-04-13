@@ -34,7 +34,9 @@
     </div>
   </div>
 </dialog>
+@guest
 <div class="absolute inset-0 flex justify-center items-center z-10">
       <p class="text-xl">{{__('To save your progress on this post, you must be connected.')}}</p>
     </div>
+    @endguest
 </div>
