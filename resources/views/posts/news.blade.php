@@ -15,13 +15,13 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-messaging.js";
 
 
-const firebaseConfig = {//TODO Add Firebase config
-    apiKey: "XXX",
-    authDomain: "XXX.firebaseapp.com",
-    projectId: "XXX",
-    storageBucket: "XXX.appspot.com",
-    messagingSenderId: "XXX",
-    appId: "1:XXX:web:XXX"
+const firebaseConfig = {
+    apiKey: "{{env('FCM_apiKey')}}",
+    authDomain: "{{env('FCM_authDomain')}}",
+    projectId: "{{env('FCM_projectId')}}",
+    storageBucket: "{{env('FCM_storageBucket')}}",
+    messagingSenderId: "{{env('FCM_messagingSenderId')}}",
+    appId: "{{env('FCM_appId')}}"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -55,7 +55,7 @@ function registerSW(){
     navigator.serviceWorker.register("firebase-messaging-sw.js").then(registration => {
     getToken(messaging, {
         serviceWorkerRegistration: registration,
-        vapidKey: 'XXXXXXXXXXXXXXXX'
+        vapidKey: '{{env('FIREBASE_SERVER_KEY')}}'
     }).then((currentToken) => {
         if (currentToken) {
             console.log("Token is: " + currentToken);
