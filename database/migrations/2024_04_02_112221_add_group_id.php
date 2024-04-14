@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Group;
 
 return new class extends Migration
 {
@@ -11,6 +12,14 @@ return new class extends Migration
      */
     public function up(): void
     {
+        $group = new Group;
+        $group->name = 'private';
+        $group->save();
+
+        $group = new Group;
+        $group->name = 'all';
+        $group->save();
+
         Schema::table('posts', function (Blueprint $table) {
             $table->foreignId('group_id')->default(2)
             ->constrained();

@@ -59,9 +59,5 @@ class DatabaseSeeder extends Seeder
         $course->slug = 'all-courses';
         $course->color = 'red-500';
         $course->save();
-
-        $this->call([
-            GroupSeeder::class
-        ]);
     }
 }

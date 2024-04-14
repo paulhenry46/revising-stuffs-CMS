@@ -29,10 +29,6 @@ class RSCMS_UpdateToV2 extends Command
      */
     public function handle()
     {
-        Artisan::call('db:seed', [
-            '--class' => 'GroupSeeder',
-            '--force' => true
-        ]);
     Permission::create(['guard_name' => 'sanctum', 'name' => 'manage groups']);
     $role = Role::findByName('admin', 'sanctum');
     $role->syncPermissions(['manage courses', 'manage levels', 'manage users', 'manage all posts', 'manage groups']);
