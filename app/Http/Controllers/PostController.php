@@ -87,11 +87,6 @@ class PostController extends Controller
             $post->pinned = false;
         }
         $post->slug = Str::slug($request->title, '-');
-        if($request->has('public')){
-        $post->public = 'public';
-        }else{
-            $post->public = 'specific';
-        }
         $post->course_id = $request->course_id;
         $post->level_id = $request->level_id;
         $post->user_id = $user->id;
