@@ -121,6 +121,10 @@ class PostController extends Controller
     {
         $this->authorize('update', $post);
         $user = Auth::user();
+        $oldSlug = $post->slug;
+        $oldLevelSlug = $post->level->slug;
+        $oldCourseSlug = $post->course->slug;
+
         $post->title = $request->title;
         $post->description = $request->description;
         $post->type_id = $request->type_id;
@@ -152,14 +156,15 @@ class PostController extends Controller
         $post->course_id = $request->course_id;
         $post->level_id = $request->level_id;
         $post->save();
-        //Move files to the new directory if course or level is changed :
-            $files = $post->files;
-            foreach ($files as $file) {
-                $name = $file->name;
-                Storage::disk('public')->move($file->file_path, ''.$post->level->slug.'/'.$post->course->slug.'/'.$name.'');
-                $file->file_path = ''.$post->level->slug.'/'.$post->course->slug.'/'.$name.'';
+        //Move files to the new directory if course or level or post name is changed :
+            foreach ($post->files as $file) {
+                $file->name = str_replace($oldSlug, $post->slug, $file->name);
+                Storage::disk('public')->move($file->file_path, ''.$post->level->slug.'/'.$post->course->slug.'/'.$file->name.'');
+                //Do it with thumbnail
+                $file->file_path = ''.$post->level->slug.'/'.$post->course->slug.'/'.$file->name.'';
                 $file->save();
             }
+        Storage::disk('public')->move(''.$oldLevelSlug.'/'.$oldCourseSlug.'/'.$post->id.'-'.$oldSlug.'.thumbnail.png', ''.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png');
         return redirect()->route('posts.index')->with('message', __('The post has been modified.'));
     }
 

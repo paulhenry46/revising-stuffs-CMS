@@ -359,27 +359,6 @@ function initializeHandlers() {
   $('#reset').hide();
   ouicards.getFromLS();
   updateFooter();
-//   // Load front functionality
-//   $('.upload label').on('click', function() {
-//     $('.upload-fronts-label').hide();
-//     $('.upload').css({"padding": " 0 2px 10px 2px"});
-//     $('#fronts-input-area').show(100, function(){
-//       $('#load-fronts').show(400);
-//     });
-//   });
-//
-//   $('#load-fronts').on('click', function() {
-//     initializeHandlers(ouicards.loadFromBrowser('#fronts-input-area', ','));
-//     changeFront();
-//     $('#fronts-input-area').hide();
-//     $('.upload').css({"padding": "10px"});
-//     $('#load-fronts').hide();
-//     $('.upload-fronts-label').text("Upload New Fronts");
-//     $('.upload-fronts-label').show();
-//     start = true;
-//   });
-
-//Start function
 
   $('#start').on('click', function() {
     if (!start) {
@@ -532,13 +511,7 @@ $('#fail').prop("disabled", true);
     //$('.back').children().hide(); NOTE
   }
 
-//   $('.front').on('click', function() { NOTE BEGIN
-//     $('.back p').show();
-//   });
-//
-//   $('.back').on('click', function() {
-//     $('.back p').show();
-//   }); NOTE END
+
 
   // Update footer info
   function updateFooter() {
