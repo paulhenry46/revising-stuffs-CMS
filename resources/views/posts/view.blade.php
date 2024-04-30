@@ -17,7 +17,7 @@
                     <section>
                         <div class="grid grid-cols-3 gap-4">
                             <div class="col-span-3 lg:col-span-2">
-                                <x-post-card :post=$post/>
+                                <x-post-card :post=$post :description=true/>
                                 @if($post->cards)
                                 <livewire:step-history :$post lazy/>
                                 @endif

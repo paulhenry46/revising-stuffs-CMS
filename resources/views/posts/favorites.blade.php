@@ -25,7 +25,7 @@
     @auth
 @forelse($posts as $post)
 <div class="pt-4 col-span-4 lg:col-span-1">
-<x-post-card :post=$post :starred=false/>
+<x-post-card :post=$post :starred=false description=false/>
                                 </div>
                                 @empty
                                 <div class="sm:col-span-4 rounded-box mt-6 dark:border-gray-500 border-base-300 dark:text-gray-500 text-base-content/30 flex h-72 flex-col items-center justify-center gap-6 border-2 border-dashed p-10 text-center [text-wrap:balance]">
@@ -51,7 +51,7 @@
 
 @forelse($RevisePosts as $post)
 <div class="pt-4 col-span-4 lg:col-span-1">
-<x-post-card :post=$post :starred=false/>
+<x-post-card :post=$post :starred=false description=false/>
                                 </div>
                                 @empty
                                 <div class="sm:col-span-4 rounded-box mt-6 dark:border-gray-500 border-base-300 dark:text-gray-500 text-base-content/30 flex h-72 flex-col items-center justify-center gap-6 border-2 border-dashed p-10 text-center [text-wrap:balance]">

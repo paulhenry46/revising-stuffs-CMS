@@ -94,7 +94,7 @@
   <div class="grid grid-cols-4 gap-4"> 
     @foreach($posts as $post) 
     <div wire:key="post_{{ $post->id }}" class="pt-4 col-span-4 lg:col-span-1">
-      <x-post-card :post=$post :starred=false />
+      <x-post-card :post=$post :starred=false description=false />
     </div> 
     @endforeach 
   </div>

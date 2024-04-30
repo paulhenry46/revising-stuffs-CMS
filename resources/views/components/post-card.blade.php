@@ -24,7 +24,9 @@
                                     <div class="card-body">
                                       
                                         <h2 class="card-title">{{$post->title}}</h2>
-                                        
+                                        @if($description === true)
+                                        <p>{{$post->description}}</p>
+                                        @endif
                                         
                                         <div class="card-actions items-center justify-center flex">
                                             <div class="items-center justify-center flex min-h-[6rem] min-w-[18rem] max-w-4xl flex-wrap gap-2">
