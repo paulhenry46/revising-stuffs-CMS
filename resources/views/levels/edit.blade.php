@@ -1,28 +1,37 @@
 <x-app-layout>
-    <x-slot name="header">
-    @if($level->id !== 0)
-    @php
-     $breadcrumb = array (
-  array(__('Dashboard'),'dashboard'),
-  array(__('Levels'),'levels.index'),
-  array(__('Edit'),NULL)
-        );
-      @endphp
-    @else
-     @php
-     $breadcrumb = array (
-  array(__('Dashboard'),'dashboard'),
-  array(__('Levels'),'levels.index'),
-  array(__('Create'),NULL)
-        );
-      @endphp
-    @endif
-   
-     <x-breadcrumb :items=$breadcrumb/>   
-    </x-slot>
-
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    
+    <div class="py-4">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        @if($level->id == 0)
+      <div class=" text-sm breadcrumbs mb-2">
+  <ul>
+    <li><a wire:navigate href="{{route('dashboard')}}">
+      {{__('Dashboard')}}
+    </a></li>
+    <li><a wire:navigate href="{{route('levels.index')}}">
+      {{__('Levels')}}
+    </a></li>
+    <li>
+      {{__('New level')}}
+    </li>
+  </ul>
+</div>
+@else 
+<div class=" text-sm breadcrumbs mb-2">
+  <ul>
+    <li><a wire:navigate href="{{route('dashboard')}}">
+      {{__('Dashboard')}}
+    </a></li>
+    <li><a wire:navigate href="{{route('levels.index')}}">
+      {{__('Levels')}}
+    </a></li>
+    <li>
+      {{__('Edit level : ')}}{{$level->name}}
+    </li>
+  </ul>
+</div>
+@endif
+        <div class="">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
             <div class="p-6 lg:p-8 bg-white dark:bg-gray-800 dark:bg-gradient-to-bl dark:from-gray-700/50 dark:via-transparent border-b border-gray-200 dark:border-gray-700">
 
@@ -43,24 +52,26 @@
     <div class="sm:col-span-3">
       <label for="name" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Name')}}</label>
       <div class="mt-2">
-        <input type="text" name="name" id="name" autocomplete="given-name" class="form-input dark:bg-white/5 dark:text-white block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-white/10 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" value="{{ old('name', $level->name) }}">
+        <input type="text" name="name" id="name" autocomplete="given-name" class="w-full input input-primary" value="{{ old('name', $level->name) }}">
       </div>
     </div>
     <div class="sm:col-span-3">
     <label for="courses[]" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Courses')}}</label>
-    <select name="courses[]" multiple="true" class="select select-bordered w-full">
+    <div class="mt-2">
+    <select name="courses[]" multiple="true" class="select select-bordered w-full select-primary">
         @foreach($courses as $course)
             <option value="{{ $course->id }}" {{ in_array($course->id, old('courses', $level->courses->pluck('id')->all()) ?: []) ? 'selected' : '' }}>{{ $course->name }}</option>
         @endforeach
     </select>
+    </div>
     </div>
   </div>
 </div>
 </div>
 
 <div class="mt-6 flex items-center justify-end gap-x-6">
-<a href="{{route('levels.index')}}" class="text-sm font-semibold leading-6 text-red-500">{{__('Cancel')}}</a>
-<button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">@if($level->id !== 0) {{__('Edit')}} @else {{__('Create')}} @endif</button>
+<a href="{{route('levels.index')}}" class="link ">{{__('Cancel')}}</a>
+<button type="submit" class="btn btn-primary">@if($level->id !== 0) {{__('Edit')}} @else {{__('Create')}} @endif</button>
 </div>
 </form>
 </div>

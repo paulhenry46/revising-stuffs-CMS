@@ -1,6 +1,6 @@
 <div>
     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
-                <div class="p-6 lg:p-8 bg-white dark:bg-gray-800 dark:bg-gradient-to-bl dark:from-gray-700/50 dark:via-transparent border-b border-gray-200 dark:border-gray-700">
+                <div class="p-6 lg:p-8 bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
 
     <h1 class=" decoration-4 underline decoration-warning text-2xl font-medium text-gray-900 dark:text-white">
         {{$level->name}} - {{$course->name}}
@@ -62,7 +62,7 @@
 <div class="grid grid-cols-4 gap-4">
 @foreach($posts as $post)
 <div wire:key="post_{{ $post->id }}" class="pt-4 col-span-4 lg:col-span-1">
-<x-post-card wire:key="post_nested{{$post->id}}" :post=$post/>
+<x-post-card wire:key="post_nested{{$post->id}}" :post=$post description=false/>
                                 </div>
                                 @endforeach
 

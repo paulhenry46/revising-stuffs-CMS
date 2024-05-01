@@ -1,28 +1,35 @@
 <x-app-layout>
-    <x-slot name="header">
-    @if($course->id !== 0)
-    @php
-     $breadcrumb = array (
-  array(__('Dashboard'),'dashboard'),
-  array(__('Courses'),'courses.index'),
-  array(__('Edit'),NULL)
-        );
-      @endphp
-    @else
-     @php
-     $breadcrumb = array (
-  array(__('Dashboard'),'dashboard'),
-  array(__('Courses'),'courses.index'),
-  array(__('Create'),NULL)
-        );
-      @endphp
-    @endif
-   
-     <x-breadcrumb :items=$breadcrumb/>   
-    </x-slot>
-
-    <div class="py-12">
+    <div class="py-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        @if($course->id == 0)
+      <div class=" text-sm breadcrumbs mb-2">
+  <ul>
+    <li><a wire:navigate href="{{route('dashboard')}}">
+      {{__('Dashboard')}}
+    </a></li>
+    <li><a wire:navigate href="{{route('courses.index')}}">
+      {{__('Courses')}}
+    </a></li>
+    <li>
+      {{__('New course')}}
+    </li>
+  </ul>
+</div>
+@else 
+<div class=" text-sm breadcrumbs mb-2">
+  <ul>
+    <li><a wire:navigate href="{{route('dashboard')}}">
+      {{__('Dashboard')}}
+    </a></li>
+    <li><a wire:navigate href="{{route('courses.index')}}">
+      {{__('Posts')}}
+    </a></li>
+    <li>
+      {{__('Edit course : ')}}{{$course->name}}
+    </li>
+  </ul>
+</div>
+@endif
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
             <div class="p-6 lg:p-8 bg-white dark:bg-gray-800 dark:bg-gradient-to-bl dark:from-gray-700/50 dark:via-transparent border-b border-gray-200 dark:border-gray-700">
 

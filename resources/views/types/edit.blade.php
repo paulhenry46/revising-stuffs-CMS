@@ -1,26 +1,36 @@
 <x-app-layout>
-    <x-slot name="header">
-    @if($type->id !== 0)
-    @php
-     $breadcrumb = array (
-  array(__('Dashboard'),'dashboard'),
-  array(__('Edit'),NULL)
-        );
-      @endphp
-    @else
-     @php
-     $breadcrumb = array (
-  array(__('Dashboard'),'dashboard'),
-  array(__('Create'),NULL)
-        );
-      @endphp
-    @endif
-   
-     <x-breadcrumb :items=$breadcrumb/>   
-    </x-slot>
 
-    <div class="py-12">
+    <div class="py-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        @if($type->id == 0)
+      <div class=" text-sm breadcrumbs mb-2">
+  <ul>
+    <li><a href="{{route('dashboard')}}">
+      {{__('Dashboard')}}
+    </a></li>
+    <li><a href="{{route('levels.index')}}">
+      {{__('Types')}}
+    </a></li>
+    <li>
+      {{__('New type')}}
+    </li>
+  </ul>
+</div>
+@else 
+<div class=" text-sm breadcrumbs mb-2">
+  <ul>
+    <li><a href="{{route('dashboard')}}">
+      {{__('Dashboard')}}
+    </a></li>
+    <li><a href="{{route('levels.index')}}">
+      {{__('Types')}}
+    </a></li>
+    <li>
+      {{__('Edit type : ')}}{{$type->name}}
+    </li>
+  </ul>
+</div>
+@endif
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
             <div class="p-6 lg:p-8 bg-white dark:bg-gray-800 dark:bg-gradient-to-bl dark:from-gray-700/50 dark:via-transparent border-b border-gray-200 dark:border-gray-700">
 

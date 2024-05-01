@@ -49,7 +49,7 @@ Route::patch('/fcm-token', [PushNotificationsController::class, 'updateToken'])-
 //Public Routes
 Route::name('post.public.')->group(function() {
     //The route to accces to all courses of all levels
-    Route::get('/courses/{level_chosen}/{course_chosen}', [ReadPostController::class, 'course'])
+    Route::get('/course/{level_chosen}/{course_chosen}', [ReadPostController::class, 'course'])
     ->name('courseView')
     ->where(['level' => '[a-z0-9-]+'])
     ->where(['course' => '[a-z0-9-]+']);
@@ -140,10 +140,7 @@ Route::middleware([
                 Route::get('/create', 'createPrimary')->name('primary.create');
                 Route::post('/', 'storePrimary')->name('primary.store');
                 
-                Route::post('/add', 'handleRequest')->name('primary.handle');
-                Route::put('/add', 'handleRequest')->name('primary.handle');
-                Route::get('/images/sort', 'sortForm')->name('primary.sortForm');
-                Route::post('/images/sorted', 'sort')->name('primary.sort');
+              
                 
                 Route::get('/update', 'editPrimary')->name('edit');
                 Route::get('/update', 'editPrimary')->name('edit');

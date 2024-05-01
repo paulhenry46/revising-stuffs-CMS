@@ -12,7 +12,7 @@
                         </div>
 
                         
-                    <div class="col-span-1 col-span-1 h-full ">
+                    <div class="col-span-1 h-full ">
                         <div class="card w-full bg-primary text-primary-content h-full">
                             <div class="card-body">
                               <h2 class="card-title">{{__('News')}}</h2>
@@ -23,7 +23,7 @@
                             </div>
                           </div>
                     </div>
-                    <div class="col-span-1 col-span-1">
+                    <div class="col-span-1">
                         <div class="card w-full bg-secondary text-success-content">
                             <div class="card-body">
                               <h2 class="card-title">{{__('Library')}}</h2>
@@ -34,7 +34,7 @@
                             </div>
                           </div>
                     </div>
-                    <div class="col-span-1 col-span-1 h-full">
+                    <div class="col-span-1 h-full">
                         <div class="card w-full h-full bg-success text-warning-content">
                             <div class="card-body">
                               <h2 class="card-title">{{__('Participate')}}</h2>
