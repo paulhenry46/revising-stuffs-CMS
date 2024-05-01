@@ -5,10 +5,10 @@
                 
                 <div class="">
                     <x-info-message/>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="justify-items-center grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div class="sm:col-span-3 col-span-1 h-full ">
                             <h1 class="text-4xl text-center dark:text-white">{{__('Welcome to')}} {{env('APP_NAME')}}</h1>
-                            <p class="sm:px-12 text-2xl text-center dark:text-white">{{__('New resources are added throughout the year to support your revision. Here you\'ll find mind maps, summary sheets and flashcards.')}}</p>
+                            <p class="sm:px-12 text-2xl text-center dark:text-white max-w-4xl">{{__('New resources are added throughout the year to support your revision. Here you\'ll find mind maps, summary sheets and flashcards.')}}</p>
                         </div>
 
                         
