@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use App\Http\Requests\CardRequest;
 use App\Http\Requests\CardImportRequest;
 use Illuminate\Support\Facades\Response;
+use \Illuminate\Validation\ValidationException;
 
 class CardController extends Controller
 {
@@ -101,8 +102,16 @@ class CardController extends Controller
             $newLine['post_id'] = $post->id;
             $newLine['updated_at'] = now();
             $newLine['created_at'] = now();
+            if ((!array_key_exists('front', $newLine))or(!array_key_exists('back', $newLine))) {
+                $error = ValidationException::withMessages([
+                    'content' => ['Error when handling your input near "'.$newLine['front'].'" on line '.(count($output)+1).'. Please, check if the separator selected exists.']
+                 ]);
+                 throw $error;
+                 break;
+            }
             $output[] = $newLine;
         }
+        dd($output);
         Card::insert($output);
         if(!$post->cards){
                 $post->cards = true;
