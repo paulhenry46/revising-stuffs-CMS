@@ -16,6 +16,7 @@ use Str;
 use App\Jobs\CreateThumbnail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Livewire\Attributes\Locked;
 use Livewire\Attributes\Rule;
 
 class EditPrimaryFiles extends Component
@@ -25,8 +26,10 @@ class EditPrimaryFiles extends Component
     private string $visibility = 'public';
     private string $disk = 'public';
     public Post $post;//The post in wich we add primary files (PF)
+    #[Locked]
     public bool $update = false;//Variable to set if we update or create the PF
-    public bool $dark_version;//Varaible to set if a dark version of PF is needeed
+    #[Locked]
+    public bool $dark_version;//Variable to set if a dark version of PF is needeed
 
     // Images files for mary-ui library component
     public array $light_image_files = [];

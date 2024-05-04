@@ -12,8 +12,10 @@ class CardsTable extends Component
     use WithPagination;
 
     public string $search = '';
-    public $post;
+
+    public Post $post;
     public array $selection = [];
+
     public function updating($name, $value){
         if($name == 'search'){
             $this->resetPage();

@@ -25,7 +25,7 @@ class CommentsTable extends Component
                     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
                         <div class="p-6 lg:p-8 bg-white dark:bg-gray-800 dark:bg-gradient-to-bl dark:from-gray-700/50 dark:via-transparent border-b border-gray-200 dark:border-gray-700">
                             <h1 class=" text-2xl font-medium text-gray-900 dark:text-white">
-                                    Moderate the comments
+                                    {{__('Moderate the comments')}}
                             </h1>
                         </div>
                         <div role="status" class=" p-4 space-y-4 border border-gray-200 divide-y divide-gray-200 rounded shadow animate-pulse dark:divide-gray-700 md:p-6 dark:border-gray-700">

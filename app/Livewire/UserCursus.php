@@ -10,7 +10,7 @@ class UserCursus extends Component
 {
 
     public $level;
-    public $user;
+    public User $user;
     public $courses=[];
     public $course;
 

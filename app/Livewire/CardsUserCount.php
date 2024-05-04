@@ -8,7 +8,8 @@ use App\Models\User;
 
 class CardsUserCount extends Component
 {
-    public $user;
+    
+    public User $user;
     public $count;
     public $posts;
     public function render()

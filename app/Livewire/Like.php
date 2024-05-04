@@ -4,10 +4,12 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Post;
+use Livewire\Attributes\Locked;
 
 class Like extends Component
 {
     public Post $post;
+    #[Locked]
     public $count; //int $count
 
     public function mount(Post $post)

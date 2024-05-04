@@ -10,7 +10,7 @@ class ThanksCount extends Component
 {
     public $posts;
     public $count;
-    public $user;
+    public User $user;
 
     public function render()
     {

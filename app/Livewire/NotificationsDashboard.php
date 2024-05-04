@@ -15,7 +15,7 @@ class NotificationsDashboard extends Component
         session()->flash('message', __('The notification has been deleted.'));
     }
 
-    public $user;
+    public User $user;
     public array $selection = [];
     public function updating($name, $value){
     }
