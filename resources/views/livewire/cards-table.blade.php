@@ -44,29 +44,39 @@
   <div class="mt-8 flow-root">
     <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
    <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-        <table class="min-w-full divide-y divide-gray-300">
+        <table class="table table-zebra">
           <thead>
             <tr>
               <th></th>
-              <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-medium uppercase tracking-wide dark:text-gray-100 text-gray-500 sm:pl-0">ID</th>
-              <th scope="col" class="px-3 py-3 text-left text-xs font-medium uppercase tracking-wide dark:text-gray-100 text-gray-500">{{__('Front')}}</th>
-              <th scope="col" class="px-3 py-3 text-left text-xs font-medium uppercase tracking-wide dark:text-gray-100 text-gray-500">{{__('Back')}}</th>
+              <th>ID</th>
+              <th>{{__('Front')}}</th>
+              <th>{{__('Back')}}</th>
               <th scope="col" class="relative py-3 pl-3 pr-4 sm:pr-0">
                 <span class="sr-only">Edit</span>
-                <button x-show="selection.length > 0" x-on:click="$wire.deleteCards(selection)" class="text-red-600 hover:text-red-300">{{__('Delete')}}</button>
+                <button x-show="selection.length > 0" x-on:click="$wire.deleteCards(selection)" class="btn btn-error">{{__('Delete')}}</button>
               </th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-200 dark:bg-gray-800 bg-white">
+          <tbody>
             @foreach($cards as $card)
             <tr>
               <td><input value="{{$card->id}}" x-model="selection" type="checkbox" class="checkbox checkbox-success" /></td>
-                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium dark:text-gray-100 text-gray-900 sm:pl-0">{{ $card->id }}</td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm dark:text-gray-100 text-gray-500">{!! $card->front !!}</td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm dark:text-gray-100 text-gray-500">{!! $card->back !!}</td>
-                <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                    <a href="{{route('cards.edit', [$post->id, $card->id])}}" class="text-indigo-600 hover:text-indigo-400" wire:navigate>{{__('Edit')}}</a>
-                    <button x-on:click="$wire.deleteCard({{$card->id}})" type="submit" class="text-red-600 hover:text-red-300">{{__('Delete')}}</button>
+                <td>{{ $card->id }}</td>
+                <td>{!! $card->front !!}</td>
+                <td>{!! $card->back !!}</td>
+                <td class="align-middle">
+            <div class="flex items-stretch justify-end relative  text-right">
+                    <a href="{{route('cards.edit', [$post->id, $card->id])}}" class="link link-primary mr-4" wire:navigate>
+                    <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+                    <path d="M160-400v-80h280v80H160Zm0-160v-80h440v80H160Zm0-160v-80h440v80H160Zm360 560v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/>
+                  </svg>
+                    </a>
+                    <button x-on:click="$wire.deleteCard({{$card->id}})"  class="link link-error">
+                    <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+                      <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+                    </svg>
+                    </button>
+            </div>
                 </td>
             </tr>
             @endforeach

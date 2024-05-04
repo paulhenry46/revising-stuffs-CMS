@@ -29,9 +29,6 @@ use App\Http\Controllers\StepController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-if(env('APP_DEBUG')){ //Debug Routes
-    Route::get('/send-notification',[PushNotificationsController::class,'sendPushNotification'])->name('push.notification');
-}
 
 Route::get('/', function () {
     return view('welcome');
@@ -75,6 +72,7 @@ Route::name('about.')->prefix('/about')->group(function() {
         Route::get('/licensing', [AboutController::class, 'licensing'])->name('licensing');
         Route::get('/legal', [AboutController::class, 'legal'])->name('legal');
                 });
+
 //Users Routes
 Route::middleware([
     'auth:sanctum',
@@ -84,23 +82,23 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-    Route::get('/user/updateCursus', [UserController::class, 'cursusForm'])->name('user.update-cursus-form');
-    Route::post('/user/updateCursus', [UserController::class, 'cursusUpdate'])->name('user.update-cursus');
+    Route::get('/user/cursus', [UserController::class, 'cursusForm'])->name('user.update-cursus-form');
+    Route::post('/user/cursus', [UserController::class, 'cursusUpdate'])->name('user.update-cursus');
     Route::group(['middleware' => ['can:manage courses']], function () {
         Route::resource('courses', CourseController::class)->except(['show']);
         Route::resource('types', TypeController::class)->except(['show']);
     });
     Route::group(['middleware' => ['can:manage all comments']], function () {
-        Route::get('/moderateComments', [CommentController::class, 'moderate'])->name('comments.moderate');
+        Route::get('/comments/moderate', [CommentController::class, 'moderate'])->name('comments.moderate');
     });
     Route::group(['middleware' => ['can:publish all posts']], function () {
-        Route::get('/moderatePosts', [PostController::class, 'moderate'])->name('posts.moderate');
+        Route::get('/posts/moderate', [PostController::class, 'moderate'])->name('posts.moderate');
     });
     Route::group(['middleware' => ['can:manage all posts']], function () {
-        Route::get('/allPosts', [PostController::class, 'all'])->name('posts.all');
+        Route::get('/posts/all', [PostController::class, 'all'])->name('posts.all');
         Route::get('/settings', [AdminSettingsController::class, 'show'])->name('settings');
-        Route::get('/allPosts/download', [AdminSettingsController::class, 'createZipOfStorage'])->name('settings.downloadFiles');
-        Route::get('/allPosts/downloadDB', [AdminSettingsController::class, 'createBackupOfDB'])->name('settings.downloadDB');
+        Route::get('/settings/backups/files', [AdminSettingsController::class, 'createZipOfStorage'])->name('settings.downloadFiles');
+        Route::get('/settings/backups/DB', [AdminSettingsController::class, 'createBackupOfDB'])->name('settings.downloadDB');
     });
     Route::group(['middleware' => ['can:manage levels']], function () {
         Route::resource('levels', LevelController::class)->except(['show']);
@@ -117,7 +115,8 @@ Route::middleware([
             Route::get('/create', [GroupController::class, 'create'])->name('groups.create');
         });
     });
-
+    
+    //Used to send datas for quiz-mode in cards
     Route::post('/step', [StepController::class, 'create'])->name('step.add');
 
     Route::group(['middleware' => ['can:manage own posts']], function () {
@@ -131,12 +130,12 @@ Route::middleware([
         Route::controller(FileController::class)->prefix('/posts/{post}/files')->name('files.')->group(function () {
             Route::get('/', 'index')->name('index');
 
-            Route::prefix('/Complementary')->group(function () {
+            Route::prefix('/complementary')->group(function () {
                 Route::get('/create', 'create')->name('create');
                 Route::post('/', 'store')->name('store');
                 Route::delete('/{file}/delete', 'destroy')->name('destroy');
             });
-            Route::prefix('/Primary')->group(function () {
+            Route::prefix('/primary')->group(function () {
                 Route::get('/create', 'createPrimary')->name('primary.create');
                 Route::post('/', 'storePrimary')->name('primary.store');
                 

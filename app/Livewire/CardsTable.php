@@ -118,6 +118,9 @@ class CardsTable extends Component
     {
         return view('livewire.cards-table', ['cards' => Card::where('post_id', '=', $this->post->id)
             ->when($this->search, function($query, $search){
-                return $query->where('front', 'LIKE', "%{$this->search}%")->orWhere('back', 'LIKE', "%{$this->search}%");})->paginate(15), 'post' => $this->post]);
+                return $query->where(function ($query) {
+                        $query->where('front', 'LIKE', "%{$this->search}%")
+                          ->orWhere('back', 'LIKE', "%{$this->search}%");
+                });})->paginate(15), 'post' => $this->post]);
     }
 }
