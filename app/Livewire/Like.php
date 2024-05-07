@@ -11,11 +11,13 @@ class Like extends Component
     public Post $post;
     #[Locked]
     public $count; //int $count
+    public bool $mobile;
 
-    public function mount(Post $post)
+    public function mount(Post $post, $mobile=false)
     {
         $this->post = $post;
         $this->count = $post->likes_count;
+        $this->mobile = $mobile;
     }
 
     public function like(): void

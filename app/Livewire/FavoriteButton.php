@@ -11,6 +11,7 @@ class FavoriteButton extends Component
 {
     public Post $post;
     public User $user;
+    public bool $mobile;
 
     public function favorite(): void
     {
@@ -21,10 +22,11 @@ class FavoriteButton extends Component
         }
     }
 
-    public function mount(Post $post, User $user)
+    public function mount(Post $post, User $user, $mobile=false)
     {
         $this->post = $post;
         $this->user = $user;
+        $this->mobile = $mobile;
     }
 
         public function placeholder()
