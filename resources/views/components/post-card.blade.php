@@ -1,4 +1,4 @@
-<div class="card @if(!request()->routeIs('post.public.view')) h-full @endif dark:bg-base-100 bg-{{str_replace('500', '100',$post->course->color)}} shadow-xl">
+<div class="card @if(!request()->routeIs('post.public.view')) h-full @endif dark:bg-base-100 bg-{{str_replace('500', '100',$post->course->color)}}">
                                     <figure>
                                         @if(file_exists('storage/'.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png'))
 

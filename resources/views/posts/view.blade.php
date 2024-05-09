@@ -1,13 +1,9 @@
 <x-app-layout>
   <div class="py-12 hidden md:block">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-      <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
-        <div class="p-6 lg:p-8 bg-white dark:bg-gray-800 dark:bg-gradient-to-bl dark:from-gray-700/50 dark:via-transparent border-b border-gray-200 dark:border-gray-700">
-          <h1 class=" text-2xl font-medium text-gray-900 dark:text-white">
-            {{$post->title}}
-          </h1>
-        </div>
-        <div class="bg-gray-200 dark:bg-gray-800 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
+    <div class="max-w-7xl mx-auto ">
+      <div class="">
+        
+        <div class=" ">
           <x-info-message />
           <div class="px-4 ">
             <div class="mt-8 flow-root">
@@ -18,7 +14,7 @@
                       <div class="col-span-3 lg:col-span-2">
                         <x-post-card :post=$post :description=true /> @if($post->cards)
                         <livewire:step-history :$post lazy /> @endif <div class="pt-6">
-                          <div class="rounded-lg navbar dark:bg-base-100">
+                          <div class="rounded-lg navbar bg-white dark:bg-base-100">
                             <div class="flex-1">
                               <a class="btn btn-ghost normal-case text-xl">{{__('Comments')}}</a>
                             </div>
@@ -193,7 +189,7 @@
                         </li> @endif @endforeach </ul>
                     </li>
                   </ul>
-                  <div class="pt-6"> @else <div class=""> @endif <div class="card bg-base-100 shadow-xl">
+                  <div class="pt-6"> @else <div class=""> @endif <div class="card bg-base-100 ">
                         <div class="card-body">
                           <h2 class="card-title">{{__('History')}}</h2>
                           <ol class="relative border-l border-gray-200 dark:border-gray-700"> @foreach($events as $event) @if($event->type == 'bugfix') <li class="mb-10 ml-6">
@@ -229,7 +225,7 @@
                       </div>
                     </div>
                     <div class="pt-6">
-                      <div class="card bg-base-100 shadow-xl">
+                      <div class="card bg-base-100 ">
                         <div class="card-body">
                           <h2 class="card-title">{{__('Author')}}</h2>
                           <div class="flex items-center justify-center">
@@ -294,7 +290,7 @@
     <div>
       <div class=" ">
         <div wire:key="post_193" class="pt-4 col-span-4 lg:col-span-1">
-          <div class="card  h-screen  dark:bg-base-100 bg-orange-100 shadow-xl">
+          <div class="card  h-screen  dark:bg-base-100 ">
             <figure class="h-1/2">
               <img class="object-cover w-full h-full" src="{{url('storage/'.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png')}}" alt="Thumbnail of the post">
               <div class="right-0 top-0 absolute pin-t pin-l ">
@@ -311,7 +307,7 @@
               <div class="left-0 top-0 absolute pin-t pin-l ">
                 <div>
                   <a wire:navigate href="{{ url()->previous() }}">
-                    <div class="w-10 h-10 absolute left-2 top-2 flex items-center justify-center bg-base-200 shadow-lg  rounded-full">
+                    <div class="w-10 h-10 absolute left-2 top-2 flex items-center justify-center bg-base-200  rounded-full">
                       <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
                         <path d="m382-480 294 294q15 15 14.5 35T675-116q-15 15-35 15t-35-15L297-423q-12-12-18-27t-6-30q0-15 6-30t18-27l308-308q15-15 35.5-14.5T676-844q15 15 15 35t-15 35L382-480Z" />
                       </svg>
@@ -321,9 +317,9 @@
               </div>
             </figure>
             <div class=" relative card-body">
-              <div class=" absolute inset-x-0 -top-16 flex justify-center items-center ">
-                <div class="rounded-lg max-w-[90%]  min-w-[90%] justify-center content-center text-center items-center bg-base-200">
-                  <h2 class="mt-4 mx-1 text-white text-center items-center text-2xl font-semibold">
+              <div class="  absolute inset-x-0 -top-16 flex justify-center items-center ">
+                <div class="bg-white rounded-lg max-w-[90%] dark:border-0 border-2 border-{{$post->course->color}} min-w-[90%] justify-center content-center text-center items-center dark:bg-base-200">
+                  <h2 class="mt-4 mx-1 dark:text-white text-center items-center text-2xl font-semibold">
                   {{$post->title}}
                   </h2>
                   <div class="my-5 grid grid-cols-2 gap-2">
@@ -344,12 +340,12 @@
               </div>
               <div class="mt-24" x-data="{ activeTab:  0 }">
                 <div class="grid grid-flow-col justify-stretch">
-                  <button class="btn" @click="activeTab = 0" class="tab-control" :class="{ 'btn-ghost': activeTab !== 0 }">Accueil</button>
-                  <button class="btn  mx-1 @if(!$post->cards) btn-disabled @endif" @click="activeTab = 1" class="tab-control" :class="{ 'btn-ghost': activeTab !== 1 }">Cartes</button>
-                  <button class="btn btn-ghost" @click="activeTab = 2" class="tab-control" :class="{ 'btn-ghost': activeTab !== 2 }">Autre</button>
+                  <button class="btn btn-primary mr-1" @click="activeTab = 0" class="tab-control" :class="{ 'btn-ghost': activeTab !== 0 }">Accueil</button>
+                  @if($post->cards)<button class="btn btn-primary mr-1" @click="activeTab = 1" class="tab-control" :class="{ 'btn-ghost': activeTab !== 1 }">{{__('Cards')}}</button>@endif
+                  <button class="btn btn-primary" @click="activeTab = 2" class="tab-control" :class="{ 'btn-ghost': activeTab !== 2 }">Autre</button>
                 </div>
                 <div id="accueil" x-show.transition.in.opacity.duration.600="activeTab === 0">
-                  <ul class="mt-4 menu menu-lg bg-base-200 w-full rounded-box">
+                  <ul class="mt-4 menu menu-lg bg-white dark:bg-base-200 w-full rounded-box">
                   @foreach($post->files as $file)
                     @if ($file->type == 'primary light')
                     <li>
@@ -369,8 +365,8 @@
                     @endforeach
                   </ul>
                   <div class="pt-6">
-                    <div class="rounded-lg navbar dark:bg-base-100">
-                      <div class="flex-1">
+                    <div class="rounded-lg navbar bg-white  dark:bg-base-200">
+                      <div class="flex-1 ml-3">
                         <a class="card-title normal-case text-xl">{{__('Comments')}}</a>
                       </div>
                       <div class="flex-none">
