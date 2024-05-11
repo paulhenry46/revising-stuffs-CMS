@@ -1,5 +1,5 @@
 <x-app-layout>
-  <div class="py-12 hidden md:block">
+  <div class="-z-50 py-12 hidden md:block">
     <div class="max-w-7xl mx-auto ">
       <div class="">
         
@@ -12,8 +12,97 @@
                   <section>
                     <div class="grid grid-cols-3 gap-4">
                       <div class="col-span-3 lg:col-span-2">
-                        <x-post-card :post=$post :description=true /> @if($post->cards)
-                        <livewire:step-history :$post lazy /> @endif <div class="pt-6">
+                      <div class="card  bg-base-200 dark:bg-base-100 ">
+            <figure class="h-[50vh] bg-{{$post->course->color}} dark:bg-none">
+              <img class="opacity-75 dark:opacity-100 object-cover w-full h-full" src="{{url('storage/'.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png')}}" alt="Thumbnail of the post">
+              <div class="right-0 top-0 absolute pin-t pin-l ">
+                <div>
+                @auth
+                <livewire:favorite-button wire:key="fav_{{$post->id}}_mobile" :post=$post :user=Auth::user() lazy mobile=true/>
+                @endauth
+                </div>
+                <div>
+                <livewire:like wire:key="like_{{$post->id}}_mobile" :post=$post lazy mobile=true/>
+                  
+                </div>
+              </div>
+              <div class="left-0 top-0 absolute pin-t pin-l ">
+                <div>
+                  <a wire:navigate href="{{ url()->previous() }}">
+                    <div class="w-10 h-10 absolute left-2 top-2 flex items-center justify-center bg-base-200  rounded-full">
+                      <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                        <path d="m382-480 294 294q15 15 14.5 35T675-116q-15 15-35 15t-35-15L297-423q-12-12-18-27t-6-30q0-15 6-30t18-27l308-308q15-15 35.5-14.5T676-844q15 15 15 35t-15 35L382-480Z" />
+                      </svg>
+                    </div>
+                                </a>
+                </div>
+              </div>
+            </figure>
+            <div class=" relative card-body">
+              <div class="  absolute inset-x-0 -top-16 flex justify-center items-center ">
+                <div class="bg-white rounded-lg max-w-[90%] dark:border-0 border-0 border-{{$post->course->color}} min-w-[90%] justify-center content-center text-center items-center dark:bg-base-200">
+                  <h2 class="mt-4 mx-1 dark:text-white text-center items-center text-2xl font-semibold">
+                  {{$post->title}}
+                  </h2>
+                  <div class="my-5 grid grid-cols-2 gap-2">
+                    <div class="text-{{$post->course->color}} text-center flex  justify-center">
+                      <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+                        <path d="m297-581 149-243q6-10 15-14.5t19-4.5q10 0 19 4.5t15 14.5l149 243q6 10 6 21t-5 20q-5 9-14 14.5t-21 5.5H331q-12 0-21-5.5T296-540q-5-9-5-20t6-21ZM700-80q-75 0-127.5-52.5T520-260q0-75 52.5-127.5T700-440q75 0 127.5 52.5T880-260q0 75-52.5 127.5T700-80Zm-580-60v-240q0-17 11.5-28.5T160-420h240q17 0 28.5 11.5T440-380v240q0 17-11.5 28.5T400-100H160q-17 0-28.5-11.5T120-140Zm580-20q42 0 71-29t29-71q0-42-29-71t-71-29q-42 0-71 29t-29 71q0 42 29 71t71 29Zm-500-20h160v-160H200v160Zm202-420h156l-78-126-78 126Zm78 0ZM360-340Zm340 80Z" />
+                      </svg>
+                      <span class="ml-2">{{$post->course->name}}</span>
+                    </div>
+                    <div class="text-center flex  justify-center">
+                      <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+                        <path d="M200-200h57l391-391-57-57-391 391v57Zm-40 80q-17 0-28.5-11.5T120-160v-97q0-16 6-30.5t17-25.5l505-504q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L313-143q-11 11-25.5 17t-30.5 6h-97Zm600-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
+                      </svg>
+                      <span class="ml-2">{{$post->level->name}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-10">
+                
+                <div>
+                <h2 class="card-title mb-2 mt-4">{{__('Description')}}</h2>
+                <p>{{$post->description}}</p>
+
+                  <ul class="mt-4 menu menu-lg bg-white dark:bg-base-200 w-full rounded-box">
+                  @foreach($post->files as $file)
+                    @if ($file->type == 'primary light')
+                    <li>
+                      <a href="{{url('storage/'.$file->file_path.'')}}">
+                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+                          <path d="M480-360q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35Zm0 80q-83 0-141.5-58.5T280-480q0-83 58.5-141.5T480-680q83 0 141.5 58.5T680-480q0 83-58.5 141.5T480-280ZM80-440q-17 0-28.5-11.5T40-480q0-17 11.5-28.5T80-520h80q17 0 28.5 11.5T200-480q0 17-11.5 28.5T160-440H80Zm720 0q-17 0-28.5-11.5T760-480q0-17 11.5-28.5T800-520h80q17 0 28.5 11.5T920-480q0 17-11.5 28.5T880-440h-80ZM480-760q-17 0-28.5-11.5T440-800v-80q0-17 11.5-28.5T480-920q17 0 28.5 11.5T520-880v80q0 17-11.5 28.5T480-760Zm0 720q-17 0-28.5-11.5T440-80v-80q0-17 11.5-28.5T480-200q17 0 28.5 11.5T520-160v80q0 17-11.5 28.5T480-40ZM226-678l-43-42q-12-11-11.5-28t11.5-29q12-12 29-12t28 12l42 43q11 12 11 28t-11 28q-11 12-27.5 11.5T226-678Zm494 495-42-43q-11-12-11-28.5t11-27.5q11-12 27.5-11.5T734-282l43 42q12 11 11.5 28T777-183q-12 12-29 12t-28-12Zm-42-495q-12-11-11.5-27.5T678-734l42-43q11-12 28-11.5t29 11.5q12 12 12 29t-12 28l-43 42q-12 11-28 11t-28-11ZM183-183q-12-12-12-29t12-28l43-42q12-11 28.5-11t27.5 11q12 11 11.5 27.5T282-226l-42 43q-11 12-28 11.5T183-183Zm297-297Z"></path>
+                        </svg>{{__('Light Version')}}</a>
+                    </li>
+                    @elseif ($file->type == 'primary dark')
+                    <li>
+                    <a href="{{url('storage/'.$file->file_path.'')}}">
+                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+                          <path d="M480-120q-150 0-255-105T120-480q0-150 105-255t255-105q14 0 27.5 1t26.5 3q-41 29-65.5 75.5T444-660q0 90 63 153t153 63q55 0 101-24.5t75-65.5q2 13 3 26.5t1 27.5q0 150-105 255T480-120Zm0-80q88 0 158-48.5T740-375q-20 5-40 8t-40 3q-123 0-209.5-86.5T364-660q0-20 3-40t8-40q-78 32-126.5 102T200-480q0 116 82 198t198 82Zm-10-270Z"></path>
+                        </svg>{{__('Dark Version')}}</a>
+                    </li>
+                    @endif
+                    @endforeach
+                    @if($post->cards)
+                    <li>
+                    <a wire:navigate href="{{
+                                                          route('post.public.cards.show', [$post->slug, $post->id])
+                                                        }}">
+                                                            <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+                                                                <path d="m608-368 46-166-142-98-46 166 142 98ZM160-207l-33-16q-31-13-42-44.5t3-62.5l72-156v279Zm160 87q-33 0-56.5-24T240-201v-239l107 294q3 7 5 13.5t7 12.5h-39Zm206-5q-31 11-62-3t-42-45L245-662q-11-31 3-61.5t45-41.5l301-110q31-11 61.5 3t41.5 45l178 489q11 31-3 61.5T827-235L526-125Zm-28-75 302-110-179-490-301 110 178 490Zm62-300Z"/>
+                                                            </svg>{{('Cards')}}
+                                                        </a>
+                    </li>
+                    @endif
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+                        @if($post->cards)
+                        <livewire:step-history :$post lazy /> 
+                        @endif <div class="pt-6">
                           <div class="rounded-lg navbar bg-white dark:bg-base-100">
                             <div class="flex-1">
                               <a class="btn btn-ghost normal-case text-xl">{{__('Comments')}}</a>
@@ -289,10 +378,10 @@
   <div class="md:hidden">
     <div>
       <div class=" ">
-        <div wire:key="post_193" class="pt-4 col-span-4 lg:col-span-1">
+        <div class="pt-4 col-span-4 lg:col-span-1">
           <div class="card  h-screen  dark:bg-base-100 ">
-            <figure class="h-1/2">
-              <img class="object-cover w-full h-full" src="{{url('storage/'.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png')}}" alt="Thumbnail of the post">
+            <figure class="h-1/2 bg-{{$post->course->color}} dark:bg-none">
+              <img class="opacity-75 dark:opacity-100 object-cover w-full h-full" src="{{url('storage/'.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png')}}" alt="Thumbnail of the post">
               <div class="right-0 top-0 absolute pin-t pin-l ">
                 <div>
                 @auth
@@ -318,7 +407,7 @@
             </figure>
             <div class=" relative card-body">
               <div class="  absolute inset-x-0 -top-16 flex justify-center items-center ">
-                <div class="bg-white rounded-lg max-w-[90%] dark:border-0 border-2 border-{{$post->course->color}} min-w-[90%] justify-center content-center text-center items-center dark:bg-base-200">
+                <div class="bg-white rounded-lg max-w-[90%] dark:border-0 border-0 border-{{$post->course->color}} min-w-[90%] justify-center content-center text-center items-center dark:bg-base-200">
                   <h2 class="mt-4 mx-1 dark:text-white text-center items-center text-2xl font-semibold">
                   {{$post->title}}
                   </h2>
@@ -345,6 +434,9 @@
                   <button class="btn btn-primary" @click="activeTab = 2" class="tab-control" :class="{ 'btn-ghost': activeTab !== 2 }">Autre</button>
                 </div>
                 <div id="accueil" x-show.transition.in.opacity.duration.600="activeTab === 0">
+                <h2 class="card-title mb-2 mt-4">{{__('Description')}}</h2>
+                <p>{{$post->description}}</p>
+                <h2 class="card-title mb-2 mt-4">{{__('Download')}}</h2>
                   <ul class="mt-4 menu menu-lg bg-white dark:bg-base-200 w-full rounded-box">
                   @foreach($post->files as $file)
                     @if ($file->type == 'primary light')
@@ -563,7 +655,7 @@
                   @endif
                   <div class="">
                     <div class="">
-                      <h2 class="card-title mb-2 mt-4">Historique</h2>
+                      <h2 class="card-title mb-2 mt-4">{{__('History')}}</h2>
                       <ol class="relative border-l border-gray-200 dark:border-gray-700"> @foreach($events as $event) @if($event->type == 'bugfix') <li class="mb-10 ml-6">
                               <span class="absolute flex items-center justify-center w-8 h-8 bg-red-100 rounded-full -left-4  dark:bg-base-100 text-error">
                                 <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">

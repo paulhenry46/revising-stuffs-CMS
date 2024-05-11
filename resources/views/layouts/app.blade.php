@@ -147,7 +147,7 @@ function editTheme(){
 
         @livewireScripts
     </body>
-<footer class="footer footer-center p-10 bg-base-200 text-base-content rounded">
+<footer class="footer footer-center p-10 bg-base-100 dark:bg-base-200 text-base-content rounded">
 <x-application-mark />
 <nav class="">
     <p>{{env('APP_NAME')}}</p>
