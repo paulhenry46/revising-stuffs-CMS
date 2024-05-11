@@ -16,6 +16,7 @@ use App\Http\Controllers\AdminSettingsController;
 use App\Http\Controllers\RssController;
 use App\Http\Controllers\PushNotificationsController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\Public\ReadUserController;
 use App\Http\Controllers\PushNotif;
 use App\Http\Controllers\StepController;
 
@@ -67,6 +68,11 @@ Route::name('post.public.')->group(function() {
                     });
             });
         });
+
+        Route::prefix('/u/{user}')->group(function () {
+            Route::get('/', [ReadUserController::class, 'view'])->name('users.public.view');
+            });
+
 Route::name('about.')->prefix('/about')->group(function() {
         Route::get('/', [AboutController::class, 'index'])->name('about');
         Route::get('/licensing', [AboutController::class, 'licensing'])->name('licensing');
