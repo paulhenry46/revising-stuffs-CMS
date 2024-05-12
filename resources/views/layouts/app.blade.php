@@ -125,7 +125,7 @@ function editTheme(){
   </div>
 </div>
 
-        <div class="min-h-screen /*bg-gray-200*/ /*bg-gray-100*/ dark:bg-gray-900 bg-gray-100">
+        <div class="min-h-screen /*bg-gray-200*/ /*bg-gray-100*/ dark:bg-base-300 bg-gray-100">
             
 
             <!-- Page Heading -->

@@ -1,4 +1,4 @@
-<div class="mt-6 mb-3 card bg-base-100 shadow-xl @guest z-0 @endguest">
+<div class="mt-6 mb-3 card bg-base-100 dark:bg-base-200 shadow-xl @guest z-0 @endguest">
     <div class="card-body @guest opacity-25 @endguest">
         <h2 class="card-title">{{__('Progression')}}</h2>
         <x-mary-chart wire:model="HistoryChart" />
@@ -17,7 +17,7 @@
     {{__('Revise now')}}</a>
     @endif
 </p> 
-    <p class="float-right"><button class="btn" onclick="my_modal_1.showModal()">{{__('Reinitialize your progress')}}</button></p>
+    <p class="float-right"><button class="btn dark:bg-base-100" onclick="my_modal_1.showModal()">{{__('Reinitialize your progress')}}</button></p>
 </div>
 
         
@@ -29,7 +29,7 @@
     <div class="modal-action">
       <form method="dialog">
         <!-- if there is a button in form, it will close the modal -->
-        <button class="btn">{{__('Close')}}</button> <button wire:click=reinitialize class="ml-2 btn btn-error">{{__('Reinitialize')}}</button>
+        <button class="btn">{{__('Close')}}</button> <button wire:click=reinitialize class="ml-2 btn btn-error ">{{__('Reinitialize')}}</button>
       </form>
     </div>
   </div>

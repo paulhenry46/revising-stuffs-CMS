@@ -12,7 +12,7 @@
                   <section>
                     <div class="grid grid-cols-3 gap-4">
                       <div class="col-span-3 lg:col-span-2">
-                      <div class="card  bg-base-200 dark:bg-base-100 ">
+                      <div class="card  bg-base-200 dark:bg-base-200 ">
             <figure class="h-[50vh] bg-{{$post->course->color}} dark:bg-none">
               <img class="opacity-75 dark:opacity-100 object-cover w-full h-full" src="{{url('storage/'.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png')}}" alt="Thumbnail of the post">
               <div class="right-0 top-0 absolute pin-t pin-l ">
@@ -29,7 +29,7 @@
               <div class="left-0 top-0 absolute pin-t pin-l ">
                 <div>
                   <a wire:navigate href="{{ url()->previous() }}">
-                    <div class="w-10 h-10 absolute left-2 top-2 flex items-center justify-center bg-base-200  rounded-full">
+                    <div class="w-10 h-10 absolute left-2 top-2 flex items-center justify-center bg-base-100  rounded-full">
                       <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
                         <path d="m382-480 294 294q15 15 14.5 35T675-116q-15 15-35 15t-35-15L297-423q-12-12-18-27t-6-30q0-15 6-30t18-27l308-308q15-15 35.5-14.5T676-844q15 15 15 35t-15 35L382-480Z" />
                       </svg>
@@ -40,7 +40,7 @@
             </figure>
             <div class=" relative card-body">
               <div class="  absolute inset-x-0 -top-16 flex justify-center items-center ">
-                <div class="bg-white rounded-lg max-w-[90%] dark:border-0 border-0 border-{{$post->course->color}} min-w-[90%] justify-center content-center text-center items-center dark:bg-base-200">
+                <div class="bg-white rounded-lg max-w-[90%] dark:border-0 border-0 border-{{$post->course->color}} min-w-[90%] justify-center content-center text-center items-center dark:bg-base-100">
                   <h2 class="mt-4 mx-1 dark:text-white text-center items-center text-2xl font-semibold">
                   {{$post->title}}
                   </h2>
@@ -66,7 +66,7 @@
                 <h2 class="card-title mb-2 mt-4">{{__('Description')}}</h2>
                 <p>{{$post->description}}</p>
 
-                  <ul class="mt-4 menu menu-lg bg-white dark:bg-base-200 w-full rounded-box">
+                  <ul class="mt-4 menu menu-lg bg-white dark:bg-base-100 w-full rounded-box">
                   @foreach($post->files as $file)
                     @if ($file->type == 'primary light')
                     <li>
@@ -103,12 +103,12 @@
                         @if($post->cards)
                         <livewire:step-history :$post lazy /> 
                         @endif <div class="pt-6">
-                          <div class="rounded-lg navbar bg-white dark:bg-base-100">
+                          <div class="rounded-lg navbar bg-white dark:bg-base-200">
                             <div class="flex-1">
                               <a class="btn btn-ghost normal-case text-xl">{{__('Comments')}}</a>
                             </div>
                             <div class="flex-none">
-                              <button onclick="add_comment.showModal()" class="btn btn-square btn-ghost dark:bg-base-200">
+                              <button onclick="add_comment.showModal()" class="btn btn-square btn-ghost dark:bg-base-100">
                                 <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
                                   <path d="M440-400h80v-120h120v-80H520v-120h-80v120H320v80h120v120ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Zm126-240h594v-480H160v525l46-45Zm-46 0v-480 480Z" />
                                 </svg>
@@ -145,7 +145,7 @@
                           </dialog>
                           <!--End modal for adding a comment-->
                           <div class="pl-2 flex-none">
-                            <button onclick="report_error.showModal()" class="btn btn-square btn-ghost dark:bg-base-200">
+                            <button onclick="report_error.showModal()" class="btn btn-square btn-ghost dark:bg-base-100">
                               <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
                                 <path d="M480-360q17 0 28.5-11.5T520-400q0-17-11.5-28.5T480-440q-17 0-28.5 11.5T440-400q0 17 11.5 28.5T480-360Zm-40-160h80v-240h-80v240ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Zm126-240h594v-480H160v525l46-45Zm-46 0v-480 480Z" />
                               </svg>
@@ -278,7 +278,7 @@
                         </li> @endif @endforeach </ul>
                     </li>
                   </ul>
-                  <div class="pt-6"> @else <div class=""> @endif <div class="card bg-base-100 ">
+                  <div class="pt-6"> @else <div class=""> @endif <div class="card bg-base-200 ">
                         <div class="card-body">
                           <h2 class="card-title">{{__('History')}}</h2>
                           <ol class="relative border-l border-gray-200 dark:border-gray-700"> @foreach($events as $event) @if($event->type == 'bugfix') <li class="mb-10 ml-6">
@@ -314,7 +314,7 @@
                       </div>
                     </div>
                     <div class="pt-6">
-                      <div class="card bg-base-100 ">
+                      <div class="card bg-base-200 ">
                         <div class="card-body">
                           <h2 class="card-title">{{__('Author')}}</h2>
                           <div class="flex items-center justify-center">
@@ -379,7 +379,7 @@
     <div>
       <div class=" ">
         <div class="pt-4 col-span-4 lg:col-span-1">
-          <div class="card  h-screen  dark:bg-base-100 ">
+          <div class="card  h-screen  dark:bg-base-300 ">
             <figure class="h-1/2 bg-{{$post->course->color}} dark:bg-none">
               <img class="opacity-75 dark:opacity-100 object-cover w-full h-full" src="{{url('storage/'.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png')}}" alt="Thumbnail of the post">
               <div class="right-0 top-0 absolute pin-t pin-l ">
@@ -396,7 +396,7 @@
               <div class="left-0 top-0 absolute pin-t pin-l ">
                 <div>
                   <a wire:navigate href="{{ url()->previous() }}">
-                    <div class="w-10 h-10 absolute left-2 top-2 flex items-center justify-center bg-base-200  rounded-full">
+                    <div class="w-10 h-10 absolute left-2 top-2 flex items-center justify-center bg-base-200 dark:bg-base-100 rounded-full">
                       <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
                         <path d="m382-480 294 294q15 15 14.5 35T675-116q-15 15-35 15t-35-15L297-423q-12-12-18-27t-6-30q0-15 6-30t18-27l308-308q15-15 35.5-14.5T676-844q15 15 15 35t-15 35L382-480Z" />
                       </svg>
@@ -437,7 +437,7 @@
                 <h2 class="card-title mb-2 mt-4">{{__('Description')}}</h2>
                 <p>{{$post->description}}</p>
                 <h2 class="card-title mb-2 mt-4">{{__('Download')}}</h2>
-                  <ul class="mt-4 menu menu-lg bg-white dark:bg-base-200 w-full rounded-box">
+                  <ul class="mt-4 menu menu-lg bg-white dark:bg-base-100 w-full rounded-box">
                   @foreach($post->files as $file)
                     @if ($file->type == 'primary light')
                     <li>
@@ -462,7 +462,7 @@
                         <a class="card-title normal-case text-xl">{{__('Comments')}}</a>
                       </div>
                       <div class="flex-none">
-                        <button onclick="add_comment_mobile.showModal()" class="btn btn-square btn-ghost dark:bg-base-200">
+                        <button onclick="add_comment_mobile.showModal()" class="btn btn-square btn-ghost dark:bg-base-100">
                           <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
                             <path d="M440-400h80v-120h120v-80H520v-120h-80v120H320v80h120v120ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Zm126-240h594v-480H160v525l46-45Zm-46 0v-480 480Z"></path>
                           </svg>
@@ -501,7 +501,7 @@
                       </dialog>
                       <!--End modal for adding a comment-->
                       <div class="pl-2 flex-none">
-                        <button onclick="report_error_mobile.showModal()" class="btn btn-square btn-ghost dark:bg-base-200">
+                        <button onclick="report_error_mobile.showModal()" class="btn btn-square btn-ghost dark:bg-base-100">
                           <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
                             <path d="M480-360q17 0 28.5-11.5T520-400q0-17-11.5-28.5T480-440q-17 0-28.5 11.5T440-400q0 17 11.5 28.5T480-360Zm-40-160h80v-240h-80v240ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Zm126-240h594v-480H160v525l46-45Zm-46 0v-480 480Z"></path>
                           </svg>
@@ -604,7 +604,7 @@
                 </div>
                 @if($post->cards)
                 <div id="cards" x-show.transition.in.opacity.duration.600="activeTab === 1">
-                  <ul class="mt-4 menu menu-lg bg-base-200 w-full rounded-box">
+                  <ul class="mt-4 menu menu-lg bg-base-200 dark:bg-base-100 w-full rounded-box">
                     <li>
                     <a wire:navigate href="{{
                                                           route('post.public.cards.show', [$post->slug, $post->id])

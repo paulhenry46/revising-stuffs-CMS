@@ -1,5 +1,5 @@
 <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-  <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
+  <div class="bg-white dark:bg-base-200 overflow-hidden shadow-xl sm:rounded-lg">
     <div class="p-6 lg:p-8">
       <div class="sm:flex sm:items-center">
         <div class="sm:flex-auto">

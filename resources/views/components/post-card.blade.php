@@ -1,4 +1,4 @@
-<div class="card @if(!request()->routeIs('post.public.view')) h-full @endif dark:bg-base-100 bg-{{str_replace('500', '100',$post->course->color)}}">
+<div class="card @if(!request()->routeIs('post.public.view')) h-full @endif dark:bg-base-200 bg-{{str_replace('500', '100',$post->course->color)}}">
                                     <figure>
                                         @if(file_exists('storage/'.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png'))
 
@@ -30,7 +30,7 @@
                                         
                                         <div class="card-actions items-center justify-center flex">
                                             <div class="items-center justify-center flex min-h-[6rem] min-w-[18rem] max-w-4xl flex-wrap gap-2">
-                                                <ul class="menu menu-horizontal bg-base-200 rounded-box">
+                                                <ul class="menu menu-horizontal bg-base-100 rounded-box">
                                                   <li>
             
                                                         <a wire:navigate href="{{
