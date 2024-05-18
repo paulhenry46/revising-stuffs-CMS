@@ -14,7 +14,7 @@
         </ul>
       </div>
       <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
-        <div class=" bg-gray-200 dark:bg-gray-800 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
+      <div class="bg-base-200 dark:bg-base-100 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
           <x-info-message />
           <div>
             <div class="">
