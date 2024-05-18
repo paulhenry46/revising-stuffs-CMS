@@ -1,4 +1,4 @@
-<div class="mt-6 mb-3 card bg-base-100 dark:bg-base-200 shadow-xl @guest z-0 @endguest">
+<div class="mt-6 mb-3 card bg-base-100 dark:bg-base-200 @guest z-0 @endguest">
     <div class="card-body @guest opacity-25 @endguest">
         <h2 class="card-title">{{__('Progression')}}</h2>
         <x-mary-chart wire:model="HistoryChart" />

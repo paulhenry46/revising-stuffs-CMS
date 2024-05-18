@@ -1,8 +1,8 @@
 <x-app-layout>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
-                <div class="p-6 lg:p-8 bg-white dark:bg-gray-800 dark:bg-gradient-to-bl dark:from-gray-700/50 dark:via-transparent border-b border-gray-200 dark:border-gray-700">
+        <div class="bg-base-200 dark:bg-base-200 overflow-hidden shadow-xl sm:rounded-lg">
+            <div class="p-6 lg:p-8 bg-base-200 dark:bg-base-200 border-b border-gray-200 dark:border-gray-700">
                   <div class="sm:flex sm:items-center">
                     <div class="sm:flex-auto">
                       <h1 class="text-2xl font-semibold leading-6 text-gray-900 dark:text-white">{{__('Cards attached to')}} {{$post->title}}</h1>
@@ -14,12 +14,12 @@
                   </div>
                 </div>
 
-                <div class="bg-gray-200 dark:bg-gray-800 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
+                <div class="bg-base-200 dark:bg-base-200 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
                     <x-info-message/>
 <div class="grid grid-cols-6 gap-4">
   <div class="col-span-6">
     <div class="stack w-full h-64 sm:h-80">
-    <label class="swap grid w-full h-full rounded dark:bg-base-100 bg-white text-primary-content place-content-center text-dark dark:text-white">
+    <label class="swap grid w-full h-full rounded dark:bg-base-100 bg-white place-content-center text-dark dark:text-white text-black">
       <input type="checkbox" />
       <div id="back" class="place-content-center align-middle flex flex-col swap-on text-center"></div>
       <div id="front" class="place-content-center align-middle flex flex-col swap-off text-center"></div>

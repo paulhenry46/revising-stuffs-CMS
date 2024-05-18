@@ -35,14 +35,15 @@
   </ul>
 </div>
 @endif
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
-                <div class="p-6 lg:p-8 bg-white dark:bg-gray-800 dark:bg-gradient-to-bl dark:from-gray-700/50 dark:via-transparent border-b border-gray-200 dark:border-gray-700">
+           
+<div class="bg-base-200 dark:bg-base-200 overflow-hidden shadow-xl sm:rounded-lg">
+            <div class="p-6 lg:p-8 bg-base-200 dark:bg-base-200 border-b border-gray-200 dark:border-gray-700">
                     <h1 class=" text-2xl font-medium text-gray-900 dark:text-white">
                         @if($card->id !== 0) {{__('Edit a card')}} @else {{__('Add a new card')}} @endif
                     </h1>
                 </div>
+                <div class="bg-base-200 dark:bg-base-200 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
 
-                <div class="bg-gray-200 dark:bg-gray-800 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
                     <x-info-message/>
                 <form method="POST" action="@if($card->id !== 0) {{route('cards.update', [$post->id, $card->id])}} @else {{route('cards.store', $post->id)}} @endif">
                 @csrf
@@ -53,13 +54,13 @@
                         <div class="sm:col-span-3">
                           <label for="front" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Front')}}</label>
                           <div class="mt-2">
-                            <textarea id="front" name="front" rows="3" class="textarea textarea-bordered w-full">{{ old('front', $card->front) }}</textarea>
+                            <textarea id="front" name="front" rows="3" class="textarea textarea-bordered textarea-primary w-full">{{ old('front', $card->front) }}</textarea>
                           </div>
                         </div>
                         <div class="sm:col-span-3">
                           <label for="back" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Back')}}</label>
                           <div class="mt-2">
-                            <textarea id="back" name="back" rows="3" class="textarea textarea-bordered w-full">{{ old('back', $card->back) }}</textarea>
+                            <textarea id="back" name="back" rows="3" class="textarea textarea-primary textarea-bordered w-full">{{ old('back', $card->back) }}</textarea>
                           </div>
                         </div>
                         <div class="sm:col-span-6">

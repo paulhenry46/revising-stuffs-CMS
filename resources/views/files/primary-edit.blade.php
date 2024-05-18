@@ -36,9 +36,14 @@
   </ul>
 </div>
 @endif
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
+<div class="bg-base-200 dark:bg-base-200 overflow-hidden shadow-xl sm:rounded-lg">
+<div class="p-6 lg:p-8 bg-base-200 dark:bg-base-200 border-b border-gray-200 dark:border-gray-700">
+            <h1 class=" text-2xl font-medium text-gray-900 dark:text-white"> @if($state == 'update')  {{__('Edit Primary files')}} @else {{__('New Primary file')}} @endif </h1>
+          </div>
+<div class="bg-base-200 dark:bg-base-200 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
                <livewire:edit-primary-files :post=$post :state=$state />
             </div>
         </div>
+    </div>
     </div>
 </x-app-layout>

@@ -1,6 +1,6 @@
 <div>
-    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
-                <div class="p-6 lg:p-8 bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
+    <div class="bg-white dark:bg-base-100 overflow-hidden shadow-xl sm:rounded-lg">
+                <div class="p-6 lg:p-8 bg-white dark:bg-base-100 overflow-hidden shadow-xl sm:rounded-lg">
 
     <h1 class=" decoration-4 underline decoration-warning text-2xl font-medium text-gray-900 dark:text-white">
         {{$level->name}} - {{$course->name}}

@@ -1,4 +1,4 @@
-<div class="p-6 lg:p-8 bg-white dark:bg-gray-800 dark:bg-gradient-to-bl dark:from-gray-700/50 dark:via-transparent border-b border-gray-200 dark:border-gray-700">
+<div class="bg-base-200 dark:bg-base-200 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
 @if($update)
 <div class="border-b dark:border-white/10 border-gray-900/10 pb-12">
       <h2 class="text-base font-semibold leading-7 text-gray-900 dark:text-white pb-3">{{__('Update Informations')}}</h2>
@@ -35,7 +35,7 @@
 <div class="border-b dark:border-white/10 border-gray-900/10 pb-12">
       <h2 class="pt-6 pb-3 text-base font-semibold leading-7 text-gray-900 dark:text-white">@if($update){{__('Update Primary Files')}}@else{{__('Create Primary Files')}}@endif</h2>
 <div class=" grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
-<div class="sm:col-span-3">
+<div class="sm:col-span-3 ">
 <x-mary-image-library
     wire:model="light_image_files"                 {{-- Temprary files --}}
     wire:library="light_image_library"             {{-- Library metadata property --}}

@@ -2,8 +2,9 @@
     <div>
         <div class="py-12">
               <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                  <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
-                      <div class="p-6 lg:p-8 bg-white dark:bg-gray-800 dark:bg-gradient-to-bl dark:from-gray-700/50 dark:via-transparent border-b border-gray-200 dark:border-gray-700">
+                 
+<div class="bg-base-200 dark:bg-base-200 overflow-hidden shadow-xl sm:rounded-lg">
+            <div class="p-6 lg:p-8 bg-base-200 dark:bg-base-200 border-b border-gray-200 dark:border-gray-700">
           <div class="sm:flex sm:items-center">
             <div class="sm:flex-auto">
               <h1 class="text-2xl font-semibold leading-6 text-gray-900 dark:text-white">{{__('View the cards attached to')}} {{$post->title}}</h1>
@@ -49,7 +50,7 @@
   <span>{{__('To track your progress in learning the cards in this resource, you can use the "Review" mode, which will automatically record your score. Depending on your level of mastery, the site will then suggest that you revisit the cards at different intervals to fix them in your long-term memory. ')}} </br>{{__('You must be logged in to use this function.')}}</span>
 </div>
       </div>
-        <div class="bg-gray-200 dark:bg-gray-800 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
+      <div class="bg-base-200 dark:bg-base-200 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
           <x-info-message/>
       <div class="px-4 sm:px-6 lg:px-8">
         <div class="sm:flex sm:items-center">
@@ -63,7 +64,7 @@
               <ul class="space-y-8">
                 @foreach ($cards as $card)
                 <li class="pl-1 pr-1">
-                    <div class="relative p-6 shadow-sm ring-1 ring-gray-300 rounded-xl">
+                    <div class="relative p-6 shadow-sm dark:ring-0  rounded-xl bg-white dark:bg-base-100">
                         <div class="grid sm:grid-cols-3 space-y-6 sm:space-y-0">
                             <div>
                                 <span class="text-xs text-gray-500 uppercase">{{__('Term')}}</span>

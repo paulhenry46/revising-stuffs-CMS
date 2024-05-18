@@ -244,7 +244,7 @@
                       {{__('Nobody commented that post.')}}
                     </div> @endforelse
                 </div>
-                <div class="col-span-3 lg:col-span-1"> @if( ($files->contains('type', 'source')) or ($files->contains('type', 'exercise')) or ($files->contains('type', 'other')) or ($files->contains('type', 'exercise correction'))) <ul class="menu bg-base-100 w-full rounded-box">
+                <div class="col-span-3 lg:col-span-1"> @if( ($files->contains('type', 'source')) or ($files->contains('type', 'exercise')) or ($files->contains('type', 'other')) or ($files->contains('type', 'exercise correction'))) <ul class="menu dark:bg-base-200 bg-white w-full rounded-box">
                     <li>
                       <h2 class="card-title ">{{__('Complementary files')}}</h2>
                       <ul> @foreach($files as $file) @if($file->type == 'source') <li>
@@ -278,7 +278,7 @@
                         </li> @endif @endforeach </ul>
                     </li>
                   </ul>
-                  <div class="pt-6"> @else <div class=""> @endif <div class="card bg-base-200 ">
+                  <div class="pt-6"> @else <div class=""> @endif <div class="card dark:bg-base-200 bg-white">
                         <div class="card-body">
                           <h2 class="card-title">{{__('History')}}</h2>
                           <ol class="relative border-l border-gray-200 dark:border-gray-700"> @foreach($events as $event) @if($event->type == 'bugfix') <li class="mb-10 ml-6">
@@ -314,7 +314,7 @@
                       </div>
                     </div>
                     <div class="pt-6">
-                      <div class="card bg-base-200 ">
+                      <div class="card dark:bg-base-200 bg-white ">
                         <div class="card-body">
                           <h2 class="card-title">{{__('Author')}}</h2>
                           <div class="flex items-center justify-center">

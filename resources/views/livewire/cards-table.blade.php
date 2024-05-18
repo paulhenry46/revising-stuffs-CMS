@@ -14,8 +14,8 @@
     </li>
   </ul>
 </div>
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
-                <div class="p-6 lg:p-8 bg-white dark:bg-gray-800 dark:bg-gradient-to-bl dark:from-gray-700/50 dark:via-transparent border-b border-gray-200 dark:border-gray-700">
+<div class="bg-white dark:bg-base-100 overflow-hidden shadow-xl sm:rounded-lg">
+<div class="p-6 lg:p-8 bg-white dark:bg-base-100 border-b border-gray-200 dark:border-gray-700">
 
     <h1 class=" text-2xl font-medium text-gray-900 dark:text-white">
         {{__('Manage the cards attached to this post')}}
@@ -23,7 +23,7 @@
     
 
 </div>
-  <div class="bg-gray-200 dark:bg-gray-800 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
+<div class="bg-white dark:bg-base-100 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
     <x-info-message/>
 <div class="px-4 sm:px-6 lg:px-8">
   <div class="sm:flex sm:items-center">
@@ -31,8 +31,9 @@
       <h1 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">{{__('Cards')}}</h1>
     </div>
    <div class="flex items-stretch justify-end mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-      <a wire:navigate href="{{route('cards.import', $post->id)}}" class=" ml-4 btn bg-indigo-600 text-white  hover:bg-indigo-500 ">{{__('Import cards')}}</a>
-      <a wire:navigate href="{{route('cards.create', $post->id)}}" class=" ml-4 btn bg-indigo-600 text-white  hover:bg-indigo-500 ">{{__('Create cards')}}</a>
+   <button x-show="selection.length > 0" x-on:click="$wire.deleteCards(selection)" class="ml-4 btn btn-error">{{__('Delete')}}</button>
+      <a wire:navigate href="{{route('cards.import', $post->id)}}" class=" ml-4 btn btn-primary ">{{__('Import cards')}}</a>
+      <a wire:navigate href="{{route('cards.create', $post->id)}}" class=" ml-4 btn btn-primary">{{__('Create cards')}}</a>
     </div>
   </div>
 <div class="sm:col-span-2">
@@ -48,12 +49,10 @@
           <thead>
             <tr>
               <th></th>
-              <th>ID</th>
               <th>{{__('Front')}}</th>
               <th>{{__('Back')}}</th>
               <th scope="col" class="relative py-3 pl-3 pr-4 sm:pr-0">
                 <span class="sr-only">Edit</span>
-                <button x-show="selection.length > 0" x-on:click="$wire.deleteCards(selection)" class="btn btn-error">{{__('Delete')}}</button>
               </th>
             </tr>
           </thead>
@@ -61,7 +60,7 @@
             @foreach($cards as $card)
             <tr>
               <td><input value="{{$card->id}}" x-model="selection" type="checkbox" class="checkbox checkbox-success" /></td>
-                <td>{{ $card->id }}</td>
+                
                 <td>{!! $card->front !!}</td>
                 <td>{!! $card->back !!}</td>
                 <td class="align-middle">

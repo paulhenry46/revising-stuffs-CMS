@@ -13,8 +13,8 @@
       {{__('Files')}}</li>
   </ul>
 </div>
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
-            <div class="p-6 lg:p-8 bg-white dark:bg-gray-800 dark:bg-gradient-to-bl dark:from-gray-700/50 dark:via-transparent border-b border-gray-200 dark:border-gray-700">
+<div class="bg-base-200 dark:bg-base-200 overflow-hidden shadow-xl sm:rounded-lg">
+            <div class="p-6 lg:p-8 bg-base-200 dark:bg-base-200 border-b border-gray-200 dark:border-gray-700">
 
 <h1 class=" text-2xl font-medium text-gray-900 dark:text-white">
     {{__('Manage your files')}}
@@ -22,7 +22,7 @@
 
 </div>
 
-<div class="bg-gray-200 dark:bg-gray-800 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
+<div class="bg-base-200 dark:bg-base-200 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
 <x-info-message />
 <div class="px-4 sm:px-6 lg:px-8">
 <div class="sm:flex sm:items-center">
