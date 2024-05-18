@@ -1,12 +1,17 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Profile') }}
-        </h2>
-    </x-slot>
+   
 
     <div>
         <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
+        <div class=" text-sm breadcrumbs mb-2">
+  <ul>
+    <li><a wire:navigate href="{{route('dashboard')}}">
+      {{__('Dashboard')}}
+    </a></li>
+    <li>
+      {{__('Profile')}}</li>
+  </ul>
+</div>
             @if (Laravel\Fortify\Features::canUpdateProfileInformation())
                 @livewire('profile.update-profile-information-form')
 
