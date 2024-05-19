@@ -15,34 +15,6 @@
         @if(env('PWA')==true)
         <link rel="manifest" href="/manifest.webmanifest" />
         @endif
-    <script type="text/javascript">
-        function changeTheme() {
-            if (localStorage.theme === 'light' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: light)').matches)) {
-                document.querySelector('html').setAttribute('data-theme', 'light')
-                  document.querySelector('html').classList.remove('dark')
-                document.querySelector('html').classList.add('light')
-                localStorage.theme = 'light'
- 
-} else {
-  document.querySelector('html').setAttribute('data-theme', 'dark')
-  document.querySelector('html').classList.remove('light')
-  document.querySelector('html').classList.add('dark')
-  localStorage.theme = 'dark'
-}
-        }
-
-        window.onload = changeTheme;
-    
-function editTheme(){
-    
-    if ( localStorage.theme === 'dark'){
-        localStorage.theme = 'light'
-    }else{
-        localStorage.theme = 'dark'
-    }
-    changeTheme()
-}
-      </script>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -118,11 +90,12 @@ function editTheme(){
   </div>
   <div class="navbar-end">
 
-  <label class="cursor-pointer grid place-items-center">
+  <!--<label class="cursor-pointer grid place-items-center">
   <input onclick="editTheme()" type="checkbox" class="toggle theme-controller bg-base-content row-start-1 col-start-1 col-span-2"/>
   <svg class="col-start-1 row-start-1 stroke-base-100 fill-base-100" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>
   <svg class="col-start-2 row-start-1 stroke-base-100 fill-base-100" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-</label>
+</label>-->
+<x-mary-theme-toggle class="mr-4"/>
   </div>
 </div>
 
