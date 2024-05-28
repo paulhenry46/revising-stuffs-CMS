@@ -111,7 +111,6 @@ class CardController extends Controller
             }
             $output[] = $newLine;
         }
-        dd($output);
         Card::insert($output);
         if(!$post->cards){
                 $post->cards = true;
