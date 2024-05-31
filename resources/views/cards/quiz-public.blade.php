@@ -149,7 +149,7 @@
             nextCards: [],
             activeCard: 0,
             //-----------UI-------------
-            recto : false,
+            recto : true,
             cardState : 'default',
             ////---------Quiz---------////
             playButtons: true,
@@ -223,7 +223,15 @@
                         this.stats = true;
                     }
 
+                    if(this.recto === false){
+                  this.recto = true;
+                }
+
                 } else {
+
+                if(this.recto === false){
+                  this.recto = true;
+                }
                     this.activeCard++
                     this.disabledPreviousButton = false;
                 }
