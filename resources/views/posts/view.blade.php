@@ -26,6 +26,24 @@
                   
                 </div>
               </div>
+              @auth
+              @if((Auth::id() == $post->user_id) or (Auth::user()->can('manage all posts')))
+              <div class="left-14 top-2 absolute pin-t pin-l ">
+                <div>
+                <details class="dropdown">
+  <summary class="cursor-pointer w-10 h-10  flex items-center justify-center bg-base-100  rounded-full"><svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+                        <path d="M200-200h57l391-391-57-57-391 391v57Zm-40 80q-17 0-28.5-11.5T120-160v-97q0-16 6-30.5t17-25.5l505-504q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L313-143q-11 11-25.5 17t-30.5 6h-97Zm600-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
+                      </svg></summary>
+  <ul class="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
+    <li><a wire:navigate href="{{route('posts.edit', $post->id)}}" >{{__('Edit')}}</a></li>
+    <li><a wire:navigate href="{{route('files.index', $post->id)}}" >{{__('Manage files')}}</a></li>
+    <li><a wire:navigate href="{{route('cards.index', $post->id)}}">{{__('Manage cards')}}</a></li>
+  </ul>
+</details>
+                </div>
+              </div>
+              @endif
+              @endauth
               <div class="left-0 top-0 absolute pin-t pin-l ">
                 <div>
                   <a wire:navigate href="{{ url()->previous() }}">
@@ -122,7 +140,10 @@
                                     <div class="">
                                       <label for="name" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Pseudo')}}</label>
                                       <div class="mt-2">
-                                        <input type="text" name="pseudo" id="name" autocomplete="given-name" class="input input-bordered input-primary w-full" value="{{ old('name') }}">
+                                        <input type="text" name="pseudo" id="name" autocomplete="given-name" class="input input-bordered input-primary w-full" @auth disabled @endauth @auth value="{{Auth::user()->name}}" @endauth @guest value="{{ old('name') }}" @endguest>
+                                        @auth
+                                        <input type="hidden" name="pseudo" value="null" autocomplete="off">
+                                        @endauth
                                       </div>
                                     </div>
                                     <div class="">
@@ -155,12 +176,15 @@
                             <div class="modal-box">
                               <h3 class="font-bold text-lg">{{__('Report an error')}}</h3>
                               <form action="{{route('post.public.comment.create', [$post->slug, $post->id])}}" method="POST"> @csrf <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8">
-                                  <div class="">
-                                    <label for="name" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Pseudo')}}</label>
-                                    <div class="mt-2">
-                                      <input type="text" name="pseudo" id="name" autocomplete="given-name" class="input input-bordered input-primary w-full" value="{{ old('name') }}">
+                              <div class="">
+                                      <label for="name" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Pseudo')}}</label>
+                                      <div class="mt-2">
+                                        <input type="text" name="pseudo" id="name" autocomplete="given-name" class="input input-bordered input-primary w-full" @auth disabled @endauth @auth value="{{Auth::user()->name}}" @endauth @guest value="{{ old('name') }}" @endguest>
+                                        @auth
+                                        <input type="hidden" name="pseudo" value="null" autocomplete="off">
+                                        @endauth
+                                      </div>
                                     </div>
-                                  </div>
                                   <div class="">
                                     <label for="about" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('What is the error ?')}}</label>
                                     <div class="mt-2">
@@ -475,12 +499,15 @@
                           <form action="{{route('post.public.comment.create', [$post->slug, $post->id])}}" method="POST">
                           @csrf
                             <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8">
-                              <div class="">
-                                <label for="name" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">Pseudo</label>
-                                <div class="mt-2">
-                                  <input type="text" name="pseudo" id="name" autocomplete="given-name" class="input input-bordered input-primary w-full" value="">
-                                </div>
-                              </div>
+                            <div class="">
+                                      <label for="name" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Pseudo')}}</label>
+                                      <div class="mt-2">
+                                        <input type="text" name="pseudo" id="name" autocomplete="given-name" class="input input-bordered input-primary w-full" @auth disabled @endauth @auth value="{{Auth::user()->name}}" @endauth @guest value="{{ old('name') }}" @endguest>
+                                        @auth
+                                        <input type="hidden" name="pseudo" value="null" autocomplete="off">
+                                        @endauth
+                                      </div>
+                                    </div>
                               <div class="">
                                 <label for="about" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">Contenu</label>
                                 <div class="mt-2">
@@ -513,12 +540,15 @@
                           <form action="{{route('post.public.comment.create', [$post->slug, $post->id])}}" method="POST">
                           @csrf
                             <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8">
-                              <div class="">
-                                <label for="name" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">Pseudo</label>
-                                <div class="mt-2">
-                                  <input type="text" name="pseudo" id="name" autocomplete="given-name" class="input input-bordered input-primary w-full" value="">
-                                </div>
-                              </div>
+                            <div class="">
+                                      <label for="name" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Pseudo')}}</label>
+                                      <div class="mt-2">
+                                        <input type="text" name="pseudo" id="name" autocomplete="given-name" class="input input-bordered input-primary w-full" @auth disabled @endauth @auth value="{{Auth::user()->name}}" @endauth @guest value="{{ old('name') }}" @endguest>
+                                        @auth
+                                        <input type="hidden" name="pseudo" value="null" autocomplete="off">
+                                        @endauth
+                                      </div>
+                                    </div>
                               <div class="">
                                 <label for="about" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">Quelle est l'erreur ?</label>
                                 <div class="mt-2">

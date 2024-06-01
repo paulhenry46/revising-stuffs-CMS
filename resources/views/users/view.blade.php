@@ -86,7 +86,7 @@
             <h2 class="card-title mt-4 mb-4">{{__('Last posts')}}</h2>
           </div>
           <div class="grid grid-cols-4 gap-4"> @foreach($posts as $post) <div wire:key="post_{{ $post->id }}" class="pt-4 col-span-4 lg:col-span-1">
-              <x-post-card :post=$post :starred=false description=false />
+              <x-post-card :post=$post :starred=false description=false showGroup=false/>
             </div> @endforeach </div>
         </div>
       </div>
