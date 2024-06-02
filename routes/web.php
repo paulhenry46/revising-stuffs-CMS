@@ -13,12 +13,15 @@ use App\Http\Controllers\CardController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\AdminSettingsController;
+use App\Http\Controllers\CurriculumController;
 use App\Http\Controllers\RssController;
 use App\Http\Controllers\PushNotificationsController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\Public\ReadUserController;
 use App\Http\Controllers\PushNotif;
+use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\StepController;
+use App\Models\School;
 
 /*
 |--------------------------------------------------------------------------
@@ -111,6 +114,13 @@ Route::middleware([
     });
     Route::group(['middleware' => ['can:manage users']], function () {
         Route::resource('users', UserController::class)->except(['show']);
+    });
+    Route::group(['middleware' => ['can:manage levels']], function () {
+        Route::resource('curricula', CurriculumController::class)->except(['show']);
+    });
+
+    Route::group(['middleware' => ['can:manage levels']], function () {
+        Route::resource('schools', SchoolController::class)->except(['show']);
     });
 
     //Groups

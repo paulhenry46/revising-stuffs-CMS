@@ -18,4 +18,8 @@ class Level extends Model
     {
         return $this->belongsToMany(Course::class);
     }
+
+    public function Curriculum(){
+    return $this->belongsTo(Curriculum::class);
+}
 }
