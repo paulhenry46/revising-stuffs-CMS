@@ -78,10 +78,13 @@ class UserController extends Controller
         $user = auth()->user();
         $validated = $request->validate([
             'level_id' => 'required|exists:levels,id',
+            'curriculum_id' => 'required|exists:curricula,id',
+            'school_id' => 'required|exists:schools,id',
             'course_*' => 'required|exists:courses,id',
         ]);
 
-
+        $user->school_id = $request->school_id;
+        $user->curriculum_id = $request->curriculum_id;
         $user->level_id = $request->level_id;
         $user->courses_id = [0]; //Reinitialise the value before updating
         foreach($request->all() as $key => $value) {
