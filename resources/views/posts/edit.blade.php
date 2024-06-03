@@ -41,11 +41,15 @@
                   <h2 class="text-base font-semibold leading-7 text-gray-900 dark:text-white">{{__('General Informations')}}</h2>
                   <p class="mt-1 text-sm leading-6 text-gray-600 dark:text-white">{{__('This information is used to classify and recognise your posts.')}}</p>
                   <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                    <div class="sm:col-span-6">
+                    <div class="sm:col-span-4">
                       <label for="name" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Title')}}</label>
                       <div class="mt-2">
                         <input value="{{ old('title', $post->title) }}" type="text" name="title" id="name" autocomplete="given-name" class="input input-bordered w-full max-w" value="{{ old('name', $post->name) }}">
                       </div>
+                    </div>
+                    <div class="sm:col-span-2">
+                      <div class="sm:mt-10">{{$school->name}} @ {{$curriculum->name}}</div>
+                    
                     </div>
                   </div> @if($post->id !== 0) @livewire('level-course-dropdown', ['level'=>old('level_id', $post->level->id), 'course'=>old('course_id', $post->course->id), 'type'=> old('type_id', $post->type_id)]) @else @livewire('level-course-dropdown', ['level'=>old('level_id', NULL), 'course'=>old('course_id', NULL), 'type'=> old('type_id', NULL)]) @endif
                 </div>

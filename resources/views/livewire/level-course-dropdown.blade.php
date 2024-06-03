@@ -4,6 +4,7 @@
             <label for="location" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Level')}}</label>
             <div class="mt-2">
                 <select wire:model.live="level" id="location" name="level_id" class="select select-bordered w-full">
+                    
                 <option>{{__('Select Level')}}</option>
                     @foreach($levels as $level)
                         <option value="{{ $level->id }}">{{ $level->name }}</option>

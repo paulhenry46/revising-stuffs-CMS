@@ -56,7 +56,9 @@ class PostController extends Controller
       }else{
         $groups = $user->groups;
       }
-        return view('posts.edit', compact('post', 'groups'));
+      $school = $user->school;
+      $curriculum = $user->curriculum;
+        return view('posts.edit', compact('post', 'groups', 'school', 'curriculum'));
     }
 
     /**
@@ -70,6 +72,7 @@ class PostController extends Controller
         $post->title = $request->title;
         $post->description = $request->description;
         $post->type_id = $request->type_id;
+        $post->school_id = $user->school_id;
         $post->quizlet_url = $request->quizlet_url;
         $post->dark_version = $request->has('dark_version');
         $post->thanks = 0;
@@ -106,12 +109,14 @@ class PostController extends Controller
         $courses = Course::all();
         $levels = Level::all();
         $user = auth()->user();
+        $school = $post->school;
+        $curriculum = $post->curriculum;
       if($user->hasPermissionTo('publish all posts')){
         $groups = Group::where('id', '!=', '1')->where('id', '!=', '2')->get();
       }else{
         $groups = $user->groups;
       }
-        return view('posts.edit', compact('post', 'courses', 'levels', 'groups'));
+        return view('posts.edit', compact('post', 'courses', 'levels', 'groups', 'school', 'curriculum'));
     }
 
     /**
