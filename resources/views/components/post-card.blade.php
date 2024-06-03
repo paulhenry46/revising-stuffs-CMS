@@ -83,7 +83,7 @@
                                         </div>
                                                         
                                         <div class="flex flex-items">
-                                        <a wire:navigate href="{{route('post.public.courseView', ['level_chosen' => $post->level->slug, 'course_chosen' => $post->course->slug])}}" class="badge badge-md bg-{{$post->course->color}} text-white">{{$post->course->name}}</a>
+                                        <a wire:navigate href="{{route('post.public.courseView', ['curriculum_chosen' => $post->level->curriculum->slug, 'level_chosen' => $post->level->slug, 'course_chosen' => $post->course->slug])}}" class="badge badge-md bg-{{$post->course->color}} text-white">{{$post->course->name}}</a>
                                         @if($post->pinned)<span class="ml-1 badge badge-md badge-neutral">{{__('Pinned')}}</span>
                                         @endif
                                         @if($showGroup === true)

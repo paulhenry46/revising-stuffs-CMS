@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Public;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\Course;
+use App\Models\Curriculum;
 use App\Models\Level;
 use Auth;
 use Carbon\Carbon;
@@ -49,18 +50,19 @@ class ReadPostController extends Controller
     }
 
 
-    public function course(string $level_chosen, string $course_chosen)
-    {   
+    public function course(string $curriculum_chosen, string $level_chosen, string $course_chosen)
+    {   $curriculum = Curriculum::where('slug', $curriculum_chosen)->first();
+        $level = Level::where('slug', $level_chosen)->where('curriculum_id', $curriculum->id)->first();
         $course = Course::where('slug', $course_chosen)->first();
-        $level = Level::where('slug', $level_chosen)->first();
+        
         return view('posts.course', compact('level', 'course'));
     }
 
     public function library()
     {   
-        $courses = Course::where('id', '!=', '1')->get();
+        $curricula = Curriculum::all();
         //$levels = Level::All();
-        return view('posts.library', compact('courses'));
+        return view('posts.library', compact('curricula'));
     }
 
 }

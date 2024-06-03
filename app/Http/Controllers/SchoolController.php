@@ -61,7 +61,7 @@ class SchoolController extends Controller
         $school->description = $request->description;
         $school->slug = Str::slug($request->name, '-');
         $school->save();
-        $school->curricula()->attach($request->curricula);
+        $school->curricula()->sync($request->curricula);
 
         return redirect()->route('settings')->with('message', __('The school has been updated'));
     }

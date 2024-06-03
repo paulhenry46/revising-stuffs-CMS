@@ -50,10 +50,11 @@ Route::patch('/fcm-token', [PushNotificationsController::class, 'updateToken'])-
 //Public Routes
 Route::name('post.public.')->group(function() {
     //The route to accces to all courses of all levels
-    Route::get('/course/{level_chosen}/{course_chosen}', [ReadPostController::class, 'course'])
+    Route::get('/course/{curriculum_chosen}/{level_chosen}/{course_chosen}', [ReadPostController::class, 'course'])
     ->name('courseView')
     ->where(['level' => '[a-z0-9-]+'])
-    ->where(['course' => '[a-z0-9-]+']);
+    ->where(['course' => '[a-z0-9-]+'])
+    ->where(['curriculum' => '[a-z0-9-]+']);
     //Other routes
     Route::get('/news', [ReadPostController::class, 'news'])->name('news');
     Route::get('/library', [ReadPostController::class, 'library'])->name('library');
