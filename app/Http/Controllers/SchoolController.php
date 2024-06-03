@@ -12,11 +12,7 @@ class SchoolController extends Controller
        /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $schools = School::all();
-        return view('schools.index', compact(['schools']));
-    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -42,7 +38,7 @@ class SchoolController extends Controller
         $school->save();
         $school->curricula()->attach($request->curricula);
 
-        return redirect()->route('schools.index')->with('message', __('The curriculum has been created'));
+        return redirect()->route('settings')->with('message', __('The curriculum has been created'));
     }
 
 
@@ -67,7 +63,7 @@ class SchoolController extends Controller
         $school->save();
         $school->curricula()->attach($request->curricula);
 
-        return redirect()->route('schools.index')->with('message', __('The school has been updated'));
+        return redirect()->route('settings')->with('message', __('The school has been updated'));
     }
 
     /**
@@ -82,6 +78,6 @@ class SchoolController extends Controller
         }
 
         $curriculum->delete();
-            return redirect()->route('schools.index')->with('message', __('The school has been deleted.'));
+            return redirect()->route('settings')->with('message', __('The school has been deleted.'));
     }
 }

@@ -13,4 +13,14 @@ class School extends Model
     {
         return $this->belongsToMany(Curriculum::class);
     }
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
 }

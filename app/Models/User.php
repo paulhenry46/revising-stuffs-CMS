@@ -81,6 +81,11 @@ class User extends Authenticatable
     return $this->hasMany(Step::class); 
     }
 
+    public function school()
+    {
+        return $this->belongsTo(School::class);
+    }
+    
     public function groups(): BelongsToMany
     {
         return $this->belongsToMany(Group::class);

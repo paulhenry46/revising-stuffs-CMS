@@ -11,13 +11,9 @@ use Illuminate\Support\Str;
 class CurriculumController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource --> Moved to Settings
      */
-    public function index()
-    {
-        $curricula = Curriculum::all();
-        return view('curricula.index', compact(['curricula']));
-    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -47,7 +43,7 @@ class CurriculumController extends Controller
             $level->save();
         }
 
-        return redirect()->route('curricula.index')->with('message', __('The curriculum has been created'));
+        return redirect()->route('settings')->with('message', __('The curriculum has been created'));
     }
 
 
@@ -76,7 +72,7 @@ class CurriculumController extends Controller
             $level->save();
         }
 
-        return redirect()->route('curricula.index')->with('message', __('The curriculum has been updated'));
+        return redirect()->route('settings')->with('message', __('The curriculum has been updated'));
     }
 
     /**
@@ -91,6 +87,6 @@ class CurriculumController extends Controller
         }
 
         $curriculum->delete();
-            return redirect()->route('curricula.index')->with('message', __('The curriculum has been deleted.'));
+            return redirect()->route('settings')->with('message', __('The curriculum has been deleted.'));
     }
 }

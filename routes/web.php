@@ -116,11 +116,11 @@ Route::middleware([
         Route::resource('users', UserController::class)->except(['show']);
     });
     Route::group(['middleware' => ['can:manage levels']], function () {
-        Route::resource('curricula', CurriculumController::class)->except(['show']);
+        Route::resource('curricula', CurriculumController::class)->except(['show', 'index']);
     });
 
     Route::group(['middleware' => ['can:manage levels']], function () {
-        Route::resource('schools', SchoolController::class)->except(['show']);
+        Route::resource('schools', SchoolController::class)->except(['show', 'index']);
     });
 
     //Groups

@@ -8,7 +8,7 @@
   <li><a wire:navigate href="{{route('dashboard')}}">
       {{__('Dashboard')}}
     </a></li>
-    <li><a wire:navigate href="{{route('schools.index')}}">
+    <li><a wire:navigate href="{{route('settings')}}">
       {{__('Schools')}}
     </a></li>
     <li>
@@ -22,7 +22,7 @@
   <li><a wire:navigate href="{{route('dashboard')}}">
       {{__('Dashboard')}}
     </a></li>
-    <li><a wire:navigate href="{{route('schools.index')}}">
+    <li><a wire:navigate href="{{route('settings')}}">
       {{__('Schools')}}
     </a></li>
     <li>
@@ -82,7 +82,7 @@
   </div>
 </div>
 <div class="mt-6 flex items-center justify-end gap-x-6">
-<a href="{{route('schools.index')}}" class="link">{{__('Cancel')}}</a>
+<a href="{{route('settings')}}" class="link">{{__('Cancel')}}</a>
 <button type="submit" class="btn btn-primary">@if($school->id !== 0) {{__('Edit')}} @else {{__('Create')}} @endif</button>
 </div>
 </form>

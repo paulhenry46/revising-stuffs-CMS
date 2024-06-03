@@ -8,9 +8,11 @@ use App\Http\Requests\FileRequest;
 use App\Http\Requests\FilePrimaryRequest;
 use App\Http\Requests\FilePrimaryUpdateRequest;
 use App\Http\Requests\ImagesRequest;
+use App\Models\Curriculum;
 use App\Models\Post;
 use App\Models\File;
 use App\Models\Event;
+use App\Models\School;
 use Illuminate\Support\Str;
 use ZipArchive;
 
@@ -18,7 +20,9 @@ class AdminSettingsController extends Controller
 {
 /*Show the page*/
 public function show(){
-    return view('admin');
+    $schools = School::all();
+    $curricula = Curriculum::all();
+    return view('admin', compact(['schools', 'curricula']));
 }
 
 public function createZipOfStorage(){

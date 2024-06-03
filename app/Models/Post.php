@@ -53,6 +53,10 @@ class Post extends Model
     { 
     return $this->hasMany(PostLike::class); 
     }
+    public function school()
+    {
+        return $this->belongsTo(School::class);
+    }
     protected $withCount = [
         'likes',
     ];
