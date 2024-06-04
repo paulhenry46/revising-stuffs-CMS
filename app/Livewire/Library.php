@@ -8,6 +8,7 @@ use App\Models\Post;
 use App\Models\Course;
 use App\Models\Type;
 use App\Models\Level;
+use App\Models\School;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,6 +22,8 @@ class Library extends Component
     public $level;
     #[Url(as: 'type')]
     public $types = []; // Default is empty, so "All" is checked;
+    #[Url(as: 'school')]
+    public $schools = []; // Default is empty, so "All" is checked;
     #[Url(as: 'dark')]
     public $dark = false;
     #[Url(as: 'cards')]
@@ -70,6 +73,9 @@ class Library extends Component
             ->when(count(array_filter($this->types)), function ($query) {
                     return $query->whereIn('type_id', $this->types);
             })
+            ->when(count(array_filter($this->schools)), function ($query) {
+                return $query->whereIn('school_id', $this->schools);
+        })
             //->whereIn('type_id', $this->types)
             ->when($this->dark, function($query){
                 return $query->where('dark_version', 1);
@@ -87,6 +93,7 @@ class Library extends Component
                 $query->where('course_id', $this->course->id) //Get types for this courses
                       ->orWhere('course_id', 1); //Get types for all courses
             })->get(),
+            'schools_view' => $this->level->curriculum->schools
         ]);
     }
 }

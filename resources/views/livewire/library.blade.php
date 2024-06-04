@@ -5,7 +5,7 @@
     <h1 class=" decoration-4 underline decoration-warning text-2xl font-medium text-gray-900 dark:text-white">
         {{$level->name}} - {{$course->name}}
     </h1>
-    <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+    <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-8">
         <div class="sm:col-span-2">
           <label for="name" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Search')}}</label>
           <div class="mt-2">
@@ -46,6 +46,18 @@
   <label class="cursor-pointer label">
     <span class="label-text">{{$type->name}}</span>
     <input value="{{$type->id}}" wire:model.live="types" type="checkbox" class="checkbox checkbox-info"/>
+  </label>
+</div>
+@endforeach
+</div>
+<div class="sm:col-span-2">
+         <label for="location" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('School')}}</label>
+
+        @foreach($schools_view as $school)
+<div wire:key="school_{{ $school->id }}" class="form-control">
+  <label class="cursor-pointer label">
+    <span class="label-text">{{$school->name}}</span>
+    <input value="{{$school->id}}" wire:model.live="schools" type="checkbox" class="checkbox checkbox-info"/>
   </label>
 </div>
 @endforeach
