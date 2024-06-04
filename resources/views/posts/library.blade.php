@@ -16,7 +16,7 @@
 
             @foreach($curriculum->levels as $level)
             <div class="collapse bg-base-100 collapse-arrow mt-2 rounded-lg">
-  <input type="radio" name="my-accordion-1" checked="checked" /> 
+  <input type="radio" name="my-accordion-1" @if ($loop->first) checked="checked" @endif/> 
   <div class="collapse-title text-xl font-medium">
     {{$level->name}}
   </div>

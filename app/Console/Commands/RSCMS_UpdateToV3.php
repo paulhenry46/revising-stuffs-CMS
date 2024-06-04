@@ -30,11 +30,14 @@ class RSCMS_UpdateToV3 extends Command
      */
     public function handle()
     {
+    $school_id = $this->ask('What is the school id of the posts');
     $posts = Post::all();
     $progressbar = $this->output->createProgressBar(count($posts));
     $progressbar->start();
 
     foreach($posts as $post){
+        $post->school_id = $school_id;
+        $post->save();
         if($post->level->curriculum !== null ){
         foreach($post->files as $file){
             $file->file_path = ''.$post->level->curriculum->slug.'/'.$post->level->slug.'/'.$post->course->slug.'/'.$file->name.'';
@@ -47,6 +50,10 @@ class RSCMS_UpdateToV3 extends Command
 
     }
     $progressbar->finish();
+    Permission::create(['guard_name' => 'sanctum', 'name' => 'manage curricula']);
+    Permission::create(['guard_name' => 'sanctum', 'name' => 'manage schools']);
+    $role = Role::findByName('admin', 'sanctum');
+    $role->syncPermissions(['manage courses', 'manage levels', 'manage users', 'manage all posts', 'manage groups', 'manage curricula', 'manage schools']);
     $this->newLine();
     $this->info('The command was successful!. Now you must move manually the folder of the level inside a folder entitled with the slug of their curriculum');
     }

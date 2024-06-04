@@ -29,8 +29,10 @@ class DatabaseSeeder extends Seeder
         Permission::create(['guard_name' => 'sanctum', 'name' => 'manage courses']);
         Permission::create(['guard_name' => 'sanctum', 'name' => 'manage levels']);
         Permission::create(['guard_name' => 'sanctum', 'name' => 'manage groups']);
+        Permission::create(['guard_name' => 'sanctum', 'name' => 'manage curricula']);
+    Permission::create(['guard_name' => 'sanctum', 'name' => 'manage schools']);
         //Create roles and assigning the permissions
-        Role::create(['guard_name' => 'sanctum', 'name' => 'admin'])->syncPermissions(['manage courses', 'manage levels', 'manage users', 'manage all posts', 'manage groups']);
+        Role::create(['guard_name' => 'sanctum', 'name' => 'admin'])->syncPermissions(['manage courses', 'manage levels', 'manage users', 'manage all posts', 'manage groups', 'manage curricula', 'manage schools']);
         Role::create(['guard_name' => 'sanctum', 'name' => 'contributor'])->syncPermissions(['publish own posts']);
         Role::create(['guard_name' => 'sanctum', 'name' => 'moderator'])->syncPermissions(['publish all posts', 'manage all comments']);
         Role::create(['guard_name' => 'sanctum', 'name' => 'student'])->syncPermissions(['manage own posts', 'create posts', 'manage own comments']);
