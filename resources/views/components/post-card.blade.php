@@ -1,8 +1,8 @@
 <div class="card @if(!request()->routeIs('post.public.view')) h-full @endif dark:bg-base-200 bg-{{str_replace('500', '100',$post->course->color)}}">
                                     <figure>
-                                        @if(file_exists('storage/'.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png'))
+                                        @if(file_exists('storage/'.$post->level->curriculum->slug.'/'.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png'))
 
-                                        <img class="object-cover w-full h-48" src="{{url('storage/'.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png')}}" alt="Thumbnail of the post" />
+                                        <img class="object-cover w-full h-48" src="{{url('storage/'.$post->level->curriculum->slug.'/'.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png')}}" alt="Thumbnail of the post" />
                                       @else
                                       <div class="object-cover w-full h-48"  >
 

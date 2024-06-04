@@ -53,7 +53,7 @@ class EditPrimaryFiles extends Component
         $this->dark_image_library = new Collection();
         //Get Post
         $this->post = $post;
-        $this->storage_subpath = ''.$post->level->slug.'/'.$post->course->slug.'';
+        $this->storage_subpath = ''.$post->level->curriculum->slug.'/'.$post->level->slug.'/'.$post->course->slug.'';
         $this->dark_version = $post->dark_version;
         if($state == 'update'){
             $this->update = true; //If the state is update, we set the variable, else, we don't do anything because it is already set to false
@@ -103,8 +103,6 @@ class EditPrimaryFiles extends Component
 
 
     public function save(){
-        Log::debug('An informational message.1');
-       // $this->validate();
        $validator = Validator::make(
         // Data to validate...
         ['light_file' => $this->light_file, 
@@ -173,7 +171,7 @@ class EditPrimaryFiles extends Component
         foreach($metadata as $item){
             array_push($images_to_convert_path, Storage::path('/public'.$item['path'].''));
         }
-                $folder = ''.$this->post->level->slug.'/'.$this->post->course->slug.'';
+                $folder = ''.$this->post->level->curriculum->slug.'/'.$this->post->level->slug.'/'.$this->post->course->slug.'';
                 $fileName = ''.$this->post->id.'-'.$this->post->slug.'.light.pdf';
                 $path = ''.storage_path().'/app/public/'.$folder.'/'.$fileName.'';
                 $fileDatas = [
@@ -198,7 +196,7 @@ class EditPrimaryFiles extends Component
     private function processNumericFile($file, string $type){
         //Process a file and return its datas (paths, folder, name)
 
-        $PdfDatas['folder'] = ''.$this->post->level->slug.'/'.$this->post->course->slug.'';
+        $PdfDatas['folder'] = ''.$this->post->level->curriculum->slug.'/'.$this->post->level->slug.'/'.$this->post->course->slug.'';
         $PdfDatas['filename'] = ''.$this->post->id.'-'.$this->post->slug.'.'.$type.'.pdf';
         /*save the file*/
         //dd($this->$file);

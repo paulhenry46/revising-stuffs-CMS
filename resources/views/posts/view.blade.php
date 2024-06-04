@@ -14,7 +14,7 @@
                       <div class="col-span-3 lg:col-span-2">
                       <div class="card  bg-base-200 dark:bg-base-200 ">
             <figure class="h-[50vh] bg-{{$post->course->color}} dark:bg-none">
-              <img class="opacity-75 dark:opacity-100 object-cover w-full h-full" src="{{url('storage/'.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png')}}" alt="Thumbnail of the post">
+              <img class="opacity-75 dark:opacity-100 object-cover w-full h-full" src="{{url('storage/'.$post->level->curriculum->slug.'/'.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png')}}" alt="Thumbnail of the post">
               <div class="right-0 top-0 absolute pin-t pin-l ">
                 <div>
                 @auth
@@ -405,7 +405,7 @@
         <div class="pt-4 col-span-4 lg:col-span-1">
           <div class="card  h-screen  dark:bg-base-300 ">
             <figure class="h-1/2 bg-{{$post->course->color}} dark:bg-none">
-              <img class="opacity-75 dark:opacity-100 object-cover w-full h-full" src="{{url('storage/'.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png')}}" alt="Thumbnail of the post">
+              <img class="opacity-75 dark:opacity-100 object-cover w-full h-full" src="{{url('storage/'.$post->level->curriculum->slug.'/'.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png')}}" alt="Thumbnail of the post">
               <div class="right-0 top-0 absolute pin-t pin-l ">
                 <div>
                 @auth

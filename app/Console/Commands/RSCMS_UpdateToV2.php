@@ -15,14 +15,14 @@ class RSCMS_UpdateToV2 extends Command
      *
      * @var string
      */
-    protected $signature = 'app:RSCMS_UpdateToV2';
+    protected $signature = 'rscms:updateToV2';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Command to update from a 1.x version of the app to the 2.0 version. Run once';
 
     /**
      * Execute the console command.

@@ -56,7 +56,7 @@ class FileController extends Controller
     {
         $this->authorize('create', [File::class, $post]);
 
-        $folder = ''.$post->level->slug.'/'.$post->course->slug.'';
+        $folder = ''.$post->level->curriculum->slug.'/'.$post->level->slug.'/'.$post->course->slug.'';
         $filename_path = ''.$post->id.'.'.Str::slug($request->name, '-').'.'.$request->file->extension().'';
         $filename = $request->name;
         $path = $request->file->storeAs($folder, $filename_path, 'public');
@@ -82,7 +82,9 @@ class FileController extends Controller
         return view('files.primary-edit', compact('state', 'post'));
     }
 
-
+    /**
+     * For creating and updating actions for primaries files, see EditPrimaryFiles Livewire component
+     */
 
     /**
      * Remove the from filesystem and database, but not the primary files
