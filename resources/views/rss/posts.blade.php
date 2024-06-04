@@ -11,12 +11,12 @@
         <item>
             <title>{{ $post->title }}</title>
             <description>
-                <![CDATA[<img src="{{url('storage/'.$post->curriculum->slug.'/'.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png')}}" style="width:100%;height:auto"/>
+                <![CDATA[<img src="{{url('storage/'.$post->level->curriculum->slug.'/'.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png')}}" style="width:100%;height:auto"/>
                 {{ $post->description }}</br>
                 <p>{{__('Course')}} : {{$post->course->name}}</p>
                 <p>{{__('Level')}} : {{$post->level->name}}</p>
                 <p>{{__('Type')}} : {{$post->type->name}}</p>
-                <p>{{__('Curriculum and school')}} : {{$post->curriculum->name}}/{{$post->school->name}}</p>   
+                <p>{{__('Curriculum and school')}} : {{$post->level->curriculum->name}}/{{$post->school->name}}</p>   
                 ]]>
             </description>
             <pubDate>{{$post->created_at->toRfc7231String() }}</pubDate>
