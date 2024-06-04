@@ -23,4 +23,9 @@ class School extends Model
     {
         return $this->hasMany(Post::class);
     }
+
+    public function groups()
+    { 
+    return $this->hasMany(Group::class); 
+    }
 }

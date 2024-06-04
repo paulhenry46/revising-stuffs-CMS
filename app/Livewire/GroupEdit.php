@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Group;
+use App\Models\School;
 use App\Models\User;
 use Mary\Traits\Toast;
 
@@ -20,6 +21,8 @@ class GroupEdit extends Component
     public bool $private;
     public $description;
     public $users;
+    public $schools;
+    public $school;
     public $selected_users;
     public function render()
     {
@@ -32,6 +35,12 @@ class GroupEdit extends Component
         $this->selected_users = $group->users()->pluck('users.id');
         $this->users = User::All();
         $this->name = $group->name;
+        if(!empty($group->school_id)){
+            $this->school = $group->school_id;
+        }else{
+            $this->school = School::first()->id;
+        }
+
         $this->description = $group->description;
         
         if(($group->public === NULL) or ($group->public === 1)){
@@ -49,7 +58,7 @@ class GroupEdit extends Component
         }else{
             $this->group->public = true;
         }
-
+        $this->group->school_id = $this->school;
         $this->group->description = $this->description;
         $this->group->save();
         $this->group->users()->sync($this->selected_users);

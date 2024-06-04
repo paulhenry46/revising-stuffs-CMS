@@ -18,7 +18,9 @@
     rows="5"
     inline />
     <div class="py-2"></div>
-    
+    <div class="py-2">
+    <x-mary-select label="School" :options="$schools" wire:model="school" />
+    </div>
         <x-mary-table
     :headers="$headers"
     :rows="$users"

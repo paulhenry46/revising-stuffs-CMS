@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Spatie\Permission\Models\Role;
 use App\Models\Course;
+use App\Models\Group;
 use App\Models\Post;
 use Illuminate\Support\Facades\Artisan;
 use Spatie\Permission\Models\Permission;
@@ -31,6 +32,11 @@ class RSCMS_UpdateToV3 extends Command
     public function handle()
     {
     $school_id = $this->ask('What is the school id of the posts');
+    $groups = Group::all();
+    foreach($groups as $group){
+        $group->school_id = $school_id;
+        $group->save();
+    }
     $posts = Post::all();
     $progressbar = $this->output->createProgressBar(count($posts));
     $progressbar->start();

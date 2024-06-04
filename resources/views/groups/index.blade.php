@@ -49,6 +49,7 @@
       <thead>
         <tr>
           <th>{{__('Name')}}</th>
+          <th>{{__('School')}}</th>
           <th></th>
         </tr>
       </thead>
@@ -69,6 +70,7 @@
               </div>
             </div>
           </div>
+          <td>{{$group->school->name}}</td>
             </td>
             <td class="align-middle">
             <div class="flex items-stretch justify-end relative  text-right">

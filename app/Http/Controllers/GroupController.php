@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\GroupRequest;
 use App\Models\Group;
+use App\Models\School;
 use Illuminate\Support\Str;
 
 class GroupController extends Controller
@@ -23,9 +24,10 @@ class GroupController extends Controller
      */
     public function create()
     {
+        $schools = School::all();
         $group = New Group;
         $create = 1;
-        return view('groups.edit', compact(['create', 'group']));
+        return view('groups.edit', compact(['create', 'group', 'schools']));
     }
 
     /**
@@ -41,8 +43,8 @@ class GroupController extends Controller
      */
     public function edit(Group $group)
     {
-        
-        return view('groups.edit', compact('group'));
+        $schools = School::all();
+        return view('groups.edit', compact(['group', 'schools']));
     }
 
     /**
