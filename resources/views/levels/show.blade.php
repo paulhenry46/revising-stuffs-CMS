@@ -40,6 +40,7 @@
                                                 <tr>
                                                     <th>ID</th>
                                                     <th>{{__('Name')}}</th>
+                                                    <th>{{__('Curriculum')}}</th>
                                                     <th>{{__('Courses')}}</th>
                                                     <th>{{__('Number of posts')}}</th>
                                                     <th></th>
@@ -50,6 +51,7 @@
                                                 <tr>
                                                     <td>{{ $level->id }}</td>
                                                     <td>{{ $level->name }}</td>
+                                                    <td>{{ $level->curriculum->name }}</td>
                                                     <td>
                                                         @foreach ($level->courses()->get() as $course)
                                                         <span class="ml-1 text-white badge bg-{{$course->color}} badge-xm">{{$course->name}}</span>

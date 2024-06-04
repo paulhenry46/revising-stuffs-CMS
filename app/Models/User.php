@@ -90,6 +90,11 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Curriculum::class);
     }
+
+    public function level()
+    {
+        return $this->belongsTo(Level::class);
+    }
     
     public function groups(): BelongsToMany
     {
