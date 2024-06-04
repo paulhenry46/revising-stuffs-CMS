@@ -9,7 +9,7 @@
     {{$curriculum->name}}
 </h1>
 
-<p>Teach in @foreach($curriculum->schools as $school) {{$school->name}} @endforeach</p>
+<p>{{__('Taught at')}} @foreach($curriculum->schools as $school) {{$school->name}} @endforeach</p>
 </div>
 </div>
         <div class="">
