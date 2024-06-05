@@ -21,6 +21,7 @@ use App\Http\Controllers\Public\ReadUserController;
 use App\Http\Controllers\PushNotif;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\StepController;
+use App\Http\Middleware\EnsureUserCursusProfileIsCompleted;
 use App\Models\School;
 
 /*
@@ -180,5 +181,5 @@ Route::middleware([
             Route::put('/{card}/edit', 'update')->name('update');
             Route::post('/step', 'step')->name('step');
         });
-    });
+    })->middleware(EnsureUserCursusProfileIsCompleted::class);
 });
