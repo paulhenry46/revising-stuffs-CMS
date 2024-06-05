@@ -18,7 +18,7 @@
           <x-info-message />
           <div>
             <div class="">
-              <div class="relative z-0 mt-1 flex h-32 w-full justify-center rounded-xl bg-cover bg-gradient-to-r from-blue-600 to-violet-600">
+              <div class="relative z-0 mt-1 flex h-32 w-full justify-center rounded-xl bg-cover bg-primary">
                 <div class="absolute -bottom-12 flex h-[88px] w-[88px] items-center justify-center rounded-full border-[4px] border-base-100">
                   <img class="h-full w-full rounded-full" src="{{$user->profile_photo_url}}" alt="" />
                 </div>
