@@ -139,7 +139,7 @@ Route::middleware([
 
     Route::group(['middleware' => ['can:manage own posts']], function () {
         //Manage the posts
-        Route::resource('posts', PostController::class);
+        Route::resource('posts', PostController::class)->middleware(EnsureUserCursusProfileIsCompleted::class);
 
         //See the comments on your posts
         Route::get('/comments', [CommentController::class, 'index'])->name('comments.show');
@@ -181,5 +181,5 @@ Route::middleware([
             Route::put('/{card}/edit', 'update')->name('update');
             Route::post('/step', 'step')->name('step');
         });
-    })->middleware(EnsureUserCursusProfileIsCompleted::class);
+    });
 });

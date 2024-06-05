@@ -16,7 +16,7 @@ class EnsureUserCursusProfileIsCompleted
     public function handle(Request $request, Closure $next): Response
     {
         if (($request->user()->school_id === null) or ($request->user()->curriculum_id === null)) {
-            return redirect('user.update-cursus-form');
+            return redirect(route('user.update-cursus-form'));
         }
 
         return $next($request);
