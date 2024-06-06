@@ -459,5 +459,19 @@
     "My posts are licensed under" : "Mes ressources sont publiées sous license",
     "Thanks" : "Remerciements",
     "About me" : "À propos",
-    "Last posts" : "Derniers posts"
+    "Last posts" : "Derniers posts",
+    "Taught at" : "Enseigné à",
+    "School" : "Établissement",
+    "Curriculum" : "Cursus",
+    "Curricula" :"Cursus",
+    "Update cursus information" : "Mise à jour de votre parcours",
+    "All comments are validated for now !" : "Aucun commentaire à valider pour le moment !",
+    "All posts are validated for now !" : "Aucune ressource à valider pour le moment !",
+    "Schools" : "Établissements",
+    "Admin Settings" : "Paramètres d'administration",
+    "Manage groups" : "Gestion des groupes",
+    "Group" : "Groupe",
+    "Groups" : "Groupes",
+    "List of all groups" : "Liste de tous les groupes",
+    "New group" : "Nouveau groupe"
 }
