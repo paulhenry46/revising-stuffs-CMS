@@ -38,6 +38,9 @@ use App\Models\School;
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
+Route::get('/contributor', function () {
+    return view('contributor');
+})->name('contributor');
 
 //RSS Routes
 Route::get('/rss/all', [RssController::class, 'posts'])->name('rss.posts');//General RSS including all the levels and courses

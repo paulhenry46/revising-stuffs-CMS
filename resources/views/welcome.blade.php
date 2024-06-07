@@ -68,9 +68,9 @@
               <h1 class="text-4xl font-bold tracking-tight dark:text-white text-gray-900 sm:text-6xl">{{__('We help students with their revision work')}}</h1>
               <p class="relative mt-6 text-lg leading-8 text-gray-600 dark:text-gray-100 sm:max-w-md lg:max-w-none">{{__('New resources especially made for your curriculum are added throughout the year to support your revision. Here you\'ll find mind maps, summary sheets and flashcards.')}}</p>
               <div class="mt-10 flex items-center gap-x-6">
-                <a href="{{route('login')}}" class="btn btn-primary">{{__('Login')}}</a>
-                <a href="{{route('post.public.library')}}" class="btn btn-outline">{{__('See all posts')}}</a>
-                <a href="#" class="btn btn-outline">{{__('Become a contributor')}}</a>
+                <a wire:navigate href="{{route('login')}}" class="btn btn-primary">{{__('Login')}}</a>
+                <a wire:navigate href="{{route('post.public.library')}}" class="btn btn-outline">{{__('See all posts')}}</a>
+                <a wire:navigate href="{{route('contributor')}}" class="btn btn-outline">{{__('Become a contributor')}}</a>
               </div>
             </div>
             <div class="mt-14 flex justify-end gap-8 sm:-mt-44 sm:justify-start sm:pl-20 lg:mt-0 lg:pl-0">
