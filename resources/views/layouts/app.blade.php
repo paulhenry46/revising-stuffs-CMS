@@ -92,8 +92,11 @@
   </div>
 </div>
 
-        <div class="min-h-screen /*bg-gray-200*/ /*bg-gray-100*/ dark:bg-base-300 bg-gray-100">
-            
+          @if(Route::current()->getName() == 'welcome')
+          <div class="min-h-screen /*bg-gray-200*/ /*bg-gray-100*/ dark:bg-gray-800 bg-gray-100">
+            @else
+            <div class="min-h-screen /*bg-gray-200*/ /*bg-gray-100*/ dark:bg-base-300 bg-gray-100">
+              @endif
 
             <!-- Page Heading -->
             @if (isset($header))
