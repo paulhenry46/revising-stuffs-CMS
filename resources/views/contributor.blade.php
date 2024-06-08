@@ -64,7 +64,7 @@
 <dialog id="my_modal_1" class="modal">
   <div class="modal-box">
     <h3 class="font-bold text-lg">{{__('It\'s no big deal!')}}</h3>
-    <p class="py-4">{{__('Contact an administrator at')}} {{str_replace('@', '[->AT<-]',env('INSTANCE_MAIL'))}} {{__('and tell them the name of your course, your school, the subjects taught and the levels. They\'ll be happy to add all this information as quickly as possible!')}}</p>
+    <p class="py-4">{{__('Contact an administrator at')}} {{str_replace('@', '[->AT<-]',env('INSTANCE_MAIL'))}} {{__('and tell him the name of your curriculum, your school, the subjects taught and the levels. They\'ll be happy to add all this information as quickly as possible!')}}</p>
     <div class="modal-action">
       <form method="dialog">
         <!-- if there is a button in form, it will close the modal -->

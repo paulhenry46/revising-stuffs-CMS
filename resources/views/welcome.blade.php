@@ -126,7 +126,7 @@
       <div class="flex flex-col-reverse justify-between gap-x-16 gap-y-8 rounded-2xl bg-gray-900 p-8 sm:flex-row-reverse sm:items-end lg:w-full lg:max-w-sm lg:flex-auto lg:flex-col lg:items-start lg:gap-y-44">
         <p class="flex-none text-3xl font-bold tracking-tight text-white"><livewire:posts-count /></p>
         <div class="sm:w-80 sm:shrink lg:w-auto lg:flex-none">
-          <p class="text-lg font-semibold tracking-tight text-white">{{__('We\'re proud to already have')}} <livewire:posts-count /> {{__('resources with')}} <livewire:courses-count /> {{__('courses covered!')}}</p>
+          <p class="text-lg font-semibold tracking-tight text-white">{{__('We\'re proud to already have')}} <livewire:posts-count /> {{__('posts with')}} <livewire:courses-count /> {{__('courses covered!')}}</p>
           <p class="mt-2 text-base leading-7 text-gray-400">{{__('And that\'s just for starters!')}}</p>
         </div>
       </div>
