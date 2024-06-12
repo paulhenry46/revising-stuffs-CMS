@@ -51,7 +51,11 @@
                                                 <tr>
                                                     <td>{{ $level->id }}</td>
                                                     <td>{{ $level->name }}</td>
+                                                    @if(!empty($level->curriculum))
                                                     <td>{{ $level->curriculum->name }}</td>
+                                                    @else
+                                                    <td><span class="badge badge-error">{{__('No curriculum')}}</span></td>
+                                                    @endif
                                                     <td>
                                                         @foreach ($level->courses()->get() as $course)
                                                         <span class="ml-1 text-white badge bg-{{$course->color}} badge-xm">{{$course->name}}</span>

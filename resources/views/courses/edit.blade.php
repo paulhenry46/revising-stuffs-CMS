@@ -118,8 +118,8 @@
 </div>
 
 <div class="mt-6 flex items-center justify-end gap-x-6">
-<a href="{{route('courses.index')}}" class="text-sm font-semibold leading-6 text-red-500">{{__('Cancel')}}</a>
-<button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">@if($course->id !== 0) {{__('Edit')}} @else {{__('Create')}} @endif</button>
+<a href="{{route('courses.index')}}" class="link">{{__('Cancel')}}</a>
+<button type="submit" class="btn btn-primary">@if($course->id !== 0) {{__('Edit')}} @else {{__('Create')}} @endif</button>
 </div>
 </form>
 <script async>

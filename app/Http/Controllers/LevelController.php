@@ -18,7 +18,7 @@ class LevelController extends Controller
     {   $levels = Level::all();
         $courses = Course::where('id', '!=', '1')->get();
         $types = Type::all();
-        return view('levels.show', compact(['levels', 'courses', 'types']));
+        return view('levels.index', compact(['levels', 'courses', 'types']));
     }
 
     /**
