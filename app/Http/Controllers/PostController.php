@@ -110,7 +110,7 @@ class PostController extends Controller
         $levels = Level::all();
         $user = auth()->user();
         $school = $post->school;
-        $curriculum = $post->curriculum;
+        $curriculum = $post->level->curriculum;
       if($user->hasPermissionTo('publish all posts')){
         $groups = Group::where('id', '!=', '1')->where('id', '!=', '2')->get();
       }else{
