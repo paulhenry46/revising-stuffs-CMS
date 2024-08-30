@@ -28,7 +28,7 @@
             <div class="flex flex-1 items-center justify-between truncate rounded-r-md  dark:bg-base-200 bg-white">
                 <div class="flex-1 truncate px-4 py-2 text-sm">
                     <a class="font-medium text-gray-900 dark:text-white">{{$course->name}}</a>
-                    <p class="text-gray-500">{{$course->posts->count()}}{{__(' Resources')}}</p>
+                    <p class="text-gray-500">{{$course->postsOfLevel($level)->count()}}{{__(' Resources')}}</p>
                 </div>
             </div>
         </div>

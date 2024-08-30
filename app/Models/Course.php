@@ -19,4 +19,10 @@ class Course extends Model
     {
         return $this->belongsToMany(Level::class);
     }
+
+    public function postsOfLevel(Level $level){
+        $posts = Post::where('course_id', $this->id)->where('level_id', $level->id)->get();
+         
+        return $posts;
+    }
 }
