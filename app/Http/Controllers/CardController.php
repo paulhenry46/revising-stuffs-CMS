@@ -152,6 +152,8 @@ class CardController extends Controller
 
     public function export(string $slug, Post $post)
     {
+        $this->authorize('view', $post);
+        
         $this->authorize('export', [Card::class, $post]);
         $cards = Card::where('post_id', '=', $post->id)->get();
         $csvFileName = 'cards-'.$post->title.'-'.$post->id.'.csv';

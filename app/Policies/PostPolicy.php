@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Group;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
@@ -36,7 +37,21 @@ class PostPolicy
      */
     public function view(User $user, Post $post): bool
     {
-        return true;
+        if(($post->group_id == 1) and ($post->user_id !== $user->id)){//group id 1 is for private posts. So we check if the user is thos who created the post
+            return false;
+        }elseif(($post->group_id !== 2)){
+            if((!array_key_exists($post->group_id, array_flip($user->groups->pluck('id')->toArray()))) and !(Group::where('id', $post->group_id)->first()->public)){
+                //dump(array_flip($user->groups->pluck('id')->toArray()));
+                //dump(array_key_exists($post->group_id, array_flip($user->groups->pluck('id')->toArray())));
+                //dd($post->group_id);
+                return false;
+            }else{
+                return true;
+            }
+        }else{
+           
+            return true;
+        }
     }
 
     /**
