@@ -35,7 +35,7 @@ class StepHistory extends Component
     }
 
     public function reinitialize(){
-        //$steps = Step::where('user_id', Auth::id())->where('post_id', $this->post_id)->delete();
+        Step::where('user_id', Auth::id())->where('post_id', $this->post->id)->delete();
         $this->success(
             title: __('Progress reinitialized !')
         );

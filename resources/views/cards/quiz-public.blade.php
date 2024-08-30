@@ -334,7 +334,7 @@
                   success++;
                 }
                 }
-                percent = (success/this.cards.length)*100;
+                percent = Math.round((success/this.cards.length)*100);
 
               body = JSON.stringify({
                 postId: '{{$post->id}}',
