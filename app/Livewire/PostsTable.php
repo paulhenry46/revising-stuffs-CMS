@@ -146,6 +146,6 @@ class PostsTable extends Component
 
     public function render()
     {
-        return view('livewire.posts-table', ['posts' => Post::where('published', 0)->paginate(15)]);
+        return view('livewire.posts-table', ['posts' => Post::where('published', 0)->where('group_id', '!=', 1)->paginate(15)]);
     }
 }
