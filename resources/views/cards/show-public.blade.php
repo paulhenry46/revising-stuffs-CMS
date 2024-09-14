@@ -89,4 +89,10 @@
                   </div>
               </div>
           </div>
+          <script>
+document.addEventListener('livewire:navigated', () => { 
+    MathJax.typeset();
+})
+</script>
+
 </x-app-layout>
