@@ -34,6 +34,9 @@
    <button x-show="selection.length > 0" x-on:click="$wire.deleteCards(selection)" class="ml-4 btn btn-error">{{__('Delete')}}</button>
       <a wire:navigate href="{{route('cards.import', $post->id)}}" class=" ml-4 btn btn-primary ">{{__('Import cards')}}</a>
       <a wire:navigate href="{{route('cards.create', $post->id)}}" class=" ml-4 btn btn-primary">{{__('Create cards')}}</a>
+      <a @click="MathJax.typeset();" class=" ml-4 btn btn-secondary">
+      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M160-160v-80h110l-16-14q-52-46-73-105t-21-119q0-111 66.5-197.5T400-790v84q-72 26-116 88.5T240-478q0 45 17 87.5t53 78.5l10 10v-98h80v240H160Zm400-10v-84q72-26 116-88.5T720-482q0-45-17-87.5T650-648l-10-10v98h-80v-240h240v80H690l16 14q49 49 71.5 106.5T800-482q0 111-66.5 197.5T560-170Z"/>
+    </svg>{{__('Render LaTeX')}}</a>
     </div>
   </div>
 <div class="sm:col-span-2">
@@ -129,4 +132,13 @@
                     <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"></div>
                 </div>
                 <span class="sr-only">Loading...</span>
-            </div></div>
+            </div>
+          
+<script>
+    
+    document.addEventListener('livewire:initialized', () => {
+      MathJax.typeset();
+    })
+</script>
+
+          </div>

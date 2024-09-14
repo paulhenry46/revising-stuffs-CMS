@@ -23,8 +23,8 @@
     <div @click="returnCard()" class="stack w-full h-64 sm:h-80">
     <div x-bind:data-state="cardState" class=" duration-500 data-[state=success]:bg-success dark:data-[state=success]:bg-success data-[state=fail]:bg-warning dark:data-[state=fail]:bg-warning transition ease-in-out swap grid w-full h-full rounded dark:bg-base-100 bg-white text-dark dark:text-white place-content-center">
       
-      <div x-transition x-show="!recto" x-html="cards[activeCard].back" id="back" class="place-content-center align-middle flex flex-col  text-center"></div>
-      <div x-transition x-show="recto" x-html="cards[activeCard].front" id="front" class="place-content-center align-middle flex flex-col  text-center"></div>
+      <div x-transition x-show="!recto" x-html="cards[activeCard].back" x-init="$watch('cards[activeCard].back', value => MathJax.typeset())" id="back" class="place-content-center align-middle /*flex*/ flex-col  text-center"></div>
+      <div x-transition x-show="recto" x-html="cards[activeCard].front" x-init="$watch('cards[activeCard].front', value => MathJax.typeset())" id="front" class="place-content-center align-middle /*flex*/ flex-col  text-center"></div>
 </div>
 <div class=" w-full h-full rounded bg-primary  place-content-center"></div>
 <div class=" w-full h-full rounded bg-success place-content-center"></div>
@@ -194,7 +194,10 @@
                     card.state = 'pending'
                 }
                 this.savedCards = this.cards;
+                MathJax.typeset();
             },
+
+            
 
             next() {
                 if (this.activeCard === ((this.cards.length) - 1)) {
@@ -234,11 +237,13 @@
                 }
                     this.activeCard++
                     this.disabledPreviousButton = false;
+                    
                 }
                 this.$nextTick(() => { 
                   setTimeout(() => {this.resetDataState();}, "130");
  
                 });
+               // MathJax.typeset();
             },
 
             previous() {
@@ -251,18 +256,21 @@
                 if (this.activeCard === 0) {
                     this.disabledPreviousButton = true;
                 }
+               // MathJax.typeset();
             },
 
             success() {
               this.cardState = 'success';
                 this.cards[this.activeCard].state = 'success'
                 this.next()
+               // MathJax.typeset();
             },
             
             fail() {
               this.cardState = 'fail';
                 this.cards[this.activeCard].state = 'fail'
                 this.next()
+               // MathJax.typeset();
             },
 
             nextCycle() {
@@ -304,6 +312,7 @@
             
             returnCard(){
               this.recto = !this.recto;
+             // MathJax.typeset();
             },
 
             resetDataState(){
@@ -355,5 +364,9 @@
             }
         }))
     });
+
+    document.addEventListener('alpine:initialized', () => {
+      MathJax.typeset();
+})
   </script>
 </x-app-layout>

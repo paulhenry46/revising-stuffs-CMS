@@ -11,6 +11,12 @@
 @if((Route::is('post.public.view')) or (Route::is('dashboard')) )
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 @endif
+
+
+@if((Route::is('cards.index')) or (Route::is('post.public.cards.*')) )
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+@endif
+
     
         @if(env('PWA')==true)
         <link rel="manifest" href="/manifest.webmanifest" />

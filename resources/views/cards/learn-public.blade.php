@@ -21,8 +21,8 @@
     <div class="stack w-full h-64 sm:h-80">
     <label class="swap grid w-full h-full rounded dark:bg-base-100 bg-white place-content-center text-dark dark:text-white text-black">
       <input type="checkbox" />
-      <div id="back" class="place-content-center align-middle flex flex-col swap-on text-center"></div>
-      <div id="front" class="place-content-center align-middle flex flex-col swap-off text-center"></div>
+      <div id="back" class="place-content-center align-middle /*flex*/ flex-col swap-on text-center"></div>
+      <div id="front" class="place-content-center align-middle /*flex*/ flex-col swap-off text-center"></div>
     </label>
   <div class="grid w-full h-full rounded bg-primary text-secondary-content place-content-center">3</div>
   <div class="grid w-full h-full rounded bg-success text-secondary-content place-content-center">3</div>
@@ -251,6 +251,7 @@
     var result = next();
     $('#current-front').first().html(result['front']);
     $('#current-back').first().hide().html(result['back']);
+    MathJax.typeset();
   };
 
   $.fn.ouicards = function() {
@@ -369,6 +370,7 @@ function initializeHandlers() {
       $('#start').hide();
       $('#success').prop("disabled", false);
       $('#fail').prop("disabled", false);
+      MathJax.typeset();
       return;
     }
   });
@@ -483,6 +485,7 @@ $('#fail').prop("disabled", true);
     changeFront();
     updateFooter();
 }
+MathJax.typeset();
   });
 
   $('#fail').on('click', function() {

@@ -35,8 +35,11 @@ class PostPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Post $post): bool
+    public function view(?User $user, Post $post): bool
     {
+        /*By default, all gates and policies automatically return false if the incoming HTTP request was not initiated by an authenticated user. 
+        However, you may allow these authorization checks to pass through to your gates and policies by declaring an "optional" type-hint*/
+        
         if(($post->group_id == 1) and ($post->user_id !== $user->id)){//group id 1 is for private posts. So we check if the user is thos who created the post
             return false;
         }elseif(($post->group_id !== 2)){

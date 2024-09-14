@@ -68,11 +68,11 @@
                         <div class="grid sm:grid-cols-3 space-y-6 sm:space-y-0">
                             <div>
                                 <span class="text-xs text-gray-500 uppercase">{{__('Term')}}</span>
-                                <p class="gap-3 align-middle flex flex-row swap-off text-center dark:text-white text-gray-900 sm:col-span-2">{!!$card->front!!}</p>
+                                <p class="gap-3 align-middle /*flex */flex-row swap-off text-center dark:text-white text-gray-900 sm:col-span-2">{!!$card->front!!}</p>
                             </div>
                             <div>
                                 <span class="text-xs text-gray-500 uppercase">{{__('Definition')}}</span>
-                                <p class="gap-3 align-middle flex flex-row swap-off text-center dark:text-white text-gray-900 sm:col-span-2">{!!$card->back!!}</p>
+                                <p class="gap-3 align-middle /*flex*/ flex-row swap-off text-center dark:text-white text-gray-900 sm:col-span-2">{!!$card->back!!}</p>
                             </div>
                         </div>
                     </div>

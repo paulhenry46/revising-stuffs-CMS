@@ -14,6 +14,7 @@ class ReadPostController extends Controller
 {
     public function view(string $slug, Post $post)
     {
+        
         $this->authorize('view', $post);
         if($slug != $post->slug){
             abort(404);
