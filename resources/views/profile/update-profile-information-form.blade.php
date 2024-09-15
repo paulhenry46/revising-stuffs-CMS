@@ -61,9 +61,11 @@
         <!-- Bio -->
         <div class="col-span-6 sm:col-span-4">
             <x-label for="bio" value="{{ __('Bio') }}" />
-            <x-input id="bio" type="text" class="mt-1 block w-full" wire:model="state.bio" />
+            
+            <textarea id="bio"  wire:model="state.bio" class="w-full textarea textarea-bordered" placeholder="Bio"></textarea>
             <x-input-error for="bio" class="mt-2" />
         </div>
+        
         <!-- Networks Link -->
         <div class="col-span-6 sm:col-span-4">
             <x-label for="social_network_link" value="{{ __('Networks Link') }}" />
