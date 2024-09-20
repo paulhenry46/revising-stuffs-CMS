@@ -128,6 +128,7 @@ class PostController extends Controller
         $user = Auth::user();
         $oldSlug = $post->slug;
         $oldLevelSlug = $post->level->slug;
+        $oldCurriculymSlug = $oldLevelSlug = $post->level->Curriculum->slug;
         $oldCourseSlug = $post->course->slug;
 
         $post->title = $request->title;
@@ -164,12 +165,12 @@ class PostController extends Controller
         //Move files to the new directory if course or level or post name is changed :
             foreach ($post->files as $file) {
                 $file->name = str_replace($oldSlug, $post->slug, $file->name);
-                Storage::disk('public')->move($file->file_path, ''.$post->level->slug.'/'.$post->course->slug.'/'.$file->name.'');
+                Storage::disk('public')->move($file->file_path, ''.$post->level->Curriculum->slug.'/'.$post->level->slug.'/'.$post->course->slug.'/'.$file->name.'');
                 //Do it with thumbnail
-                $file->file_path = ''.$post->level->slug.'/'.$post->course->slug.'/'.$file->name.'';
+                $file->file_path = ''.$post->level->Curriculum->slug.'/'.$post->level->slug.'/'.$post->course->slug.'/'.$file->name.'';
                 $file->save();
             }
-        Storage::disk('public')->move(''.$oldLevelSlug.'/'.$oldCourseSlug.'/'.$post->id.'-'.$oldSlug.'.thumbnail.png', ''.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png');
+        Storage::disk('public')->move(''.$oldCurriculymSlug.'/'.$oldLevelSlug.'/'.$oldCourseSlug.'/'.$post->id.'-'.$oldSlug.'.thumbnail.png', ''.$oldCurriculymSlug.'/'.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png');
         return redirect()->route('posts.index')->with('message', __('The post has been modified.'));
     }
 

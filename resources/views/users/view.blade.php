@@ -78,10 +78,10 @@
               </div>
             </div>
             <h2 class="card-title">{{__('About me')}}</h2>
-            <div class=" mt-2 h-32 w-full  border-primary rounded-xl border-2">
-              <div class="ml-4 mt-4 h-3/6">{{$user->bio}}</div>
+            <div class=" mt-2 w-full  border-primary rounded-xl border-2">
+              <div class="ml-4 mt-4 mb-4"> {!!nl2br(e($user->bio))!!} </div>
               <div class="border-t-2 border-dashed border-primary"></div>
-              <p class="ml-4 mt-2">@if(!empty($user->license)) {{__('My posts are licensed under')}}
+              <p class="ml-4 mt-4 mb-4">@if(!empty($user->license)) {{__('My posts are licensed under')}}
                 <a wire:navigate class="link" href="{{route('about.licensing')}}">{{$user->license}}</a>@else {{__('This user didn\'t chose a license for his/her posts')}} @endif
               </p>
             </div>
