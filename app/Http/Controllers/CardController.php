@@ -51,8 +51,17 @@ class CardController extends Controller
     public function store(CardRequest $request, Post $post)
     {
         $this->authorize('create',[Card::class, $post]);
-        $front = str_ireplace($this->forbiden_tags, '', $request->front);
-        $back = str_ireplace($this->forbiden_tags, '', $request->back);
+        $front_serialized = str_ireplace($this->forbiden_tags, '', $request->front);
+        $back_serialized = str_ireplace($this->forbiden_tags, '', $request->back);
+
+        $file_path=url('storage/'.$post->level->curriculum->slug.'/'.$post->level->slug.'/'.$post->course->slug.'/');
+
+        $back_temp = str_ireplace('[IMG]', '<img class="h-48" src="'.$file_path.'/', $back_serialized);
+        $back = str_ireplace('[/IMG]', '">', $back_temp);
+        
+        $front_temp = str_ireplace('[IMG]', '<img class="h-48" src="'.$file_path.'/', $front_serialized);
+        $front = str_ireplace('[/IMG]', '">', $front_temp);
+
 
         $card = New Card;
         $card->front = $front;
@@ -75,6 +84,7 @@ class CardController extends Controller
     public function storeImport(CardImportRequest $request, Post $post)
     {
         $this->authorize('create', [Card::class, $post]);
+        $file_path=url('storage/'.$post->level->curriculum->slug.'/'.$post->level->slug.'/'.$post->course->slug.'/');
         $input = $request->content;
         //The separator by defalut is a tabulation
         $separator = "/\t+/";
@@ -96,7 +106,11 @@ class CardController extends Controller
             $values = preg_split($separator, $line);
             //For each values of our new array
             foreach ($values as $col_index => $value) {
-                $value = str_ireplace($this->forbiden_tags, '', $value);
+                $value_sanitized = str_ireplace($this->forbiden_tags, '', $value);
+
+                $value_temp = str_ireplace('[IMG]', '<img class="h-48" src="'.$file_path.'/', $value_sanitized);
+                $value = str_ireplace('[/IMG]', '">', $value_temp);
+                
                 $newLine[$cols[$col_index]] = $value;
             }
             $newLine['post_id'] = $post->id;
@@ -126,6 +140,11 @@ class CardController extends Controller
     public function edit(Post $post, Card $card)
     {   
         $this->authorize('update', $card);
+        $file_path=url('storage/'.$post->level->curriculum->slug.'/'.$post->level->slug.'/'.$post->course->slug.'/');
+        $back = str_ireplace('<img class="h-48" src="'.$file_path.'/','[IMG]', $card->back);
+        $card->back = str_ireplace('">','[/IMG]', $back);
+        $front = str_ireplace('<img class="h-48" src="'.$file_path.'/','[IMG]', $card->front);
+        $card->front = str_ireplace('">','[/IMG]', $front);
         return view('cards.edit', compact('card', 'post'));
     }
 
@@ -134,9 +153,17 @@ class CardController extends Controller
      */
     public function update(CardRequest $request, Post $post, Card $card)
     {
+        $file_path=url('storage/'.$post->level->curriculum->slug.'/'.$post->level->slug.'/'.$post->course->slug.'/');
         $this->authorize('update', $card);
         $card->front = str_ireplace($this->forbiden_tags, '', $request->front);
         $card->back = str_ireplace($this->forbiden_tags, '', $request->back);
+
+        $back = str_ireplace('[IMG]', '<img class="h-48" src="'.$file_path.'/', $request->back);
+        $card->back = str_ireplace('[/IMG]', '">', $back);
+        
+        $front = str_ireplace('[IMG]', '<img class="h-48" src="'.$file_path.'/', $request->front);
+        $card->front = str_ireplace('[/IMG]', '">', $front);
+
         $card->save();
         return redirect()->route('cards.index', $post->id)->with('message', __('The card has been updated.'));
        

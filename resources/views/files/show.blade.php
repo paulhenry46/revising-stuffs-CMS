@@ -13,8 +13,8 @@
       {{__('Files')}}</li>
   </ul>
 </div>
-<div class="bg-base-200 dark:bg-base-200 overflow-hidden shadow-xl sm:rounded-lg">
-            <div class="p-6 lg:p-8 bg-base-200 dark:bg-base-200 border-b border-gray-200 dark:border-gray-700">
+<div class="bg-white dark:bg-base-200 overflow-hidden sm:rounded-lg">
+            <div class="p-6 lg:p-8 bg-white dark:bg-base-200 border-b border-gray-200 dark:border-gray-700">
 
 <h1 class=" text-2xl font-medium text-gray-900 dark:text-white">
     {{__('Manage your files')}}
@@ -22,7 +22,7 @@
 
 </div>
 
-<div class="bg-base-200 dark:bg-base-200 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
+<div class="bg-white dark:bg-base-200 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
 <x-info-message />
 <div class="px-4 sm:px-6 lg:px-8">
 <div class="sm:flex sm:items-center">
@@ -45,18 +45,20 @@
     <div class="grid md:grid-cols-4 grid-cols-1 gap-4">
     @forelse($files as $file)
     <div>
-    <div class="card bg-base-100 shadow-xl">
-        <div class="card-body">
-            <h2 class="card-title">{{ $file->name }}</h2><div class="badge 
-            @if(str_contains($file->type, 'primary'))
-            badge-success 
+    <div class="card bg-base-100 border-2 
+    @if(str_contains($file->type, 'primary'))
+            border-success 
             @elseif(str_contains($file->type, 'card'))
-            badge-warning
+            border-warning
             @else
-            badge-neutral 
-            @endif">{{$file->type}}</div>  
+            border-neutral 
+            @endif
+    ">
+        <div class="card-body">
+            <h2 class="card-title">{{ $file->name }}</h2>  
             <div class="justify-end card-actions">
-                <a href="{{url('storage/'.$file->file_path.'')}}" class="btn btn-primary">See</a>
+                <a href="{{url('storage/'.$file->file_path.'')}}" class="btn btn-primary">{{__('See')}}</a>
+                
                 @if(!str_contains($file->type, 'primary'))
 
 <form action="{{route('files.destroy', ['post' => $post->id, 'file' => $file->id])}}" method="POST">
@@ -65,6 +67,7 @@
 <button type="submit" class="btn btn-neutral"><svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg><span class="sr-only">, {{ $file->name }}</span></button></form>
 @endif
             </div>
+            ID : {{basename($file->file_path)}}
         </div>
     </div>
     </div>
