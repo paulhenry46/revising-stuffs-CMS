@@ -65,8 +65,19 @@
                         </div>
                         <div class="sm:col-span-6">
                         <div class="mt-2">
-                           {{__('You can use HTML tags andTailwind CSS. To add image, use [IMG]id.name.extension[/IMG]. You can also use LaTeX betwenn \( and \).  However, there is forbiden tags wich are escaped :')}} &lt;div&gt;, &lt;script&gt;, &lt;link&gt;, &lt;th&gt;, &lt;td&gt;, &lt;a&gt;, &lt;iframe&gt;</br>
+                           {{__('You can use HTML tags andTailwind CSS. However, there is forbiden tags wich are escaped :')}} &lt;div&gt;, &lt;script&gt;, &lt;link&gt;, &lt;th&gt;, &lt;td&gt;, &lt;a&gt;, &lt;iframe&gt;</br>
                            {{('For example, to underline a part of text,')}} <span class="underline decoration-warning object-scale-down">{{__('like')}}</span> <span class="underline decoration-error">{{__('this')}}</span>, use &lt;span class="underline decoration-warning"&gt;{{__('like')}}&lt;/span&gt; &lt;span class="underline decoration-error"&gt;{{__('this')}}&lt;/span&gt;
+                          </div>
+                          <div class="sm:col-span-6">
+                        <div class="mt-2">
+                          <h2 class="text-xl">{{__('How to add image ?')}}</h2>
+                           {{__('To add image, first upload it as complemnetary document (select card image for the type of document) and note the image ID, such as "id.name.extension". Then, just put it between [IMG] and [/IMG]. Example : [IMG]18.cool_image.svg[/IMG].')}}
+                          </div>
+                        </div>
+                        <div class="sm:col-span-6">
+                        <div class="mt-2">
+                          <h2 class="text-xl">{{__('How to use maths formula ?')}}</h2>
+                           {{__('You can use maths written in LaTeX between \( and \). Example : \( a^2+\sqrt{2} = \frac{1}{2} \)')}}
                           </div>
                         </div>
                       </div>
