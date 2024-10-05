@@ -36,8 +36,8 @@
 </div>
 @endif
            
-<div class="bg-base-200 dark:bg-base-200 overflow-hidden shadow-xl sm:rounded-lg">
-            <div class="p-6 lg:p-8 bg-base-200 dark:bg-base-200 border-b border-gray-200 dark:border-gray-700">
+<div class="bg-white dark:bg-base-200 overflow-hidden sm:rounded-lg">
+            <div class="p-6 lg:p-8 bg-white dark:bg-base-200 border-b border-gray-200 dark:border-gray-700">
                     <h1 class=" text-2xl font-medium text-gray-900 dark:text-white">
                         @if($card->id !== 0) {{__('Edit a card')}} @else {{__('Add a new card')}} @endif
                     </h1>

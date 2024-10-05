@@ -525,5 +525,21 @@
     "How to add image ?" : "Comment ajouter des images ?",
     "How to use maths formula ?" : "Comment mettre des formules mathématiques ?",
     "How to underline text ?" : "Comment souligner le texte ?",
-    "You can use tags to underline part of your cards. To choose the color, put the text between the tags, for exemple :" : "Vous pouvez souligner des parties de vos cartes. Pour choisir la couleur, mettez le texte à souligner entre des tags, par exemple :"
+    "You can use tags to underline part of your cards. To choose the color, put the text between the tags, for exemple :" : "Vous pouvez souligner des parties de vos cartes. Pour choisir la couleur, mettez le texte à souligner entre des tags, par exemple :",
+    "Edit a card" : "Modidier une carte",
+    "Front" : "Recto",
+    "Back" : "Verso",
+    "Add a new card" : "Ajouter une nouvelle carte",
+    "See more about this user" : "En voir plus sur cet utilisateur",
+    "Edit Cursus informations" : "Modifier votre parcours",
+    "Import cards" : "Importer des cartes",
+    "Your cards" : "Vos cartes",
+    "Separator between cards" : "Séparateur entre les cartes",
+    "Separator between front and back of a card" : "Séparateur entre le recto et le verso",
+    "Tabulation" : "Tabulation",
+    "Egual (=)" : "Égal (=)",
+    "SemiColon" : "Point-virgule",
+    "Import" : "Importer",
+    "New line" : "Nouvelle ligne"
+
 }
