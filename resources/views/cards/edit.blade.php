@@ -65,8 +65,9 @@
                         </div>
                         <div class="sm:col-span-6">
                         <div class="mt-2">
-                           {{__('You can use HTML tags andTailwind CSS. However, there is forbiden tags wich are escaped :')}} &lt;div&gt;, &lt;script&gt;, &lt;link&gt;, &lt;th&gt;, &lt;td&gt;, &lt;a&gt;, &lt;iframe&gt;</br>
-                           {{('For example, to underline a part of text,')}} <span class="underline decoration-warning object-scale-down">{{__('like')}}</span> <span class="underline decoration-error">{{__('this')}}</span>, use &lt;span class="underline decoration-warning"&gt;{{__('like')}}&lt;/span&gt; &lt;span class="underline decoration-error"&gt;{{__('this')}}&lt;/span&gt;
+                        <h2 class="text-xl">{{__('How to underline text ?')}}</h2>
+                           {{__('You can use tags to underline part of your cards. To choose the color, put the text between the tags, for exemple :')}} [YEL]<span class="underline decoration-2 decoration-warning object-scale-down">{{__('Text in yellow')}}</span>[/] ; 
+                           [RED]<span class="underline decoration-2 decoration-error  object-scale-down">{{__('Text in red')}}</span>[/] ; [GRE]<span class="underline decoration-2 decoration-success object-scale-down">{{__('Text in green')}}</span>[/] ; [PUR]<span class="underline decoration-primary decoration-2 object-scale-down">{{__('Text in purple')}}</span>[/]
                           </div>
                           <div class="sm:col-span-6">
                         <div class="mt-2">

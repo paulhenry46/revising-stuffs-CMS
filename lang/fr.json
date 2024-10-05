@@ -523,5 +523,7 @@
     "To add image, first upload it as complemnetary document (select card image for the type of document) and note the image ID, such as \"id.name.extension\". Then, just put it between [IMG] and [/IMG]. Example : [IMG]18.cool_image.svg[/IMG]." : "Pour ajouter une image, uploadez-la tout d'abord en tant que document complémentaire (sélectionnez \"card image\" pour le type de document) et notez l'identifiant de l'image, de la forme \"id.name.extension\". Il suffit ensuite de le placer entre [IMG] et [/IMG]. Exemple : [IMG]18.cool_image.svg[/IMG].",
     "You can use maths written in LaTeX between \\( and \\). Example : \\( a^2+\\sqrt{2} = \\frac{1}{2} \\)" : "Vous pouvez mettre des formules écrites en LaTeX entre \\( et \\). Exemple : \\( a^2+\\sqrt{2} = \\frac{1}{2} \\)",
     "How to add image ?" : "Comment ajouter des images ?",
-    "How to use maths formula ?" : "Comment mettre des formules mathématiques ?"
+    "How to use maths formula ?" : "Comment mettre des formules mathématiques ?",
+    "How to underline text ?" : "Comment souligner le texte ?",
+    "You can use tags to underline part of your cards. To choose the color, put the text between the tags, for exemple :" : "Vous pouvez souligner des parties de vos cartes. Pour choisir la couleur, mettez le texte à souligner entre des tags, par exemple :"
 }

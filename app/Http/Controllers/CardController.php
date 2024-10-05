@@ -24,6 +24,27 @@ class CardController extends Controller
         '<th>', '</th>', 
         '<iframe>', '</iframe>'
     ];
+
+    private array $users_tags =[
+         
+        '[RED]', 
+        '[YEL]', 
+        '[GRE]',
+        '[PUR]', 
+        '[/]',
+        '[/IMG]'
+    ];
+
+    private array $users_tags_replaced =[
+         
+        '<span class="underline decoration-2 decoration-error">', 
+        '<span class="underline decoration-2 decoration-warning">', 
+        '<span class="underline decoration-2 decoration-success">',
+        '<span class="underline decoration-2 decoration-primary">', 
+        '</span>',
+        '">',
+    ];
+    
     /**
      * Display a listing of the resource.
      */
@@ -57,10 +78,10 @@ class CardController extends Controller
         $file_path=url('storage/'.$post->level->curriculum->slug.'/'.$post->level->slug.'/'.$post->course->slug.'/');
 
         $back_temp = str_ireplace('[IMG]', '<img class="h-48" src="'.$file_path.'/', $back_serialized);
-        $back = str_ireplace('[/IMG]', '">', $back_temp);
+        $back = str_ireplace($this->users_tags, $this->users_tags_replaced, $back_temp);
         
         $front_temp = str_ireplace('[IMG]', '<img class="h-48" src="'.$file_path.'/', $front_serialized);
-        $front = str_ireplace('[/IMG]', '">', $front_temp);
+        $front = str_ireplace($this->users_tags, $this->users_tags_replaced, $front_temp);
 
 
         $card = New Card;
@@ -142,9 +163,9 @@ class CardController extends Controller
         $this->authorize('update', $card);
         $file_path=url('storage/'.$post->level->curriculum->slug.'/'.$post->level->slug.'/'.$post->course->slug.'/');
         $back = str_ireplace('<img class="h-48" src="'.$file_path.'/','[IMG]', $card->back);
-        $card->back = str_ireplace('">','[/IMG]', $back);
+        $card->back = str_ireplace($this->users_tags_replaced, $this->users_tags, $back);
         $front = str_ireplace('<img class="h-48" src="'.$file_path.'/','[IMG]', $card->front);
-        $card->front = str_ireplace('">','[/IMG]', $front);
+        $card->front = str_ireplace($this->users_tags_replaced, $this->users_tags, $front);
         return view('cards.edit', compact('card', 'post'));
     }
 
@@ -159,10 +180,10 @@ class CardController extends Controller
         $card->back = str_ireplace($this->forbiden_tags, '', $request->back);
 
         $back = str_ireplace('[IMG]', '<img class="h-48" src="'.$file_path.'/', $request->back);
-        $card->back = str_ireplace('[/IMG]', '">', $back);
+        $card->back = str_ireplace($this->users_tags, $this->users_tags_replaced, $back);
         
         $front = str_ireplace('[IMG]', '<img class="h-48" src="'.$file_path.'/', $request->front);
-        $card->front = str_ireplace('[/IMG]', '">', $front);
+        $card->front = str_ireplace($this->users_tags, $this->users_tags_replaced, $front);
 
         $card->save();
         return redirect()->route('cards.index', $post->id)->with('message', __('The card has been updated.'));
