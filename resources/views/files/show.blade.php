@@ -42,42 +42,53 @@
 <div class="mt-8 flow-root">
 <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
   <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-    <div class="grid md:grid-cols-4 grid-cols-1 gap-4">
-    @forelse($files as $file)
-    <div>
-    <div class="card bg-base-100 border-2 
-    @if(str_contains($file->type, 'primary'))
-            border-success 
-            @elseif(str_contains($file->type, 'card'))
-            border-warning
-            @else
-            border-neutral 
-            @endif
-    ">
-        <div class="card-body">
-            <h2 class="card-title">{{ $file->name }}</h2>  
-            <div class="justify-end card-actions">
-                <a href="{{url('storage/'.$file->file_path.'')}}" class="btn btn-primary">{{__('See')}}</a>
-                
-                @if(!str_contains($file->type, 'primary'))
 
-<form action="{{route('files.destroy', ['post' => $post->id, 'file' => $file->id])}}" method="POST">
-    @csrf
-    @method('DELETE')
-<button type="submit" class="btn btn-neutral"><svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg><span class="sr-only">, {{ $file->name }}</span></button></form>
-@endif
-            </div>
-            ID : {{basename($file->file_path)}}
-        </div>
-    </div>
-    </div>
-    @empty
+  <table class="table table-zebra">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>{{__('Title')}}</th>
+          <th>{{__('Type')}}</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @forelse($files as $file)
+        <tr>
+            <td>{{basename($file->file_path)}}</td>
+            <td> {{ $file->name }}</td>
+            <td>
+                 <span class="badge @if(str_contains($file->type, 'primary'))
+            badge-success 
+            @elseif(str_contains($file->type, 'card'))
+            badge-warning
+            @else
+            badge-neutral 
+            @endif">{{ $file->type }}</span>
+            </td>
+            <td class="align-middle">
+            <div class="flex items-stretch justify-end relative  text-right">
+            <a href="{{url('storage/'.$file->file_path.'')}}" class="ml-4 link link-primary">
+            <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+              <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"/>
+            </svg>
+                </a>
+                
+                <form action="{{route('files.destroy', ['post' => $post->id, 'file' => $file->id])}}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                <button type="submit" class="ml-4 link link-error"><svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg><span class="sr-only">, {{ $post->name }}</span></button></form>
+</div>
+</td>
+        </tr>
+        @empty
     <div class="sm:col-span-4 rounded-box border-base-300 text-base-content/30 flex h-72 flex-col items-center justify-center gap-6 border-2 border-dashed p-10 text-center [text-wrap:balance]">
     <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" fill="currentColor"><path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg> 
         <div>{{__('No files registered with this post.')}}</div> 
     </div>
     @endforelse
-    </div>
+      </tbody>
+    </table>
     <div class="text-blue-500 text-red-500 text-orange-500 text-green-500 text-yellow-500 text-purple-500  text-pink-500" style="display: none;"></div>
   </div>
 </div>
