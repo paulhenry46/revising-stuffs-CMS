@@ -7,7 +7,7 @@
             <div class="p-6 lg:p-8 bg-base-200 dark:bg-base-200 border-b border-gray-200 dark:border-gray-700">
           <div class="sm:flex sm:items-center">
             <div class="sm:flex-auto">
-              <h1 class="text-2xl font-semibold leading-6 text-gray-900 dark:text-white">{{__('View the cards attached to')}} {{$post->title}}</h1>
+              <h1 class="text-2xl font-semibold leading-6 text-gray-900 dark:text-white">{{__('View the cards attached to')}} <a wire:navigate class="link" href="{{route('post.public.view', [$post->slug, $post->id])}}"> {{$post->title}}</a></h1>
             </div>
            <div class="flex items-stretch justify-end mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
            @guest

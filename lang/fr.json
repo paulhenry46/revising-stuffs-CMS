@@ -419,7 +419,7 @@
     "Mastery" : "Niveau de maîtrise",
     "Revise" : "Révision",
     "Upcoming posts to review in the coming days" : "Ressources à réviser dans les prochains jours",
-    "There is no data for now. Try to learn cards of a post." : "Pas de données pour le moment. Essayer de faire un quiz sur les cartes associées à une ressource.",
+    "There is no data for now. Try to learn cards of a post." : "Pas de données pour le moment. Essayez de faire un quiz sur les cartes associées à une ressource.",
     "Post" : "Ressource",
     "Next revision in" : "Prochaine révision dans",
     "days" : "jours",
@@ -540,6 +540,8 @@
     "Egual (=)" : "Égal (=)",
     "SemiColon" : "Point-virgule",
     "Import" : "Importer",
-    "New line" : "Nouvelle ligne"
+    "New line" : "Nouvelle ligne",
+    "Light Version" : "Version claire",
+    "Dark Version" : "Version claire"
 
 }
