@@ -19,6 +19,10 @@ export default {
             },
         },
     },
+    daisyui: {
+        darkTheme: "light", // name of one of the included themes for dark mode
+      },
+    
 
     plugins: [require("@tailwindcss/forms")({strategy: 'class'}), typography, require("daisyui")],
 };
