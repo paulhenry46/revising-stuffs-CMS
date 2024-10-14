@@ -1,9 +1,9 @@
 {
-    "name": "LONGNAME",
-    "short_name": "NAME",
+    "name": "Fiches et Cartes",
+    "short_name": "F&C",
     "start_url": "./",
     "display": "standalone",
-    "description": "DESCRIPTION.",
+    "description": "App in which you will find all you nedd to revise.",
     "orientation":"portrait-primary",
 
     "background_color": "#641ae6",
