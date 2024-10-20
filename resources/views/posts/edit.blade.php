@@ -107,11 +107,25 @@
                         <div class="space-y-5">
                           <div class="relative flex items-start">
                             <div class="flex h-6 items-center">
-                              <input {{ (old('dark_version', $post->dark_version) == 1 or old('dark_version', $post->dark_version) == 'on') ? 'checked' : '' }} id="dark_version" aria-describedby="dark_version-description" name="dark_version" type="checkbox" checked="checked" class="checkbox checkbox-primary checkbox-sm" />
+                              <input {{ (old('dark_version', $post->dark_version) == 1 or old('dark_version', $post->dark_version) == 'on') ? 'checked' : '' }} id="dark_version" aria-describedby="dark_version-description" name="dark_version" type="checkbox" class="checkbox checkbox-primary checkbox-sm" />
                             </div>
                             <div class="ml-3 text-sm leading-6">
                               <label for="dark_version" class="font-medium text-gray-900 dark:text-white">{{__('Dark Version')}}</label>
                               <p id="dark_version-description" class="text-gray-500 dark:text-gray-400">{{__('You provide a dark version of this ressource.')}}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </fieldset>
+                      <fieldset class="mb-4">
+                        <legend class="sr-only">Early Access</legend>
+                        <div class="space-y-5">
+                          <div class="relative flex items-start">
+                            <div class="flex h-6 items-center">
+                              <input {{ (old('early_access', $post->early_access) == 1 or old('early_access', $post->early_access) == 'on') ? 'checked' : '' }} id="early_access" aria-describedby="early_access-description" name="early_access" type="checkbox"  class="checkbox checkbox-primary checkbox-sm" />
+                            </div>
+                            <div class="ml-3 text-sm leading-6">
+                              <label for="early_access" class="font-medium text-gray-900 dark:text-white">{{__('Early Access')}}</label>
+                              <p id="early_access-description" class="text-gray-500 dark:text-gray-400">{{__('This resource is published in early access. This means that it is not in its final version and may change at any time.')}}</p>
                             </div>
                           </div>
                         </div>

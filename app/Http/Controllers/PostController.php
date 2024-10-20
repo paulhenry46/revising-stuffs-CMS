@@ -75,6 +75,7 @@ class PostController extends Controller
         $post->school_id = $user->school_id;
         $post->quizlet_url = $request->quizlet_url;
         $post->dark_version = $request->has('dark_version');
+        $post->early_access = $request->has('early_access');
         $post->thanks = 0;
         if($user->hasPermissionTo('publish own posts')){
             $post->published = $request->has('published');
@@ -136,6 +137,7 @@ class PostController extends Controller
         $post->type_id = $request->type_id;
         $post->quizlet_url = $request->quizlet_url;
         $post->dark_version = $request->has('dark_version');
+        $post->early_access = $request->has('early_access');
        
         if($request->visibility == 1 or $request->visibility == 2){
             $post->group_id = $request->visibility;

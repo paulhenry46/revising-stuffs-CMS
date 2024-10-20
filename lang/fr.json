@@ -542,6 +542,9 @@
     "Import" : "Importer",
     "New line" : "Nouvelle ligne",
     "Light Version" : "Version claire",
-    "Dark Version" : "Version claire"
+    "Dark Version" : "Version sombre",
+    "This resource is published in early access. This means that it is not in its final version and may change at any time." : "Cette ressource est publiée en accès anticipé. Cela signifie qu'elle n'est pas sous sa version finale et qu'elle peut évoluer à tout moment ",
+    "Early Access" : "Accès anticipé",
+    "Download" : "Téléchargement"
 
 }

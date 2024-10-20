@@ -81,6 +81,22 @@
               <div class="mt-10">
                 
                 <div>
+                @if($post->early_access)
+                <div role="alert" class="alert alert-info mt-3">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    class="h-6 w-6 shrink-0 stroke-current">
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+  </svg>
+  <span>{{__('This resource is published in early access. This means that it is not in its final version and may change at any time.')}}</span>
+</div>
+@endif
                 <h2 class="card-title mb-2 mt-4">{{__('Description')}}</h2>
                 <p>{{$post->description}}</p>
 
@@ -457,6 +473,22 @@
                   <button class="btn btn-primary" @click="activeTab = 2" class="tab-control" :class="{ 'btn-ghost': activeTab !== 2 }">Autre</button>
                 </div>
                 <div id="accueil" x-show.transition.in.opacity.duration.600="activeTab === 0">
+                  @if($post->early_access)
+                <div role="alert" class="alert alert-info mt-3">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    class="h-6 w-6 shrink-0 stroke-current">
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+  </svg>
+  <span>{{__('This resource is published in early access. This means that it is not in its final version and may change at any time.')}}</span>
+</div>
+@endif
                 <h2 class="card-title mb-2 mt-4">{{__('Description')}}</h2>
                 <p>{{$post->description}}</p>
                 <h2 class="card-title mb-2 mt-4">{{__('Download')}}</h2>

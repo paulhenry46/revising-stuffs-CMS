@@ -30,6 +30,7 @@ class PostRequest extends FormRequest
             'description' => 'bail|required|max:200',
             'description' => 'bail|min:10',
             'dark_version' => '',
+            'early_access' => '',
             'public' => '',
             'published' => '',
             'pinned' => '',
