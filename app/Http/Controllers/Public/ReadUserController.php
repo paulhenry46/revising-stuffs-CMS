@@ -12,7 +12,7 @@ class ReadUserController extends Controller
     public function view(User $user)
     {
         $user = User::findOrFail($user->id);
-        $posts = Post::where('user_id', $user->id)->limit(4)->get();
+        $posts = Post::where('user_id', $user->id)->latest()->limit(4)->get();
         return view('users.view', compact('user', 'posts'));
     }
 
