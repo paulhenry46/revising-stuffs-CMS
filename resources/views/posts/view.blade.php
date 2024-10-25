@@ -418,8 +418,8 @@
     <div>
       <div class=" ">
         <div class="pt-4 col-span-4 lg:col-span-1">
-          <div class="card  h-screen  dark:bg-base-300 ">
-            <figure class="h-1/2 bg-{{$post->course->color}} dark:bg-none">
+          <div class="card   dark:bg-base-300 ">
+            <figure class="h-96 bg-{{$post->course->color}} dark:bg-none">
               <img class="opacity-75 dark:opacity-100 object-cover w-full h-full" src="{{url('storage/'.$post->level->curriculum->slug.'/'.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png')}}" alt="Thumbnail of the post">
               <div class="right-0 top-0 absolute pin-t pin-l ">
                 <div>
