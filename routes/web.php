@@ -21,6 +21,7 @@ use App\Http\Controllers\Public\ReadUserController;
 use App\Http\Controllers\PushNotif;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\StepController;
+use App\Http\Controllers\StorageController;
 use App\Http\Middleware\EnsureUserCursusProfileIsCompleted;
 use App\Models\School;
 
@@ -34,6 +35,8 @@ use App\Models\School;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::get('/storage/{path}', [StorageController::class, 'getFile'])->where('path', '.*')->name('storage');
 
 Route::get('/', function () {
     return view('welcome');
