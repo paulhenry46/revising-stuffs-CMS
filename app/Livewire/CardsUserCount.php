@@ -14,7 +14,7 @@ class CardsUserCount extends Component
     public $posts;
     public function render()
     {
-        return view('livewire.cards-user-count');
+        return view('livewire.count.user.cards-user-count');
     }
 
     public function mount(User $user)

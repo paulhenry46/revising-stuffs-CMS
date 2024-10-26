@@ -25,7 +25,7 @@ class FileController extends Controller
     {   
         $this->authorize('list', [File::class, $post]);
         $files = $post->files;
-        return view('files.show', compact('files', 'post'));
+        return view('files.index', compact('files', 'post'));
     }
 
     /**

@@ -14,7 +14,7 @@ class ThanksCount extends Component
 
     public function render()
     {
-        return view('livewire.thanks-count');
+        return view('livewire.count.user.thanks-count');
     }
 
     public function mount(User $user)

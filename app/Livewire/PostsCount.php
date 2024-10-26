@@ -10,7 +10,7 @@ class PostsCount extends Component
     public $count;
     public function render()
     {
-        return view('livewire.posts-count');
+        return view('livewire.count.welcome.posts-count');
     }
 
     public function mount(){

@@ -10,7 +10,7 @@ class CoursesCount extends Component
     public $count;
     public function render()
     {
-        return view('livewire.courses-count');
+        return view('livewire.count.welcome.courses-count');
     }
 
     public function mount(){

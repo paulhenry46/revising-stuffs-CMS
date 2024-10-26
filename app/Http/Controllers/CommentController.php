@@ -19,7 +19,7 @@ class CommentController extends Controller
         $arr = Post::where('user_id', Auth::id())->pluck('id')->toArray();
         $comments = Comment::whereIn('post_id', $arr)->where('validated', '=', 1)->get();
 
-        return view('comments.show')->with('comments', $comments);
+        return view('comments.index')->with('comments', $comments);
     }
 
 //Display all comments wich need to be validated

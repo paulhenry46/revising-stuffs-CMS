@@ -52,7 +52,7 @@ class CardController extends Controller
     public function index(Post $post)
     {   
         $this->authorize('list', [Card::class, $post]);
-        return view('cards.show', compact('post'));
+        return view('cards.index', compact('post'));
     }
 
     /**

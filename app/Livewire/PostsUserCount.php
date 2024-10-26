@@ -14,7 +14,7 @@ class PostsUserCount extends Component
 
     public function render()
     {
-        return view('livewire.posts-user-count');
+        return view('livewire.count.user.posts-user-count');
     }
     public function mount(User $user)
     {

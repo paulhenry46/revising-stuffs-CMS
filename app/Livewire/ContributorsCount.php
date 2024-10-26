@@ -10,7 +10,7 @@ class ContributorsCount extends Component
     public $count;
     public function render()
     {
-        return view('livewire.contributors-count');
+        return view('livewire.count.welcome.contributors-count');
     }
 
     public function mount(){

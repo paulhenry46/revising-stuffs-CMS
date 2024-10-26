@@ -10,7 +10,7 @@ class CardsCount extends Component
     public $count;
     public function render()
     {
-        return view('livewire.cards-count');
+        return view('livewire.count.welcome.cards-count');
     }
     public function mount(){
         $this->count = Card::all()->count();
