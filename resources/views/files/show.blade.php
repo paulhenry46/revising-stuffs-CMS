@@ -49,6 +49,7 @@
           <th>ID</th>
           <th>{{__('Title')}}</th>
           <th>{{__('Type')}}</th>
+          <th>{{__('Download')}}</th>
           <th></th>
         </tr>
       </thead>
@@ -66,6 +67,7 @@
             badge-neutral 
             @endif">{{ $file->type }}</span>
             </td>
+            <td> {{$file->download_count}}</td>
             <td class="align-middle">
             <div class="flex items-stretch justify-end relative  text-right">
             <a href="{{url('storage/'.$file->file_path.'')}}" class="ml-4 link link-primary">
