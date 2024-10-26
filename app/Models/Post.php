@@ -82,4 +82,12 @@ class Post extends Model
         }
         return false;
     }
+    public function downloads(): int{
+        $files = $this->files;
+        $count = 0;
+        foreach($files as $file){
+            $count = $count + $file->download_count;
+        }
+        return $count;
+    }
 }

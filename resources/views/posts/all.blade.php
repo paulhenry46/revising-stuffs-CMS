@@ -40,6 +40,7 @@
           <th>{{__('Level')}}</th>
           <th>{{__('State')}}</th>
           <th>{{__('Thanks')}}</th>
+          <th>{{__('Donwloads')}}</th>
           <th></th>
         </tr>
       </thead>
@@ -82,6 +83,7 @@
         @endif </div>
             </td>
             <td>{{ $post->thanks }}</td>
+            <td>{{ $post->downloads() }}</td>
 
             <td class="align-middle">
             <div class="flex items-stretch justify-end relative  text-right">
