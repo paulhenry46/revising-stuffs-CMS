@@ -156,7 +156,9 @@ Route::middleware([
 
             Route::prefix('/complementary')->group(function () {
                 Route::get('/create', 'create')->name('create');
+                Route::get('/import', 'import')->name('import');
                 Route::post('/', 'store')->name('store');
+                Route::post('/bulkStore', 'bulkStore')->name('bulkStore');
                 Route::delete('/{file}/delete', 'destroy')->name('destroy');
             });
             Route::prefix('/primary')->group(function () {

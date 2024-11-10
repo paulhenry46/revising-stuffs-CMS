@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FileBulkRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\FileRequest;
@@ -39,6 +40,15 @@ class FileController extends Controller
         $file->type = 'none';
         return view('files.edit', compact('file', 'post'));
     }
+
+    /**
+     * Show the form for creating a new complementary file.
+     */
+    public function import(Post $post)
+    {
+        $this->authorize('create', [File::class, $post]);
+        return view('files.import', compact('post'));
+    }
     /**
      * Show the form for creating the primary files
      */
@@ -47,6 +57,32 @@ class FileController extends Controller
         $this->authorize('create', [File::class, $post]);
         $state ="create";
         return view('files.primary-edit', compact('state', 'post'));
+    }
+
+    /**
+     * Store a newly created complementary file in storage.
+     */
+    public function bulkStore(FileBulkRequest $request, Post $post)
+    {
+        $this->authorize('create', [File::class, $post]);
+
+        $folder = ''.$post->level->curriculum->slug.'/'.$post->level->slug.'/'.$post->course->slug.'';
+        foreach($request->file('files') as $key => $file){
+            $filename = Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME), '-');
+            
+            $filename_path = ''.$post->id.'.'.$filename.'.'.$file->extension().'';
+            
+            $path = $file->storeAs($folder, $filename_path, 'public');
+            $file = new File;
+            $file->type = $request->type;
+            $file->name = $filename;
+            $file->file_path = $path;
+            $file->post_id = $post->id;
+            $file->save();
+    }
+        $files = $post->files;
+
+        return redirect()->route('files.index', compact('files', 'post'))->with('message', __('The file has been created.'));
     }
 
     /**
