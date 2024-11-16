@@ -83,7 +83,11 @@
                                         </div>
                                                         
                                         <div class="flex flex-items">
+                                        @isset($type)
+                                        <a class="badge badge-md bg-{{$post->type->color}} text-white">{{$post->type->name}}</a>
+                                        @else
                                         <a wire:navigate href="{{route('post.public.courseView', ['curriculum_chosen' => $post->level->curriculum->slug, 'level_chosen' => $post->level->slug, 'course_chosen' => $post->course->slug])}}" class="badge badge-md bg-{{$post->course->color}} text-white">{{$post->course->name}}</a>
+                                        @endisset
                                         @if($post->pinned)<span class="ml-1 badge badge-md badge-neutral">{{__('Pinned')}}</span>
                                         @endif
                                         @if($showGroup === true)
