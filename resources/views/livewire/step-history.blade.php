@@ -1,6 +1,6 @@
 <div class="mt-6 mb-3 card bg-base-100 dark:bg-base-200 @guest z-0 @endguest">
     <div class="card-body @guest opacity-25 @endguest">
-        <h2 class="card-title">{{__('Progression')}}</h2>
+        <h2 class="card-title">{{__('Progression')}}<button class="btn dark:bg-base-100" onclick="my_modal_1.showModal()"><svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m376-300 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Zm-96 180q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520Zm-400 0v520-520Z"/></svg></button></h2>
         <x-mary-chart wire:model="HistoryChart" />
 
         <div class="flow-root">  
@@ -16,8 +16,7 @@
     
     {{__('Revise now')}}</a>
     @endif
-</p> 
-    <p class="float-right"><button class="btn dark:bg-base-100" onclick="my_modal_1.showModal()">{{__('Reinitialize your progress')}}</button></p>
+</p>
 </div>
 
         
@@ -36,7 +35,7 @@
 </dialog>
 @guest
 <div class="absolute inset-0 flex justify-center items-center z-10">
-      <p class="text-xl">{{__('To save your progress on this post, you must be connected.')}}</p>
+      <p class="text-xl px-2">{{__('To save your progress on this post, you must be connected.')}}</p>
     </div>
     @endguest
 </div>
