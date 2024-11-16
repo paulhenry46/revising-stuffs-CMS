@@ -99,6 +99,7 @@ class StepHistory extends Component
                 ]
                     ],
                     'options' => [
+                        'maintainAspectRatio' => false,
                         'scale' => [
                             'y' => [
                                 'type'=> 'linear',
@@ -148,6 +149,7 @@ class StepHistory extends Component
                 ]
                     ],
                     'options' => [
+                        'maintainAspectRatio' => false,
                         'scale' => [
                             'y' => [
                                 'type'=> 'linear',

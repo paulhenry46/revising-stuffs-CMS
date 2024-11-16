@@ -122,6 +122,7 @@ private function masteryOfWeek($steps){
                 ]
                     ],
                     'options' => [
+                        'maintainAspectRatio' => false,
                         'scales' => [
                             'x'=> [
                               'stacked'=> true,

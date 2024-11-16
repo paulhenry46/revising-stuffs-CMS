@@ -8,7 +8,7 @@
         <div>{{__('There is no data for now. Try to learn cards of a post.')}}</div> 
     </div>
         @else
-        <x-mary-chart wire:model="HistoryChart" />
+        <x-mary-chart wire:model="HistoryChart" class="min-h-60 md:min-h-72" />
 
        <h2 class="card-title py-3" >{{__('Upcoming posts to review in the coming days')}}</h2>
         <div class="overflow-x-auto">
