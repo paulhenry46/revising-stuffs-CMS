@@ -1,5 +1,6 @@
 <x-app-layout>
-    <div class="py-12">
+    <div class="py-12" x-data="flashCards"
+    x-init="start()">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-base-200 dark:bg-base-200 overflow-hidden shadow-xl sm:rounded-lg">
             <div class="p-6 lg:p-8 bg-base-200 dark:bg-base-200 border-b border-gray-200 dark:border-gray-700">
@@ -8,6 +9,22 @@
                         <h1 class="text-2xl font-semibold leading-6 text-gray-900 dark:text-white">{{__('Cards attached to')}}  <a wire:navigate class="link" href="{{route('post.public.view', [$post->slug, $post->id])}}"> {{$post->title}}</a></h1>
                       </div>
                      <div class="flex items-stretch justify-end mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+                     <button class="btn" onclick="my_modal_1.showModal()">{{__('Settings')}}</button>
+<dialog id="my_modal_1" class="modal">
+  <div class="modal-box">
+    <h3 class="text-lg font-bold">{{__('Settings')}}</h3>
+    <p class="py-4">Toogle recto/verso : <button class="btn btn-primary"  
+          @click="reverse()">
+          <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M160-160v-80h110l-16-14q-52-46-73-105t-21-119q0-111 66.5-197.5T400-790v84q-72 26-116 88.5T240-478q0 45 17 87.5t53 78.5l10 10v-98h80v240H160Zm400-10v-84q72-26 116-88.5T720-482q0-45-17-87.5T650-648l-10-10v98h-80v-240h240v80H690l16 14q49 49 71.5 106.5T800-482q0 111-66.5 197.5T560-170Z"/></svg>
+  </button></p>
+    <div class="modal-action">
+      <form method="dialog">
+        <!-- if there is a button in form, it will close the modal -->
+        <button class="btn">{{__('Close')}}</button>
+      </form>
+    </div>
+  </div>
+</dialog>
                         <a wire:navigate href="{{route('post.public.cards.learn', [$post->slug, $post->id])}}" class=" ml-4 btn btn-primary">{{__('Learn mode')}}</a>
                         <a wire:navigate href="{{route('post.public.cards.show', [$post->slug, $post->id])}}" class=" ml-4 btn btn-primary">{{__('View')}}</a>
                       </div>
@@ -16,8 +33,7 @@
 
                 <div class="bg-base-200 dark:bg-base-200 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
                     <x-info-message/>
-<div x-data="flashCards"
-    x-init="start()"
+<div
     class="grid grid-cols-3 gap-4">
   <div class="col-span-3">
     <div @click="returnCard()" class="stack w-full h-64 sm:h-80">
@@ -150,6 +166,7 @@
             activeCard: 0,
             //-----------UI-------------
             recto : true,
+            reversed : false,
             cardState : 'default',
             ////---------Quiz---------////
             playButtons: true,
@@ -226,14 +243,22 @@
                         this.stats = true;
                     }
 
-                    if(this.recto === false){
-                  this.recto = true;
+                    if((this.recto === false) && (this.reversed===false)){
+                      this.recto = true;
+                }
+
+                if(((this.recto === true) && (this.reversed===true))){
+                  this.recto = false;
                 }
 
                 } else {
 
-                if(this.recto === false){
-                  this.recto = true;
+                  if((this.recto === false) && (this.reversed===false)){
+                      this.recto = true;
+                }
+
+                if(((this.recto === true) && (this.reversed===true))){
+                  this.recto = false;
                 }
                     this.activeCard++
                     this.disabledPreviousButton = false;
@@ -317,6 +342,11 @@
 
             resetDataState(){
               this.cardState = 'default'
+            },
+
+            reverse(){
+              this.returnCard();
+              this.reversed = !this.reversed;
             },
 
             shuffle(arr) {
