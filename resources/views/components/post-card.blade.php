@@ -1,4 +1,4 @@
-<div class="card @if(!request()->routeIs('post.public.view')) h-full @endif dark:bg-base-200 bg-{{str_replace('500', '100',$post->course->color)}}">
+<div class="card @if(!request()->routeIs('post.public.view')) h-full @endif dark:bg-base-200 bg-@isset($type){{str_replace('500', '100',$post->type->color)}}@else{{str_replace('500', '100',$post->course->color)}}@endif">
                                     <figure>
                                         @if(file_exists('../storage/app/public/'.$post->level->curriculum->slug.'/'.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png'))
 
