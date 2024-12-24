@@ -164,28 +164,28 @@
                                 <div class="stats shadow w-full">
                                     <div class="stat">
                                       <div class="stat-figure text-primary">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                                      <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 -960 960 960"  fill="currentColor" class="inline-block w-10 h-10 stroke-current"><path d="M360-240h240q17 0 28.5-11.5T640-280q0-17-11.5-28.5T600-320H360q-17 0-28.5 11.5T320-280q0 17 11.5 28.5T360-240Zm0-160h240q17 0 28.5-11.5T640-440q0-17-11.5-28.5T600-480H360q-17 0-28.5 11.5T320-440q0 17 11.5 28.5T360-400ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h287q16 0 30.5 6t25.5 17l194 194q11 11 17 25.5t6 30.5v447q0 33-23.5 56.5T720-80H240Zm280-560q0 17 11.5 28.5T560-600h160L520-800v160Z"/></svg>
                                       </div>
-                                      <div class="stat-title">{{__('Total Thanks')}}</div>
-                                      <div class="stat-value text-primary"><livewire:thanks-count :user=Auth::user() lazy /></div>
+                                      <div class="stat-title">{{__('Learned posts')}}</div>
+                                      <div class="stat-value text-primary"><livewire:posts-learned-user-count :user=Auth::user() lazy /></div>
                                       
                                     </div>
                                     
                                     <div class="stat">
                                       <div class="stat-figure text-secondary">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill='currentColor' class="inline-block w-10 h-10 stroke-current"><path d="M360-360H236q-24 0-35.5-21.5T203-423l299-430q10-14 26-19.5t33 .5q17 6 25 21t6 32l-32 259h155q26 0 36.5 23t-6.5 43L416-100q-11 13-27 17t-31-3q-15-7-23.5-21.5T328-139l32-221Z"/></svg>
                                       </div>
-                                      <div class="stat-title">{{__('Published posts')}}</div>
-                                      <div class="stat-value text-secondary"><livewire:posts-user-count :user=Auth::user() lazy /></div>
+                                      <div class="stat-title">{{__('Cards in training')}}</div>
+                                      <div class="stat-value text-secondary"><livewire:cards-learning-user-count :user=Auth::user() lazy /></div>
                                       
                                     </div>
                                     
                                     <div class="stat">
                                         <div class="stat-figure text-success">
-                                            <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 -960 960 960" width="30"><path d="m615-395 31-112q4-12-.5-24T630-551l-95-65q-8-6-17.5-2.5T505-605l-31 112q-4 12 .5 24t15.5 20l95 65q8 6 17.5 2.5T615-395ZM160-207l-33-16q-31-13-42-44.5t3-62.5l72-156v279Zm160 87q-33 0-56.5-24T240-201v-239l107 294q3 7 5 13.5t7 12.5h-39Zm206-5q-31 11-62-3t-42-45L245-662q-11-31 3-61.5t45-41.5l301-110q31-11 61.5 3t41.5 45l178 489q11 31-3 61.5T827-235L526-125Z"/></svg>
-                                        </div>
-                                        <div class="stat-title">{{__('Published cards')}}</div>
-                                        <div class="stat-value text-success"><livewire:cards-user-count :user=Auth::user() lazy /></div>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"  fill="currentColor" class="inline-block w-10 h-10 stroke-current"><path d="m424-408-86-86q-11-11-28-11t-28 11q-11 11-11 28t11 28l114 114q12 12 28 12t28-12l226-226q11-11 11-28t-11-28q-11-11-28-11t-28 11L424-408Zm56 328q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"/></svg>
+                                             </div>
+                                        <div class="stat-title">{{__('Learned cards')}}</div>
+                                        <div class="stat-value text-success"><livewire:cards-learned-user-count :user=Auth::user() lazy /></div>
                                         
                                       </div>
                                     
@@ -195,7 +195,8 @@
                             <div class="pt-2">
                                 <div class="card bg-base-100 shadow-xl">
                                 <div class="card-body">
-                                    <h2 class="card-title">{{__('Your posts')}}</h2>
+                                    <h2 class="card-title">{{__('Creator space')}}</h2>
+                                    @if((Auth::user()->posts()->count()) != 0)
                                     <a wire:navigate href="{{route('posts.index')}}" class="btn btn-primary">
                                         <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M120-160q-17 0-28.5-11.5T80-200q0-17 11.5-28.5T120-240h720q17 0 28.5 11.5T880-200q0 17-11.5 28.5T840-160H120Zm80-160q-17 0-28.5-11.5T160-360v-240q0-17 11.5-28.5T200-640q17 0 28.5 11.5T240-600v240q0 17-11.5 28.5T200-320Zm160 0q-17 0-28.5-11.5T320-360v-400q0-17 11.5-28.5T360-800q17 0 28.5 11.5T400-760v400q0 17-11.5 28.5T360-320Zm160 0q-17 0-28.5-11.5T480-360v-400q0-17 11.5-28.5T520-800q17 0 28.5 11.5T560-760v400q0 17-11.5 28.5T520-320Zm275-20q-14 8-30.5 3.5T740-355L620-565q-8-14-3.5-30.5T635-620q14-8 30.5-3.5T690-605l120 210q8 14 3.5 30.5T795-340Z"/></svg>
                                         {{__('Manage')}}
@@ -208,6 +209,14 @@
                                         <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M280-240q-17 0-28.5-11.5T240-280v-80h520v-360h80q17 0 28.5 11.5T880-680v503q0 27-24.5 37.5T812-148l-92-92H280Zm-40-200-92 92q-19 19-43.5 8.5T80-377v-463q0-17 11.5-28.5T120-880h520q17 0 28.5 11.5T680-840v360q0 17-11.5 28.5T640-440H240Z"/></svg>
                                         {{__('View comments')}}
                                     </a>
+                                    @else
+                                    <div class="sm:col-span-4 rounded-box dark:text-gray-500 dark:border-gray-500 border-base-300 text-base-content/30 flex h-72 flex-col items-center justify-center gap-6 border-2 border-dashed p-10 text-center [text-wrap:balance]">
+    <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M680-39q-17 0-28.5-12T640-80q0-17 11.5-28.5T680-120q66 0 113-47t47-113q0-17 12-29t29-12q17 0 28.5 12t11.5 29q0 100-70.5 170.5T680-39ZM80-640q-17 0-29-11.5T39-680q0-100 70.5-170.5T280-921q17 0 29 11.5t12 28.5q0 17-12 29t-29 12q-66 0-113 47t-47 113q0 17-11.5 28.5T80-640Zm689-143q12 12 12 28t-12 28L515-472q-11 12-27.5 11.5T459-472q-12-12-12-28.5t12-28.5l254-254q12-12 28-12t28 12Zm71 127q12 12 12 28.5T840-599L614-373q-11 11-27.5 11T558-373q-12-12-12.5-28.5T557-430l226-226q12-12 28.5-12t28.5 12ZM211-211q-91-91-91-219t91-219l92-92q12-12 28-12t28 12l31 31q7 7 12 14.5t10 15.5l148-149q12-12 28.5-12t28.5 12q12 12 12 28.5T617-772L444-599l-85 84 19 19q46 46 44 110t-49 111l-1 1q-11 11-27.5 11T316-274q-12-12-12-28.5t12-28.5q23-23 25.5-54.5T321-440l-47-46q-12-12-12-28.5t12-28.5l57-56q12-12 12-28.5T331-656l-64 64q-68 68-68 162.5T267-267q68 68 163 68t163-68l239-240q12-12 28.5-12t28.5 12q12 12 12 28.5T889-450L649-211q-91 91-219 91t-219-91Zm219-219Z"/></svg>
+        <div>{{__('You don\'t have created any post. To create your first post, just click the button below !')}}<br/>
+          <a href="{{route('posts.create')}}" class="mt-5 btn btn-primary">{{__('Create your first post !')}}</a>
+        </div> 
+    </div>
+                                @endif
                                 </div>
                                 </div>
                             </div>
