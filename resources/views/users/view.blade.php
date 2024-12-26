@@ -59,19 +59,19 @@
               <div class="mt-6 mb-3 flex gap-4 md:!gap-14 items-center justify-center">
                 <div class="flex flex-col items-center justify-center">
                   <h3 class="text-primary text-2xl font-bold">
-                    <livewire:posts-user-count :user=$user lazy />
+                    <livewire:stats.user.posts-user-count :user=$user lazy />
                   </h3>
                   <p class="text-gray-500 text-sm font-normal">{{__('Posts')}}</p>
                 </div>
                 <div class="flex flex-col items-center justify-center">
                   <h3 class="text-primary text-2xl font-bold">
-                    <livewire:thanks-count :user=$user lazy />
+                    <livewire:stats.user.thanks-count :user=$user lazy />
                   </h3>
                   <p class="text-gray-500 text-sm font-normal">{{__('Thanks')}}</p>
                 </div>
                 <div class="flex flex-col items-center justify-center">
                   <h3 class="text-primary text-2xl font-bold">
-                    <livewire:cards-user-count :user=$user lazy />
+                    <livewire:stats.user.cards-user-count :user=$user lazy />
                   </h3>
                   <p class="text-gray-500 text-sm font-normal">{{__('Cards')}}</p>
                 </div>
