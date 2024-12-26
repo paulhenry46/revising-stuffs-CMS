@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Stats\User;
 
 use Livewire\Component;
 use App\Models\Post;
@@ -14,7 +14,7 @@ class ThanksCount extends Component
 
     public function render()
     {
-        return view('livewire.count.user.thanks-count');
+        return view('livewire.stats.user.thanks-count');
     }
 
     public function mount(User $user)

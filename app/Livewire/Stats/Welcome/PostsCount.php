@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Stats\Welcome;
 
 use App\Models\Post;
 use Livewire\Component;
@@ -10,7 +10,7 @@ class PostsCount extends Component
     public $count;
     public function render()
     {
-        return view('livewire.count.welcome.posts-count');
+        return view('livewire.stats.welcome.posts-count');
     }
 
     public function mount(){

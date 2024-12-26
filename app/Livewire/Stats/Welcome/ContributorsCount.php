@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Stats\Welcome;
 
 use App\Models\User;
 use Livewire\Component;
@@ -10,7 +10,7 @@ class ContributorsCount extends Component
     public $count;
     public function render()
     {
-        return view('livewire.count.welcome.contributors-count');
+        return view('livewire.stats.welcome.contributors-count');
     }
 
     public function mount(){

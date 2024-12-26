@@ -117,21 +117,21 @@
     </div>
     <div class="mx-auto mt-16 flex max-w-2xl flex-col gap-8 lg:mx-0 lg:mt-20 lg:max-w-none lg:flex-row lg:items-end">
       <div class="flex flex-col-reverse justify-between gap-x-16 gap-y-8 rounded-2xl bg-gray-50 p-8 sm:w-3/4 sm:max-w-md sm:flex-row-reverse sm:items-end lg:w-72 lg:max-w-none lg:flex-none lg:flex-col lg:items-start">
-        <livewire:contributors-count />
+        <livewire:stats.welcome.contributors-count />
         <div class="sm:w-80 sm:shrink lg:w-auto lg:flex-none">
           <p class="text-lg font-semibold tracking-tight text-gray-900">{{__('Contibutors on the platform')}}</p>
           <p class="mt-2 text-base leading-7 text-gray-600">{{__('Who add resources to their curriculum every day')}}</p>
         </div>
       </div>
       <div class="flex flex-col-reverse justify-between gap-x-16 gap-y-8 rounded-2xl bg-gray-900 p-8 sm:flex-row-reverse sm:items-end lg:w-full lg:max-w-sm lg:flex-auto lg:flex-col lg:items-start lg:gap-y-44">
-        <p class="flex-none text-3xl font-bold tracking-tight text-white"><livewire:posts-count /></p>
+        <p class="flex-none text-3xl font-bold tracking-tight text-white"><livewire:stats.welcome.posts-count /></p>
         <div class="sm:w-80 sm:shrink lg:w-auto lg:flex-none">
-          <p class="text-lg font-semibold tracking-tight text-white">{{__('We\'re proud to already have')}} <livewire:posts-count /> {{__('posts with')}} <livewire:courses-count /> {{__('courses covered!')}}</p>
+          <p class="text-lg font-semibold tracking-tight text-white">{{__('We\'re proud to already have')}} <livewire:stats.welcome.posts-count /> {{__('posts with')}} <livewire:stats.welcome.courses-count /> {{__('courses covered!')}}</p>
           <p class="mt-2 text-base leading-7 text-gray-400">{{__('And that\'s just for starters!')}}</p>
         </div>
       </div>
       <div class="flex flex-col-reverse justify-between gap-x-16 gap-y-8 rounded-2xl bg-indigo-600 p-8 sm:w-11/12 sm:max-w-xl sm:flex-row-reverse sm:items-end lg:w-full lg:max-w-none lg:flex-auto lg:flex-col lg:items-start lg:gap-y-28">
-        <p class="flex-none text-3xl font-bold tracking-tight text-white"><livewire:cards-count /></p>
+        <p class="flex-none text-3xl font-bold tracking-tight text-white"><livewire:stats.welcome.cards-count /></p>
         <div class="sm:w-80 sm:shrink lg:w-auto lg:flex-none">
           <p class="text-lg font-semibold tracking-tight text-white">{{__('Flashcards linked to resources')}}</p>
           <p class="mt-2 text-base leading-7 text-indigo-200">{{__('Perfect for learning vocabulary words, definitions or complex formulas, they enable long-term memorization.')}}</p>

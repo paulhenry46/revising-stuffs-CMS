@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Stats\User;
 
 use Livewire\Component;
 use App\Models\Post;
-use App\Models\File;
 use App\Models\User;
 
-class PostsDownloadsUserCount extends Component
+class PostsUserCount extends Component
 {
     public $posts;
     public $count;
@@ -15,13 +14,12 @@ class PostsDownloadsUserCount extends Component
 
     public function render()
     {
-        return view('livewire.count.user.posts-downloads-user-count');
+        return view('livewire.stats.user.posts-user-count');
     }
     public function mount(User $user)
     {
         $this->user = $user;
-        $this->posts = $this->user->posts()->pluck('id')->toArray();
-        $this->count = array_sum(File::whereIn('post_id', $this->posts)->pluck('download_count')->toArray());
+        $this->count = $this->user->posts()->count();
     }
 
     public function placeholder()

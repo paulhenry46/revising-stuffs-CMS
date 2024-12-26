@@ -167,7 +167,7 @@
                                       <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 -960 960 960"  fill="currentColor" class="inline-block w-10 h-10 stroke-current"><path d="M360-240h240q17 0 28.5-11.5T640-280q0-17-11.5-28.5T600-320H360q-17 0-28.5 11.5T320-280q0 17 11.5 28.5T360-240Zm0-160h240q17 0 28.5-11.5T640-440q0-17-11.5-28.5T600-480H360q-17 0-28.5 11.5T320-440q0 17 11.5 28.5T360-400ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h287q16 0 30.5 6t25.5 17l194 194q11 11 17 25.5t6 30.5v447q0 33-23.5 56.5T720-80H240Zm280-560q0 17 11.5 28.5T560-600h160L520-800v160Z"/></svg>
                                       </div>
                                       <div class="stat-title">{{__('Learned posts')}}</div>
-                                      <div class="stat-value text-primary"><livewire:posts-learned-user-count :user=Auth::user() lazy /></div>
+                                      <div class="stat-value text-primary"><livewire:stats.user.posts-learned-user-count :user=Auth::user() lazy /></div>
                                       
                                     </div>
                                     
@@ -176,7 +176,7 @@
                                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill='currentColor' class="inline-block w-10 h-10 stroke-current"><path d="M360-360H236q-24 0-35.5-21.5T203-423l299-430q10-14 26-19.5t33 .5q17 6 25 21t6 32l-32 259h155q26 0 36.5 23t-6.5 43L416-100q-11 13-27 17t-31-3q-15-7-23.5-21.5T328-139l32-221Z"/></svg>
                                       </div>
                                       <div class="stat-title">{{__('Cards in training')}}</div>
-                                      <div class="stat-value text-secondary"><livewire:cards-learning-user-count :user=Auth::user() lazy /></div>
+                                      <div class="stat-value text-secondary"><livewire:stats.user.cards-learning-user-count :user=Auth::user() lazy /></div>
                                       
                                     </div>
                                     
@@ -185,7 +185,7 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"  fill="currentColor" class="inline-block w-10 h-10 stroke-current"><path d="m424-408-86-86q-11-11-28-11t-28 11q-11 11-11 28t11 28l114 114q12 12 28 12t28-12l226-226q11-11 11-28t-11-28q-11-11-28-11t-28 11L424-408Zm56 328q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"/></svg>
                                              </div>
                                         <div class="stat-title">{{__('Learned cards')}}</div>
-                                        <div class="stat-value text-success"><livewire:cards-learned-user-count :user=Auth::user() lazy /></div>
+                                        <div class="stat-value text-success"><livewire:stats.user.cards-learned-user-count :user=Auth::user() lazy /></div>
                                         
                                       </div>
                                     

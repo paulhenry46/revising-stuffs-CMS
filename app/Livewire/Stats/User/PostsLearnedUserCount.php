@@ -1,27 +1,25 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Stats\User;
 
 use Livewire\Component;
 use App\Models\Card;
 use App\Models\User;
 
-class CardsLearningUserCount extends Component
+class PostsLearnedUserCount extends Component
 {
     
     public User $user;
     public $count;
-    public $posts;
     public function render()
     {
-        return view('livewire.count.user.cards-learning-user-count');
+        return view('livewire.stats.user.posts-learned-user-count');
     }
 
     public function mount(User $user)
     {
         $this->user = $user;
-        $this->posts = $this->user->steps()->where('next_step', '!=', null)->where('mastery', '<', '1')->pluck('post_id')->toArray();
-        $this->count = Card::whereIn('post_id', $this->posts)->count();
+        $this->count = $this->user->steps()->where('next_step', '!=', null)->where('mastery', '>=', '1')->count();
     }
 
     public function placeholder()
