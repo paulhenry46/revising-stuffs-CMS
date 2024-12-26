@@ -129,7 +129,7 @@ class PostController extends Controller
         $user = Auth::user();
         $oldSlug = $post->slug;
         $oldLevelSlug = $post->level->slug;
-        $oldCurriculymSlug = $oldLevelSlug = $post->level->Curriculum->slug;
+        $oldCurriculymSlug = $post->level->Curriculum->slug;
         $oldCourseSlug = $post->course->slug;
 
         $post->title = $request->title;
