@@ -13,9 +13,9 @@
         </div>
 
         <div class="mt-5">
-            <x-danger-button wire:click="confirmUserDeletion" wire:loading.attr="disabled">
+            <button wire:click="confirmUserDeletion" wire:loading.attr="disabled" class="btn btn-error" >
                 {{ __('Delete Account') }}
-            </x-danger-button>
+            </button>
         </div>
 
         <!-- Delete User Confirmation Modal -->

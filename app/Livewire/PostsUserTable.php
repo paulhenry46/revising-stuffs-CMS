@@ -69,6 +69,6 @@ class PostsUserTable extends Component
                 return $query->where(function ($query) {
                         $query->where('title', 'LIKE', "%{$this->search}%")
                           ->orWhere('description', 'LIKE', "%{$this->search}%");
-                });})->paginate(15)]);
+                });})->orderBy('created_at','DESC')->paginate(15)]);
     }
 }
