@@ -87,7 +87,7 @@
                             </div>
                             <div class=" sm:col-span-1 sm:flex sm:justify-center sm:items-center ">
                               <div class="grid grid-rows-1 grid-flow-col  min-h-full min-w-full">
-                              <div class="  min-h-12 text-primary transition duration-300 dark:hover:text-indigo-800 hover:cursor-pointer hover:text-indigo-400 hover:bg-primary rounded-br-lg sm:rounded-tr-lg sm:rounded-bl-none rounded-bl-lg">
+                              <div class="  min-h-12 text-primary transition duration-300 dark:hover:text-indigo-800 hover:cursor-pointer hover:text-indigo-400 hover:bg-primary dark:hover:bg-indigo-500 dark:bg-indigo-900 bg-indigo-100 rounded-br-lg sm:rounded-tr-lg sm:rounded-bl-none rounded-bl-lg">
                               <a wire:navigate class="flex justify-center items-center min-h-full min-w-full" href="{{route('cards.edit', [$post->id, $card->id])}}">
                               <!--<span class="text-xs text-gray-500 uppercase">{{__('Term')}}</span>-->
                               <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M200-200h57l391-391-57-57-391 391v57Zm-40 80q-17 0-28.5-11.5T120-160v-97q0-16 6-30.5t17-25.5l505-504q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L313-143q-11 11-25.5 17t-30.5 6h-97Zm600-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/>
