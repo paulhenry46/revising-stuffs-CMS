@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Mary\Traits\Toast;
+use Illuminate\Support\Str;
 
 class StepHistory extends Component
 {
@@ -16,7 +17,10 @@ class StepHistory extends Component
     public array $HistoryChart;
     public $numberBeforeNextRevision;
     private $post_id;
+    public $last_step;
     public Post $post;
+    public $mastery_percent;
+    public $learning_percent;
     public function render()
     {
         return view('livewire.step-history');
@@ -52,7 +56,16 @@ class StepHistory extends Component
         if($steps->first() !== null){
             //dd($steps->first()->next_step);
             //$this->numberBeforeNextRevision = $steps->sortByDesc('created_at')->first()->next_step->diffInDays(Carbon::today(), false);
-            $this->numberBeforeNextRevision =  Carbon::today()->diffInDays($steps->sortByDesc('created_at')->first()->next_step, false);
+            $this->last_step = $steps->sortByDesc('created_at')->first();
+            if($this->last_step->mastery >=1){
+                $this->mastery_percent = Str::limit(($this->last_step->mastery/9)*100, 2,'');
+                $this->learning_percent = 100;
+            }else{
+                $this->mastery_percent = 0;
+                $this->learning_percent = $this->last_step->mastery*100;
+            }
+            
+            $this->numberBeforeNextRevision =  Carbon::today()->diffInDays($this->last_step->next_step, false);
         }
 
         $dates = [];
