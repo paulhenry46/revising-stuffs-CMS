@@ -15,7 +15,6 @@ For more screenchots, informations about setup and features, see [the Wiki](http
 - Tailwind CSS with DaisyUI components
 - Laravel Livewire
 - Alpine.js
-- Vanilla JS for the flashcard Quiz and Learn Mode
 
 ## Security
 If you discover a security vulnerability within RSCMS, please send an e-mail to Paulhenry via [paulhenry@paulhenry.eu](mailto:paulhenry@paulhenry.eu). All security vulnerabilities will be promptly addressed.
