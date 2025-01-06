@@ -3,7 +3,7 @@
 
 RSCMS is a web app wich allow user to easily publish and share their revissing stuffs with their community.
 
-For more screenchots, informations about setup and features, see [the Wiki](https://github.com/paulhenry46/revising-stuffs-CMS/wiki).
+For screenchots, informations about setup and features, see [the Wiki](https://github.com/paulhenry46/revising-stuffs-CMS/wiki).
 
 ## Tech Stack
 #### Back-end
