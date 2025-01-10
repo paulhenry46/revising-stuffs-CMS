@@ -12,7 +12,7 @@
         "laravel/jetstream": "^4.0",
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
-        "livewire/livewire": "^3.4",
+        "livewire/livewire": "^3.5",
         "robsontenorio/mary": "^1.21",
         "spatie/laravel-permission": "^5.11",
         "spatie/pdf-to-image": "^2.2"
