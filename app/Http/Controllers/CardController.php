@@ -44,6 +44,14 @@ class CardController extends Controller
         '</span>',
         '">',
     ];
+
+    private array $latex_split_tag = [
+        '='
+    ];
+
+    private array $latex_split_replaced = [
+        '\) \(='
+    ];
     
     /**
      * Display a listing of the resource.
@@ -65,6 +73,20 @@ class CardController extends Controller
         $card->id = 0;
         return view('cards.edit', compact('card', 'post'));
     }
+    /**
+     * Sanitize values, replace tags by true values and split latex
+     */
+    private function replace_values(string $value, string $file_path){
+        $value_sanitized = str_ireplace($this->forbiden_tags, '', $value);
+        $value_temp = str_ireplace('[IMG]', '<img class="h-48" src="'.$file_path.'/', $value_sanitized);
+        $value = str_ireplace('[/IMG]', '">', $value_temp);
+        $new_value = str_ireplace($this->users_tags, $this->users_tags_replaced, $value);
+        if(str_contains($value, '\(') and (!str_contains($value, '\) \(='))){//Split latex only if latex is detected with \( balise
+            return str_ireplace($this->latex_split_tag, $this->latex_split_replaced, $new_value);
+        }else{
+            return $new_value;
+        }
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -72,21 +94,14 @@ class CardController extends Controller
     public function store(CardRequest $request, Post $post)
     {
         $this->authorize('create',[Card::class, $post]);
-        $front_serialized = str_ireplace($this->forbiden_tags, '', $request->front);
-        $back_serialized = str_ireplace($this->forbiden_tags, '', $request->back);
+        //$front_serialized = str_ireplace($this->forbiden_tags, '', $request->front);
+        //$back_serialized = str_ireplace($this->forbiden_tags, '', $request->back);
 
         $file_path=url('storage/'.$post->level->curriculum->slug.'/'.$post->level->slug.'/'.$post->course->slug.'/');
 
-        $back_temp = str_ireplace('[IMG]', '<img class="h-48" src="'.$file_path.'/', $back_serialized);
-        $back = str_ireplace($this->users_tags, $this->users_tags_replaced, $back_temp);
-        
-        $front_temp = str_ireplace('[IMG]', '<img class="h-48" src="'.$file_path.'/', $front_serialized);
-        $front = str_ireplace($this->users_tags, $this->users_tags_replaced, $front_temp);
-
-
         $card = New Card;
-        $card->front = $front;
-        $card->back = $back;
+        $card->front = $this->replace_values($request->front, $file_path);
+        $card->back = $this->replace_values($request->back, $file_path);
         $card->post_id = $post->id;
         $card->save();
         if(!$post->cards){
@@ -127,12 +142,7 @@ class CardController extends Controller
             $values = preg_split($separator, $line);
             //For each values of our new array
             foreach ($values as $col_index => $value) {
-                $value_sanitized = str_ireplace($this->forbiden_tags, '', $value);
-
-                $value_temp = str_ireplace('[IMG]', '<img class="h-48" src="'.$file_path.'/', $value_sanitized);
-                $value = str_ireplace('[/IMG]', '">', $value_temp);
-                
-                $newLine[$cols[$col_index]] = $value;
+                $newLine[$cols[$col_index]] = $this->replace_values($value, $file_path);
             }
             $newLine['post_id'] = $post->id;
             $newLine['updated_at'] = now();
@@ -176,18 +186,12 @@ class CardController extends Controller
     {
         $file_path=url('storage/'.$post->level->curriculum->slug.'/'.$post->level->slug.'/'.$post->course->slug.'/');
         $this->authorize('update', $card);
-        $card->front = str_ireplace($this->forbiden_tags, '', $request->front);
-        $card->back = str_ireplace($this->forbiden_tags, '', $request->back);
 
-        $back = str_ireplace('[IMG]', '<img class="h-48" src="'.$file_path.'/', $request->back);
-        $card->back = str_ireplace($this->users_tags, $this->users_tags_replaced, $back);
-        
-        $front = str_ireplace('[IMG]', '<img class="h-48" src="'.$file_path.'/', $request->front);
-        $card->front = str_ireplace($this->users_tags, $this->users_tags_replaced, $front);
+        $card->back = $this->replace_values($request->back, $file_path);
+        $card->front = $this->replace_values($request->front, $file_path);
 
         $card->save();
         return redirect()->route('cards.index', $post->id)->with('message', __('The card has been updated.'));
-       
     }
 
     /**
