@@ -16,13 +16,11 @@ return new class extends Migration
             $table->string('name');
             $table->string('bio')->nullable();
             $table->string('social_network_link')->nullable();
-            $table->integer('telegram_chat_id')->nullable();
             $table->json('favorite_posts')->default('[0]')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
             $table->timestamps();
         });

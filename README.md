@@ -7,13 +7,14 @@ For screenchots, informations about setup and features, see [the Wiki](https://g
 
 ## Tech Stack
 #### Back-end
-- Laravel 10
+- Laravel 11
 - Laravel JetStream for authentication
 - User permissions and roles package by Spatie
 - PDF to image package by Spatie
 #### Front-end
 - Tailwind CSS with DaisyUI components
-- Laravel Livewire
+- MaryUI
+- Livewire
 - Alpine.js
 
 ## Security

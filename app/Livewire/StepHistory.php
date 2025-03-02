@@ -52,10 +52,7 @@ class StepHistory extends Component
         $this->post_id = $post->id;
         $steps = Step::where('user_id', Auth::id())->where('post_id', $post->id)->orderBy('created_at', 'ASC')->get();
 
-        //$dates = $steps->pluck('created_at')->toArray();
         if($steps->first() !== null){
-            //dd($steps->first()->next_step);
-            //$this->numberBeforeNextRevision = $steps->sortByDesc('created_at')->first()->next_step->diffInDays(Carbon::today(), false);
             $this->last_step = $steps->sortByDesc('created_at')->first();
             if($this->last_step->mastery >=1){
                 $this->mastery_percent = Str::limit(($this->last_step->mastery/9)*100, 2,'');
@@ -65,7 +62,12 @@ class StepHistory extends Component
                 $this->learning_percent = $this->last_step->mastery*100;
             }
             
-            $this->numberBeforeNextRevision =  Carbon::today()->diffInDays($this->last_step->next_step, false);
+            $number = Carbon::today()->diffInDays($this->last_step->next_step, false);
+            if($number > 0){
+                $this->numberBeforeNextRevision =  $number;
+            }else{
+                $this->numberBeforeNextRevision = 0;
+            } 
         }
 
         $dates = [];

@@ -68,7 +68,12 @@ private function masteryOfWeek($steps){
 
         $this->steps = Step::where('user_id', $this->user->id)->where('next_step', '!=', null)->orderBy('next_step', 'ASC')->limit(3)->get();
         foreach($this->steps as $step){
-            $step['numberBeforeNextRevision'] =  Carbon::today()->diffInDays($step->next_step, false);
+            $number = Carbon::today()->diffInDays($step->next_step, false);
+            if($number > 0){
+                $step['numberBeforeNextRevision'] =  $number;
+            }else{
+                $step['numberBeforeNextRevision'] = 0;
+            }
         }
 
 
