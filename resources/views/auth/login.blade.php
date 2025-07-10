@@ -1,4 +1,15 @@
 <x-guest-layout>
+    <div class='grid sm:grid-cols-2'>
+    <div class='relative hidden sm:block bg-cover bg-center' style="background-image: url('images/garmin.jpg');">
+<div class='inline-block text-4xl mt-10 ml-10 text-gray-100 font-bold bg-gray-900 bg-opacity-50 p-5 rounded-md'>
+    {{ __('Ready to dive in?') }}</br>
+    {{ __('Start revising now !') }}
+</div>
+<div class="absolute bottom-10 mb-10 mr-10 right-0 text-4xl mt-10 ml-10 text-gray-100 font-bold bg-gray-900 bg-opacity-50 p-5 rounded-md">
+    {{ env('APP_NAME') }}
+  </div>
+    </div>
+    <div>
     <x-authentication-card>
         <x-slot name="logo">
             <x-authentication-card-logo />
@@ -45,4 +56,6 @@
             </div>
         </form>
     </x-authentication-card>
+</div>
+</div>
 </x-guest-layout>
