@@ -13,8 +13,69 @@
                     <div class="grid grid-cols-3 gap-4">
                       <div class="col-span-3 lg:col-span-2">
                       <div class="card  bg-base-200 dark:bg-base-200 ">
-            <figure class="h-[50vh] bg-{{$post->course->color}} dark:bg-none">
-              <img class="opacity-75 dark:opacity-100 object-cover w-full h-full" src="{{url('storage/'.$post->level->curriculum->slug.'/'.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png')}}" alt="Thumbnail of the post">
+            
+
+
+    <div class="text-blue-300 text-red-300 text-orange-300 text-green-300 text-yellow-300 text-purple-300  text-pink-300" style="display: none;"></div>
+              @if(file_exists('../storage/app/public/'.$post->level->curriculum->slug.'/'.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png')) 
+              <figure class="h-[50vh] bg-{{$post->course->color}} dark:bg-none">
+    <img class="opacity-75 dark:opacity-100 object-cover w-full h-full" src="{{url('storage/'.$post->level->curriculum->slug.'/'.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png')}}" alt="Thumbnail of the post" /> 
+    @elseif(true)
+    <figure class="h-[50vh]">
+    <div class="w-full h-full relative inline-block border-b-4 border-{{$post->course->color}}">
+    <svg
+      class=' text-{{str_replace('500', '300',$post->course->color)}} dark:text-base-300  object-cover w-full h-full'
+      viewBox="0 0 114.33626 61.505016"
+      version="1.1"
+      id="svg1"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlns:svg="http://www.w3.org/2000/svg"
+      fill='currentColor'>
+      <defs
+        id="defs1" />
+      <g
+        id="layer1"
+        transform="translate(-95.148776,-48.888603)">
+        <path
+          d="m 197.75661,83.956018 2.69906,9.74011 -8.3319,5.750111 -2.69906,-9.740111 z m -26.28655,-9.44675 -1.93628,0.93877 q -1.81892,0.76288 -2.46435,2.61107 -0.64578,1.84828 0.17564,3.6672 l 4.22463,9.15341 z m 9.38803,-5.10478 q -1.93627,0 -3.31512,1.40821 -1.37885,1.40821 -1.37885,3.34449 v 14.02338 l 6.27826,-17.25051 q 0.17564,-0.41071 0.29362,-0.79214 0.11709,-0.38144 0.41071,-0.7336 z m 12.08719,0.29362 q -1.81892,-0.64578 -3.63793,0.17564 -1.81892,0.82142 -2.46434,2.64034 l -10.38554,28.692262 q -0.64578,1.81892 0.17564,3.60857 0.82142,1.78955 2.64034,2.43498 l 17.6613,6.45435 q 1.81892,0.64578 3.60856,-0.17564 1.78956,-0.82142 2.43499,-2.64034 l 10.44426,-28.692262 q 0.64578,-1.81892 -0.17564,-3.60857 -0.82142,-1.78956 -2.64034,-2.43498 z"
+          id="path1"
+          style="stroke-width:0.0586754" />
+        <g
+          id="g2"
+          transform="matrix(0.0559924,0,0,0.0559924,99.459225,100.70309)">
+          <path
+            d="m -39.956794,-873.05029 c -3.333333,-22 1.833333,-41.83333 15.5,-59.5 13.666667,-17.66667 31.5,-27.83333 53.5,-30.5 L 466.0432,-1016.0503 c 22,-2.6667 41.66667,2.6667 59,16 17.33333,13.33334 27.33333,31.00001 30,53.00001 l 6,46 h -326 c -44,0 -81.66667,15.66667 -113,47 -31.333331,31.33333 -46.999996,69 -46.999996,113 v 372 c -15.999999,-4 -29.833331,-12 -41.499998,-24 -11.666667,-12 -18.5,-26.66667 -20.5,-44 z"
+            id="path1-3" />
+          <path
+            d="m 364.7064,-398.25533 91,-55 91,55 -24,-104 80,-69 -105,-9 -42,-98 -42,98 -105,9 80,69 z m -129,180 c -22,0 -40.8333,-7.83333 -56.5,-23.5 -15.6667,-15.66667 -23.5,-34.5 -23.5,-56.5 v -440 c 0,-22 7.8333,-40.83333 23.5,-56.5 15.6667,-15.66667 34.5,-23.5 56.5,-23.5 h 440 c 22,0 40.8333,7.83333 56.5,23.5 15.6667,15.66667 23.5,34.5 23.5,56.5 v 440 c 0,22 -7.8333,40.83333 -23.5,56.5 -15.6667,15.66667 -34.5,23.5 -56.5,23.5 z"
+            id="path1-2" />
+        </g>
+        <rect
+          style="opacity:0.583492;fill:none;stroke:none;stroke-width:0.653;stroke-linecap:round;stroke-linejoin:round"
+          id="rect1"
+          width="114.33626"
+          height="61.505016"
+          x="95.148781"
+          y="48.888603" />
+      </g>
+    </svg>
+<span class="absolute inset-0 flex items-center justify-center font-bold text-xl pointer-events-none">
+    {{ $post->cards}}{{ __(' cards') }}
+  </span>
+</div>
+    @else 
+    <figure class="h-[50vh] bg-{{$post->course->color}} dark:bg-none">
+    <div class="object-cover w-full h-48">
+      <div class="flex h-72 flex-col items-center justify-center gap-6  p-10 text-center [text-wrap:balance]">
+        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+          <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0 0v-560 560Zm80-80h400q12 0 18-11t-2-21L586-459q-6-8-16-8t-16 8L450-320l-74-99q-6-8-16-8t-16 8l-80 107q-8 10-2 21t18 11Z" />
+        </svg>
+        <div>{{__('The thumbnail will be here soon.')}}</div>
+      </div>
+    </div> 
+    @endif 
+
+
               <div class="right-0 top-0 absolute pin-t pin-l ">
                 <div>
                 @auth

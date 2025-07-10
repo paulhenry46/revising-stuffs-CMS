@@ -76,6 +76,9 @@
 </div>
 </div>
 <div class="mt-6 flex items-center justify-end gap-x-6">
+@if(!$update)
+<a href="{{route('cards.index', $post->id)}}" class="btn btn-secondary" wire:navigate>{{__('Pass this step and upload cards')}}</a>
+@endif
 <button class="btn btn-primary" wire:click="save">{{__('Save')}}</button>
 </div>
 </div>
