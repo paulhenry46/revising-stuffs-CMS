@@ -23,7 +23,8 @@ use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\StepController;
 use App\Http\Controllers\StorageController;
 use App\Http\Middleware\EnsureUserCursusProfileIsCompleted;
-use App\Models\School;
+use App\Http\Controllers\Auth\GoogleController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -52,6 +53,11 @@ Route::get('/rss/{user}', [RssController::class, 'user'])->name('rss.user');//RS
 //Routes USED to use the notifications push
 if(env('FirebasePush')){
 Route::patch('/fcm-token', [PushNotificationsController::class, 'updateToken'])->name('push.fcmToken');
+}
+
+if(env('GOOGLE_AUTH')){
+    Route::get('login/google', [GoogleController::class, 'redirectToGoogle'])->name('login.google');
+    Route::get('login/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 }
 
 //Public Routes
