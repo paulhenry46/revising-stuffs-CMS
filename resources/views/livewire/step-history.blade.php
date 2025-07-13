@@ -1,58 +1,235 @@
 <div class="mt-6 mb-3 card bg-base-100 dark:bg-base-200 @guest z-0 @endguest">
-    <div class="card-body @guest opacity-25 @endguest">
-        <h2 class="card-title">{{__('Progression')}}</h2>
-        <x-mary-chart wire:model="HistoryChart" class="min-h-60 md:min-h-72" />
+   @guest
+      <div class="absolute inset-0 flex justify-center items-center z-10">
+      <div class="alert alert-warning w-1/2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+      <div>
+        <h3 class="font-bold">{{ __('You should consider this.') }}</h3>
+        <ul class="mt-3 list-disc list-inside text-sm">
+          <li>{{__('To save your progress on this post, you must be connected.')}}</li>
+        </ul>
+      </div> 
+    </div>
+    </div>
+    @endguest
+  <div class="card-body @guest opacity-25 @endguest">
+   
+    @auth
+    <div class="grid grid-cols-2 mt-2 space-x-3">
+      <div>
+        <div class='flex'>
+          <span class="card-title rounded-full bg-primary w-12 h-12 flex flex-col justify-center items-center mr-2 text-white"> 1 </span>
+          <h3 class="card-title">{{__('Learning')}}</h3>
+        </div>
+        <div class='grid grid-cols-2'>
+          <div>
+            <div class='text-center'>
+              <div class="relative radial-progress text-gray-200" style="--size:12rem; --value:100;" role="progressbar">
+                <div class="absolute radial-progress z-10 @if($learning_percent >=75) text-success @elseif($learning_percent >=40) bg-warning @else bg-error @endif" style="--size:12rem; --value:{{$learning_percent}};" role="progressbar">
+                  {{$learning_percent}}%
+                </div>
+                <br>
+              </div>
+              <br>
+            </div>
+          </div>
+          <div class='flex items-center'>
+            <div>
+              <div class='flex  mt-4'>
+                <span class="rounded-full bg-success w-12 flex flex-col items-center mr-2 dark:text-white"> {{ $mastered_cards }} </span>
+                {{ __('Learned cards') }}
+              </div>
+              <div class='flex mt-4'>
+                <span class="rounded-full bg-warning w-12 flex flex-col items-center mr-2 dark:text-white"> {{ $learning_cards }} </span>
+                {{ __('Learning cards') }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class='flex  mt-4 items-center'>
+                @if($learning_percent ==100)
+                <svg class='mr-3 h-12' xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"  fill="currentColor"><path d="m80-80 200-560 360 360L80-80Zm502-378-42-42 224-224q32-32 77-32t77 32l24 24-42 42-24-24q-14-14-35-14t-35 14L582-458ZM422-618l-42-42 24-24q14-14 14-34t-14-34l-26-26 42-42 26 26q32 32 32 76t-32 76l-24 24Zm80 80-42-42 144-144q14-14 14-35t-14-35l-64-64 42-42 64 64q32 32 32 77t-32 77L502-538Zm160 160-42-42 64-64q32-32 77-32t77 32l64 64-42 42-64-64q-14-14-35-14t-35 14l-64 64Z"/>
+                </svg>
+                {{__('Congrats ! You have learned all the cards ! Now, review them regularly to make sure you don\'t forget them.')}}
+                @else
+                <svg class='mr-3 h-12' xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"  fill="currentColor"><path d="M400-240q-33 0-56.5-23.5T320-320v-50q-57-39-88.5-100T200-600q0-117 81.5-198.5T480-880q117 0 198.5 81.5T760-600q0 69-31.5 129.5T640-370v50q0 33-23.5 56.5T560-240H400Zm0 160q-17 0-28.5-11.5T360-120v-40h240v40q0 17-11.5 28.5T560-80H400Z"/>
+                </svg>
+                {{__('A little more effort! You already know many cards!')}}
+                @endif
+          </div>
+      </div>
+      <div>
+        <div class='flex'>
+          <span class="card-title rounded-full bg-primary w-12 h-12 flex flex-col justify-center items-center mr-2 text-white"> 2 </span>
+          <h3 class="card-title">{{__('Memorising')}}</h3>
+        </div>
+        <div class='grid grid-cols-3 h-48'>
+          <div class='grid grid-rows-3 px-8'>
+            <div class='row-span-2'>
+            </div>
+            <div class=' grid grid-rows-2 @if($masteryLevel < 2) bg-base-300 dark:bg-base-100 @else bg-yellow-200 dark:bg-yellow-800  @endif'>
+              <div class='@if($masteryLevel >= 3) bg-warning @endif'>
+              </div>
+              <div class='@if($masteryLevel >= 2) bg-warning @endif'>
+              </div>
+            </div>
+          </div>
+          <div class='grid grid-rows-3 px-8'>
+            <div class='row-span-1'>
+            </div>
+            <div class=' row-span-2 grid grid-rows-2 @if($masteryLevel < 4) bg-base-300 dark:bg-base-100 @else bg-green-200 dark:bg-green-800 @endif'>
+              <div class='@if($masteryLevel >= 5) bg-green-500 @endif'>
+              </div>
+              <div class='@if($masteryLevel >= 4) bg-green-500 @endif'>
+              </div>
+            </div>
+          </div>
+          <div class='grid grid-rows-4 mx-8 @if($masteryLevel < 6) bg-base-300 dark:bg-base-100 @else bg-emerald-200 dark:bg-emerald-800 @endif' >
+              <div class='@if($masteryLevel >= 9) bg-success  @endif'>
+              </div>
+              <div class='@if($masteryLevel >= 8) bg-success  @endif'>
+              </div>
+              <div class='@if($masteryLevel >= 7) bg-success  @endif'>
+              </div>
+              <div class='@if($masteryLevel >= 6) bg-success  @endif'>
+              </div>
+          </div>
+        </div>
+        <div class='grid grid-cols-3'>
+          <div class='text-center'>
+            {{ __('Consolidation') }}
+          </div>
+          <div class='text-center'>
+            {{ __('Medium-term') }}
+          </div>
+          <div class='text-center'>
+            {{ __('Long-term') }}
+          </div>
+        </div>
+        <div class='flex  mt-4 items-center'>
+                <span class="@if($masteryLevel >= 6) bg-success @elseif($masteryLevel >= 4) bg-green-500 @else  bg-warning @endif rounded-full w-12 flex flex-col items-center mr-1 dark:text-white"> {{ $masteryLevel }} </span>
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M579-480 285-774q-15-15-14.5-35.5T286-845q15-15 35.5-15t35.5 15l307 308q12 12 18 27t6 30q0 15-6 30t-18 27L356-115q-15 15-35 14.5T286-116q-15-15-15-35.5t15-35.5l293-293Z"/></svg>
+                <span class="@if($masteryLevel +1 >= 6) bg-success @elseif($masteryLevel +1 >= 4) bg-green-500 @else  bg-warning @endif rounded-full w-12 flex flex-col items-center ml-1 mr-4 dark:text-white"> {{ $masteryLevel +1}} </span>
+                @if($numberBeforeNextRevision >= 1)
+                {{ __('Upgrading to the next level in') }} {{ $numberBeforeNextRevision }} {{ __('days') }}
+                @else
+                  {{ __('You can now try to upgrade your level. Simply click on Revise button')  }}
+                @endif
+          </div>
+      </div>
+    </div>
+    @endauth
+    @guest
+      <div class="grid grid-cols-2 mt-2 space-x-3">
+      <div>
+        <div class="flex">
+          <span class="card-title rounded-full bg-primary w-12 h-12 flex flex-col justify-center items-center mr-2 text-white"> 1 </span>
+          <h3 class="card-title">{{ __('Learning') }}</h3>
+        </div>
+        <div class="grid grid-cols-2">
+          <div>
+            <div class="text-center">
+              <div class="relative radial-progress text-gray-200" style="--size:12rem; --value:100;" role="progressbar">
+                <div class="absolute radial-progress z-10  text-success " style="--size:12rem; --value:100;" role="progressbar">
+                  100%
+                </div>
+                <br>
+              </div>
+              <br>
+            </div>
+          </div>
+          <div class="flex items-center">
+            <div>
+              <div class="flex  mt-4">
+                <span class="rounded-full bg-success w-12 flex flex-col items-center mr-2 dark:text-white">36</span>
+                {{ __('Learned cards') }}
+              </div>
+              <div class="flex mt-4">
+                <span class="rounded-full bg-warning w-12 flex flex-col items-center mr-2 dark:text-white">0</span>
+                {{ __('Learning cards') }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex  mt-4 items-center">
+                <!--[if BLOCK]><![endif]-->                <svg class="mr-3 h-12" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor"><path d="m80-80 200-560 360 360L80-80Zm502-378-42-42 224-224q32-32 77-32t77 32l24 24-42 42-24-24q-14-14-35-14t-35 14L582-458ZM422-618l-42-42 24-24q14-14 14-34t-14-34l-26-26 42-42 26 26q32 32 32 76t-32 76l-24 24Zm80 80-42-42 144-144q14-14 14-35t-14-35l-64-64 42-42 64 64q32 32 32 77t-32 77L502-538Zm160 160-42-42 64-64q32-32 77-32t77 32l64 64-42 42-64-64q-14-14-35-14t-35 14l-64 64Z"></path>
+                </svg>
+                {{ __('Congrats ! You have learned all the cards ! Now, review them regularly to make sure you don\'t forget them.') }}
+                <!--[if ENDBLOCK]><![endif]-->
+          </div>
+      </div>
+      <div>
+        <div class="flex">
+          <span class="card-title rounded-full bg-primary w-12 h-12 flex flex-col justify-center items-center mr-2 text-white"> 2 </span>
+          <h3 class="card-title">{{ __('Memorising') }}</h3>
+        </div>
+        <div class="grid grid-cols-3 h-48">
+          <div class="grid grid-rows-3 px-8">
+            <div class="row-span-2">
+            </div>
+            <div class=" grid grid-rows-2  bg-yellow-200 dark:bg-yellow-800  ">
+              <div class="">
+              </div>
+              <div class=" bg-warning ">
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-rows-3 px-8">
+            <div class="row-span-1">
+            </div>
+            <div class=" row-span-2 grid grid-rows-2  bg-base-300 dark:bg-base-100 ">
+              <div class="">
+              </div>
+              <div class="">
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-rows-4 mx-8  bg-base-300 dark:bg-base-100 ">
+              <div class="">
+              </div>
+              <div class="">
+              </div>
+              <div class="">
+              </div>
+              <div class="">
+              </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-3">
+          <div class="text-center">
+            {{ __('Consolidation') }}
+          </div>
+          <div class="text-center">
+            {{ __('Medium-term') }}
+          </div>
+          <div class="text-center">
+            {{ __('Long-term') }}
+          </div>
+        </div>
+        <div class="flex  mt-4 items-center">
+                <span class="  bg-warning  rounded-full w-12 flex flex-col items-center mr-1 dark:text-white"> 2 </span>
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M579-480 285-774q-15-15-14.5-35.5T286-845q15-15 35.5-15t35.5 15l307 308q12 12 18 27t6 30q0 15-6 30t-18 27L356-115q-15 15-35 14.5T286-116q-15-15-15-35.5t15-35.5l293-293Z"></path></svg>
+                <span class="  bg-warning  rounded-full w-12 flex flex-col items-center ml-1 mr-4 dark:text-white"> 3 </span>
+                              {{ __('Upgrading to the next level in') }} 4 {{ __('days') }}
+                
+          </div>
+      </div>
+    </div>
+    @endguest
 
-        
-@auth
-<div class="grid grid-cols-2 mt-2">
-  <div class="mr-1 dark:text-white rounded-lg sm:border-solid @if($learning_percent >=75) sm:bg-green-200/50 sm:dark:bg-green-900/50 sm:border-success/50 @elseif($learning_percent >=40) sm:border-warning @else sm:border-error @endif sm:border-4 sm:grid sm:grid-cols-3">
-  <div class="col-span-1 my-2">
-  <div class="text-center">
-  <div class="radial-progress @if($learning_percent >=75) text-success @elseif($learning_percent >=40) bg-warning @else bg-error @endif" style="--value:{{$learning_percent}};" role="progressbar">{{$learning_percent}}%</div><br>
-  <div class="badge badge-outline">{{__('Learning')}}</div>
-</div>
-</div>
-<div class="hidden my-2 col-span-2 text-center sm:flex justify-center content-center align-middle items-center">
-  @if($learning_percent ==100)
-  {{__('Congrats ! You have learned all the cards ! Now, review them regularly to make sure you don\'t forget them.')}}
-  @else
-  {{__('A little more effort! You already know many cards!')}}
-  @endif
-</div>
-</div>
-<div class="ml-1 sm:grid sm:grid-cols-3 sm:dark:bg-indigo-900/50 dark:text-white sm:bg-indigo-200/50 rounded-lg sm:border-4 sm:border-solid sm:border-primary/50 rounded-lg">
-  <div class="text-center my-2">
-  <div class="radial-progress text-indigo-500" style="--value:{{$mastery_percent}};" role="progressbar">{{$mastery_percent}}%</div><br>
-  <div class="badge badge-outline">{{__('Memorization')}}</div>
-</div>
-<div class="hidden col-span-2 text-center sm:flex justify-center content-center align-middle items-center">
-  {{__('You have a memory retention rate of:')}} {{$mastery_percent}}%
-</div>
-</div>
+    <div class='divider'></div>
 
-  </div>
-  <div class="divider"></div>
-  <div class="flow-root">  
+     <div class="flow-root">  
     <p class="float-right">
-    <button class="btn dark:bg-base-100" onclick="my_modal_1.showModal()"><svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m376-300 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Zm-96 180q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520Zm-400 0v520-520Z"/></svg>
+      @auth
+    <button class="btn btn-ghost dark:bg-base-100" onclick="modal_reinit.showModal()"><svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m376-300 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Zm-96 180q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520Zm-400 0v520-520Z"/></svg>
     {{__('Delete progress')}}</button>
-    @if($numberBeforeNextRevision > 0)
-        <button disabled="disabled" class=" btn">
-    <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M200-640h560v-80H200v80Zm0 0v-80 80Zm0 560q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-40q0-17 11.5-28.5T280-880q17 0 28.5 11.5T320-840v40h320v-40q0-17 11.5-28.5T680-880q17 0 28.5 11.5T720-840v40h40q33 0 56.5 23.5T840-720v187q0 17-11.5 28.5T800-493q-17 0-28.5-11.5T760-533v-27H200v400h232q17 0 28.5 11.5T472-120q0 17-11.5 28.5T432-80H200Zm520 40q-83 0-141.5-58.5T520-240q0-83 58.5-141.5T720-440q83 0 141.5 58.5T920-240q0 83-58.5 141.5T720-40Zm20-208v-92q0-8-6-14t-14-6q-8 0-14 6t-6 14v91q0 8 3 15.5t9 13.5l61 61q6 6 14 6t14-6q6-6 6-14t-6-14l-61-61Z"/></svg>
-    
-    {{__('Next revision in')}} {{$numberBeforeNextRevision}} {{__('days')}}.</button>
-    @else
-    <a href="{{route('post.public.cards.quiz', [$post->slug, $post->id])}}" class="btn btn-ghost">
-    <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M200-640h560v-80H200v80Zm0 0v-80 80Zm0 560q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-40q0-17 11.5-28.5T280-880q17 0 28.5 11.5T320-840v40h320v-40q0-17 11.5-28.5T680-880q17 0 28.5 11.5T720-840v40h40q33 0 56.5 23.5T840-720v187q0 17-11.5 28.5T800-493q-17 0-28.5-11.5T760-533v-27H200v400h232q17 0 28.5 11.5T472-120q0 17-11.5 28.5T432-80H200Zm520 40q-83 0-141.5-58.5T520-240q0-83 58.5-141.5T720-440q83 0 141.5 58.5T920-240q0 83-58.5 141.5T720-40Zm20-208v-92q0-8-6-14t-14-6q-8 0-14 6t-6 14v91q0 8 3 15.5t9 13.5l61 61q6 6 14 6t14-6q6-6 6-14t-6-14l-61-61Z"/></svg>
-    
-    {{__('Revise now')}}</a>
-    @endif
+    @endauth
+    <button class="btn btn-ghost dark:bg-base-100" onclick="modal_graph.showModal()"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M680-160q-17 0-28.5-11.5T640-200v-200q0-17 11.5-28.5T680-440h80q17 0 28.5 11.5T800-400v200q0 17-11.5 28.5T760-160h-80Zm-240 0q-17 0-28.5-11.5T400-200v-560q0-17 11.5-28.5T440-800h80q17 0 28.5 11.5T560-760v560q0 17-11.5 28.5T520-160h-80Zm-240 0q-17 0-28.5-11.5T160-200v-360q0-17 11.5-28.5T200-600h80q17 0 28.5 11.5T320-560v360q0 17-11.5 28.5T280-160h-80Z"/></svg>
+    {{__('See graph')}}</button>
 </p>
 </div>
-  @endauth
-    </div>
-<dialog id="my_modal_1" class="modal">
+<dialog id="modal_reinit" class="modal">
   <div class="modal-box">
     <h3 class="font-bold text-lg">{{__('Are you sure ?')}}</h3>
     <p class="py-4">{{__('You will lose your progress on this post. We\'ll have to start all over again.')}}</p>
@@ -64,9 +241,20 @@
     </div>
   </div>
 </dialog>
-@guest
-<div class="absolute inset-0 flex justify-center items-center z-10">
-      <p class="text-xl px-2">{{__('To save your progress on this post, you must be connected.')}}</p>
+
+<dialog id="modal_graph" class="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">{{__('Graph of progress')}}</h3>
+    <x-mary-chart wire:model="HistoryChart" class="min-h-60 md:min-h-72" />
+    <div class="modal-action">
+      <form method="dialog">
+        <!-- if there is a button in form, it will close the modal -->
+        <button class="btn">{{__('Close')}}</button>
+      </form>
     </div>
-    @endguest
+  </div>
+</dialog>
+
+  </div>
+</div>
 </div>

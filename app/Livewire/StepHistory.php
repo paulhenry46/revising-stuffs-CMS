@@ -18,9 +18,13 @@ class StepHistory extends Component
     public $numberBeforeNextRevision;
     private $post_id;
     public $last_step;
+    public $masteryLevel;
     public Post $post;
     public $mastery_percent;
     public $learning_percent;
+    public $learning_cards;
+    public $mastered_cards;
+    public $cards_count;
     public function render()
     {
         return view('livewire.step-history');
@@ -50,10 +54,13 @@ class StepHistory extends Component
         if(Auth::check()){
         $this->post = $post;
         $this->post_id = $post->id;
+        $this->cards_count = $post->cards()->count();
+
         $steps = Step::where('user_id', Auth::id())->where('post_id', $post->id)->orderBy('created_at', 'ASC')->get();
 
         if($steps->first() !== null){
             $this->last_step = $steps->sortByDesc('created_at')->first();
+            $this->masteryLevel = $this->last_step->mastery;
             if($this->last_step->mastery >=1){
                 $this->mastery_percent = Str::limit(($this->last_step->mastery/9)*100, 2,'');
                 $this->learning_percent = 100;
@@ -61,6 +68,8 @@ class StepHistory extends Component
                 $this->mastery_percent = 0;
                 $this->learning_percent = $this->last_step->mastery*100;
             }
+            $this->mastered_cards = round($this->learning_percent/100 * $this->cards_count);
+            $this->learning_cards = $this->cards_count - $this->mastered_cards;
             
             $number = Carbon::today()->diffInDays($this->last_step->next_step, false);
             if($number > 0){

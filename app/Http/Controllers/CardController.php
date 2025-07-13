@@ -76,12 +76,12 @@ class CardController extends Controller
     /**
      * Sanitize values, replace tags by true values and split latex
      */
-    private function replace_values(string $value, string $file_path){
+    private function replace_values(string $value, string $file_path, bool $create=true){
         $value_sanitized = str_ireplace($this->forbiden_tags, '', $value);
         $value_temp = str_ireplace('[IMG]', '<img class="h-48" src="'.$file_path.'/', $value_sanitized);
         $value = str_ireplace('[/IMG]', '">', $value_temp);
         $new_value = str_ireplace($this->users_tags, $this->users_tags_replaced, $value);
-        if(str_contains($value, '\(') and (!str_contains($value, '\) \(='))){//Split latex only if latex is detected with \( balise
+        if(str_contains($value, '\(') and (!str_contains($value, '\) \(=')) and ($create)){//Split latex only if latex is detected with \( balise
             return str_ireplace($this->latex_split_tag, $this->latex_split_replaced, $new_value);
         }else{
             return $new_value;
@@ -187,8 +187,8 @@ class CardController extends Controller
         $file_path=url('storage/'.$post->level->curriculum->slug.'/'.$post->level->slug.'/'.$post->course->slug.'/');
         $this->authorize('update', $card);
 
-        $card->back = $this->replace_values($request->back, $file_path);
-        $card->front = $this->replace_values($request->front, $file_path);
+        $card->back = $this->replace_values($request->back, $file_path, false);
+        $card->front = $this->replace_values($request->front, $file_path, false);
 
         $card->save();
         return redirect()->route('cards.index', $post->id)->with('message', __('The card has been updated.'));
