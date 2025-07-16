@@ -15,9 +15,9 @@
   <div class="card-body @guest opacity-25 @endguest">
    
     @auth
-    <div class="grid grid-cols-2 mt-2 space-x-3">
+    <div class="grid grid-cols-1 sm:grid-cols-2 mt-2 md:space-x-3">
       <div>
-        <div class='flex'>
+        <div class='flex mb-4'>
           <span class="card-title rounded-full bg-primary w-12 h-12 flex flex-col justify-center items-center mr-2 text-white"> 1 </span>
           <h3 class="card-title">{{__('Learning')}}</h3>
         </div>
@@ -58,8 +58,8 @@
                 @endif
           </div>
       </div>
-      <div>
-        <div class='flex'>
+      <div class='mt-4 md:mt-0'>
+        <div class='flex mb-4'>
           <span class="card-title rounded-full bg-primary w-12 h-12 flex flex-col justify-center items-center mr-2 text-white"> 2 </span>
           <h3 class="card-title">{{__('Memorising')}}</h3>
         </div>
