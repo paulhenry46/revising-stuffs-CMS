@@ -7,7 +7,7 @@ For screenchots, informations about setup and features, see [the Wiki](https://g
 
 ## Tech Stack
 #### Back-end
-- Laravel 11
+- Laravel 12
 - Laravel JetStream for authentication
 - User permissions and roles package by Spatie
 - PDF to image package by Spatie
