@@ -66,18 +66,18 @@
     <div>
       <div>
         <div>
-        <div x-show='state != "end_cycle"' class=" bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
+        <div x-show='state != "end_cycle"' class=" gap-6 lg:gap-8 p-6 lg:p-8">
           <x-info-message />
           <div class=" gap-4">
             <div>
               <div class="stack w-full h-64 sm:h-80 mb-3">
-                <label class="swap grid w-full h-full rounded dark:bg-base-100 bg-white place-content-center text-dark dark:text-white text-black">
+                <label class="swap grid w-full h-full rounded-sm dark:bg-base-100 bg-white place-content-center text-dark dark:text-white text-black">
                   <input type="checkbox" />
                   <div x-html="current_card.back" class="place-content-center align-middle /*flex*/ flex-col swap-on text-center"></div>
                   <div x-html="current_card.front" class="place-content-center align-middle /*flex*/ flex-col swap-off text-center"></div>
                 </label>
-                <div  class="bg-accent text-accent-content grid h-20 w-full place-content-center rounded">2</div>
-                <div class="bg-secondary text-secondary-content grid h-20 w-full place-content-center rounded">
+                <div  class="bg-accent text-accent-content grid h-20 w-full place-content-center rounded-sm">2</div>
+                <div class="bg-secondary text-secondary-content grid h-20 w-full place-content-center rounded-sm">
               </div>
             </div>
             <div class=" grid grid-cols-2 space-x-3">
@@ -92,7 +92,7 @@
         </div>
       </div>
     </div>
-        <div x-show="state == 'end_cycle'" class=" w-full h-full rounded place-content-center text-dark dark:text-white text-black" >
+        <div x-show="state == 'end_cycle'" class=" w-full h-full rounded-sm place-content-center text-dark dark:text-white text-black" >
                   <div role="alert" class="alert alert-success mt-3">
   <svg class='text-success-content w-10' xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"  fill="currentColor"><path d="M108-255q-12-12-11.5-28.5T108-311l211-214q23-23 57-23t57 23l103 104 208-206h-64q-17 0-28.5-11.5T640-667q0-17 11.5-28.5T680-707h160q17 0 28.5 11.5T880-667v160q0 17-11.5 28.5T840-467q-17 0-28.5-11.5T800-507v-64L593-364q-23 23-57 23t-57-23L376-467 164-255q-11 11-28 11t-28-11Z"/></svg>
   <span x-show='cards.length >0' class='text-2xl'>{{__('Keep up the good work, you\'ll get there! Start the next cycle whenever you want.')}}</span>
@@ -109,7 +109,7 @@
                         <ul class="space-y-4">
                           <template x-for="card in cards_learned_in_current_cycle">
                           <li class="pl-1 pr-1">
-                            <div class="relative p-6 shadow-sm dark:ring-0  rounded-xl bg-white dark:bg-base-100">
+                            <div class="relative p-6 shadow-xs dark:ring-0  rounded-xl bg-white dark:bg-base-100">
                               <div class="grid sm:grid-cols-12 sm:divide-x-2 space-y-6 sm:space-y-0 dark:divide-neutral-500">
                                 <div class="sm:col-span-4 sm:flex sm:justify-center sm:items-center sm:mx-3">
                                   <p class="gap-3 align-middle /*flex */flex-row swap-off text-center dark:text-white text-gray-900 sm:col-span-2" x-html="card.front"></p>
@@ -138,7 +138,7 @@
                         <ul class="space-y-4">
                           <template x-for="card in cards_revised_in_current_cycle">
                           <li class="pl-1 pr-1">
-                            <div class="relative p-6 shadow-sm dark:ring-0  rounded-xl bg-white dark:bg-base-100">
+                            <div class="relative p-6 shadow-xs dark:ring-0  rounded-xl bg-white dark:bg-base-100">
                               <div class="grid sm:grid-cols-12 sm:divide-x-2 space-y-6 sm:space-y-0 dark:divide-neutral-500">
                                 <div class="sm:col-span-4 sm:flex sm:justify-center sm:items-center sm:mx-3">
                                   <p class="gap-3 align-middle /*flex */flex-row swap-off text-center dark:text-white text-gray-900 sm:col-span-2" x-html="card.front"></p>

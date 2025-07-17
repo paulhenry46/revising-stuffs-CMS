@@ -111,7 +111,7 @@
           <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
               <ul class="space-y-4"> @if(Auth::id()==$post->user_id) @foreach ($cards as $card) <li class="pl-1 pr-1">
-                  <div class="relative shadow-sm dark:ring-0  rounded-xl bg-white dark:bg-base-100">
+                  <div class="relative shadow-xs dark:ring-0  rounded-xl bg-white dark:bg-base-100">
                     <div class="grid sm:grid-cols-12  sm:space-y-0 ">
                       <div class="py-6 sm:col-span-4 sm:flex sm:justify-center sm:items-center sm:mx-3 px-3 sm:px-0">
                         <div class="sm:min-h-full sm:min-w-full flex justify-center sm:items-center sm:pr-2 sm:border-r-2 dark:border-neutral-500">
@@ -145,7 +145,7 @@
                     </div>
                   </div>
                 </li> @endforeach @else @foreach ($cards as $card) <li class="pl-1 pr-1">
-                  <div class="relative p-6 shadow-sm dark:ring-0  rounded-xl bg-white dark:bg-base-100">
+                  <div class="relative p-6 shadow-xs dark:ring-0  rounded-xl bg-white dark:bg-base-100">
                     <div class="grid sm:grid-cols-12 sm:divide-x-2 space-y-6 sm:space-y-0 dark:divide-neutral-500">
                       <div class="sm:col-span-4 sm:flex sm:justify-center sm:items-center sm:mx-3">
                         <!--<span class="text-xs text-gray-500 uppercase">{{__('Term')}}</span>-->

@@ -8,7 +8,7 @@
         {{__('Legal')}}
     </h1>
 </div>
-<div class="bg-base-200 dark:bg-base-200 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
+<div class="bg-base-200/25 dark:bg-base-200/25 gap-6 lg:gap-8 p-6 lg:p-8">
 
 Ce site est soumis au régime juridique français. À ce titre, il est un service de communication au public en ligne édité à titre non professionnel au sens de l’article 6, Ⅲ, 2° de la loi 2004‑575 du 21 juin 2004.
 

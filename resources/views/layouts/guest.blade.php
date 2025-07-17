@@ -42,7 +42,7 @@
       <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
       </div>
-      <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+      <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-1 p-2 shadow-sm bg-base-100 rounded-box w-52">
       <li><a @if(Route::is('post.public.news')) class="active" @endif wire:navigate href="{{route('post.public.news')}}">{{__('New posts')}}</a></li>
       <li><a @if((Route::is('post.public.library')) or (Route::is('post.public.courseView'))) class="active" @endif wire:navigate href="{{route('post.public.library')}}" >{{__('Library')}}</a></li>
       <li><a @if(Route::is('post.public.favorites')) class="active" @endif wire:navigate  href="{{route('post.public.favorites')}}" >{{__('Suggested posts')}}</a></li>
@@ -98,7 +98,7 @@
 
             <!-- Page Heading -->
             @if (isset($header))
-                <header class="bg-gray-300 dark:bg-gray-800 shadow">
+                <header class="bg-gray-300 dark:bg-gray-800 shadow-sm">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
@@ -115,7 +115,7 @@
 
         @livewireScripts
     </body>
-<footer class="footer footer-center p-10 bg-base-200 text-base-content rounded">
+<footer class="footer footer-center p-10 bg-base-200 text-base-content rounded-sm">
 <x-application-mark />
 <nav class="">
     <p>{{env('APP_NAME')}}</p>

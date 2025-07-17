@@ -26,7 +26,7 @@
 
 </div>
 
-<div class="bg-base-200 dark:bg-base-200 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
+<div class="bg-base-200/25 dark:bg-base-200/25 gap-6 lg:gap-8 p-6 lg:p-8">
 <x-info-message/>
 
 <form method="POST" action="{{route('files.bulkStore', $post->id)}}" enctype="multipart/form-data">

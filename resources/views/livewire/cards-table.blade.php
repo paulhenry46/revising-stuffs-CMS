@@ -23,7 +23,7 @@
     
 
 </div>
-<div class="bg-white dark:bg-base-100 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
+<div class="bg-white/25 dark:bg-base-100/25 gap-6 lg:gap-8 p-6 lg:p-8">
     <x-info-message/>
 <div class="px-4 sm:px-6 lg:px-8">
   <div class="sm:flex sm:items-center">

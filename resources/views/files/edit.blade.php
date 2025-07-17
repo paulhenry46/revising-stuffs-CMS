@@ -45,7 +45,7 @@
 
 </div>
 
-<div class="bg-base-200 dark:bg-base-200 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
+<div class="bg-base-200/25 dark:bg-base-200/25 gap-6 lg:gap-8 p-6 lg:p-8">
 <x-info-message/>
 
 <form method="POST" action="@if($file->id !== 0) {{route('files.update', ['post' => $post->id, 'file' => $file->id])}} @else {{route('files.store', $post->id)}} @endif" enctype="multipart/form-data">

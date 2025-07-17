@@ -17,7 +17,7 @@
                     {{__('Manage levels, courses and specific types of post')}}
                 </h1>
             </div>
-            <div class="bg-white dark:bg-base-100 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
+            <div class="bg-white/25 dark:bg-base-100/25 gap-6 lg:gap-8 p-6 lg:p-8">
                 <x-info-message/>
                 <div role="tablist" class="tabs tabs-bordered">
                     <input type="radio" name="my_tabs_1" role="tab" class="tab" aria-label="Levels" checked />
@@ -122,7 +122,7 @@
                                                     <td>{{ $course->id }}</td>
                                                     <td>{{ $course->name }}</td>
                                                     <td>
-                                                        <label class="relative flex rounded-full focus:outline-none ring-{{ $course->color }}">
+                                                        <label class="relative flex rounded-full focus:outline-hidden ring-{{ $course->color }}">
                                                         <span class="h-8 w-8 bg-{{ $course->color }} rounded-full border border-black border-opacity-10">
                                                         </span>
                                                         </label>
@@ -193,7 +193,7 @@
                                                     <td>{{ $type->id }}</td>
                                                     <td>{{ $type->name }}</td>
                                                     <td>
-                                                        <label class="relative flex rounded-full focus:outline-none ring-{{ $course->color }}">
+                                                        <label class="relative flex rounded-full focus:outline-hidden ring-{{ $course->color }}">
                                                         <span class="h-8 w-8 bg-{{ $type->color }} rounded-full border border-black border-opacity-10">
                                                         </span>
                                                         </label>

@@ -31,19 +31,19 @@
                     </div>
                 </div>
 
-                <div class="bg-base-200 dark:bg-base-200 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
+                <div class="bg-base-200/25 dark:bg-base-200/25 gap-6 lg:gap-8 p-6 lg:p-8">
                     <x-info-message/>
 <div
     class="grid grid-cols-3 gap-4">
   <div class="col-span-3">
     <div @click="returnCard()" class="stack w-full h-64 sm:h-80">
-    <div x-bind:data-state="cardState" class=" duration-500 data-[state=success]:bg-success dark:data-[state=success]:bg-success data-[state=fail]:bg-warning dark:data-[state=fail]:bg-warning transition ease-in-out swap grid w-full h-full rounded dark:bg-base-100 bg-white text-dark dark:text-white place-content-center">
+    <div x-bind:data-state="cardState" class=" duration-500 data-[state=success]:bg-success dark:data-[state=success]:bg-success data-[state=fail]:bg-warning dark:data-[state=fail]:bg-warning transition ease-in-out swap grid w-full h-full rounded-sm dark:bg-base-100 bg-white text-dark dark:text-white place-content-center">
       
       <div x-transition x-show="!recto" x-html="cards[activeCard].back" x-init="$watch('cards[activeCard].back', value => MathJax.typeset())" id="back" class="place-content-center align-middle /*flex*/ flex-col  text-center"></div>
       <div x-transition x-show="recto" x-html="cards[activeCard].front" x-init="$watch('cards[activeCard].front', value => MathJax.typeset())" id="front" class="place-content-center align-middle /*flex*/ flex-col  text-center"></div>
 </div>
-<div class=" w-full h-full rounded bg-primary  place-content-center"></div>
-<div class=" w-full h-full rounded bg-success place-content-center"></div>
+<div class=" w-full h-full rounded-sm bg-primary  place-content-center"></div>
+<div class=" w-full h-full rounded-sm bg-success place-content-center"></div>
 
 </div>
 </div>

@@ -34,7 +34,7 @@
             <div class="p-6 lg:p-8 bg-base-200 dark:bg-base-200 border-b border-gray-200 dark:border-gray-700">
             <h1 class=" text-2xl font-medium text-gray-900 dark:text-white"> @if($post->id !== 0) {{__('Edit a post')}} @else {{__('Add a new post')}} @endif </h1>
           </div>
-          <div class="bg-base-200 dark:bg-base-200 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
+          <div class="bg-base-200/25 dark:bg-base-200/25 gap-6 lg:gap-8 p-6 lg:p-8">
             <x-info-message />
             <form method="POST" action="@if($post->id !== 0) {{route('posts.update', $post->id)}} @else {{route('posts.store')}} @endif"> @csrf @if($post->id !== 0) @method('put') @endif <div class="space-y-12">
                 <div class="border-b dark:border-white/10 border-gray-900/10 pb-12">

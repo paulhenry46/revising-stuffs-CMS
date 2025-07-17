@@ -66,7 +66,7 @@
     @else 
     <figure class="h-[50vh] bg-{{$post->course->color}} dark:bg-none">
     <div class="object-cover w-full h-48">
-      <div class="flex h-72 flex-col items-center justify-center gap-6  p-10 text-center [text-wrap:balance]">
+      <div class="flex h-72 flex-col items-center justify-center gap-6  p-10 text-center text-balance">
         <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
           <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0 0v-560 560Zm80-80h400q12 0 18-11t-2-21L586-459q-6-8-16-8t-16 8L450-320l-74-99q-6-8-16-8t-16 8l-80 107q-8 10-2 21t18 11Z" />
         </svg>
@@ -76,7 +76,7 @@
     @endif 
 
 
-              <div class="right-0 top-0 absolute pin-t pin-l ">
+              <div class="right-0 top-0 absolute pin-t pin-l flex gap-1">
                 <div>
                 @auth
                 <livewire:favorite-button wire:key="fav_{{$post->id}}_mobile" :post=$post :user=Auth::user() lazy mobile=true/>
@@ -95,7 +95,7 @@
   <summary class="cursor-pointer w-10 h-10  flex items-center justify-center bg-base-100  rounded-full"><svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
                         <path d="M200-200h57l391-391-57-57-391 391v57Zm-40 80q-17 0-28.5-11.5T120-160v-97q0-16 6-30.5t17-25.5l505-504q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L313-143q-11 11-25.5 17t-30.5 6h-97Zm600-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
                       </svg></summary>
-  <ul class="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
+  <ul class="p-2 shadow-sm menu dropdown-content z-1 bg-base-100 rounded-box w-52">
     <li><a wire:navigate href="{{route('posts.edit', $post->id)}}" >{{__('Edit')}}</a></li>
     <li><a wire:navigate href="{{route('files.index', $post->id)}}" >{{__('Manage files')}}</a></li>
     <li><a wire:navigate href="{{route('cards.index', $post->id)}}">{{__('Manage cards')}}</a></li>
@@ -422,7 +422,7 @@
                             $user = $post->user;
                           @endphp
                          <div class="relative z-0 mt-1 flex h-32 w-full justify-center rounded-xl bg-cover bg-primary">
-                <div class="absolute -bottom-12 flex h-[88px] w-[88px] items-center justify-center rounded-full border-[4px] border-base-100">
+                <div class="absolute -bottom-12 flex h-[88px] w-[88px] items-center justify-center rounded-full border-4 border-base-100">
                   <img class="h-full w-full rounded-full" src="{{$user->profile_photo_url}}" alt="" />
                 </div>
               </div>
@@ -482,7 +482,7 @@
           <div class="card   dark:bg-base-300 ">
             <figure class="h-96 bg-{{$post->course->color}} dark:bg-none">
               <img class="opacity-75 dark:opacity-100 object-cover w-full h-full" src="{{url('storage/'.$post->level->curriculum->slug.'/'.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png')}}" alt="Thumbnail of the post">
-              <div class="right-0 top-0 absolute pin-t pin-l ">
+              <div class="right-0 top-0 absolute pin-t pin-l flex gap-1">
                 <div>
                 @auth
                 <livewire:favorite-button wire:key="fav_{{$post->id}}_mobile" :post=$post :user=Auth::user() lazy mobile=true/>

@@ -17,7 +17,7 @@
                     {{__('Admin Settings')}}
                 </h1>
             </div>
-            <div class="bg-white dark:bg-base-200 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
+            <div class="bg-white/25 dark:bg-base-200/25 gap-6 lg:gap-8 p-6 lg:p-8">
                 <x-info-message/>
                 <div role="tablist" class="tabs tabs-bordered">
                     <input type="radio" name="my_tabs_1" role="tab" class="tab" aria-label="{{__('Backups')}}" checked />

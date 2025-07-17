@@ -28,7 +28,7 @@
                                         </h2>
                                         <div class="flex items-center justify-center">
                                             <div class="avatar">
-                                                <div class="w-24 rounded-full ring 
+                                                <div class="w-24 rounded-full ring-3 
                                                 @if($user->hasRole('admin'))
                                                 ring-error 
                                                 @elseif($user->hasRole('moderator'))
@@ -161,7 +161,7 @@
                         </div>
                         <div class="col-span-6 sm:col-span-4">
                             <div class="pt-2">
-                                <div class="stats shadow w-full">
+                                <div class="stats shadow-sm w-full bg-base-100">
                                     <div class="stat">
                                       <div class="stat-figure text-primary">
                                       <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 -960 960 960"  fill="currentColor" class="inline-block w-10 h-10 stroke-current"><path d="M360-240h240q17 0 28.5-11.5T640-280q0-17-11.5-28.5T600-320H360q-17 0-28.5 11.5T320-280q0 17 11.5 28.5T360-240Zm0-160h240q17 0 28.5-11.5T640-440q0-17-11.5-28.5T600-480H360q-17 0-28.5 11.5T320-440q0 17 11.5 28.5T360-400ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h287q16 0 30.5 6t25.5 17l194 194q11 11 17 25.5t6 30.5v447q0 33-23.5 56.5T720-80H240Zm280-560q0 17 11.5 28.5T560-600h160L520-800v160Z"/></svg>
@@ -215,7 +215,7 @@
                                     <div>
                                     <div class="card-body">
                                     <h2 class="card-title">{{__('Creator space')}}</h2>
-                                    <div class="sm:col-span-4 rounded-box dark:text-gray-500 dark:border-gray-500 border-base-300 text-base-content/30 flex h-72 flex-col items-center justify-center gap-6 border-2 border-dashed p-10 text-center [text-wrap:balance]">
+                                    <div class="sm:col-span-4 rounded-box dark:text-gray-500 dark:border-gray-500 border-base-300 text-base-content/30 flex h-72 flex-col items-center justify-center gap-6 border-2 border-dashed p-10 text-center text-balance">
     <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M680-39q-17 0-28.5-12T640-80q0-17 11.5-28.5T680-120q66 0 113-47t47-113q0-17 12-29t29-12q17 0 28.5 12t11.5 29q0 100-70.5 170.5T680-39ZM80-640q-17 0-29-11.5T39-680q0-100 70.5-170.5T280-921q17 0 29 11.5t12 28.5q0 17-12 29t-29 12q-66 0-113 47t-47 113q0 17-11.5 28.5T80-640Zm689-143q12 12 12 28t-12 28L515-472q-11 12-27.5 11.5T459-472q-12-12-12-28.5t12-28.5l254-254q12-12 28-12t28 12Zm71 127q12 12 12 28.5T840-599L614-373q-11 11-27.5 11T558-373q-12-12-12.5-28.5T557-430l226-226q12-12 28.5-12t28.5 12ZM211-211q-91-91-91-219t91-219l92-92q12-12 28-12t28 12l31 31q7 7 12 14.5t10 15.5l148-149q12-12 28.5-12t28.5 12q12 12 12 28.5T617-772L444-599l-85 84 19 19q46 46 44 110t-49 111l-1 1q-11 11-27.5 11T316-274q-12-12-12-28.5t12-28.5q23-23 25.5-54.5T321-440l-47-46q-12-12-12-28.5t12-28.5l57-56q12-12 12-28.5T331-656l-64 64q-68 68-68 162.5T267-267q68 68 163 68t163-68l239-240q12-12 28.5-12t28.5 12q12 12 12 28.5T889-450L649-211q-91 91-219 91t-219-91Zm219-219Z"/></svg>
         <div>{{__('You don\'t have created any post. To create your first post, just click the button below !')}}<br/>
           <a wire:navigate href="{{route('contributor')}}" class="mt-5 btn btn-primary">{{__('Learn how to create your first post !')}}</a>

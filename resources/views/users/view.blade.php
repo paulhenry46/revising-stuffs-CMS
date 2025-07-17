@@ -14,12 +14,12 @@
         </ul>
       </div>
       <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
-      <div class="bg-base-200 dark:bg-base-100 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
+      <div class="bg-base-200 dark:bg-base-100 gap-6 lg:gap-8 p-6 lg:p-8">
           <x-info-message />
           <div>
             <div class="">
               <div class="relative z-0 mt-1 flex h-32 w-full justify-center rounded-xl bg-cover bg-primary">
-                <div class="absolute -bottom-12 flex h-[88px] w-[88px] items-center justify-center rounded-full border-[4px] border-base-100">
+                <div class="absolute -bottom-12 flex h-[88px] w-[88px] items-center justify-center rounded-full border-4 border-base-100">
                   <img class="h-full w-full rounded-full" src="{{$user->profile_photo_url}}" alt="" />
                 </div>
               </div>
@@ -56,7 +56,7 @@
                     </svg> @endif </a>
                 </div> @endif
               </div>
-              <div class="mt-6 mb-3 flex gap-4 md:!gap-14 items-center justify-center">
+              <div class="mt-6 mb-3 flex gap-4 md:gap-14! items-center justify-center">
                 <div class="flex flex-col items-center justify-center">
                   <h3 class="text-primary text-2xl font-bold">
                     <livewire:stats.user.posts-user-count :user=$user lazy />

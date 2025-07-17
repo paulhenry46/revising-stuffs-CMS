@@ -40,7 +40,7 @@
 <div class="p-6 lg:p-8 bg-base-200 dark:bg-base-200 border-b border-gray-200 dark:border-gray-700">
             <h1 class=" text-2xl font-medium text-gray-900 dark:text-white"> @if($state == 'update')  {{__('Edit Primary files')}} @else {{__('New Primary file')}} @endif </h1>
           </div>
-            <div class="bg-base-200 dark:bg-base-200 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
+            <div class="bg-base-200/25 dark:bg-base-200/25 gap-6 lg:gap-8 p-6 lg:p-8">
                <livewire:edit-primary-files :post=$post :state=$state />
             </div>
         </div>

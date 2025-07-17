@@ -10,7 +10,7 @@
 
 </div>
 
-<div class="bg-base-200 dark:bg-base-200 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
+<div class="bg-base-200/25 dark:bg-base-200/25 gap-6 lg:gap-8 p-6 lg:p-8">
 <x-info-message/>
 <div class="px-4 sm:px-6 lg:px-8">
 
@@ -43,7 +43,7 @@
                                         <div class="card-body">
                                             <div class="flex items-center justify-center">
                                                 <div class="avatar">
-                                                    <div class="w-24 rounded-full ring 
+                                                    <div class="w-24 rounded-full ring-3 
                                                     @if($user->hasRole('admin'))
                                                 ring-error 
                                                 @elseif($user->hasRole('moderator'))

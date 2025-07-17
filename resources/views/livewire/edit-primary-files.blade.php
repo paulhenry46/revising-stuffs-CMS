@@ -1,4 +1,4 @@
-<div class="bg-base-200 dark:bg-base-200 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
+<div class="bg-base-200/25 dark:bg-base-200/25 gap-6 lg:gap-8 p-6 lg:p-8">
 @if($update)
 <div class="border-b dark:border-white/10 border-gray-900/10 pb-12">
       <h2 class="text-base font-semibold leading-7 text-gray-900 dark:text-white pb-3">{{__('Update Informations')}}</h2>

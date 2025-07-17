@@ -42,7 +42,7 @@
                         @if($card->id !== 0) {{__('Edit a card')}} @else {{__('Add a new card')}} @endif
                     </h1>
                 </div>
-                <div class="bg-base-200 dark:bg-base-200 bg-opacity-25 gap-6 lg:gap-8 p-6 lg:p-8">
+                <div class="bg-base-200/25 dark:bg-base-200/25 gap-6 lg:gap-8 p-6 lg:p-8">
 
                     <x-info-message/>
                 <form method="POST" action="@if($card->id !== 0) {{route('cards.update', [$post->id, $card->id])}} @else {{route('cards.store', $post->id)}} @endif">

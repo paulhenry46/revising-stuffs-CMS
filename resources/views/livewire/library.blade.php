@@ -19,20 +19,20 @@
         
         <div class="sm:col-span-2">
             <label for="location" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Particularities')}}</label>
-            <div class="form-control w-52">
-    <label class="cursor-pointer label">
+            <div class="form-control">
+    <label class="cursor-pointer label flex justify-between mt-1">
       <span class="label-text">{{__('Only with Dark version')}}</span> 
       <input wire:model.live="dark" type="checkbox" class="toggle toggle-primary" />
     </label>
   </div>
-  <div class="form-control w-52">
-    <label class="cursor-pointer label">
+  <div class="form-control">
+    <label class="cursor-pointer label flex justify-between mt-1">
       <span class="label-text">{{__('Only with Quizlet')}}</span> 
       <input wire:model.live="quizlet" type="checkbox" class="toggle toggle-primary"  />
     </label>
   </div>
-  <div class="form-control w-52">
-    <label class="cursor-pointer label">
+  <div class="form-control">
+    <label class="cursor-pointer label flex justify-between mt-1">
       <span class="label-text">{{__('Only with Cards')}}</span> 
       <input wire:model.live="cards" type="checkbox" class="toggle toggle-primary" />
     </label>
@@ -43,7 +43,7 @@
          <label for="location" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Type')}}</label>
         @foreach($types_view as $type)
 <div wire:key="type_{{ $type->id }}" class="form-control">
-  <label class="cursor-pointer label">
+  <label class="cursor-pointer label flex justify-between mt-1">
     <span class="label-text">{{$type->name}}</span>
     <input value="{{$type->id}}" wire:model.live="types" type="checkbox" class="checkbox checkbox-info"/>
   </label>
@@ -55,7 +55,7 @@
 
         @foreach($schools_view as $school)
 <div wire:key="school_{{ $school->id }}" class="form-control">
-  <label class="cursor-pointer label">
+  <label class="cursor-pointer label flex justify-between mt-1">
     <span class="label-text">{{$school->name}}</span>
     <input value="{{$school->id}}" wire:model.live="schools" type="checkbox" class="checkbox checkbox-info"/>
   </label>

@@ -55,7 +55,7 @@
 <div class="">
   <div class="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:flex lg:items-center lg:justify-between lg:px-8">
     <h2 class="text-3xl font-bold tracking-tight dark:text-white text-gray-900 sm:text-4xl">{{__('Ready to dive in?')}}<br>{{__('Start contributing right away!')}}</h2>
-    <div class="mt-10 flex items-center gap-x-6 lg:mt-0 lg:flex-shrink-0">
+    <div class="mt-10 flex items-center gap-x-6 lg:mt-0 lg:shrink-0">
       <a href="{{route('posts.create')}}" class="btn btn-primary">{{__('Create your fisrt post')}}</a>
                 <a onclick="my_modal_1.showModal()" class="btn btn-outline">{{__('Your curriculum or school isn\'t registered ?')}}</a>
     </div>

@@ -46,7 +46,7 @@
   </span>
 </div>
     @else <div class="object-cover w-full h-48">
-      <div class="flex h-72 flex-col items-center justify-center gap-6  p-10 text-center [text-wrap:balance]">
+      <div class="flex h-72 flex-col items-center justify-center gap-6  p-10 text-center text-balance">
         <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
           <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0 0v-560 560Zm80-80h400q12 0 18-11t-2-21L586-459q-6-8-16-8t-16 8L450-320l-74-99q-6-8-16-8t-16 8l-80 107q-8 10-2 21t18 11Z" />
         </svg>
@@ -54,7 +54,7 @@
       </div>
     </div> 
     @endif 
-    <div class="right-0 top-0 absolute pin-t pin-l "> @auth
+    <div class="right-0 top-0 absolute pin-t pin-l flex gap-1"> @auth
       <livewire:favorite-button wire:key="fav_{{$post->id}}" :post=$post :user=Auth::user() lazy /> @endauth
     </div>
     <div class="left-0 top-0 absolute pin-t pin-l ">
@@ -64,7 +64,7 @@
   </figure>
   <div class="card-body">
     <h2 class="card-title">{{$post->title}}</h2> @if($description === true) <p>{{$post->description}}</p> @endif <div class="card-actions items-center justify-center flex">
-      <div class="items-center justify-center flex min-h-[6rem] min-w-[18rem] max-w-4xl flex-wrap gap-2">
+      <div class="items-center justify-center flex min-h-24 min-w-[18rem] max-w-4xl flex-wrap gap-2">
         <ul class="menu menu-horizontal bg-base-100 rounded-box">
           <li>
             <a wire:navigate href="{{route('post.public.view', [$post->slug, $post->id])}}">
