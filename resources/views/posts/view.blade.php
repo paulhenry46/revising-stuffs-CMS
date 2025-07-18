@@ -179,7 +179,7 @@
                     </li>
                     @endif
                     @endforeach
-                    @if($post->cards)
+                   @if($post->decks->count()>0)
                     <li>
                     <a wire:navigate href="{{
                                                           route('post.public.cards.show', [$post->slug, $post->id])
@@ -195,8 +195,11 @@
               </div>
             </div>
           </div>
-                        @if($post->cards)
-                        <livewire:step-history :$post lazy /> 
+                        @if($post->decks->count()>0)
+                        @php
+                          $deck = $post->decks->first();
+                        @endphp
+                        <livewire:step-history :$deck lazy /> 
                         @endif <div class="pt-6">
                           <div class="rounded-lg navbar bg-white dark:bg-base-200">
                             <div class="flex-1">
@@ -530,7 +533,7 @@
               <div class="mt-24" x-data="{ activeTab:  0 }">
                 <div class="grid grid-flow-col justify-stretch">
                   <button class="btn btn-primary mr-1" @click="activeTab = 0" class="tab-control" :class="{ 'btn-ghost': activeTab !== 0 }">Accueil</button>
-                  @if($post->cards)<button class="btn btn-primary mr-1" @click="activeTab = 1" class="tab-control" :class="{ 'btn-ghost': activeTab !== 1 }">{{__('Cards')}}</button>@endif
+                  @if($post->decks->count()>0)<button class="btn btn-primary mr-1" @click="activeTab = 1" class="tab-control" :class="{ 'btn-ghost': activeTab !== 1 }">{{__('Cards')}}</button>@endif
                   <button class="btn btn-primary" @click="activeTab = 2" class="tab-control" :class="{ 'btn-ghost': activeTab !== 2 }">Autre</button>
                 </div>
                 <div id="accueil" x-show.transition.in.opacity.duration.600="activeTab === 0">
@@ -724,7 +727,7 @@
                       {{__('Nobody commented that post.')}}
                     </div> @endforelse
                 </div>
-                @if($post->cards)
+                @if($post->decks->count()>0)
                 <div id="cards" x-show.transition.in.opacity.duration.600="activeTab === 1">
                   <ul class="mt-4 menu menu-lg bg-base-200 dark:bg-base-100 w-full rounded-box">
                     <li>
@@ -736,8 +739,11 @@
                         </svg>{{__('Cards')}} </a>
                     </li>
                   </ul>
-                  @if($post->cards)
-                        <livewire:step-history :$post lazy /> @endif
+                  @if($post->decks->count()>0)
+                  @php
+                          $deck = $post->decks->first();
+                        @endphp
+                        <livewire:step-history :$deck lazy /> @endif
                 </div>
                 @endif
                 <div id="others" x-show.transition.in.opacity.duration.600="activeTab === 2">

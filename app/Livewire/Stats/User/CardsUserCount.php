@@ -4,7 +4,10 @@ namespace App\Livewire\Stats\User;
 
 use Livewire\Component;
 use App\Models\Card;
+use App\Models\Deck;
+use App\Models\Post;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 
 class CardsUserCount extends Component
 {
@@ -21,7 +24,15 @@ class CardsUserCount extends Component
     {
         $this->user = $user;
         $this->posts = $this->user->posts()->pluck('id')->toArray();
-        $this->count = Card::whereIn('post_id', $this->posts)->count();
+
+
+        $decks = Deck::whereHasMorph('deckable', Post::class,
+            function (Builder $query) {
+                $query->whereIn('id', $this->posts);
+            })->pluck('id');
+
+        $this->count = Card::whereIn('deck_id', $decks)->count();
+
     }
 
     public function placeholder()

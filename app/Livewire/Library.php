@@ -81,7 +81,7 @@ class Library extends Component
                 return $query->where('dark_version', 1);
             })
             ->when($this->cards, function($query){
-                return $query->where('cards', 1);
+                return $query->has('decks');
             })
             ->when($this->quizlet, function($query){
                 return $query->where('quizlet_url', '!=', NULL);

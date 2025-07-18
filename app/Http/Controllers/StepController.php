@@ -16,11 +16,11 @@ class StepController extends Controller
     public function create(StepRequest $request)
     {
         if(Auth::check()){
-            $LastStep = Step::where('user_id', Auth::id())->where('post_id', $request->postId)->orderBy('created_at', 'DESC')->get();
+            $LastStep = Step::where('user_id', Auth::id())->where('deck_id', $request->deckId)->orderBy('created_at', 'DESC')->get();
             if($LastStep->first() === NULL){ //Check if there is already a step
                 $step = new Step;
                 $step->user_id = Auth::id();
-                $step->post_id = $request->postId;
+                $step->deck_id = $request->deckId;
                 $step->mastery = ($request->percent / 100);
                 $step->percent = $request->percent;
                 $step->next_step = $this->nextStep($step->mastery);
@@ -35,8 +35,8 @@ class StepController extends Controller
                     
                     $step = new Step;
                     $step->user_id = Auth::id();
-                    $step->post_id = $request->postId;
-                    $step->mastery = $this->newMastery($LastStep, $request->percent, Auth::id(), $request->postId);
+                    $step->deck_id = $request->deckId;
+                    $step->mastery = $this->newMastery($LastStep, $request->percent);
                     $step->percent = $request->percent;
                     $step->next_step = $this->nextStep($step->mastery);
                     $step->save();
@@ -60,7 +60,7 @@ class StepController extends Controller
     /**
      * Get the new level of mastery of a post
      */
-    private function newMastery($Laststep, int $percent, int $user_id, int $post_id)
+    private function newMastery($Laststep, int $percent)
     {
         $score = $percent / 100;
 

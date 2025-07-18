@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Deck;
 use App\Models\Post;
 use App\Models\Step;
 use Carbon\Carbon;
@@ -16,10 +17,11 @@ class StepHistory extends Component
 
     public array $HistoryChart;
     public $numberBeforeNextRevision;
-    private $post_id;
+    private $deck_id;
     public $last_step;
     public $masteryLevel;
     public Post $post;
+    public Deck $deck;
     public $mastery_percent;
     public $learning_percent;
     public $learning_cards;
@@ -30,33 +32,21 @@ class StepHistory extends Component
         return view('livewire.step-history');
     }
 
-    public function placeholder()
-    {
-        return <<<'HTML'
-            <div class="mt-6 mb-3 card bg-base-100 shadow-xl">
-                <div class="card-body">
-                    <h2 class="card-title">{{__('Progression')}}</h2>
-                    <span class="text-primary loading loading-spinner loading-sm"></span>
-                </div>
-            </div>
-        HTML;
-    }
-
     public function reinitialize(){
-        Step::where('user_id', Auth::id())->where('post_id', $this->post->id)->delete();
+        Step::where('user_id', Auth::id())->where('deck_id', $this->deck_id)->delete();
         $this->success(
             title: __('Progress reinitialized !')
         );
     }
 
-    public function mount(Post $post)
+    public function mount(Deck $deck)
     {
         if(Auth::check()){
-        $this->post = $post;
-        $this->post_id = $post->id;
-        $this->cards_count = $post->cards()->count();
+        $this->deck = $deck;
+        $this->deck_id = $deck->id;
+        $this->cards_count = $this->deck->cards->count();
 
-        $steps = Step::where('user_id', Auth::id())->where('post_id', $post->id)->orderBy('created_at', 'ASC')->get();
+        $steps = Step::where('user_id', Auth::id())->where('deck_id', $deck->id)->orderBy('created_at', 'ASC')->get();
 
         if($steps->first() !== null){
             $this->last_step = $steps->sortByDesc('created_at')->first();
@@ -77,6 +67,13 @@ class StepHistory extends Component
             }else{
                 $this->numberBeforeNextRevision = 0;
             } 
+        }else{
+            $this->last_step  = new Step;
+            $this->masteryLevel = 0;
+            $this->mastery_percent = 0;
+            $this->learning_percent = 0;
+            $this->mastered_cards = 0;
+            $this->learning_cards = $this->cards_count;
         }
 
         $dates = [];

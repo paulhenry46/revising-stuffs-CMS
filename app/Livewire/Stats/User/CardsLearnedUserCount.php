@@ -11,7 +11,7 @@ class CardsLearnedUserCount extends Component
     
     public User $user;
     public $count;
-    public $posts;
+    public $decks;
     public function render()
     {
         return view('livewire.stats.user.cards-learned-user-count');
@@ -20,8 +20,10 @@ class CardsLearnedUserCount extends Component
     public function mount(User $user)
     {
         $this->user = $user;
-        $this->posts = $this->user->steps()->where('next_step', '!=', null)->where('mastery', '>=', '1')->pluck('post_id')->toArray();
-        $this->count = Card::whereIn('post_id', $this->posts)->count();
+        $this->decks = $this->user->steps()->where('next_step', '!=', null)->where('mastery', '>=', '1')->pluck('deck_id')->toArray();
+        $this->count = Card::whereHas('decks', function ($query) {
+            $query->whereIn('decks.id', $this->decks);
+        })->count();
     }
 
     public function placeholder()

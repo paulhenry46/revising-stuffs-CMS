@@ -25,7 +25,7 @@
           <div>
             <div class='text-center'>
               <div class="relative radial-progress text-gray-200" style="--size:12rem; --value:100;" role="progressbar">
-                <div class="absolute radial-progress z-10 @if($learning_percent >=75) text-success @elseif($learning_percent >=40) bg-warning @else bg-error @endif" style="--size:12rem; --value:{{$learning_percent}};" role="progressbar">
+                <div class="absolute radial-progress z-10 @if($learning_percent >=75) text-success @elseif($learning_percent >=40) text-warning @else text-error @endif" style="--size:12rem; --value:{{$learning_percent}};" role="progressbar">
                   {{$learning_percent}}%
                 </div>
                 <br>

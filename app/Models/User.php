@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -67,6 +68,12 @@ class User extends Authenticatable
     { 
     return $this->hasMany(Post::class); 
     }
+
+    public function decks(): MorphMany
+    {
+        return $this->morphMany(Deck::class, 'deckable');
+    }
+
     public function comments() 
     { 
     return $this->hasMany(Comment::class); 

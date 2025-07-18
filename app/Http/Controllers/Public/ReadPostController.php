@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\Course;
 use App\Models\Curriculum;
+use App\Models\Deck;
 use App\Models\Level;
 use Auth;
 use Carbon\Carbon;
@@ -37,18 +38,21 @@ class ReadPostController extends Controller
             if (Auth::check()) {
             $user = Auth::user();
             $posts = Post::where('published', '=', 1)->whereIn('id', $user->favorite_posts)->latest()->get();
-            $RevisePosts = Post::whereHas('steps', function ($query) {
+
+            $ids = Deck::whereHas('steps', function ($query) {
                 $query->where('user_id', Auth::id());
                 $query->where('next_step', '<=', Carbon::today());
                 $query->where('next_step', '!=', null);
-            })->get();
+            })->whereHasMorph('deckable',Post::class)->pluck('deckable_id');
+            $RevisePosts = Post::whereIn('id', $ids)->get();
             $logged = true;
+            $decks = $user->decks;
         }else{
             $posts = null;
             $RevisePosts = null;
             $logged = false;
         }
-            return view('posts.favorites', compact('posts', 'RevisePosts', 'logged'));
+            return view('posts.favorites', compact('posts', 'RevisePosts', 'logged', 'decks'));
     }
 
 

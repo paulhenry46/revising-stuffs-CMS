@@ -192,6 +192,7 @@
                                   </div>
                         </div>
                         <livewire:learn-history :$user lazy/>
+                        <livewire:decks-manager :$user lazy/>
                             <div class="pt-2">
                                 <div class="card bg-base-100 shadow-xl">
                                 

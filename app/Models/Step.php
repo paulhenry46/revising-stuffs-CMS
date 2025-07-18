@@ -13,9 +13,9 @@ class Step extends Model
     { 
         return $this->belongsTo(User::class);
     }
-    public function post()
+    public function deck()
     { 
-        return $this->belongsTo(Post::class);
+        return $this->belongsTo(Deck::class);
     }
 
     /**

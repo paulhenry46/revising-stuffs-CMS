@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Post extends Model
 {
@@ -33,10 +34,12 @@ class Post extends Model
     { 
     return $this->hasMany(File::class); 
     }
-    public function steps() 
-    { 
-    return $this->hasMany(Step::class); 
+
+    public function decks(): MorphMany
+    {
+        return $this->morphMany(Deck::class, 'deckable');
     }
+
     public function events() 
     { 
     return $this->hasMany(Event::class); 
@@ -44,10 +47,6 @@ class Post extends Model
     public function comments() 
     { 
     return $this->hasMany(Comment::class); 
-    }
-    public function cards() 
-    { 
-    return $this->hasMany(Card::class); 
     }
     public function likes() 
     { 

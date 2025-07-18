@@ -7,6 +7,7 @@ use App\Models\Post;
 use Illuminate\Support\Str;
 use App\Http\Requests\CardRequest;
 use App\Http\Requests\CardImportRequest;
+use App\Models\Deck;
 use Illuminate\Support\Facades\Response;
 use \Illuminate\Validation\ValidationException;
 
@@ -94,15 +95,21 @@ class CardController extends Controller
     public function store(CardRequest $request, Post $post)
     {
         $this->authorize('create',[Card::class, $post]);
-        //$front_serialized = str_ireplace($this->forbiden_tags, '', $request->front);
-        //$back_serialized = str_ireplace($this->forbiden_tags, '', $request->back);
+
+        if (!$post->decks) {
+            $deck = new Deck();
+            $deck->name = 'main';
+            $post->decks()->save($deck);
+        }
+
+        $deck = $post->decks->first();
 
         $file_path=url('storage/'.$post->level->curriculum->slug.'/'.$post->level->slug.'/'.$post->course->slug.'/');
 
         $card = New Card;
         $card->front = $this->replace_values($request->front, $file_path);
         $card->back = $this->replace_values($request->back, $file_path);
-        $card->post_id = $post->id;
+        $card->deck_id = $deck->id;
         $card->save();
         if(!$post->cards){
             $post->cards = true;
@@ -120,6 +127,14 @@ class CardController extends Controller
     public function storeImport(CardImportRequest $request, Post $post)
     {
         $this->authorize('create', [Card::class, $post]);
+
+        if (!$post->decks) {
+            $deck = new Deck();
+            $deck->name = 'main';
+            $post->decks()->save($deck);
+        }
+        $deck = $post->decks->first();
+
         $file_path=url('storage/'.$post->level->curriculum->slug.'/'.$post->level->slug.'/'.$post->course->slug.'/');
         $input = $request->content;
         //The separator by defalut is a tabulation
@@ -144,7 +159,7 @@ class CardController extends Controller
             foreach ($values as $col_index => $value) {
                 $newLine[$cols[$col_index]] = $this->replace_values($value, $file_path);
             }
-            $newLine['post_id'] = $post->id;
+            $newLine['deck_id'] = $deck->id;
             $newLine['updated_at'] = now();
             $newLine['created_at'] = now();
             if ((!array_key_exists('front', $newLine))or(!array_key_exists('back', $newLine))) {
@@ -207,7 +222,7 @@ class CardController extends Controller
         $this->authorize('view', $post);
         
         $this->authorize('export', [Card::class, $post]);
-        $cards = Card::where('post_id', '=', $post->id)->get();
+        $cards = Card::where('deck_id', '=', $post->decks->first()->id)->get();
         $csvFileName = 'cards-'.$post->title.'-'.$post->id.'.csv';
         $headers = [
             'Content-Type' => 'text/csv',

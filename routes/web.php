@@ -24,7 +24,7 @@ use App\Http\Controllers\StepController;
 use App\Http\Controllers\StorageController;
 use App\Http\Middleware\EnsureUserCursusProfileIsCompleted;
 use App\Http\Controllers\Auth\GoogleController;
-
+use App\Http\Controllers\Public\ReadCardInUserDeckController;
 
 /*
 |--------------------------------------------------------------------------
@@ -148,6 +148,14 @@ Route::middleware([
     
     //Used to send datas for quiz-mode in cards
     Route::post('/step', [StepController::class, 'create'])->name('step.add');
+
+    Route::prefix('/decks/{slug}-{deck}')->name('decks.')->group(function() {
+                Route::get('/', [ReadCardInUserDeckController::class, 'show'])->name('show');
+                Route::get('/export', [ReadCardInUserDeckController::class, 'export'])->name('export');
+                Route::get('/learn', [ReadCardInUserDeckController::class, 'learn'])->name('learn');
+                Route::get('/quiz', [ReadCardInUserDeckController::class, 'quiz'])->name('quiz');
+                    });
+    
 
     Route::group(['middleware' => ['can:manage own posts']], function () {
         //Manage the posts

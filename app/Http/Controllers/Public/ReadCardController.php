@@ -13,10 +13,7 @@ class ReadCardController extends Controller
     public function quiz(string $slug, Post $post)
     {
         $this->authorize('view', $post);
-
-        $cards = Card::where('post_id', '=', $post->id)
-        ->get()
-        ->toJSON();
+        $cards = $post->decks->first()->cards->toJSON();
         return view('cards.quiz-public', compact('post', 'cards'));
         
     }
@@ -27,9 +24,7 @@ class ReadCardController extends Controller
     {
         $this->authorize('view', $post);
 
-        $cards = Card::where('post_id', '=', $post->id)
-        ->get()
-        ->toJSON();
+        $cards = $post->decks->first()->cards->toJSON();
         return view('cards.learn-public', compact('post', 'cards'));
     }
     /**
@@ -39,8 +34,8 @@ class ReadCardController extends Controller
     {
         $this->authorize('view', $post);
         
-        $cards = Card::where('post_id', '=', $post->id)
-        ->get();
+        $cards = $post->decks->first()->cards;
+        
         return view('cards.show-public', compact('post', 'cards'));
     }
 

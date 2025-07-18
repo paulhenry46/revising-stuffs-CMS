@@ -12,4 +12,9 @@ class Card extends Model
     { 
     return $this->belongsTo(Post::class); 
     }
+
+    public function decks()
+    {
+        return $this->belongsToMany(Deck::class);
+    }
 }
