@@ -24,7 +24,7 @@
         <div class='grid grid-cols-2'>
           <div>
             <div class='text-center'>
-              <div class="relative radial-progress text-gray-200" style="--size:12rem; --value:100;" role="progressbar">
+              <div class="relative radial-progress text-base-300" style="--size:12rem; --value:100;" role="progressbar">
                 <div class="absolute radial-progress z-10 @if($learning_percent >=75) text-success @elseif($learning_percent >=40) text-warning @else text-error @endif" style="--size:12rem; --value:{{$learning_percent}};" role="progressbar">
                   {{$learning_percent}}%
                 </div>
@@ -107,7 +107,7 @@
           </div>
         </div>
         <div class='flex  mt-4 items-center'>
-                <span class="@if($masteryLevel >= 6) bg-success @elseif($masteryLevel >= 4) bg-green-500 @else  bg-warning @endif rounded-full w-12 flex flex-col items-center mr-1 dark:text-white"> {{ $masteryLevel }} </span>
+                <span class="@if($masteryLevel >= 6) bg-success @elseif($masteryLevel >= 4) bg-green-500 @elseif($masteryLevel >=1 )  bg-warning @else bg-error @endif rounded-full w-12 flex flex-col items-center mr-1 dark:text-white"> {{ $masteryLevel }} </span>
                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M579-480 285-774q-15-15-14.5-35.5T286-845q15-15 35.5-15t35.5 15l307 308q12 12 18 27t6 30q0 15-6 30t-18 27L356-115q-15 15-35 14.5T286-116q-15-15-15-35.5t15-35.5l293-293Z"/></svg>
                 <span class="@if($masteryLevel +1 >= 6) bg-success @elseif($masteryLevel +1 >= 4) bg-green-500 @else  bg-warning @endif rounded-full w-12 flex flex-col items-center ml-1 mr-4 dark:text-white"> {{ $masteryLevel +1}} </span>
                 @if($numberBeforeNextRevision >= 1)

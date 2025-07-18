@@ -20,16 +20,8 @@ class LearnHistory extends Component
         return view('livewire.learn-history');
     }
 
-    public function placeholder()
-    {
-        return <<<'HTML'
-            <div class="mt-6 mb-3 card bg-base-100 shadow-xl">
-                <div class="card-body">
-                    <h2 class="card-title">{{__('Progress')}}</h2>
-                    <span class="text-primary loading loading-spinner loading-sm"></span>
-                </div>
-            </div>
-        HTML;
+    public function deleteAllSteps(){
+        Step::where('user_id', $this->user->id)->delete();
     }
 
 

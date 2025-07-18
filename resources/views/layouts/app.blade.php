@@ -16,7 +16,7 @@
 <meta name="description" content="{{request()->route('post')->description}}" >
 @endif
 
-@if((Route::is('cards.index')) or (Route::is('post.public.cards.*')) )
+@if((Route::is('cards.index')) or  (Route::is('post.public.cards.*'))  or (Route::is('decks.*')) )
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 @endif
 
