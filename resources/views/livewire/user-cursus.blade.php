@@ -42,7 +42,7 @@
             <div class="mt-2">
             @foreach($courses as $course)
             <div wire:key="type_{{ $course->id }}" class="form-control">
-                <label class="cursor-pointer label">
+                <label class="cursor-pointer label flex justify-between">
                     <span class="label-text">{{$course->name}}</span>
                     <input name="course_{{$course->id}}" @if($user->hasCourse($course->id)) checked="yes" @endif value="{{$course->id}}"  type="checkbox" 
                     class="checkbox  border-{{$course->color}} checked:border-{{$course->color}} [--chkbg:theme(colors.{{str_replace('-', '.',$course->color)}})] [--chkfg:black]"

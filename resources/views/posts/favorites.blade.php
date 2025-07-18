@@ -73,7 +73,7 @@
     </h1>
 </div>
 </div>
-<div class="grid grid-cols-4 gap-4 mt-3">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-3">
 
 @forelse($decks as $deck)
         @if($deck->cards->count()>0)
