@@ -8,6 +8,7 @@ use App\Models\Deck;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 class CardsUserCount extends Component
 {
@@ -31,7 +32,10 @@ class CardsUserCount extends Component
                 $query->whereIn('id', $this->posts);
             })->pluck('id');
 
-        $this->count = Card::whereIn('deck_id', $decks)->count();
+        $this->count = DB::table('card_deck')
+            ->whereIn('deck_id', $decks)
+            ->distinct()
+            ->count('card_id');
 
     }
 
