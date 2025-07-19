@@ -27,9 +27,6 @@
           <div class=" -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
               <ul class="space-y-4"> 
-                 @php
-                  $user = Auth::user();
-                @endphp
                     @foreach ($cards as $card) 
                     <x-flashcard-card :card="$card" :user="$user"/> 
                     @endforeach 

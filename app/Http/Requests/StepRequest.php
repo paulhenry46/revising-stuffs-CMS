@@ -23,7 +23,7 @@ class StepRequest extends FormRequest
     {
         return [
             'percent' => 'bail|required|int',
-            'postId' => 'bail|required|int'
+            'deckId' => 'bail|required|int'
         ];
     }
 }

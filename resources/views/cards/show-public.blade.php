@@ -78,10 +78,6 @@
           </div>
         </div>
 
-                        @php
-                          $deck = $post->decks->first();
-                        @endphp
-
         <livewire:step-history :$deck lazy />
         <div class="rounded-lg navbar bg-base-100 mt-8">
           <div class="flex-1">
@@ -116,11 +112,9 @@
           <div class=" -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
               <ul class="space-y-4"> 
-                @php
-                  $user = Auth::user();
-                @endphp
+                
                 @if($user)
-                  @if(Auth::id()==$post->user_id) 
+                  @if($user->id==$post->user_id) 
                     @foreach ($cards as $card) 
                     <x-flashcard-card-edit :card="$card" :post="$post" :user="$user"/> 
                     @endforeach 
@@ -130,15 +124,9 @@
                     @endforeach 
                   @endif
                 @else
-                  @if(Auth::id()==$post->user_id) 
-                    @foreach ($cards as $card) 
-                    <x-flashcard-card-edit :card="$card" :post="$post" :user="$user"/> 
-                    @endforeach 
-                  @else 
                     @foreach ($cards as $card) 
                     <x-flashcard-card :card="$card" :post="$post" :user="$user"/> 
                     @endforeach 
-                  @endif
                 @endif
               </ul>
             </div>

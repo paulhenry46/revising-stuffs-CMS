@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Public;
 use App\Http\Controllers\Controller;
 use App\Models\Card;
 use App\Models\Deck;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 
 class ReadCardInUserDeckController extends Controller
@@ -39,8 +40,9 @@ class ReadCardInUserDeckController extends Controller
         $this->authorize('view', $deck);
         
         $cards = $deck->cards;
+        $user = Auth::user();
 
-        return view('cards.show-deck', compact('deck', 'cards'));
+        return view('cards.show-deck', compact('deck', 'cards', 'user'));
     }
 
     public function export(string $slug, Deck $deck)

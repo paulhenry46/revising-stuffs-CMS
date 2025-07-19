@@ -376,7 +376,7 @@
                 percent = Math.round((success/this.cards.length)*100);
 
               body = JSON.stringify({
-                postId: '{{$post->id}}',
+                deckId: '{{$deck->id}}',
                 _token: document.head.querySelector('meta[name=csrf-token]').content,
                 percent: percent,
               }),
