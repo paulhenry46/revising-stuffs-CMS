@@ -63,46 +63,46 @@
     <div class="sm:col-span-3">
       <fieldset>
 <legend class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Choose a label color')}}</legend>
-<div class="mt-4 flex items-center space-x-3">
+<div class="mt-4 flex items-center space-x-3 fieldset">
 <label class="@if(old('color', $course->color)=='gray-500') ring-2 @endif relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-hidden ring-gray-500">
   <input type="radio" name="color" value="gray-500" class="sr-only" aria-labelledby="color-2-label" @if(old('color', $course->color)=='gray-500') checked @endif >
   <span id="color-2-label" class="sr-only">Gray</span>
-  <span aria-hidden="true" class="h-8 w-8 bg-gray-500 rounded-full border border-black border-opacity-10"></span>
+  <span aria-hidden="true" class="h-8 w-8 bg-gray-500 rounded-full "></span>
 </label>
 <label class="@if(old('color', $course->color)=='blue-500') ring-2 @endif relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-hidden ring-blue-500">
   <input type="radio" name="color" value="blue-500" class="sr-only" aria-labelledby="color-2-label" @if(old('color', $course->color)=='blue-500') checked @endif >
   <span id="color-2-label" class="sr-only">Blue</span>
-  <span aria-hidden="true" class="h-8 w-8 bg-blue-500 rounded-full border border-black border-opacity-10"></span>
+  <span aria-hidden="true" class="h-8 w-8 bg-blue-500 rounded-full "></span>
 </label>
 <label class="@if(old('color', $course->color)=='purple-500') ring-2 @endif relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-hidden ring-purple-500">
   <input type="radio" name="color" value="purple-500" class="sr-only" aria-labelledby="color-1-label" @if(old('color', $course->color)=='purple-500') checked @endif >
   <span id="color-1-label" class="sr-only">Purple</span>
-  <span aria-hidden="true" class="h-8 w-8 bg-purple-500 rounded-full border border-black border-opacity-10"></span>
+  <span aria-hidden="true" class="h-8 w-8 bg-purple-500 rounded-full "></span>
 </label>
 <label class="@if(old('color', $course->color)=='pink-500') ring-2 @endif relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-hidden ring-pink-500">
   <input type="radio" name="color" value="pink-500" class="sr-only" aria-labelledby="color-0-label" @if(old('color', $course->color)=='pink-500') checked @endif >
   <span id="color-0-label" class="sr-only">Pink</span>
-  <span aria-hidden="true" class="h-8 w-8 bg-pink-500 rounded-full border border-black border-opacity-10"></span>
+  <span aria-hidden="true" class="h-8 w-8 bg-pink-500 rounded-full "></span>
 </label>
 <label class="@if(old('color', $course->color)=='red-500') ring-2 @endif relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-hidden ring-red-500">
   <input type="radio" name="color" value="red-500" class="sr-only" aria-labelledby="color-2-label" @if(old('color', $course->color)=='red-500') checked @endif >
   <span id="color-2-label" class="sr-only">Red</span>
-  <span aria-hidden="true" class="h-8 w-8 bg-red-500 rounded-full border border-black border-opacity-10"></span>
+  <span aria-hidden="true" class="h-8 w-8 bg-red-500 rounded-full "></span>
 </label>
 <label class="@if(old('color', $course->color)=='orange-500') ring-2 @endif relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-hidden ring-orange-500">
   <input type="radio" name="color" value="orange-500" class="sr-only" aria-labelledby="color-2-label" @if(old('color', $course->color)=='orange-500') checked @endif >
   <span id="color-2-label" class="sr-only">Orange</span>
-  <span aria-hidden="true" class="h-8 w-8 bg-orange-500 rounded-full border border-black border-opacity-10"></span>
+  <span aria-hidden="true" class="h-8 w-8 bg-orange-500 rounded-full "></span>
 </label>
 <label class="@if(old('color', $course->color)=='yellow-500') ring-2 @endif relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-hidden ring-yellow-500">
   <input type="radio" name="color" value="yellow-500" class="sr-only" aria-labelledby="color-4-label" @if(old('color', $course->color)=='yellow-500') checked @endif >
   <span id="color-4-label" class="sr-only">Yellow</span>
-  <span aria-hidden="true" class="h-8 w-8 bg-yellow-500 rounded-full border border-black border-opacity-10"></span>
+  <span aria-hidden="true" class="h-8 w-8 bg-yellow-500 rounded-full "></span>
 </label>
 <label class="@if(old('color', $course->color)=='green-500') ring-2 @endif relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-hidden ring-green-500">
   <input type="radio" name="color" value="green-500" class="sr-only" aria-labelledby="color-3-label" @if(old('color', $course->color)=='green-500') checked @endif >
   <span id="color-3-label" class="sr-only">Green</span>
-  <span aria-hidden="true" class="h-8 w-8 bg-green-500 rounded-full border border-black border-opacity-10"></span>
+  <span aria-hidden="true" class="h-8 w-8 bg-green-500 rounded-full "></span>
 </label>
 </div>
 </fieldset>

@@ -58,7 +58,7 @@
     <div class="sm:col-span-3">
     <label for="courses[]" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Courses')}}</label>
     <div class="mt-2">
-    <select name="courses[]" multiple="true" class="select select-bordered w-full select-primary">
+    <select name="courses[]" multiple="true" class="select select-bordered w-full select-primary h-36">
         @foreach($courses as $course)
             <option value="{{ $course->id }}" {{ in_array($course->id, old('courses', $level->courses->pluck('id')->all()) ?: []) ? 'selected' : '' }}>{{ $course->name }}</option>
         @endforeach
