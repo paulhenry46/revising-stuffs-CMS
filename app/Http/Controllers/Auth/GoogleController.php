@@ -30,6 +30,7 @@ class GoogleController extends Controller
                     'email' => $user->email,
                     'password' => Str::random(24)
                 ]);
+                $newUser->assignRole('student');
 
                 Auth::login($newUser, true);
                 return redirect()->intended('dashboard');
