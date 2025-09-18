@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use App\Http\Requests\CardRequest;
 use App\Http\Requests\CardImportRequest;
 use App\Models\Deck;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use \Illuminate\Validation\ValidationException;
 
@@ -96,10 +97,11 @@ class CardController extends Controller
     {
         $this->authorize('create',[Card::class, $post]);
 
-        if (!$post->decks) {
+        if ($post->decks->isEmpty()) {
             $deck = new Deck();
             $deck->name = 'main';
             $post->decks()->save($deck);
+            $post->load('decks');
         }
 
         $deck = $post->decks->first();
@@ -115,6 +117,7 @@ class CardController extends Controller
             $post->cards = true;
             $post->save();
         }
+        $deck->cards()->attach($card->id);
         return redirect()->route('cards.index', $post->id)->with('message', __('The card has been created.'));
     }
 
@@ -128,10 +131,11 @@ class CardController extends Controller
     {
         $this->authorize('create', [Card::class, $post]);
 
-        if (!$post->decks) {
+        if ($post->decks->isEmpty()) {
             $deck = new Deck();
             $deck->name = 'main';
             $post->decks()->save($deck);
+            $post->load('decks');
         }
         $deck = $post->decks->first();
 
@@ -159,7 +163,7 @@ class CardController extends Controller
             foreach ($values as $col_index => $value) {
                 $newLine[$cols[$col_index]] = $this->replace_values($value, $file_path);
             }
-            $newLine['deck_id'] = $deck->id;
+            $newLine['post_id'] = $post->id;
             $newLine['updated_at'] = now();
             $newLine['created_at'] = now();
             if ((!array_key_exists('front', $newLine))or(!array_key_exists('back', $newLine))) {
@@ -171,11 +175,21 @@ class CardController extends Controller
             }
             $output[] = $newLine;
         }
-        Card::insert($output);
+
         if(!$post->cards){
                 $post->cards = true;
                 $post->save();
             }
+        $insertedCards = [];
+        DB::transaction(function () use ($output, &$insertedCards) {
+                foreach ($output as $card) {
+                    $insertedCards[] = DB::table('cards')->insertGetId($card);
+                }
+            });
+
+        // Attach to deck (avoiding duplicates)
+        $deck->cards()->syncWithoutDetaching($insertedCards);
+
         return redirect()->route('cards.index', $post->id)->with('message', __('The cards has been imported.'));
     }
 
