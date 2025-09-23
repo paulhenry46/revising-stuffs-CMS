@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StepRequest;
 use App\Models\Step;
+use App\Models\Deck;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,6 +22,7 @@ class StepController extends Controller
                 $step = new Step;
                 $step->user_id = Auth::id();
                 $step->deck_id = $request->deckId;
+                $step->post_id = Deck::find($step->deck_id)->deckable->id;
                 $step->mastery = ($request->percent / 100);
                 $step->percent = $request->percent;
                 $step->next_step = $this->nextStep($step->mastery);
@@ -36,6 +38,7 @@ class StepController extends Controller
                     $step = new Step;
                     $step->user_id = Auth::id();
                     $step->deck_id = $request->deckId;
+                    $step->post_id = Deck::find($step->deck_id)->deckable->id;
                     $step->mastery = $this->newMastery($LastStep, $request->percent);
                     $step->percent = $request->percent;
                     $step->next_step = $this->nextStep($step->mastery);
