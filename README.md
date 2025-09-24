@@ -18,7 +18,7 @@ For screenchots, informations about setup and features, see [the Wiki](https://g
 - Alpine.js
 
 ## Security
-If you discover a security vulnerability within RSCMS, please send an e-mail to Paulhenry via [paulhenry@paulhenry.eu](mailto:paulhenry@saux.fr). All security vulnerabilities will be promptly addressed.
+If you discover a security vulnerability within RSCMS, please send an e-mail to Paulhenry via [paulhenry@paulhenry.eu](mailto:open-source@saux.fr). All security vulnerabilities will be promptly addressed.
 
 ## License
 RSCMR is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
