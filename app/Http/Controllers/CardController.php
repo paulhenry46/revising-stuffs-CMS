@@ -236,7 +236,8 @@ class CardController extends Controller
         $this->authorize('view', $post);
         
         $this->authorize('export', [Card::class, $post]);
-        $cards = Card::where('deck_id', '=', $post->decks->first()->id)->get();
+        $cards = $post->decks->first()->cards;
+        //$cards = Card::where('deck_id', '=', $post->decks->first()->id)->get();
         $csvFileName = 'cards-'.$post->title.'-'.$post->id.'.csv';
         $headers = [
             'Content-Type' => 'text/csv',
