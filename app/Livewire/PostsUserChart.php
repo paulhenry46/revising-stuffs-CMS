@@ -38,6 +38,12 @@ class PostsUserChart extends Component
             return $downloads->has($month) ? $downloads[$month]->count() : 0;
         });
 
+
+        // Calculate average downloads per month (ignore months with 0 downloads)
+        $nonZeroMonths = $downloadsByMonth->filter(function($v) { return $v > 0; });
+        $average = $nonZeroMonths->count() > 0 ? round($nonZeroMonths->sum() / $nonZeroMonths->count(), 2) : 0;
+        $averageLine = array_fill(0, $months->count(), $average);
+
         $this->HistoryChart = [
             'type' => 'bar',
             'data' => [
@@ -46,6 +52,18 @@ class PostsUserChart extends Component
                 }),
                 'datasets' => [
                     [
+                        'type' => 'line',
+                        'label' => 'Average',
+                        'data' => $averageLine,
+                        'borderColor' => 'rgb(255, 82, 217)',
+                        'backgroundColor' => 'rgba(255, 82, 217, 0.2)',
+                        'borderWidth' => 2,
+                        'pointRadius' => 0,
+                        'fill' => false,
+                        'tension' => 0.1,
+                        'borderDash' => [10,5],
+                    ],
+                    [
                         'label' => 'Downloads',
                         'data' => $downloadsByMonth,
                         'fill' => true,
@@ -53,6 +71,7 @@ class PostsUserChart extends Component
                         'backgroundColor'=> 'rgba(255, 88, 97, 1)',
                         'stack'=> 'Stack 0'
                     ],
+                    
                 ]
             ],
             'options' => [
@@ -62,11 +81,10 @@ class PostsUserChart extends Component
                         'stacked'=> true,
                     ],
                     'y'=> [
-                              'stacked'=> true
-                            ]
-                    
-                        ]
+                        'stacked'=> true
                     ]
+                ]
+            ]
         ];
     }
 }
