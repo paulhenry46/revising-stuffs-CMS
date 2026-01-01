@@ -51,6 +51,7 @@ class ReadPostController extends Controller
             $posts = null;
             $RevisePosts = null;
             $logged = false;
+            $decks = null;
         }
             return view('posts.favorites', compact('posts', 'RevisePosts', 'logged', 'decks'));
     }
