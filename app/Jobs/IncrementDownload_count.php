@@ -3,6 +3,8 @@
 namespace App\Jobs;
 
 use App\Models\File;
+use App\Models\Post;
+use App\Services\DownloadService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -33,13 +35,25 @@ class IncrementDownload_count implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(): void
+    public function handle(DownloadService $downloadService): void
     {
-        // Using preg_match_all to extract numbers
+        // Using preg_match to extract post ID from filename
         preg_match('/\d+/', $this->name, $numbers);
         
-        //Increment file
-        File::where('post_id', $numbers[0])->where('type', $this->type)->increment('download_count');
-        
+        if (!empty($numbers)) {
+            $postId = $numbers[0];
+            
+            // Increment file download count (legacy system)
+            File::where('post_id', $postId)
+                ->where('type', $this->type)
+                ->increment('download_count');
+            
+            // Record download in new event-based system
+            $post = Post::find($postId);
+            if ($post) {
+                $downloadService->recordDownload($post, auth()->user());
+            }
+        }
     }
 }
+

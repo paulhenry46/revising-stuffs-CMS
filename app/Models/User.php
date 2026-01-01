@@ -88,6 +88,11 @@ class User extends Authenticatable
     return $this->hasMany(Step::class); 
     }
 
+    public function downloads()
+    {
+        return $this->hasMany(\App\Models\Download::class);
+    }
+
     public function school()
     {
         return $this->belongsTo(School::class);

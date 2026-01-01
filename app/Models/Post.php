@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Post extends Model
@@ -81,12 +82,32 @@ class Post extends Model
         }
         return false;
     }
-    public function downloads(): int{
+    /**
+     * Get all download events for this post.
+     */
+    public function downloads(): HasMany
+    {
+        return $this->hasMany(Download::class);
+    }
+
+    /**
+     * Get the total download count from files (legacy method).
+     */
+    public function downloadsFromFiles(): int
+    {
         $files = $this->files;
         $count = 0;
         foreach($files as $file){
             $count = $count + $file->download_count;
         }
         return $count;
+    }
+
+    /**
+     * Increment the downloads counter for this post.
+     */
+    public function incrementDownloads(): void
+    {
+        $this->increment('downloads_total');
     }
 }
