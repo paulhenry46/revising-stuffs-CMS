@@ -52,6 +52,7 @@
                                   </div>
                         </div>
 </div>
+<livewire:posts-user-chart :user=Auth::user() lazy />
             <livewire:posts-user-table :user=Auth::user() lazy />
         </div>
     </div>
