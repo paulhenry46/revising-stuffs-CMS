@@ -14,14 +14,15 @@ class StorageController extends Controller
         $new_path = Storage::disk('local')->path($new_path); //Create aboslute path
         $name = basename($new_path);//Create name
         if(file_exists($new_path)){
+            $userId = auth()->check() ? auth()->id() : null;
 
             if(strpos($name, '.dark.pdf')){
                 $canonical_link = url('storage/'.str_replace('.dark.pdf', '.light.pdf',$path).'');
                 //dd($canonical_link);
                 $headers = ['link' =>'<'.$canonical_link.'>; rel="canonical"'];
-                dispatch(new IncrementDownload_count($name, 'primary dark'));
+                dispatch(new IncrementDownload_count($name, 'primary dark', $userId));
             }elseif(strpos($name, '.light.pdf')){
-                dispatch(new IncrementDownload_count($name, 'primary light'));
+                dispatch(new IncrementDownload_count($name, 'primary light', $userId));
             }
 
             return response()->file($new_path, $headers);

@@ -20,16 +20,20 @@ class IncrementDownload_count implements ShouldQueue
 
     protected $name;
     protected $type;
+    protected $userId;
 
     /**
      * Create a new job instance.
      */
     public function __construct(
         string $name,
-        string $type )
+        string $type,
+        ?int $userId = null
+    )
     {
         $this->name = $name;
         $this->type = $type;
+        $this->userId = $userId;
     }
 
     /**
@@ -51,7 +55,8 @@ class IncrementDownload_count implements ShouldQueue
             // Record download in new event-based system
             $post = Post::find($postId);
             if ($post) {
-                $downloadService->recordDownload($post, auth()->user());
+                $user = $this->userId ? \App\Models\User::find($this->userId) : null;
+                $downloadService->recordDownload($post, $user);
             }
         }
     }
