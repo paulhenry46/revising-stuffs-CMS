@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Jobs\InformUserOfNewPost;
 use Livewire\Component;
+use App\Models\Level;
 use App\Models\Post;
 use Livewire\WithPagination;
 use App\Notifications\PostValidated;
@@ -146,6 +147,13 @@ class PostsTable extends Component
 
     public function render()
     {
-        return view('livewire.posts-table', ['posts' => Post::where('published', 0)->where('group_id', '!=', 1)->paginate(15)]);
+        $user = auth()->user();
+        $query = Post::where('published', 0)->where('group_id', '!=', 1);
+        if ($user->hasRole('co-admin') && !$user->hasRole('admin')) {
+            $curriculaIds = $user->getManagedCurriculaIds();
+            $levelIds = Level::whereIn('curriculum_id', $curriculaIds)->pluck('id');
+            $query->whereIn('level_id', $levelIds);
+        }
+        return view('livewire.posts-table', ['posts' => $query->paginate(15)]);
     }
 }

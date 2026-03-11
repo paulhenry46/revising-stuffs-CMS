@@ -98,6 +98,16 @@ class User extends Authenticatable
         return $this->belongsTo(Curriculum::class);
     }
 
+    public function managedCurricula(): BelongsToMany
+    {
+        return $this->belongsToMany(Curriculum::class, 'co_admin_curricula');
+    }
+
+    public function getManagedCurriculaIds(): array
+    {
+        return $this->managedCurricula->pluck('id')->toArray();
+    }
+
     public function level()
     {
         return $this->belongsTo(Level::class);

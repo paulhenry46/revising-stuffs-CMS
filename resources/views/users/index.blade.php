@@ -55,6 +55,10 @@
             <td class="text-error">
               {{__('Administrator')}}
               @endif
+            @if($user->hasRole('co-admin') && !$user->hasRole('admin') && !$user->hasRole('moderator'))
+            <td class="text-purple-500">
+              {{__('Co-Admin')}}
+              @endif
             @if($user->hasExactRoles(['moderator', 'contributor', 'student']))
             <td class="text-warning">
               {{__('Moderator')}}

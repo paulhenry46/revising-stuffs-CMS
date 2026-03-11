@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Models\Curriculum;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
@@ -17,7 +18,14 @@ class UserController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {   $users = User::where('id', '!=', 1)->get();
+    {
+        $authUser = auth()->user();
+        if ($authUser->hasRole('co-admin') && !$authUser->hasRole('admin')) {
+            $curriculaIds = $authUser->getManagedCurriculaIds();
+            $users = User::where('id', '!=', 1)->whereIn('curriculum_id', $curriculaIds)->get();
+        } else {
+            $users = User::where('id', '!=', 1)->get();
+        }
         return view('users.index')->with('users', $users);
     }
 
@@ -28,7 +36,8 @@ class UserController extends Controller
     {
         $user = new User;
         $user->id = 0;
-        return view('users.edit', compact('user'));
+        $curricula = Curriculum::all();
+        return view('users.edit', compact('user', 'curricula'));
     }
 
     /**
@@ -44,6 +53,10 @@ class UserController extends Controller
 
     if($request->role == 'admin'){
     $user->syncRoles(['admin', 'student', 'contributor', 'moderator']);
+    }
+    if($request->role == 'co-admin'){
+    $user->syncRoles(['co-admin', 'student', 'contributor']);
+    $user->managedCurricula()->sync($request->input('curricula', []));
     }
     if($request->role == 'moderator'){
     $user->syncRoles(['student', 'contributor', 'moderator']);
@@ -64,7 +77,8 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('users.edit', compact('user'));
+        $curricula = Curriculum::all();
+        return view('users.edit', compact('user', 'curricula'));
     }
 
     public function cursusForm()
@@ -107,20 +121,35 @@ class UserController extends Controller
      */
     public function update(UserUpdateRequest $request, User $user)
     {
+    $authUser = auth()->user();
     $user->name = $request->name;
     $user->save();
 
-    if($request->role == 'admin'){
-    $user->syncRoles(['admin', 'student', 'contributor', 'moderator']);
-    }
-    if($request->role == 'moderator'){
-    $user->syncRoles(['student', 'contributor', 'moderator']);
-    }
-    if($request->role == 'contributor'){
-    $user->syncRoles(['student', 'contributor',]);
-    }
-    if($request->role == 'student'){
-    $user->syncRoles(['student']);
+    // Co-admins can only promote users to contributor or student
+    if ($authUser->hasRole('co-admin') && !$authUser->hasRole('admin')) {
+        if($request->role == 'contributor'){
+        $user->syncRoles(['student', 'contributor']);
+        }
+        if($request->role == 'student'){
+        $user->syncRoles(['student']);
+        }
+    } else {
+        if($request->role == 'admin'){
+        $user->syncRoles(['admin', 'student', 'contributor', 'moderator']);
+        }
+        if($request->role == 'co-admin'){
+        $user->syncRoles(['co-admin', 'student', 'contributor']);
+        $user->managedCurricula()->sync($request->input('curricula', []));
+        }
+        if($request->role == 'moderator'){
+        $user->syncRoles(['student', 'contributor', 'moderator']);
+        }
+        if($request->role == 'contributor'){
+        $user->syncRoles(['student', 'contributor',]);
+        }
+        if($request->role == 'student'){
+        $user->syncRoles(['student']);
+        }
     }
     return redirect()->route('users.index')->with('message', __('The user has been modified.'));
     }

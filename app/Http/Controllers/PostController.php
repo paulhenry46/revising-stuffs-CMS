@@ -25,7 +25,14 @@ class PostController extends Controller
     public function all()
     {   
         $this->authorize('viewAny', Post::class);
-        $posts = Post::orderBy('pinned', 'DESC')->latest()->paginate(15);
+        $user = Auth::user();
+        $query = Post::orderBy('pinned', 'DESC')->latest();
+        if ($user->hasRole('co-admin') && !$user->hasRole('admin')) {
+            $curriculaIds = $user->getManagedCurriculaIds();
+            $levelIds = Level::whereIn('curriculum_id', $curriculaIds)->pluck('id');
+            $query->whereIn('level_id', $levelIds);
+        }
+        $posts = $query->paginate(15);
         return view('posts.all')->with('posts', $posts);
     }
 

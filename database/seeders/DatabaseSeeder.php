@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
         Role::create(['guard_name' => 'sanctum', 'name' => 'contributor'])->syncPermissions(['publish own posts']);
         Role::create(['guard_name' => 'sanctum', 'name' => 'moderator'])->syncPermissions(['publish all posts', 'manage all comments']);
         Role::create(['guard_name' => 'sanctum', 'name' => 'student'])->syncPermissions(['manage own posts', 'create posts', 'manage own comments']);
+        Role::create(['guard_name' => 'sanctum', 'name' => 'co-admin'])->syncPermissions(['manage courses', 'manage levels', 'manage users', 'manage all posts', 'publish all posts', 'manage all comments']);
         Role::create(['guard_name' => 'sanctum', 'name' => 'system']);
         //Create Users
         //User 1 : Comment system user used when an guest user comment a post

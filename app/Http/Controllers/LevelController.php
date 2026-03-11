@@ -15,7 +15,14 @@ class LevelController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {   $levels = Level::all();
+    {
+        $authUser = auth()->user();
+        if ($authUser->hasRole('co-admin') && !$authUser->hasRole('admin')) {
+            $curriculaIds = $authUser->getManagedCurriculaIds();
+            $levels = Level::whereIn('curriculum_id', $curriculaIds)->get();
+        } else {
+            $levels = Level::all();
+        }
         $courses = Course::where('id', '!=', '1')->get();
         $types = Type::all();
         return view('levels.index', compact(['levels', 'courses', 'types']));
