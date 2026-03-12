@@ -22,7 +22,12 @@ class UserController extends Controller
         $authUser = auth()->user();
         if ($authUser->hasRole('co-admin') && !$authUser->hasRole('admin')) {
             $curriculaIds = $authUser->getManagedCurriculaIds();
-            $users = User::where('id', '!=', 1)->whereIn('curriculum_id', $curriculaIds)->get();
+            $users = User::where('id', '!=', 1)
+            ->whereIn('curriculum_id', $curriculaIds)
+            ->whereDoesntHave('roles', function($query) {
+                $query->whereIn('name', ['admin', 'moderator', 'co-admin']);
+            })
+            ->get();
         } else {
             $users = User::where('id', '!=', 1)->get();
         }
@@ -50,22 +55,32 @@ class UserController extends Controller
     $user->email = $request->email;
     $user->password = Hash::make($request->password);
     $user->save();
+    $authUser = auth()->user();
 
-    if($request->role == 'admin'){
-    $user->syncRoles(['admin', 'student', 'contributor', 'moderator']);
-    }
-    if($request->role == 'co-admin'){
-    $user->syncRoles(['co-admin', 'student', 'contributor']);
-    $user->managedCurricula()->sync($request->input('curricula', []));
-    }
-    if($request->role == 'moderator'){
-    $user->syncRoles(['student', 'contributor', 'moderator']);
-    }
-    if($request->role == 'contributor'){
-    $user->syncRoles(['student', 'contributor',]);
-    }
-    if($request->role == 'student'){
-    $user->syncRoles(['student']);
+     if ($authUser->hasRole('co-admin') && !$authUser->hasRole('admin')) {
+        if($request->role == 'contributor'){
+        $user->syncRoles(['student', 'contributor']);
+        }
+        if($request->role == 'student'){
+        $user->syncRoles(['student']);
+        }
+    } else {
+        if($request->role == 'admin'){
+        $user->syncRoles(['admin', 'student', 'contributor', 'moderator']);
+        }
+        if($request->role == 'co-admin'){
+        $user->syncRoles(['co-admin', 'student', 'contributor']);
+        $user->managedCurricula()->sync($request->input('curricula', []));
+        }
+        if($request->role == 'moderator'){
+        $user->syncRoles(['student', 'contributor', 'moderator']);
+        }
+        if($request->role == 'contributor'){
+        $user->syncRoles(['student', 'contributor',]);
+        }
+        if($request->role == 'student'){
+        $user->syncRoles(['student']);
+        }
     }
 
     return redirect()->route('users.index')->with('message', __('The user has been created.'));
@@ -77,6 +92,17 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        $authUser = auth()->user();
+
+        if ($authUser->hasRole('co-admin') && !$authUser->hasRole('admin')) {
+            $curriculaIds = $authUser->getManagedCurriculaIds();
+            abort_if(
+                !in_array($user->curriculum_id, $curriculaIds) || 
+                $user->hasAnyRole(['admin', 'moderator', 'co-admin']),
+                403
+            );
+        }
+
         $curricula = Curriculum::all();
         return view('users.edit', compact('user', 'curricula'));
     }
