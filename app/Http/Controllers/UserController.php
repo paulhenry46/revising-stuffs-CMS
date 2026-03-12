@@ -92,16 +92,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        $authUser = auth()->user();
-
-        if ($authUser->hasRole('co-admin') && !$authUser->hasRole('admin')) {
-            $curriculaIds = $authUser->getManagedCurriculaIds();
-            abort_if(
-                !in_array($user->curriculum_id, $curriculaIds) || 
-                $user->hasAnyRole(['admin', 'moderator', 'co-admin']),
-                403
-            );
-        }
+        $this->authorize('update', $user);
 
         $curricula = Curriculum::all();
         return view('users.edit', compact('user', 'curricula'));
@@ -147,16 +138,8 @@ class UserController extends Controller
      */
     public function update(UserUpdateRequest $request, User $user)
     {
+    $this->authorize('update', $user);
     $authUser = auth()->user();
-
-    if ($authUser->hasRole('co-admin') && !$authUser->hasRole('admin')) {
-        $curriculaIds = $authUser->getManagedCurriculaIds();
-        abort_if(
-            !in_array($user->curriculum_id, $curriculaIds) ||
-            $user->hasAnyRole(['admin', 'moderator', 'co-admin']),
-            403
-        );
-    }
 
     $user->name = $request->name;
     $user->save();
@@ -195,16 +178,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $authUser = auth()->user();
-
-        if ($authUser->hasRole('co-admin') && !$authUser->hasRole('admin')) {
-            $curriculaIds = $authUser->getManagedCurriculaIds();
-            abort_if(
-                !in_array($user->curriculum_id, $curriculaIds) ||
-                $user->hasAnyRole(['admin', 'moderator', 'co-admin']),
-                403
-            );
-        }
+        $this->authorize('delete', $user);
 
         $user->delete();
         return redirect()->route('users.index')->with('message', __('The user has been deleted.'));
