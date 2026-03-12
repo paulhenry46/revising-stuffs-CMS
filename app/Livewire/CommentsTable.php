@@ -13,48 +13,7 @@ class CommentsTable extends Component
 
     public array $selection = [];
 
-    public function deleteComments(array $ids){
-        Comment::whereIn('id', $ids)->delete();
-        $this->selection = [];
-        $this->resetPage();
-        session()->flash('message', __('The comment has been deleted.'));
-    }
-
-    public function validateComments(array $ids){
-        Comment::whereIn('id', $ids)->update(['validated' => 1]);
-        $comments = Comment::whereIn('id', $ids)->get();
-        foreach($comments as $comment){
-            $comment->post->user->notify(new NewComment($comment));
-        }
-        $this->selection = [];
-        $this->resetPage();
-        session()->flash('message', __('The comment has been validated.'));
-    }
-
-    public function deleteComment($id){
-        Comment::where('id', '=', $id)->delete();
-        $this->selection = [];
-        $this->resetPage();
-        session()->flash('message', __('The comment has been deleted.'));
-    }
-
-    public function validateComment($id){
-        Comment::where('id', '=', $id)->update(['validated' => 1]);
-        $comment = Comment::where('id', '=', $id)->first();
-        $comment->post->user->notify(new NewComment($comment));
-        $this->selection = [];
-        $this->resetPage();
-        session()->flash('message', __('The comment has been validated.'));
-    }
-
-    public function deleteAllComments(){
-        Comment::where('validated', 0)->delete();
-        $this->selection = [];
-        $this->resetPage();
-        session()->flash('message', __('All the comments been deleted.'));
-    }
-
-    public function render()
+    private function scopedCommentQuery()
     {
         $user = auth()->user();
         $query = Comment::where('validated', 0);
@@ -64,6 +23,54 @@ class CommentsTable extends Component
                 $q->whereIn('curriculum_id', $curriculaIds);
             });
         }
-        return view('livewire.comments-table', ['comments' => $query->paginate(15)]);
+        return $query;
+    }
+
+    public function deleteComments(array $ids){
+        $this->scopedCommentQuery()->whereIn('id', $ids)->delete();
+        $this->selection = [];
+        $this->resetPage();
+        session()->flash('message', __('The comment has been deleted.'));
+    }
+
+    public function validateComments(array $ids){
+        $comments = $this->scopedCommentQuery()->whereIn('id', $ids)->get();
+        $this->scopedCommentQuery()->whereIn('id', $ids)->update(['validated' => 1]);
+        foreach($comments as $comment){
+            $comment->post->user->notify(new NewComment($comment));
+        }
+        $this->selection = [];
+        $this->resetPage();
+        session()->flash('message', __('The comment has been validated.'));
+    }
+
+    public function deleteComment($id){
+        $this->scopedCommentQuery()->where('id', $id)->delete();
+        $this->selection = [];
+        $this->resetPage();
+        session()->flash('message', __('The comment has been deleted.'));
+    }
+
+    public function validateComment($id){
+        $comment = $this->scopedCommentQuery()->where('id', $id)->first();
+        $this->scopedCommentQuery()->where('id', $id)->update(['validated' => 1]);
+        if ($comment) {
+            $comment->post->user->notify(new NewComment($comment));
+        }
+        $this->selection = [];
+        $this->resetPage();
+        session()->flash('message', __('The comment has been validated.'));
+    }
+
+    public function deleteAllComments(){
+        $this->scopedCommentQuery()->delete();
+        $this->selection = [];
+        $this->resetPage();
+        session()->flash('message', __('All the comments been deleted.'));
+    }
+
+    public function render()
+    {
+        return view('livewire.comments-table', ['comments' => $this->scopedCommentQuery()->paginate(15)]);
     }
 }

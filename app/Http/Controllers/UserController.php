@@ -148,6 +148,16 @@ class UserController extends Controller
     public function update(UserUpdateRequest $request, User $user)
     {
     $authUser = auth()->user();
+
+    if ($authUser->hasRole('co-admin') && !$authUser->hasRole('admin')) {
+        $curriculaIds = $authUser->getManagedCurriculaIds();
+        abort_if(
+            !in_array($user->curriculum_id, $curriculaIds) ||
+            $user->hasAnyRole(['admin', 'moderator', 'co-admin']),
+            403
+        );
+    }
+
     $user->name = $request->name;
     $user->save();
 
@@ -184,9 +194,20 @@ class UserController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(User $user)
-    {   
-            $user->delete();
-            return redirect()->route('users.index')->with('message', __('The user has been deleted.'));
+    {
+        $authUser = auth()->user();
+
+        if ($authUser->hasRole('co-admin') && !$authUser->hasRole('admin')) {
+            $curriculaIds = $authUser->getManagedCurriculaIds();
+            abort_if(
+                !in_array($user->curriculum_id, $curriculaIds) ||
+                $user->hasAnyRole(['admin', 'moderator', 'co-admin']),
+                403
+            );
+        }
+
+        $user->delete();
+        return redirect()->route('users.index')->with('message', __('The user has been deleted.'));
 
     }
 }
