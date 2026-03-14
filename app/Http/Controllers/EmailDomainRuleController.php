@@ -25,6 +25,8 @@ class EmailDomainRuleController extends Controller
             $rule->curricula()->sync($request->input('curricula', []));
         }
 
+        cache()->forget('contributor_domain_rules');
+
         return redirect()->route('settings')->with('message', __('The email domain rule has been created.'));
     }
 
@@ -48,12 +50,16 @@ class EmailDomainRuleController extends Controller
             $emailDomainRule->curricula()->detach();
         }
 
+        cache()->forget('contributor_domain_rules');
+
         return redirect()->route('settings')->with('message', __('The email domain rule has been updated.'));
     }
 
     public function destroy(EmailDomainRule $emailDomainRule)
     {
         $emailDomainRule->delete();
+
+        cache()->forget('contributor_domain_rules');
 
         return redirect()->route('settings')->with('message', __('The email domain rule has been deleted.'));
     }
