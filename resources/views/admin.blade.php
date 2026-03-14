@@ -195,45 +195,6 @@
 </div>
 </div>
 
-<div class="mt-8">
-  <div class="card bg-base-100 shadow-xl">
-    <div class="card-body">
-      <h2 class="card-title">{{__('Add a new rule')}}</h2>
-      <form action="{{route('email-domain-rules.store')}}" method="POST" x-data="{ role: '{{ old('role', 'contributor') }}' }">
-        @csrf
-        <div class="form-control mt-4">
-          <label class="label" for="domain_new"><span class="label-text">{{__('Email domain')}} <span class="text-error">*</span></span></label>
-          <input type="text" id="domain_new" name="domain" value="{{ old('domain') }}" placeholder="@example.com" class="input input-bordered input-primary w-full max-w-xs" required />
-          @error('domain') <span class="text-error text-sm mt-1">{{ $message }}</span> @enderror
-        </div>
-        <div class="form-control mt-4">
-          <label class="label" for="role_new"><span class="label-text">{{__('Role')}} <span class="text-error">*</span></span></label>
-          <select id="role_new" name="role" class="select select-bordered select-primary w-full max-w-xs" x-model="role" required>
-            <option value="contributor">{{__('Contributor')}}</option>
-            <option value="co-admin">{{__('Co-Admin')}}</option>
-          </select>
-          @error('role') <span class="text-error text-sm mt-1">{{ $message }}</span> @enderror
-        </div>
-        <div class="form-control mt-4" x-show="role === 'co-admin'" x-transition>
-          <label class="label"><span class="label-text">{{__('Curricula')}} <span class="text-xs text-gray-500">({{__('for co-admin')}})</span></span></label>
-          <div class="flex flex-wrap gap-2">
-            @foreach($curricula as $curriculum)
-            <label class="label cursor-pointer gap-2">
-              <input type="checkbox" name="curricula[]" value="{{ $curriculum->id }}" class="checkbox checkbox-primary"
-                {{ in_array($curriculum->id, old('curricula', [])) ? 'checked' : '' }} />
-              <span class="label-text">{{ $curriculum->name }}</span>
-            </label>
-            @endforeach
-          </div>
-          @error('curricula') <span class="text-error text-sm mt-1">{{ $message }}</span> @enderror
-        </div>
-        <div class="card-actions justify-end mt-4">
-          <button type="submit" class="btn btn-primary">{{__('Add rule')}}</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
 
 <div class="mt-8 flow-root">
 <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -281,7 +242,6 @@
 
               <dialog id="edit-rule-{{ $rule->id }}" class="modal">
                 <div class="modal-box">
-                  <h3 class="font-bold text-lg">{{__('Edit rule')}}</h3>
                   <form action="{{route('email-domain-rules.update', $rule->id)}}" method="POST" x-data="{ role: '{{ $rule->role }}' }">
                     @csrf
                     @method('PUT')
@@ -324,6 +284,41 @@
       </tbody>
     </table>
   </div>
+  <form class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8" action="{{route('email-domain-rules.store')}}" method="POST" x-data="{ role: '{{ old('role', 'contributor') }}' }">
+        @csrf
+        <div class='flex space-x-2 justify-between'>
+        <div class='flex space-x-2'>
+        <div class="form-control mt-4">
+          <input type="text" id="domain_new" name="domain" value="{{ old('domain') }}" placeholder="@example.com" class="input input-bordered input-primary w-full max-w-xs" required />
+          @error('domain') <span class="text-error text-sm mt-1">{{ $message }}</span> @enderror
+        </div>
+        <div class="form-control mt-4">
+          <select id="role_new" name="role" class="select select-bordered select-primary w-full max-w-xs" x-model="role" required>
+            <option value="contributor">{{__('Contributor')}}</option>
+            <option value="co-admin">{{__('Co-Admin')}}</option>
+          </select>
+          @error('role') <span class="text-error text-sm mt-1">{{ $message }}</span> @enderror
+        </div>
+      </div>
+        <div class=" justify-end mt-4">
+          <button type="submit" class="btn btn-primary">{{__('Add rule')}}</button>
+        </div>
+      </div>
+        <div class="form-control mt-4" x-show="role === 'co-admin'" x-transition>
+          <label class="label"><span class="label-text">{{__('Curricula')}} <span class="text-xs text-gray-500">({{__('for co-admin')}})</span></span></label>
+          <div class="flex flex-wrap gap-2">
+            @foreach($curricula as $curriculum)
+            <label class="label cursor-pointer gap-2">
+              <input type="checkbox" name="curricula[]" value="{{ $curriculum->id }}" class="checkbox checkbox-primary"
+                {{ in_array($curriculum->id, old('curricula', [])) ? 'checked' : '' }} />
+              <span class="label-text">{{ $curriculum->name }}</span>
+            </label>
+            @endforeach
+          </div>
+          @error('curricula') <span class="text-error text-sm mt-1">{{ $message }}</span> @enderror
+        </div>
+        
+      </form>
 </div>
 </div>
 </div>
