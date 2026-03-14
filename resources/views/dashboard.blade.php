@@ -174,9 +174,9 @@
                                     <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M120-160q-17 0-28.5-11.5T80-200q0-17 11.5-28.5T120-240h720q17 0 28.5 11.5T880-200q0 17-11.5 28.5T840-160H120Zm80-160q-17 0-28.5-11.5T160-360v-240q0-17 11.5-28.5T200-640q17 0 28.5 11.5T240-600v240q0 17-11.5 28.5T200-320Zm160 0q-17 0-28.5-11.5T320-360v-400q0-17 11.5-28.5T360-800q17 0 28.5 11.5T400-760v400q0 17-11.5 28.5T360-320Zm160 0q-17 0-28.5-11.5T480-360v-400q0-17 11.5-28.5T520-800q17 0 28.5 11.5T560-760v400q0 17-11.5 28.5T520-320Zm275-20q-14 8-30.5 3.5T740-355L620-565q-8-14-3.5-30.5T635-620q14-8 30.5-3.5T690-605l120 210q8 14 3.5 30.5T795-340Z"/></svg>
                                         {{__('Manage posts')}}
                                     </a></li>
-                                    <li><a wire:navigate href="{{route('levels.index')}}" class="">
+                                    <li><a wire:navigate href="{{route('co-admin.index')}}" class="">
                                         <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m297-581 149-243q6-10 15-14.5t19-4.5q10 0 19 4.5t15 14.5l149 243q6 10 6 21t-5 20q-5 9-14 14.5t-21 5.5H331q-12 0-21-5.5T296-540q-5-9-5-20t6-21ZM700-80q-75 0-127.5-52.5T520-260q0-75 52.5-127.5T700-440q75 0 127.5 52.5T880-260q0 75-52.5 127.5T700-80Zm-580-60v-240q0-17 11.5-28.5T160-420h240q17 0 28.5 11.5T440-380v240q0 17-11.5 28.5T400-100H160q-17 0-28.5-11.5T120-140Z"/></svg>                                        
-                                        {{__('Manage courses, levels and types')}}
+                                        {{__('Manage courses and types')}}
                                     </a></li>
                                     @if($user->managedCurricula->count() > 0)
                                         @if($user->managedCurricula->count() == 1)
@@ -479,9 +479,9 @@
                                     </a>
                                 </div>
                                 <div class="sm:col-span-1 col-span-2">
-                                    <a wire:navigate href="{{route('levels.index')}}" class=" btn btn-neutral w-full">
+                                    <a wire:navigate href="{{route('co-admin.index')}}" class=" btn btn-neutral w-full">
                                         <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m297-581 149-243q6-10 15-14.5t19-4.5q10 0 19 4.5t15 14.5l149 243q6 10 6 21t-5 20q-5 9-14 14.5t-21 5.5H331q-12 0-21-5.5T296-540q-5-9-5-20t6-21ZM700-80q-75 0-127.5-52.5T520-260q0-75 52.5-127.5T700-440q75 0 127.5 52.5T880-260q0 75-52.5 127.5T700-80Zm-580-60v-240q0-17 11.5-28.5T160-420h240q17 0 28.5 11.5T440-380v240q0 17-11.5 28.5T400-100H160q-17 0-28.5-11.5T120-140Z"/></svg>                                        
-                                        {{__('Manage courses, levels and types')}}
+                                        {{__('Manage courses and types')}}
                                     </a>
                                 </div>
                                 </div>

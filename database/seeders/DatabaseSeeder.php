@@ -30,13 +30,14 @@ class DatabaseSeeder extends Seeder
         Permission::create(['guard_name' => 'sanctum', 'name' => 'manage levels']);
         Permission::create(['guard_name' => 'sanctum', 'name' => 'manage groups']);
         Permission::create(['guard_name' => 'sanctum', 'name' => 'manage curricula']);
-    Permission::create(['guard_name' => 'sanctum', 'name' => 'manage schools']);
+        Permission::create(['guard_name' => 'sanctum', 'name' => 'manage schools']);
+        Permission::create(['guard_name' => 'sanctum', 'name' => 'manage co-admin courses']);
         //Create roles and assigning the permissions
         Role::create(['guard_name' => 'sanctum', 'name' => 'admin'])->syncPermissions(['manage courses', 'manage levels', 'manage users', 'manage all posts', 'manage groups', 'manage curricula', 'manage schools']);
         Role::create(['guard_name' => 'sanctum', 'name' => 'contributor'])->syncPermissions(['publish own posts']);
         Role::create(['guard_name' => 'sanctum', 'name' => 'moderator'])->syncPermissions(['publish all posts', 'manage all comments']);
         Role::create(['guard_name' => 'sanctum', 'name' => 'student'])->syncPermissions(['manage own posts', 'create posts', 'manage own comments']);
-        Role::create(['guard_name' => 'sanctum', 'name' => 'co-admin'])->syncPermissions(['manage courses', 'manage levels', 'manage users', 'manage all posts', 'publish all posts', 'manage all comments']);
+        Role::create(['guard_name' => 'sanctum', 'name' => 'co-admin'])->syncPermissions(['manage co-admin courses', 'manage users', 'manage all posts', 'publish all posts', 'manage all comments']);
         Role::create(['guard_name' => 'sanctum', 'name' => 'system']);
         //Create Users
         //User 1 : Comment system user used when an guest user comment a post
