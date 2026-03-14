@@ -27,6 +27,7 @@ use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Public\ReadCardInUserDeckController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\CoAdminController;
+use App\Http\Controllers\EmailDomainRuleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -125,6 +126,9 @@ Route::middleware([
         Route::get('/settings', [AdminSettingsController::class, 'show'])->name('settings');
         Route::get('/settings/backups/files', [AdminSettingsController::class, 'createZipOfStorage'])->name('settings.downloadFiles');
         Route::get('/settings/backups/DB', [AdminSettingsController::class, 'createBackupOfDB'])->name('settings.downloadDB');
+        Route::post('/settings/email-domain-rules', [EmailDomainRuleController::class, 'store'])->name('email-domain-rules.store');
+        Route::put('/settings/email-domain-rules/{emailDomainRule}', [EmailDomainRuleController::class, 'update'])->name('email-domain-rules.update');
+        Route::delete('/settings/email-domain-rules/{emailDomainRule}', [EmailDomainRuleController::class, 'destroy'])->name('email-domain-rules.destroy');
     });
     Route::group(['middleware' => ['can:manage levels']], function () {
         Route::resource('levels', LevelController::class)->except(['show']);
