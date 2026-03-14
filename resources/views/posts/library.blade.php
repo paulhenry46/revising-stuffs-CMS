@@ -4,13 +4,20 @@
         
 @foreach($curricula as $curriculum)
 <div class="bg-white dark:bg-base-100 overflow-hidden shadow-xl sm:rounded-lg mt-6">
-            <div class="p-6 lg:p-8">
-<h1 class=" decoration-4 underline decoration-warning text-2xl font-medium text-gray-900 dark:text-white">
-    {{$curriculum->name}}
-</h1>
+            <div class="p-6 lg:p-8 flex justify-between">
+                <div>
+                    <h1 class=" decoration-4 underline decoration-warning text-2xl font-medium text-gray-900 dark:text-white">
+                        {{$curriculum->name}}
+                    </h1>
 
-<p>{{__('Taught at')}} @foreach($curriculum->schools as $school) {{$school->name}} @endforeach</p>
-</div>
+                    <p>{{__('Taught at')}} @foreach($curriculum->schools as $school) {{$school->name}} @endforeach</p>
+                </div>
+                @if($curriculum->subdomain)
+    <a href="https://{{$curriculum->subdomain}}.{{parse_url(config('app.url'), PHP_URL_HOST)}}" target="_blank" class="btn  btn-primary mt-2">
+        {{ __('Go to subdomain site') }}
+    </a>
+@endif
+            </div>
 </div>
         <div class="">
 
