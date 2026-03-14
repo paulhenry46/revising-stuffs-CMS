@@ -42,8 +42,7 @@
                                     <div class="sm:col-span-3">
                                         <label for="name" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{ __('Name') }}</label>
                                         <div class="mt-2">
-                                            <input type="text" name="name" id="name" autocomplete="given-name"
-                                                   autocomplete="off"
+                                            <input type="text" name="name" id="name" autocomplete="off"
                                                    class="input input-primary w-full"
                                                    value="{{ old('name', $course->name ?? '') }}">
                                         </div>

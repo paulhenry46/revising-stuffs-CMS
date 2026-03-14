@@ -31,7 +31,7 @@ class RSCMS_UpdateToV5 extends Command
     app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
 
     $permissionNames = [
-        'manage coadmin courses',
+        'manage co-admin courses',
         'manage users',
         'manage all posts',
         'publish all posts',
@@ -57,7 +57,7 @@ class RSCMS_UpdateToV5 extends Command
 
     // On synchronise en passant la collection d'objets (plus robuste que les noms)
     $coAdminRole->syncPermissions($permissions->whereIn('name', [
-        'manage coadmin courses',
+        'manage co-admin courses',
         'manage users',
         'manage all posts',
         'publish all posts',

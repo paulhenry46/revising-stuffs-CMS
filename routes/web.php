@@ -159,7 +159,7 @@ Route::middleware([
         });
     });
 
-        Route::group(['middleware' => ['can:manage coadmin courses']], function () {
+        Route::group(['middleware' => ['can:manage co-admin courses']], function () {
         Route::prefix('/co-admin')->name('co-admin.')->group(function () {
             Route::get('/', [CoAdminController::class, 'index'])->name('index');
             Route::get('/courses/create', [CoAdminController::class, 'createCourse'])->name('courses.create');
