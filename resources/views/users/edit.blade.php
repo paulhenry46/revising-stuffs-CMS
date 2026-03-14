@@ -80,12 +80,26 @@
   <div class="sm:col-span-3">
       <div>
 <label for="role" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Role')}}</label>
+@if(auth()->user()->hasRole('co-admin') && !auth()->user()->hasRole('admin'))
+{{-- Co-admins can only promote to contributor or student --}}
 <select id="role" name="role" class="select select-bordered w-full select-primary">
+<option
+@if((old('role') == 'contributor') or ($user->hasExactRoles(['contributor', 'student']))) selected @endif value="contributor">{{__('Contributor')}}</option>
+<option @if((old('role') == 'student') or ($user->hasExactRoles(['student']))) selected @endif value="student">{{__('Student')}}</option>
+</select>
+@else
+<select id="role" name="role" class="select select-bordered w-full select-primary" x-data x-on:change="$dispatch('role-changed', { role: $event.target.value })">
 <option 
 @if((old('role') == 'admin') or ($user->hasExactRoles(['admin', 'moderator', 'contributor', 'student']))) 
 selected 
 @endif 
 value="admin">{{__('Administrator')}}</option>
+
+<option
+@if((old('role') == 'co-admin') or ($user->hasRole('co-admin') && !$user->hasRole('admin') && !$user->hasRole('moderator')))
+selected
+@endif
+value="co-admin">{{__('Co-Admin')}}</option>
 
 <option 
 @if((old('role') == 'moderator') or ($user->hasExactRoles(['moderator', 'contributor', 'student']))) 
@@ -97,9 +111,29 @@ value="moderator">{{__('Moderator')}}</option>
 
 <option @if((old('role') == 'student') or ($user->hasExactRoles(['student']))) selected @endif value="student">{{__('Student')}}</option>
 </select>
+@endif
 </div>
     </div>
   </div>
+
+  @if(!auth()->user()->hasRole('co-admin') || auth()->user()->hasRole('admin'))
+  {{-- Curricula selector for co-admin role (only visible to full admins) --}}
+  <div x-data="{ showCurricula: {{ (old('role') == 'co-admin' || ($user->hasRole('co-admin') && !$user->hasRole('admin') && !$user->hasRole('moderator'))) ? 'true' : 'false' }} }"
+       x-on:role-changed.window="showCurricula = ($event.detail.role === 'co-admin')"
+       x-show="showCurricula" class="mt-6">
+    <h3 class="text-base font-semibold leading-7 text-gray-900 dark:text-white">{{__('Managed Curricula')}}</h3>
+    <p class="mt-1 text-sm leading-6 text-gray-600 dark:text-white">{{__('Select the curricula this co-admin can manage.')}}</p>
+    <div class="mt-4 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
+      @foreach($curricula as $curriculum)
+      <label class="flex items-center gap-3 cursor-pointer">
+        <input type="checkbox" name="curricula[]" value="{{ $curriculum->id }}" class="checkbox checkbox-primary"
+          @if(in_array($curriculum->id, old('curricula', $user->id !== 0 ? $user->managedCurricula->pluck('id')->toArray() : []))) checked @endif>
+        <span class="dark:text-white">{{ $curriculum->name }}</span>
+      </label>
+      @endforeach
+    </div>
+  </div>
+  @endif
 </div>
 <div class="mt-6 flex items-center justify-end gap-x-6">
 <a href="{{route('users.index')}}" class="link">{{__('Cancel')}}</a>

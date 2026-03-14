@@ -48,6 +48,8 @@
                                                 ring-error 
                                                 @elseif($user->hasRole('moderator'))
                                                 ring-warning
+                                                 @elseif($user->hasRole('co-admin'))
+                                                ring-secondary
                                                 @else
                                                 ring-info
                                                 @endif
@@ -63,6 +65,8 @@
                                                 <span class="badge badge-error badge-sm">{{__('Administrator')}}</span>
                                                 @elseif($user->hasRole('moderator'))
                                                 <span class="badge badge-warning badge-sm">{{__('Moderator')}}</span>
+                                                @elseif($user->hasRole('co-admin'))
+                                                <span class="badge badge-secondary badge-sm">{{__('Co-Admin')}}</span>
                                                 @elseif($user->hasRole('contributor'))
                                                 <span class="badge badge-info badge-sm">{{__('Contributor')}}</span>
                                                 @endif

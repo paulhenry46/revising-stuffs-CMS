@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Jobs\InformUserOfNewPost;
 use Livewire\Component;
+use App\Models\Level;
 use App\Models\Post;
 use Livewire\WithPagination;
 use App\Notifications\PostValidated;
@@ -18,6 +19,23 @@ class PostsTable extends Component
     public string $reasons = '';
     public string $mass_reasons = '';
     public function updating($name, $value){
+    }
+
+    private function scopedPostQuery()
+    {
+        $user = auth()->user();
+        $query = Post::where('published', 0)->where('group_id', '!=', 1);
+        if ($user->hasRole('co-admin') && !$user->hasRole('admin')) {
+            $curriculaIds = $user->getManagedCurriculaIds();
+            $levelIds = Level::whereIn('curriculum_id', $curriculaIds)->pluck('id');
+            $query->whereIn('level_id', $levelIds);
+        }
+        return $query;
+    }
+
+    private function scopedPostIds(array $ids): array
+    {
+        return $this->scopedPostQuery()->whereIn('id', $ids)->pluck('id')->toArray();
     }
 
     public function placeholder()
@@ -99,7 +117,8 @@ class PostsTable extends Component
          $post->delete();
     }
     public function deletePosts(array $ids){
-        $posts = Post::whereIn('id', $ids)->get();
+        $safeIds = $this->scopedPostIds($ids);
+        $posts = Post::whereIn('id', $safeIds)->get();
         foreach($posts as $post){
             $title = $post->title;
             $post->user->notify(new PostDeleted($title, $this->mass_reasons));
@@ -112,8 +131,9 @@ class PostsTable extends Component
     }
 
     public function validatePosts(array $ids){
-        Post::whereIn('id', $ids)->update(['published' => 1]);
-        $posts = Post::whereIn('id', $ids)->get();
+        $safeIds = $this->scopedPostIds($ids);
+        Post::whereIn('id', $safeIds)->update(['published' => 1]);
+        $posts = Post::whereIn('id', $safeIds)->get();
         foreach($posts as $post){
             $post->user->notify(new PostValidated($post));
             dispatch(new InformUserOfNewPost($post));
@@ -124,7 +144,7 @@ class PostsTable extends Component
     }
 
     public function deletePost($id){
-        $post = Post::where('id', '=', $id)->first();
+        $post = $this->scopedPostQuery()->where('id', $id)->firstOrFail();
         $title = $post->title;
         $post->user->notify(new PostDeleted($title, $this->reasons));
         $this->destroyPost($post);
@@ -135,10 +155,12 @@ class PostsTable extends Component
     }
 
     public function validatePost($id){
-        Post::where('id', '=', $id)->update(['published' => 1]);
-        $post = Post::where('id', '=', $id)->first();
-        $post->user->notify(new PostValidated($post));
-        dispatch(new InformUserOfNewPost($post));
+        $post = $this->scopedPostQuery()->where('id', $id)->first();
+        $this->scopedPostQuery()->where('id', $id)->update(['published' => 1]);
+        if ($post) {
+            $post->user->notify(new PostValidated($post));
+            dispatch(new InformUserOfNewPost($post));
+        }
         $this->selection = [];
         $this->resetPage();
         session()->flash('message', __('The post has been published.'));
@@ -146,6 +168,6 @@ class PostsTable extends Component
 
     public function render()
     {
-        return view('livewire.posts-table', ['posts' => Post::where('published', 0)->where('group_id', '!=', 1)->paginate(15)]);
+        return view('livewire.posts-table', ['posts' => $this->scopedPostQuery()->paginate(15)]);
     }
 }

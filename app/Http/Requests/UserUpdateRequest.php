@@ -24,7 +24,8 @@ class UserUpdateRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'role' => ['required', 'string', Rule::in(['admin', 'moderator', 'contributor', 'student'])]
+            'role' => ['required', 'string', Rule::in(['admin', 'moderator', 'contributor', 'student', 'co-admin'])],
+            'curricula' => ['array', 'exists:curricula,id']
         ];
     }
 }

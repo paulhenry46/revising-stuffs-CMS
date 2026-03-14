@@ -31,6 +31,8 @@
                                                 <div class="w-24 rounded-full ring-3 
                                                 @if($user->hasRole('admin'))
                                                 ring-error 
+                                                @elseif($user->hasRole('co-admin'))
+                                                ring-purple-500
                                                 @elseif($user->hasRole('moderator'))
                                                 ring-warning
                                                 @else
@@ -46,6 +48,12 @@
                                             <h5 class="flex"><p class="mr-1">{{$user->name}}</p>
                                             @if($user->hasRole('admin'))
                                                     <p class="text-error">
+                                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20">
+                                                            <path d="m438-452-58-57q-11-11-27.5-11T324-508q-11 11-11 28t11 28l86 86q12 12 28 12t28-12l170-170q12-12 11.5-28T636-592q-12-12-28.5-12.5T579-593L438-452ZM326-90l-58-98-110-24q-15-3-24-15.5t-7-27.5l11-113-75-86q-10-11-10-26t10-26l75-86-11-113q-2-15 7-27.5t24-15.5l110-24 58-98q8-13 22-17.5t28 1.5l104 44 104-44q14-6 28-1.5t22 17.5l58 98 110 24q15 3 24 15.5t7 27.5l-11 113 75 86q10 11 10 26t-10 26l-75 86 11 113q2 15-7 27.5T802-212l-110 24-58 98q-8 13-22 17.5T584-74l-104-44-104 44q-14 6-28 1.5T326-90Z"/>
+                                                        </svg>
+                                                    </p>
+                                                    @elseif($user->hasRole('co-admin'))
+                                                    <p class="text-purple-500">
                                                         <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20">
                                                             <path d="m438-452-58-57q-11-11-27.5-11T324-508q-11 11-11 28t11 28l86 86q12 12 28 12t28-12l170-170q12-12 11.5-28T636-592q-12-12-28.5-12.5T579-593L438-452ZM326-90l-58-98-110-24q-15-3-24-15.5t-7-27.5l11-113-75-86q-10-11-10-26t10-26l75-86-11-113q-2-15 7-27.5t24-15.5l110-24 58-98q8-13 22-17.5t28 1.5l104 44 104-44q14-6 28-1.5t22 17.5l58 98 110 24q15 3 24 15.5t7 27.5l-11 113 75 86q10 11 10 26t-10 26l-75 86 11 113q2 15-7 27.5T802-212l-110 24-58 98q-8 13-22 17.5T584-74l-104-44-104 44q-14 6-28 1.5T326-90Z"/>
                                                         </svg>
@@ -116,6 +124,60 @@
                                         {{__('Validate posts')}}
                                     </a>
                                     @endif</li>
+    </ul>
+  </li>
+</ul>
+</div>
+@endrole
+@role('co-admin')
+<div class=" hidden lg:block py-2">
+<ul class=" menu bg-base-100 w-full rounded-box">
+  <li>
+    <h2 class="menu-title">{{__('Moderation')}}</h2>
+    <ul>
+      <li> @if(App\Models\Comment::where('validated', '=', 0)->whereHas('post.level', fn($q) => $q->whereIn('curriculum_id', $user->getManagedCurriculaIds()))->exists())
+                                        <a wire:navigate href="{{route('comments.moderate')}}" class="">
+                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m694-273 142-142q12-12 28-11.5t28 12.5q11 12 11.5 28T892-358L722-188q-12 12-28 12t-28-12l-85-86q-11-11-11.5-27.5T581-330q11-11 28-11t28 11l57 57Zm-454 33-92 92q-19 19-43.5 8.5T80-177v-623q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v240q0 17-11.5 28.5T840-520H560q-33 0-56.5 23.5T480-440v160q0 17-11.5 28.5T440-240H240Z"/></svg>
+                                        {{__('Validate comments')}}<span class="badge badge-error">!</span>
+                                    </a>
+                                    @else
+                                    <a wire:navigate href="{{route('comments.moderate')}}" class="">
+                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m694-273 142-142q12-12 28-11.5t28 12.5q11 12 11.5 28T892-358L722-188q-12 12-28 12t-28-12l-85-86q-11-11-11.5-27.5T581-330q11-11 28-11t28 11l57 57Zm-454 33-92 92q-19 19-43.5 8.5T80-177v-623q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v240q0 17-11.5 28.5T840-520H560q-33 0-56.5 23.5T480-440v160q0 17-11.5 28.5T440-240H240Z"/></svg>
+                                        {{__('Validate comments')}}
+                                    </a>
+                                    @endif</li>
+      <li>@if(App\Models\Post::where('published', 0)->where('group_id', '!=', 1)->whereHas('level', fn($q) => $q->whereIn('curriculum_id', $user->getManagedCurriculaIds()))->exists())
+      <a wire:navigate href="{{route('posts.moderate')}}" class="">
+                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m424-408-86-86q-11-11-28-11t-28 11q-11 11-11 28t11 28l114 114q12 12 28 12t28-12l226-226q11-11 11-28t-11-28q-11-11-28-11t-28 11L424-408Zm56 328q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"/></svg>
+                                        {{__('Validate posts')}} <span class="badge badge-error">!</span>
+                                    </a>
+                                    @else
+                                    <a wire:navigate href="{{route('posts.moderate')}}" class="">
+                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m424-408-86-86q-11-11-28-11t-28 11q-11 11-11 28t11 28l114 114q12 12 28 12t28-12l226-226q11-11 11-28t-11-28q-11-11-28-11t-28 11L424-408Zm56 328q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"/></svg>
+                                        {{__('Validate posts')}}
+                                    </a>
+                                    @endif</li>
+    </ul>
+  </li>
+</ul>
+</div>
+<div class=" hidden lg:block py-2">
+<ul class=" menu bg-base-100 w-full rounded-box">
+  <li>
+    <h2 class="menu-title">{{__('Administration')}}</h2>
+    <ul>
+      <li> <a wire:navigate href="{{route('users.index')}}" class="">
+                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M80-240v-32q0-33 17-62t47-44q51-26 115-44t141-18h14q6 0 12 2-29 72-24 143t48 135H160q-33 0-56.5-23.5T80-240Zm600 0q33 0 56.5-23.5T760-320q0-33-23.5-56.5T680-400q-33 0-56.5 23.5T600-320q0 33 23.5 56.5T680-240ZM400-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Zm234 328-6-28q-12-5-22.5-10.5T584-204l-29 9q-13 4-25.5-1T510-212l-8-14q-7-12-5-26t13-23l22-19q-2-14-2-26t2-26l-22-19q-11-9-13-22.5t5-25.5l9-15q7-11 19-16t25-1l29 9q11-8 21.5-13.5T628-460l6-29q3-14 13.5-22.5T672-520h16q14 0 24.5 9t13.5 23l6 28q12 5 22.5 11t21.5 15l27-9q14-5 27 0t20 17l8 14q7 12 5 26t-13 23l-22 19q2 12 2 25t-2 25l22 19q11 9 13 22.5t-5 25.5l-9 15q-7 11-19 16t-25 1l-29-9q-11 8-21.5 13.5T732-180l-6 29q-3 14-13.5 22.5T688-120h-16q-14 0-24.5-9T634-152Z"/></svg>
+                                        {{__('Manage users')}}
+                                    </a></li>
+      <li><a wire:navigate href="{{route('posts.all')}}" class="">
+                                    <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M120-160q-17 0-28.5-11.5T80-200q0-17 11.5-28.5T120-240h720q17 0 28.5 11.5T880-200q0 17-11.5 28.5T840-160H120Zm80-160q-17 0-28.5-11.5T160-360v-240q0-17 11.5-28.5T200-640q17 0 28.5 11.5T240-600v240q0 17-11.5 28.5T200-320Zm160 0q-17 0-28.5-11.5T320-360v-400q0-17 11.5-28.5T360-800q17 0 28.5 11.5T400-760v400q0 17-11.5 28.5T360-320Zm160 0q-17 0-28.5-11.5T480-360v-400q0-17 11.5-28.5T520-800q17 0 28.5 11.5T560-760v400q0 17-11.5 28.5T520-320Zm275-20q-14 8-30.5 3.5T740-355L620-565q-8-14-3.5-30.5T635-620q14-8 30.5-3.5T690-605l120 210q8 14 3.5 30.5T795-340Z"/></svg>
+                                        {{__('Manage posts')}}
+                                    </a></li>
+                                    <li><a wire:navigate href="{{route('levels.index')}}" class="">
+                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m297-581 149-243q6-10 15-14.5t19-4.5q10 0 19 4.5t15 14.5l149 243q6 10 6 21t-5 20q-5 9-14 14.5t-21 5.5H331q-12 0-21-5.5T296-540q-5-9-5-20t6-21ZM700-80q-75 0-127.5-52.5T520-260q0-75 52.5-127.5T700-440q75 0 127.5 52.5T880-260q0 75-52.5 127.5T700-80Zm-580-60v-240q0-17 11.5-28.5T160-420h240q17 0 28.5 11.5T440-380v240q0 17-11.5 28.5T400-100H160q-17 0-28.5-11.5T120-140Z"/></svg>                                        
+                                        {{__('Manage courses, levels and types')}}
+                                    </a></li>
     </ul>
   </li>
 </ul>
@@ -304,6 +366,68 @@
                                 </div>
                                 
                                 @endrole
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endrole
+                        @role('co-admin')
+                        <div class="pt-2 lg:hidden">
+                            <div class="card bg-base-100 shadow-xl">
+                                <div class="card-body">
+                                    <h2 class="card-title">{{__('Special functions')}}</h2>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="sm:col-span-1 col-span-2">
+                                    @if(App\Models\Comment::where('validated', '=', 0)->whereHas('post.level', fn($q) => $q->whereIn('curriculum_id', $user->getManagedCurriculaIds()))->exists())
+                                    <div class="indicator w-full">
+                                        <span class="indicator-item badge badge-error">!</span> 
+                                        <a wire:navigate href="{{route('comments.moderate')}}" class=" btn btn-neutral w-full">
+                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m694-273 142-142q12-12 28-11.5t28 12.5q11 12 11.5 28T892-358L722-188q-12 12-28 12t-28-12l-85-86q-11-11-11.5-27.5T581-330q11-11 28-11t28 11l57 57Zm-454 33-92 92q-19 19-43.5 8.5T80-177v-623q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v240q0 17-11.5 28.5T840-520H560q-33 0-56.5 23.5T480-440v160q0 17-11.5 28.5T440-240H240Z"/></svg>
+                                        {{__('Validate comments')}}
+                                    </a>
+                                    </div>
+                                    @else
+                                    <a wire:navigate href="{{route('comments.moderate')}}" class=" btn btn-neutral w-full">
+                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m694-273 142-142q12-12 28-11.5t28 12.5q11 12 11.5 28T892-358L722-188q-12 12-28 12t-28-12l-85-86q-11-11-11.5-27.5T581-330q11-11 28-11t28 11l57 57Zm-454 33-92 92q-19 19-43.5 8.5T80-177v-623q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v240q0 17-11.5 28.5T840-520H560q-33 0-56.5 23.5T480-440v160q0 17-11.5 28.5T440-240H240Z"/></svg>
+                                        {{__('Validate comments')}}
+                                    </a>
+                                    @endif
+                                </div>
+                                <div class="sm:col-span-1 col-span-2">
+                                @if(App\Models\Post::where('published', 0)->where('group_id', '!=', 1)->whereHas('level', fn($q) => $q->whereIn('curriculum_id', $user->getManagedCurriculaIds()))->exists())
+                                <div class="indicator w-full">
+                                        <span class="indicator-item badge badge-error">!</span> 
+                                        <a wire:navigate href="{{route('posts.moderate')}}" class=" btn btn-neutral w-full">
+                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m424-408-86-86q-11-11-28-11t-28 11q-11 11-11 28t11 28l114 114q12 12 28 12t28-12l226-226q11-11 11-28t-11-28q-11-11-28-11t-28 11L424-408Zm56 328q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"/></svg>
+                                        {{__('Validate posts')}}
+                                    </a>
+                                    </div>
+                                    @else
+                                    <a wire:navigate href="{{route('posts.moderate')}}" class=" btn btn-neutral w-full">
+                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m424-408-86-86q-11-11-28-11t-28 11q-11 11-11 28t11 28l114 114q12 12 28 12t28-12l226-226q11-11 11-28t-11-28q-11-11-28-11t-28 11L424-408Zm56 328q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"/></svg>
+                                        {{__('Validate posts')}}
+                                    </a>
+                                    @endif
+                                </div>
+                                <div class="col-span-2 divider"></div>
+                                <div class="sm:col-span-1 col-span-2">
+                                    <a wire:navigate href="{{route('users.index')}}" class=" btn btn-neutral w-full">
+                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M80-240v-32q0-33 17-62t47-44q51-26 115-44t141-18h14q6 0 12 2-29 72-24 143t48 135H160q-33 0-56.5-23.5T80-240Zm600 0q33 0 56.5-23.5T760-320q0-33-23.5-56.5T680-400q-33 0-56.5 23.5T600-320q0 33 23.5 56.5T680-240ZM400-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Zm234 328-6-28q-12-5-22.5-10.5T584-204l-29 9q-13 4-25.5-1T510-212l-8-14q-7-12-5-26t13-23l22-19q-2-14-2-26t2-26l-22-19q-11-9-13-22.5t5-25.5l9-15q7-11 19-16t25-1l29 9q11-8 21.5-13.5T628-460l6-29q3-14 13.5-22.5T672-520h16q14 0 24.5 9t13.5 23l6 28q12 5 22.5 11t21.5 15l27-9q14-5 27 0t20 17l8 14q7 12 5 26t-13 23l-22 19q2 12 2 25t-2 25l22 19q11 9 13 22.5t-5 25.5l-9 15q-7 11-19 16t-25 1l-29-9q-11 8-21.5 13.5T732-180l-6 29q-3 14-13.5 22.5T688-120h-16q-14 0-24.5-9T634-152Z"/></svg>
+                                        {{__('Manage users')}}
+                                    </a>
+                                </div>
+                                <div class="sm:col-span-1 col-span-2">
+                                    <a wire:navigate href="{{route('posts.all')}}" class=" btn btn-neutral w-full">
+                                    <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M120-160q-17 0-28.5-11.5T80-200q0-17 11.5-28.5T120-240h720q17 0 28.5 11.5T880-200q0 17-11.5 28.5T840-160H120Zm80-160q-17 0-28.5-11.5T160-360v-240q0-17 11.5-28.5T200-640q17 0 28.5 11.5T240-600v240q0 17-11.5 28.5T200-320Zm160 0q-17 0-28.5-11.5T320-360v-400q0-17 11.5-28.5T360-800q17 0 28.5 11.5T400-760v400q0 17-11.5 28.5T360-320Zm160 0q-17 0-28.5-11.5T480-360v-400q0-17 11.5-28.5T520-800q17 0 28.5 11.5T560-760v400q0 17-11.5 28.5T520-320Zm275-20q-14 8-30.5 3.5T740-355L620-565q-8-14-3.5-30.5T635-620q14-8 30.5-3.5T690-605l120 210q8 14 3.5 30.5T795-340Z"/></svg>
+                                        {{__('Manage posts')}}
+                                    </a>
+                                </div>
+                                <div class="sm:col-span-1 col-span-2">
+                                    <a wire:navigate href="{{route('levels.index')}}" class=" btn btn-neutral w-full">
+                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m297-581 149-243q6-10 15-14.5t19-4.5q10 0 19 4.5t15 14.5l149 243q6 10 6 21t-5 20q-5 9-14 14.5t-21 5.5H331q-12 0-21-5.5T296-540q-5-9-5-20t6-21ZM700-80q-75 0-127.5-52.5T520-260q0-75 52.5-127.5T700-440q75 0 127.5 52.5T880-260q0 75-52.5 127.5T700-80Zm-580-60v-240q0-17 11.5-28.5T160-420h240q17 0 28.5 11.5T440-380v240q0 17-11.5 28.5T400-100H160q-17 0-28.5-11.5T120-140Z"/></svg>                                        
+                                        {{__('Manage courses, levels and types')}}
+                                    </a>
+                                </div>
                                 </div>
                                 </div>
                             </div>

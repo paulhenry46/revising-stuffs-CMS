@@ -119,6 +119,9 @@ Route::middleware([
     });
     Route::group(['middleware' => ['can:manage all posts']], function () {
         Route::get('/posts/all', [PostController::class, 'all'])->name('posts.all');
+       });
+    
+    Route::group(['middleware' => ['can:manage site']], function () {
         Route::get('/settings', [AdminSettingsController::class, 'show'])->name('settings');
         Route::get('/settings/backups/files', [AdminSettingsController::class, 'createZipOfStorage'])->name('settings.downloadFiles');
         Route::get('/settings/backups/DB', [AdminSettingsController::class, 'createBackupOfDB'])->name('settings.downloadDB');

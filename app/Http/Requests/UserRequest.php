@@ -25,8 +25,9 @@ class UserRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'role' => ['required', 'string', Rule::in(['admin', 'moderator', 'contributor', 'student'])],
-            'password' => ['string']
+            'role' => ['required', 'string', Rule::in(['admin', 'moderator', 'contributor', 'student', 'co-admin'])],
+            'password' => ['string'],
+            'curricula' => ['array', 'exists:curricula,id']
         ];
     }
 }
