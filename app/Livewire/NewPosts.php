@@ -12,6 +12,10 @@ class NewPosts extends Component
     public function render()
     {
         $user = auth()->user();
+        $subdomainCurriculum = app()->bound('subdomainCurriculum') ? app('subdomainCurriculum') : null;
+        $subdomainLevelIds = $subdomainCurriculum
+            ? $subdomainCurriculum->levels()->pluck('id')->toArray()
+            : null;
         return view('livewire.new-posts', [
             'posts' => Post::where('published', '=', 1)
             ->where('group_id', '!=', 1)
@@ -26,7 +30,9 @@ class NewPosts extends Component
                     $query->whereRelation('group', 'public', true);
                 });
             })
-
+            ->when($subdomainLevelIds, function($query) use ($subdomainLevelIds) {
+                $query->whereIn('level_id', $subdomainLevelIds);
+            })
             ->when($this->restricted, function($query){
                 return $query->where('level_id', auth()->user()->level_id)
                              ->whereIn('course_id', auth()->user()->courses_id);

@@ -67,8 +67,12 @@ class ReadPostController extends Controller
 
     public function library()
     {   
-        $curricula = Curriculum::all();
-        //$levels = Level::All();
+        $subdomainCurriculum = app()->bound('subdomainCurriculum') ? app('subdomainCurriculum') : null;
+        if ($subdomainCurriculum) {
+            $curricula = Curriculum::where('id', $subdomainCurriculum->id)->get();
+        } else {
+            $curricula = Curriculum::all();
+        }
         return view('posts.library', compact('curricula'));
     }
 

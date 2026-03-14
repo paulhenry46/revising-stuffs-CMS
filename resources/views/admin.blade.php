@@ -137,6 +137,7 @@
           <th>{{__('Name')}}</th>
           <th>{{__('Schools')}}</th>
           <th>{{__('Levels')}}</th>
+          <th>{{__('Subdomain')}}</th>
           <th></th>
         </tr>
       </thead>
@@ -154,6 +155,16 @@
               @foreach($curriculum->levels as $level)
               <div class="badge badge-outline">{{$level->name}}</div>
               @endforeach
+            </td>
+            <td>
+              @if($curriculum->subdomain)
+                <div class="badge {{ $curriculum->subdomain_enabled ? 'badge-success' : 'badge-warning' }} badge-outline">
+                  {{$curriculum->subdomain}}
+                  @if(!$curriculum->subdomain_enabled) ({{__('disabled')}}) @endif
+                </div>
+              @else
+                <span class="text-gray-400 text-sm">—</span>
+              @endif
             </td>
             <td class="flex items-stretch justify-end relative  text-right">
                 <a href="{{route('curricula.edit', $curriculum->id)}}" class="link link-primary"><svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">

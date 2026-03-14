@@ -9,6 +9,12 @@ class Curriculum extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['name', 'slug', 'description', 'subdomain', 'subdomain_enabled', 'welcome_page'];
+
+    protected $casts = [
+        'subdomain_enabled' => 'boolean',
+    ];
+
     public function schools()
     {
         return $this->belongsToMany(School::class);

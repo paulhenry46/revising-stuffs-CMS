@@ -32,12 +32,19 @@ class CurriculumController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'subdomain' => ['nullable', 'regex:/^[a-z0-9]([a-z0-9\-]*[a-z0-9])?$/', 'unique:curricula,subdomain'],
+        ]);
+
         $curriculum = new Curriculum();
         $curriculum->name = $request->name;
         $curriculum->description = $request->description;
         $curriculum->slug = Str::slug($request->name, '-');
+        $curriculum->subdomain = $request->subdomain ?: null;
+        $curriculum->subdomain_enabled = $request->boolean('subdomain_enabled');
+        $curriculum->welcome_page = $request->welcome_page ?: null;
         $curriculum->save();
-        foreach($request->levels as $id){
+        foreach($request->levels ?? [] as $id){
             $level = Level::findOrFail($id);
             $level->curriculum_id = $curriculum->id;
             $level->save();
@@ -62,11 +69,18 @@ class CurriculumController extends Controller
      */
     public function update(Request $request, Curriculum $curriculum)
     {
+        $request->validate([
+            'subdomain' => ['nullable', 'regex:/^[a-z0-9]([a-z0-9\-]*[a-z0-9])?$/', 'unique:curricula,subdomain,' . $curriculum->id],
+        ]);
+
         $curriculum->name = $request->name;
         $curriculum->description = $request->description;
         $curriculum->slug = Str::slug($request->name, '-');
+        $curriculum->subdomain = $request->subdomain ?: null;
+        $curriculum->subdomain_enabled = $request->boolean('subdomain_enabled');
+        $curriculum->welcome_page = $request->welcome_page ?: null;
         $curriculum->save();
-        foreach($request->levels as $id){
+        foreach($request->levels ?? [] as $id){
             $level = Level::findOrFail($id);
             $level->curriculum_id = $curriculum->id;
             $level->save();
@@ -88,5 +102,33 @@ class CurriculumController extends Controller
 
         $curriculum->delete();
             return redirect()->route('settings')->with('message', __('The curriculum has been deleted.'));
+    }
+
+    /**
+     * Show the welcome page edit form (accessible to admin and co-admins of the curriculum).
+     */
+    public function editWelcomePage(Curriculum $curriculum)
+    {
+        $user = auth()->user();
+        if (!$user->can('manage curricula') && !$user->managedCurricula->contains($curriculum)) {
+            abort(403);
+        }
+        return view('curricula.welcome-page', compact('curriculum'));
+    }
+
+    /**
+     * Update the welcome page for the curriculum (accessible to admin and co-admins).
+     */
+    public function updateWelcomePage(Request $request, Curriculum $curriculum)
+    {
+        $user = auth()->user();
+        if (!$user->can('manage curricula') && !$user->managedCurricula->contains($curriculum)) {
+            abort(403);
+        }
+
+        $curriculum->welcome_page = $request->welcome_page ?: null;
+        $curriculum->save();
+
+        return redirect()->back()->with('message', __('The welcome page has been updated'));
     }
 }

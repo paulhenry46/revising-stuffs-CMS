@@ -81,6 +81,32 @@
     </div>
   </div>
 </div>
+
+<div class="border-b dark:border-white/10 border-gray-900/10 pb-12">
+  <h2 class="text-base font-semibold leading-7 text-gray-900 dark:text-white">{{__('Subdomain Settings')}}</h2>
+  <p class="mt-1 text-sm leading-6 text-gray-600 dark:text-white">{{__('Configure a dedicated subdomain for this curriculum. When enabled, visitors accessing this subdomain will only see content related to this curriculum.')}}</p>
+  <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+    <div class="sm:col-span-3">
+      <label for="subdomain" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Subdomain')}}</label>
+      <div class="mt-2">
+        <input value="{{ old('subdomain', $curriculum->subdomain) }}" type="text" name="subdomain" id="subdomain" placeholder="e.g. bac" class="input input-primary w-full">
+      </div>
+      <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{__('Enter only the subdomain part (e.g. "bac" for bac.example.com). Leave empty to disable subdomain.')}}</p>
+    </div>
+    <div class="sm:col-span-3 flex items-center gap-x-4 mt-6">
+      <label for="subdomain_enabled" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Enable Subdomain')}}</label>
+      <input type="checkbox" name="subdomain_enabled" id="subdomain_enabled" class="toggle toggle-primary" value="1" {{ old('subdomain_enabled', $curriculum->subdomain_enabled ?? false) ? 'checked' : '' }}>
+      <span class="text-sm text-gray-500 dark:text-gray-400">{{__('When disabled, visiting the subdomain will redirect to the main domain.')}}</span>
+    </div>
+    <div class="col-span-full">
+      <label for="welcome_page" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Custom Welcome Page (HTML)')}}</label>
+      <div class="mt-2">
+        <textarea id="welcome_page" name="welcome_page" rows="10" class="textarea textarea-bordered textarea-primary w-full font-mono text-sm" placeholder="{{__('Enter HTML content for the custom welcome page. Leave empty to use the default welcome page.')}}">{{ old('welcome_page', $curriculum->welcome_page) }}</textarea>
+      </div>
+      <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{__('This page will be shown to visitors arriving from the subdomain. HTML is supported. Leave empty to use the default welcome page.')}}</p>
+    </div>
+  </div>
+</div>
 <div class="mt-6 flex items-center justify-end gap-x-6">
 <a href="{{route('settings')}}" class="link">{{__('Cancel')}}</a>
 <button type="submit" class="btn btn-primary">@if($curriculum->id !== 0) {{__('Edit')}} @else {{__('Create')}} @endif</button>

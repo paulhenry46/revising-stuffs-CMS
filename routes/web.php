@@ -136,6 +136,9 @@ Route::middleware([
         Route::resource('curricula', CurriculumController::class)->except(['show', 'index']);
     });
 
+    Route::get('/curricula/{curriculum}/welcome-page', [CurriculumController::class, 'editWelcomePage'])->name('curricula.welcome-page.edit');
+    Route::put('/curricula/{curriculum}/welcome-page', [CurriculumController::class, 'updateWelcomePage'])->name('curricula.welcome-page.update');
+
     Route::group(['middleware' => ['can:manage schools']], function () {
         Route::resource('schools', SchoolController::class)->except(['show', 'index']);
     });
