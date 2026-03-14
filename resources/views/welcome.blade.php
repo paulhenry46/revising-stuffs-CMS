@@ -5,11 +5,6 @@
                 
                 <div class="">
                     <x-info-message/>
-                    @if(isset($subdomainCurriculum) && $subdomainCurriculum->welcome_page)
-                    <div class="prose dark:prose-invert max-w-none px-6 py-8">
-                        {!! $subdomainCurriculum->welcome_page !!}
-                    </div>
-                    @else
                     <!--<div class="justify-items-center grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div class="sm:col-span-3 col-span-1 h-full ">
                             <h1 class="text-4xl text-center dark:text-white">{{__('Welcome to')}} {{env('APP_NAME')}}</h1>
@@ -155,5 +150,4 @@
     </div>
   </div>
 </div>
-    @endif
 </x-app-layout>

@@ -4,14 +4,14 @@
             <div class="text-sm breadcrumbs mb-2">
                 <ul>
                     <li><a wire:navigate href="{{route('dashboard')}}">{{__('Dashboard')}}</a></li>
-                    <li>{{__('Edit Welcome Page:')}} {{$curriculum->name}}</li>
+                    <li>{{__('Welcome Page:')}} {{$curriculum->name}}</li>
                 </ul>
             </div>
 
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="p-6 lg:p-8 bg-white dark:bg-gray-800 dark:bg-linear-to-bl dark:from-gray-700/50 dark:via-transparent border-b border-gray-200 dark:border-gray-700">
                     <h1 class="text-2xl font-medium text-gray-900 dark:text-white">
-                        {{__('Edit Welcome Page for')}} {{$curriculum->name}}
+                        {{__('Welcome Page for')}} {{$curriculum->name}}
                     </h1>
                     @if($curriculum->subdomain)
                     <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
@@ -26,20 +26,46 @@
 
                 <div class="bg-gray-200/25 dark:bg-gray-800/25 gap-6 lg:gap-8 p-6 lg:p-8">
                     <x-info-message/>
-                    <form method="POST" action="{{route('curricula.welcome-page.update', $curriculum->id)}}">
+
+                    {{-- Current status --}}
+                    @if($hasWelcomePage)
+                    <div class="alert alert-success mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <span>{{__('A custom welcome page is currently active.')}}</span>
+                        <form method="POST" action="{{route('curricula.welcome-page.delete', $curriculum->id)}}">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-error">{{__('Remove')}}</button>
+                        </form>
+                    </div>
+                    @else
+                    <div class="alert alert-info mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span>{{__('No custom welcome page uploaded. The default welcome page will be shown.')}}</span>
+                    </div>
+                    @endif
+
+                    {{-- Upload form --}}
+                    <form method="POST" action="{{route('curricula.welcome-page.update', $curriculum->id)}}" enctype="multipart/form-data">
                         @csrf
-                        @method('PUT')
                         <div class="space-y-6">
                             <div>
-                                <label for="welcome_page" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Welcome Page Content (HTML)')}}</label>
+                                <label for="welcome_file" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">
+                                    {{$hasWelcomePage ? __('Replace Welcome Page') : __('Upload Welcome Page')}}
+                                </label>
                                 <div class="mt-2">
-                                    <textarea id="welcome_page" name="welcome_page" rows="20" class="textarea textarea-bordered textarea-primary w-full font-mono text-sm" placeholder="{{__('Enter HTML content for the custom welcome page. Leave empty to use the default welcome page.')}}">{{ old('welcome_page', $curriculum->welcome_page) }}</textarea>
+                                    <input type="file" id="welcome_file" name="welcome_file" accept=".blade.php,.php" class="file-input file-input-bordered file-input-primary w-full">
                                 </div>
-                                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{__('HTML is supported. Leave empty to use the default welcome page.')}}</p>
+                                @error('welcome_file')
+                                    <p class="mt-1 text-sm text-error">{{ $message }}</p>
+                                @enderror
+                                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                    {{__('Upload a .blade.php file. It will be rendered as a full Blade template and may use any layout components (e.g. <x-app-layout>). Max size: 512 KB.')}}
+                                </p>
                             </div>
                             <div class="flex items-center justify-end gap-x-6">
                                 <a href="{{route('dashboard')}}" class="link">{{__('Cancel')}}</a>
-                                <button type="submit" class="btn btn-primary">{{__('Save Welcome Page')}}</button>
+                                <button type="submit" class="btn btn-primary">{{__('Upload')}}</button>
                             </div>
                         </div>
                     </form>

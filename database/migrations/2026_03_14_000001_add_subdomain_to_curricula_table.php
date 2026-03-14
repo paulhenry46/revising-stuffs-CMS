@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::table('curricula', function (Blueprint $table) {
             $table->string('subdomain')->nullable()->unique()->after('description');
             $table->boolean('subdomain_enabled')->default(false)->after('subdomain');
-            $table->text('welcome_page')->nullable()->after('subdomain_enabled');
         });
     }
 
@@ -24,7 +23,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('curricula', function (Blueprint $table) {
-            $table->dropColumn(['subdomain', 'subdomain_enabled', 'welcome_page']);
+            $table->dropColumn(['subdomain', 'subdomain_enabled']);
         });
     }
 };

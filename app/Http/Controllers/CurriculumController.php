@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Curriculum;
 use App\Models\Level;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 
@@ -42,7 +43,6 @@ class CurriculumController extends Controller
         $curriculum->slug = Str::slug($request->name, '-');
         $curriculum->subdomain = $request->subdomain ?: null;
         $curriculum->subdomain_enabled = $request->boolean('subdomain_enabled');
-        $curriculum->welcome_page = $request->welcome_page ?: null;
         $curriculum->save();
         foreach($request->levels ?? [] as $id){
             $level = Level::findOrFail($id);
@@ -78,7 +78,6 @@ class CurriculumController extends Controller
         $curriculum->slug = Str::slug($request->name, '-');
         $curriculum->subdomain = $request->subdomain ?: null;
         $curriculum->subdomain_enabled = $request->boolean('subdomain_enabled');
-        $curriculum->welcome_page = $request->welcome_page ?: null;
         $curriculum->save();
         foreach($request->levels ?? [] as $id){
             $level = Level::findOrFail($id);
@@ -100,12 +99,13 @@ class CurriculumController extends Controller
             $level->save();
         }
 
+        File::delete(self::welcomePagePath($curriculum));
         $curriculum->delete();
             return redirect()->route('settings')->with('message', __('The curriculum has been deleted.'));
     }
 
     /**
-     * Show the welcome page edit form (accessible to admin and co-admins of the curriculum).
+     * Show the welcome page upload form (accessible to admin and co-admins of the curriculum).
      */
     public function editWelcomePage(Curriculum $curriculum)
     {
@@ -113,11 +113,12 @@ class CurriculumController extends Controller
         if (!$user->can('manage curricula') && !$user->managedCurricula->contains($curriculum)) {
             abort(403);
         }
-        return view('curricula.welcome-page', compact('curriculum'));
+        $hasWelcomePage = File::exists(self::welcomePagePath($curriculum));
+        return view('curricula.welcome-page', compact('curriculum', 'hasWelcomePage'));
     }
 
     /**
-     * Update the welcome page for the curriculum (accessible to admin and co-admins).
+     * Upload a Blade welcome page file for the curriculum (accessible to admin and co-admins).
      */
     public function updateWelcomePage(Request $request, Curriculum $curriculum)
     {
@@ -126,9 +127,45 @@ class CurriculumController extends Controller
             abort(403);
         }
 
-        $curriculum->welcome_page = $request->welcome_page ?: null;
-        $curriculum->save();
+        $request->validate([
+            'welcome_file' => ['required', 'file', 'max:512', 'mimetypes:text/plain,text/x-php,application/x-php,application/octet-stream'],
+        ]);
+
+        $file = $request->file('welcome_file');
+
+        if (!str_ends_with($file->getClientOriginalName(), '.blade.php')) {
+            return redirect()->back()->withErrors(['welcome_file' => __('The file must have a .blade.php extension.')]);
+        }
+
+        // Note: Blade files are executed server-side. Access is intentionally restricted
+        // to admin and co-admin users who are considered trusted operators of the platform.
+        $dir = storage_path('app/welcome-pages');
+        File::ensureDirectoryExists($dir);
+        $file->move($dir, $curriculum->id . '.blade.php');
 
         return redirect()->back()->with('message', __('The welcome page has been updated'));
+    }
+
+    /**
+     * Delete the Blade welcome page file for the curriculum.
+     */
+    public function deleteWelcomePage(Curriculum $curriculum)
+    {
+        $user = auth()->user();
+        if (!$user->can('manage curricula') && !$user->managedCurricula->contains($curriculum)) {
+            abort(403);
+        }
+
+        File::delete(self::welcomePagePath($curriculum));
+
+        return redirect()->back()->with('message', __('The welcome page has been removed'));
+    }
+
+    /**
+     * Get the filesystem path of the welcome page Blade file for a curriculum.
+     */
+    public static function welcomePagePath(Curriculum $curriculum): string
+    {
+        return storage_path('app/welcome-pages/' . $curriculum->id . '.blade.php');
     }
 }

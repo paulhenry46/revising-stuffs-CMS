@@ -9,7 +9,7 @@ class Curriculum extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'slug', 'description', 'subdomain', 'subdomain_enabled', 'welcome_page'];
+    protected $fillable = ['name', 'slug', 'description', 'subdomain', 'subdomain_enabled'];
 
     protected $casts = [
         'subdomain_enabled' => 'boolean',

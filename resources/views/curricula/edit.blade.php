@@ -98,13 +98,14 @@
       <input type="checkbox" name="subdomain_enabled" id="subdomain_enabled" class="toggle toggle-primary" value="1" {{ old('subdomain_enabled', $curriculum->subdomain_enabled ?? false) ? 'checked' : '' }}>
       <span class="text-sm text-gray-500 dark:text-gray-400">{{__('When disabled, visiting the subdomain will redirect to the main domain.')}}</span>
     </div>
+    @if($curriculum->id !== 0)
     <div class="col-span-full">
-      <label for="welcome_page" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Custom Welcome Page (HTML)')}}</label>
-      <div class="mt-2">
-        <textarea id="welcome_page" name="welcome_page" rows="10" class="textarea textarea-bordered textarea-primary w-full font-mono text-sm" placeholder="{{__('Enter HTML content for the custom welcome page. Leave empty to use the default welcome page.')}}">{{ old('welcome_page', $curriculum->welcome_page) }}</textarea>
-      </div>
-      <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{__('This page will be shown to visitors arriving from the subdomain. HTML is supported. Leave empty to use the default welcome page.')}}</p>
+      <p class="text-sm text-gray-600 dark:text-gray-400">
+        {{__('To manage the custom welcome page for this subdomain, use the dedicated page:')}}
+        <a href="{{route('curricula.welcome-page.edit', $curriculum->id)}}" class="link link-primary">{{__('Edit Welcome Page')}}</a>
+      </p>
     </div>
+    @endif
   </div>
 </div>
 <div class="mt-6 flex items-center justify-end gap-x-6">
