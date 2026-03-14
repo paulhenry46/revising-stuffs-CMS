@@ -4,7 +4,7 @@
             <div class="text-sm breadcrumbs mb-2">
                 <ul>
                     <li><a wire:navigate href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a></li>
-                    <li><a wire:navigate href="{{ route('co-admin.index') }}">{{ __('My panel') }}</a></li>
+                    <li><a wire:navigate href="{{ route('co-admin.index') }}">{{ __('Co-Admin Panel') }}</a></li>
                     <li>
                         @if($type->id !== 0)
                             {{ __('Edit type: ') }}{{ $type->name }}
@@ -56,21 +56,7 @@
                                     </div>
 
                                     {{-- Color --}}
-                                    <div class="sm:col-span-3">
-                                        <fieldset>
-                                            <legend class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{ __('Choose a label color') }}</legend>
-                                            <div class="mt-4 flex items-center space-x-3 fieldset">
-                                                @foreach(['gray-500' => 'Gray', 'blue-500' => 'Blue', 'purple-500' => 'Purple', 'pink-500' => 'Pink', 'red-500' => 'Red', 'orange-500' => 'Orange', 'yellow-500' => 'Yellow', 'green-500' => 'Green'] as $colorValue => $colorLabel)
-                                                <label class="@if(old('color', $type->color) == $colorValue) ring-2 @endif relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-hidden ring-{{ $colorValue }}">
-                                                    <input type="radio" name="color" value="{{ $colorValue }}" class="sr-only"
-                                                           @if(old('color', $type->color) == $colorValue) checked @endif>
-                                                    <span class="sr-only">{{ $colorLabel }}</span>
-                                                    <span aria-hidden="true" class="h-8 w-8 bg-{{ $colorValue }} rounded-full"></span>
-                                                </label>
-                                                @endforeach
-                                            </div>
-                                        </fieldset>
-                                    </div>
+                                    <x-colors-selector :course=$type/>
 
                                     {{-- Course (restricted to co-admin's accessible courses) --}}
                                     <div class="sm:col-span-3">

@@ -110,22 +110,7 @@ Route::middleware([
     Route::group(['middleware' => ['can:manage courses']], function () {
         Route::resource('courses', CourseController::class)->except(['show']);
         Route::resource('types', TypeController::class)->except(['show']);
-    });
-    Route::group(['middleware' => ['can:manage co-admin courses']], function () {
-        Route::prefix('/co-admin')->name('co-admin.')->group(function () {
-            Route::get('/', [CoAdminController::class, 'index'])->name('index');
-            Route::get('/courses/create', [CoAdminController::class, 'createCourse'])->name('courses.create');
-            Route::post('/courses', [CoAdminController::class, 'storeCourse'])->name('courses.store');
-            Route::get('/courses/{course}/edit', [CoAdminController::class, 'editCourse'])->name('courses.edit');
-            Route::put('/courses/{course}', [CoAdminController::class, 'updateCourse'])->name('courses.update');
-            Route::delete('/courses/{course}', [CoAdminController::class, 'destroyCourse'])->name('courses.destroy');
-            Route::get('/types/create', [CoAdminController::class, 'createType'])->name('types.create');
-            Route::post('/types', [CoAdminController::class, 'storeType'])->name('types.store');
-            Route::get('/types/{type}/edit', [CoAdminController::class, 'editType'])->name('types.edit');
-            Route::put('/types/{type}', [CoAdminController::class, 'updateType'])->name('types.update');
-            Route::delete('/types/{type}', [CoAdminController::class, 'destroyType'])->name('types.destroy');
-        });
-    });
+        }); 
     Route::group(['middleware' => ['can:manage all comments']], function () {
         Route::get('/comments/moderate', [CommentController::class, 'moderate'])->name('comments.moderate');
     });
@@ -171,6 +156,22 @@ Route::middleware([
             Route::get('/', [GroupController::class, 'index'])->name('groups.index');
             Route::get('/{group}/edit', [GroupController::class, 'edit'])->name('groups.edit');
             Route::get('/create', [GroupController::class, 'create'])->name('groups.create');
+        });
+    });
+
+        Route::group(['middleware' => ['can:manage coadmin courses']], function () {
+        Route::prefix('/co-admin')->name('co-admin.')->group(function () {
+            Route::get('/', [CoAdminController::class, 'index'])->name('index');
+            Route::get('/courses/create', [CoAdminController::class, 'createCourse'])->name('courses.create');
+            Route::post('/courses', [CoAdminController::class, 'storeCourse'])->name('courses.store');
+            Route::get('/courses/{course}/edit', [CoAdminController::class, 'editCourse'])->name('courses.edit');
+            Route::put('/courses/{course}', [CoAdminController::class, 'updateCourse'])->name('courses.update');
+            Route::delete('/courses/{course}', [CoAdminController::class, 'destroyCourse'])->name('courses.destroy');
+            Route::get('/types/create', [CoAdminController::class, 'createType'])->name('types.create');
+            Route::post('/types', [CoAdminController::class, 'storeType'])->name('types.store');
+            Route::get('/types/{type}/edit', [CoAdminController::class, 'editType'])->name('types.edit');
+            Route::put('/types/{type}', [CoAdminController::class, 'updateType'])->name('types.update');
+            Route::delete('/types/{type}', [CoAdminController::class, 'destroyType'])->name('types.destroy');
         });
     });
     

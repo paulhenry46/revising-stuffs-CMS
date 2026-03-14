@@ -126,10 +126,10 @@ class CoAdminController extends Controller
         $this->authorizeCoAdmin();
 
         $request->validate([
-            'name'  => 'bail|required|min:3',
-            'color' => 'bail|required|min:4',
-            'lang'  => 'max:2',
-            'levels' => 'array',
+            'name'   => 'bail|required|min:3',
+            'color'  => 'bail|required|min:4',
+            'lang'   => 'max:2',
+            'levels' => 'required|array|min:1',
         ]);
 
         // Ensure all selected levels belong to the co-admin's curricula
@@ -163,10 +163,10 @@ class CoAdminController extends Controller
         $this->authorizeCourseAccess($course);
 
         $request->validate([
-            'name'  => 'bail|required|min:3',
-            'color' => 'bail|required|min:4',
-            'lang'  => 'max:2',
-            'levels' => 'array',
+            'name'   => 'bail|required|min:3',
+            'color'  => 'bail|required|min:4',
+            'lang'   => 'max:2',
+            'levels' => 'required|array|min:1',
         ]);
 
         $course->name  = $request->name;

@@ -25,25 +25,60 @@ class RSCMS_UpdateToV5 extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
-    {
-        // Create the new co-admin specific permission if it doesn't exist
-        if (!Permission::where('name', 'manage co-admin courses')->where('guard_name', 'sanctum')->exists()) {
-            Permission::create(['guard_name' => 'sanctum', 'name' => 'manage co-admin courses']);
-            $this->info('Created permission: manage co-admin courses');
-        }
+   public function handle()
+{
+    // 1. Vider le cache AVANT toute opération
+    app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
 
-        // Update co-admin role: remove manage levels, add manage co-admin courses
-        $coAdminRole = Role::findByName('co-admin', 'sanctum');
-        $coAdminRole->syncPermissions([
-            'manage co-admin courses',
-            'manage users',
-            'manage all posts',
-            'publish all posts',
-            'manage all comments',
+    $permissionNames = [
+        'manage coadmin courses',
+        'manage users',
+        'manage all posts',
+        'publish all posts',
+        'manage all comments',
+        'manage site' // Ajouté ici pour plus de sécurité
+    ];
+
+    // 2. Créer toutes les permissions et les stocker dans une collection
+    $permissions = collect($permissionNames)->map(function ($name) {
+        return Permission::firstOrCreate([
+            'name' => $name,
+            'guard_name' => 'sanctum',
         ]);
+    });
 
-        $this->info('Updated co-admin permissions: removed manage courses, manage levels; added manage co-admin courses.');
-        $this->info('The command was successful!');
+    $this->info('Permissions existantes ou créées.');
+
+    // 3. Récupérer ou créer le rôle co-admin
+    $coAdminRole = Role::firstOrCreate([
+        'name' => 'co-admin',
+        'guard_name' => 'sanctum',
+    ]);
+
+    // On synchronise en passant la collection d'objets (plus robuste que les noms)
+    $coAdminRole->syncPermissions($permissions->whereIn('name', [
+        'manage coadmin courses',
+        'manage users',
+        'manage all posts',
+        'publish all posts',
+        'manage all comments',
+    ]));
+
+    $this->info('Permissions synchronisées pour le rôle co-admin.');
+
+    // 4. Update admin role
+    $adminRole = Role::where('name', 'admin')
+                     ->where('guard_name', 'sanctum')
+                     ->first();
+
+    if ($adminRole) {
+        $adminRole->givePermissionTo('manage site');
+        $this->info('Permission manage site ajoutée à admin.');
     }
+
+    // 5. Vider le cache APRÈS pour que l'app soit prête immédiatement
+    app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+
+    $this->info('La commande a été exécutée avec succès !');
+}
 }

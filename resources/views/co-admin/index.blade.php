@@ -4,7 +4,7 @@
             <div class="text-sm breadcrumbs mb-2">
                 <ul>
                     <li><a wire:navigate href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a></li>
-                    <li>{{ __('My panel') }}</li>
+                    <li>{{ __('Co-Admin Panel') }}</li>
                 </ul>
             </div>
 
