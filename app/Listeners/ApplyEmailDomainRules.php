@@ -21,11 +21,11 @@ class ApplyEmailDomainRules
         }
 
         if ($rule->role === 'contributor') {
-            if (!$user->hasRole('contributor')) {
+            if (!$user->hasAnyRole(['contributor', 'co-admin', 'admin', 'moderator'])) {
                 $user->syncRoles(['student', 'contributor']);
             }
         } elseif ($rule->role === 'co-admin') {
-            if (!$user->hasRole('co-admin') && !$user->hasRole('admin')) {
+            if (!$user->hasAnyRole(['co-admin', 'admin', 'moderator'])) {
                 $user->syncRoles(['co-admin', 'student', 'contributor']);
                 $curriculaIds = $rule->curricula->pluck('id')->toArray();
                 if (!empty($curriculaIds)) {

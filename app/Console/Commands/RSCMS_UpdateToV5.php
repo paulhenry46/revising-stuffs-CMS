@@ -71,10 +71,10 @@ class RSCMS_UpdateToV5 extends Command
                      ->where('guard_name', 'sanctum')
                      ->first();
 
-    
+    if ($adminRole) {
         $adminRole->givePermissionTo('manage site');
         $this->info('Permission manage site ajoutée à admin.');
-    
+    }
 
     // 5. Vider le cache APRÈS pour que l'app soit prête immédiatement
     app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
