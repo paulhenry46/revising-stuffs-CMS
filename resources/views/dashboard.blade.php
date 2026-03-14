@@ -206,6 +206,34 @@
                                             </li>
                                         @endif
                                     @endif
+                                    @if($user->managedCurricula->count() > 0)
+                                        @if($user->managedCurricula->count() == 1)
+                                            <li>
+                                                <a wire:navigate href="{{ route('curricula.logo.edit', ['curriculum' => $user->managedCurricula->first()->id]) }}" class="">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0 0v-560 560Zm80-80h400q12 0 18-11t-2-21L586-459q-6-8-16-8t-16 8L450-320l-74-99q-6-8-16-8t-16 8l-80 107q-8 10-2 21t18 11Z"/></svg>
+                                               
+                                                    {{ __('Edit Logo') }}
+                                                </a>
+                                            </li>
+                                        @else
+                                            <li class="dropdown dropdown-hover">
+                                                <label tabindex="0" class="">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0 0v-560 560Zm80-80h400q12 0 18-11t-2-21L586-459q-6-8-16-8t-16 8L450-320l-74-99q-6-8-16-8t-16 8l-80 107q-8 10-2 21t18 11Z"/></svg>
+                                               
+                                                    {{ __('Edit Logo') }}
+                                                </label>
+                                                <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+                                                    @foreach($user->managedCurricula as $curriculum)
+                                                        <li>
+                                                            <a wire:navigate href="{{ route('curricula.logo.edit', ['curriculum' => $curriculum->id]) }}">
+                                                                {{ $curriculum->name }}
+                                                            </a>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </li>
+                                        @endif
+                                    @endif
     </ul>
   </li>
 </ul>
