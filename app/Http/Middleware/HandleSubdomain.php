@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Controllers\CurriculumController;
 use App\Models\Curriculum;
 use Closure;
 use Illuminate\Http\Request;
@@ -30,6 +31,7 @@ class HandleSubdomain
                 }
 
                 View::share('subdomainCurriculum', $curriculum);
+                View::share('subdomainLogoUrl', CurriculumController::logoUrl($curriculum));
                 app()->instance('subdomainCurriculum', $curriculum);
             }
         }

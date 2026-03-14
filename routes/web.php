@@ -141,6 +141,10 @@ Route::middleware([
     Route::get('/curricula/{curriculum}/welcome-page/download', [CurriculumController::class, 'downloadWelcomePage'])->name('curricula.welcome-page.download');
     Route::get('/curricula/{curriculum}/welcome-page/download-default', [CurriculumController::class, 'downloadDefaultWelcomePage'])->name('curricula.welcome-page.download-default');
 
+    Route::get('/curricula/{curriculum}/logo', [CurriculumController::class, 'editLogo'])->name('curricula.logo.edit');
+    Route::post('/curricula/{curriculum}/logo', [CurriculumController::class, 'updateLogo'])->name('curricula.logo.update');
+    Route::delete('/curricula/{curriculum}/logo', [CurriculumController::class, 'deleteLogo'])->name('curricula.logo.delete');
+
     Route::group(['middleware' => ['can:manage schools']], function () {
         Route::resource('schools', SchoolController::class)->except(['show', 'index']);
     });

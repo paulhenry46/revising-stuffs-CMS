@@ -104,6 +104,10 @@
         {{__('To manage the custom welcome page for this subdomain, use the dedicated page:')}}
         <a href="{{route('curricula.welcome-page.edit', $curriculum->id)}}" class="link link-primary">{{__('Edit Welcome Page')}}</a>
       </p>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
+        {{__('To manage the custom logo for this subdomain, use the dedicated page:')}}
+        <a href="{{route('curricula.logo.edit', $curriculum->id)}}" class="link link-primary">{{__('Edit Logo')}}</a>
+      </p>
     </div>
     @endif
   </div>
