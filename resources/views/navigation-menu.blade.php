@@ -6,7 +6,11 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="/">
-                        <x-application-mark class="block h-9 w-auto" />
+                        @if(!empty($subdomainLogoUrl))
+                            <img src="{{ $subdomainLogoUrl }}" alt="{{ $subdomainCurriculum->name }} logo" class="block h-9 w-auto">
+                        @else
+                            <x-application-mark class="block h-9 w-auto" />
+                        @endif
                     </a>
                 </div>
 

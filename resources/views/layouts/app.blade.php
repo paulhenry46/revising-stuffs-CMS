@@ -127,7 +127,11 @@
         @livewireScripts
     </body>
 <footer class="footer md:footer-horizontal p-10 bg-base-100 dark:bg-base-200 text-base-content rounded-sm">
-<x-application-mark />
+@if(!empty($subdomainLogoUrl))
+                            <img src="{{ $subdomainLogoUrl }}" alt="{{ $subdomainCurriculum->name }} logo" class="block h-9 w-auto">
+                        @else
+                            <x-application-mark  />
+                        @endif
 <nav class="">
     <p>{{env('APP_NAME')}}</p>
     <p>{{__('Version')}} {{env('APP_VERSION')}}</p></br>

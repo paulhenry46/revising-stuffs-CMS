@@ -13,7 +13,11 @@
     <div>
          <x-authentication-card>
         <x-slot name="logo">
-            <x-authentication-card-logo />
+            @if(!empty($subdomainLogoUrl))
+                            <img src="{{ $subdomainLogoUrl }}" alt="{{ $subdomainCurriculum->name }} logo" class="block h-18 w-auto">
+                        @else
+                            <x-authentication-card-logo />
+                        @endif
         </x-slot>
 
         <x-validation-errors class="mb-4" />

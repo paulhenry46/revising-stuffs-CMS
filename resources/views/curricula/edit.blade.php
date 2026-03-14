@@ -81,6 +81,37 @@
     </div>
   </div>
 </div>
+
+<div class="border-b dark:border-white/10 border-gray-900/10 pb-12">
+  <h2 class="text-base font-semibold leading-7 text-gray-900 dark:text-white">{{__('Subdomain Settings')}}</h2>
+  <p class="mt-1 text-sm leading-6 text-gray-600 dark:text-white">{{__('Configure a dedicated subdomain for this curriculum. When enabled, visitors accessing this subdomain will only see content related to this curriculum.')}}</p>
+  <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+    <div class="sm:col-span-3">
+      <label for="subdomain" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Subdomain')}}</label>
+      <div class="mt-2">
+        <input value="{{ old('subdomain', $curriculum->subdomain) }}" type="text" name="subdomain" id="subdomain" placeholder="e.g. bac" class="input input-primary w-full">
+      </div>
+      <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{__('Enter only the subdomain part (e.g. "bac" for bac.example.com). Leave empty to disable subdomain.')}}</p>
+    </div>
+    <div class="sm:col-span-3 flex items-center gap-x-4 mt-6">
+      <label for="subdomain_enabled" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Enable Subdomain')}}</label>
+      <input type="checkbox" name="subdomain_enabled" id="subdomain_enabled" class="toggle toggle-primary" value="1" {{ old('subdomain_enabled', $curriculum->subdomain_enabled ?? false) ? 'checked' : '' }}>
+      <span class="text-sm text-gray-500 dark:text-gray-400">{{__('When disabled, visiting the subdomain will redirect to the main domain.')}}</span>
+    </div>
+    @if($curriculum->id !== 0)
+    <div class="col-span-full">
+      <p class="text-sm text-gray-600 dark:text-gray-400">
+        {{__('To manage the custom welcome page for this subdomain, use the dedicated page:')}}
+        <a href="{{route('curricula.welcome-page.edit', $curriculum->id)}}" class="link link-primary">{{__('Edit Welcome Page')}}</a>
+      </p>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
+        {{__('To manage the custom logo for this subdomain, use the dedicated page:')}}
+        <a href="{{route('curricula.logo.edit', $curriculum->id)}}" class="link link-primary">{{__('Edit Logo')}}</a>
+      </p>
+    </div>
+    @endif
+  </div>
+</div>
 <div class="mt-6 flex items-center justify-end gap-x-6">
 <a href="{{route('settings')}}" class="link">{{__('Cancel')}}</a>
 <button type="submit" class="btn btn-primary">@if($curriculum->id !== 0) {{__('Edit')}} @else {{__('Create')}} @endif</button>

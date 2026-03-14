@@ -25,6 +25,7 @@ use App\Http\Controllers\StorageController;
 use App\Http\Middleware\EnsureUserCursusProfileIsCompleted;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Public\ReadCardInUserDeckController;
+use App\Http\Controllers\WelcomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,9 +40,7 @@ use App\Http\Controllers\Public\ReadCardInUserDeckController;
 
 Route::get('/storage/{path}', [StorageController::class, 'getFile'])->where('path', '.*')->name('storage');
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('welcome');
+Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 Route::get('/contributor', function () {
     return view('contributor');
 })->name('contributor');
@@ -135,6 +134,16 @@ Route::middleware([
     Route::group(['middleware' => ['can:manage curricula']], function () {
         Route::resource('curricula', CurriculumController::class)->except(['show', 'index']);
     });
+
+    Route::get('/curricula/{curriculum}/welcome-page', [CurriculumController::class, 'editWelcomePage'])->name('curricula.welcome-page.edit');
+    Route::post('/curricula/{curriculum}/welcome-page', [CurriculumController::class, 'updateWelcomePage'])->name('curricula.welcome-page.update');
+    Route::delete('/curricula/{curriculum}/welcome-page', [CurriculumController::class, 'deleteWelcomePage'])->name('curricula.welcome-page.delete');
+    Route::get('/curricula/{curriculum}/welcome-page/download', [CurriculumController::class, 'downloadWelcomePage'])->name('curricula.welcome-page.download');
+    Route::get('/curricula/{curriculum}/welcome-page/download-default', [CurriculumController::class, 'downloadDefaultWelcomePage'])->name('curricula.welcome-page.download-default');
+
+    Route::get('/curricula/{curriculum}/logo', [CurriculumController::class, 'editLogo'])->name('curricula.logo.edit');
+    Route::post('/curricula/{curriculum}/logo', [CurriculumController::class, 'updateLogo'])->name('curricula.logo.update');
+    Route::delete('/curricula/{curriculum}/logo', [CurriculumController::class, 'deleteLogo'])->name('curricula.logo.delete');
 
     Route::group(['middleware' => ['can:manage schools']], function () {
         Route::resource('schools', SchoolController::class)->except(['show', 'index']);
