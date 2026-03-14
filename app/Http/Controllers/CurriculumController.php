@@ -32,6 +32,10 @@ class CurriculumController extends Controller
      */
     public function downloadDefaultWelcomePage(Curriculum $curriculum)
     {
+        $user = auth()->user();
+        if (!$user->can('manage curricula') && !$user->managedCurricula->contains($curriculum)) {
+            abort(403);
+        }
         // Path to the default welcome page template
         $defaultPath = resource_path('views/welcome.blade.php');
         if (!\Illuminate\Support\Facades\File::exists($defaultPath)) {
