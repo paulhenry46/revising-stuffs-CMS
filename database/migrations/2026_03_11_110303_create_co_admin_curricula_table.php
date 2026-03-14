@@ -19,16 +19,6 @@ return new class extends Migration
             $table->primary(['user_id', 'curriculum_id']);
         });
 
-        if (!Role::where('name', 'co-admin')->exists()) {
-            Role::create(['guard_name' => 'sanctum', 'name' => 'co-admin'])->syncPermissions(['manage courses', 'manage levels', 'manage users', 'manage all posts', 'publish all posts', 'manage all comments']);
-            }
-            $adminRole = Role::where('name', 'admin')->first();
-            if ($adminRole) {
-
-                Permission::firstOrCreate(['name' => 'manage site', 'guard_name' => 'sanctum']);
-                $adminRole->givePermissionTo('manage site');
-
-            }
         }
 
             
