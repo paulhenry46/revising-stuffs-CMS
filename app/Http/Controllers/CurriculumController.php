@@ -12,6 +12,35 @@ use Illuminate\Support\Str;
 class CurriculumController extends Controller
 {
     /**
+     * Download the custom welcome page file for the curriculum.
+     */
+    public function downloadWelcomePage(Curriculum $curriculum)
+    {
+        $user = auth()->user();
+        if (!$user->can('manage curricula') && !$user->managedCurricula->contains($curriculum)) {
+            abort(403);
+        }
+        $path = self::welcomePagePath($curriculum);
+        if (!\Illuminate\Support\Facades\File::exists($path)) {
+            return redirect()->back()->withErrors(['welcome_file' => __('No custom welcome page found.')]);
+        }
+        return response()->download($path, $curriculum->slug . '-welcome-page.blade.php');
+    }
+
+    /**
+     * Download the default welcome page file.
+     */
+    public function downloadDefaultWelcomePage(Curriculum $curriculum)
+    {
+        // Path to the default welcome page template
+        $defaultPath = resource_path('views/welcome.blade.php');
+        if (!\Illuminate\Support\Facades\File::exists($defaultPath)) {
+            return redirect()->back()->withErrors(['welcome_file' => __('Default welcome page not found.')]);
+        }
+        return response()->download($defaultPath, 'default-welcome-page.blade.php');
+    }
+
+    /**
      * Display a listing of the resource --> Moved to Settings
      */
 
@@ -128,7 +157,7 @@ class CurriculumController extends Controller
         }
 
         $request->validate([
-            'welcome_file' => ['required', 'file', 'max:512', 'mimetypes:text/plain,text/x-php,application/x-php,application/octet-stream'],
+            'welcome_file' => ['required', 'file', 'max:512', 'mimes:php,txt,blade.php'],
         ]);
 
         $file = $request->file('welcome_file');
