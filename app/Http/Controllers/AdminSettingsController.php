@@ -49,10 +49,16 @@ public function createBackupOfDB(){
         $host = escapeshellarg($connection['host']);
         $port = escapeshellarg((string) $connection['port']);
         $username = escapeshellarg($connection['username']);
-        $password = escapeshellarg($connection['password']);
         $database = escapeshellarg($connection['database']);
-        $outPath = escapeshellarg($path);
-        exec('MYSQL_PWD=' . $password . ' mysqldump -h ' . $host . ' -P ' . $port . ' -u ' . $username . ' ' . $database . ' > ' . $outPath . ' 2>&1');
+        // Pass the password via the child-process environment to avoid exposing it in the command string
+        $env = array_merge(getenv() ?: [], ['MYSQL_PWD' => $connection['password']]);
+        $descriptors = [0 => ['pipe', 'r'], 1 => ['file', $path, 'w'], 2 => ['pipe', 'w']];
+        $process = proc_open('mysqldump -h ' . $host . ' -P ' . $port . ' -u ' . $username . ' ' . $database, $descriptors, $pipes, null, $env);
+        if (is_resource($process)) {
+            fclose($pipes[0]);
+            fclose($pipes[2]);
+            proc_close($process);
+        }
     }
     return response()->download($path)->deleteFileAfterSend(true);
 }

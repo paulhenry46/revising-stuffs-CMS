@@ -84,7 +84,7 @@ class CardController extends Controller
         $value_sanitized = preg_replace_callback(
             '/\[IMG\](.*?)\[\/IMG\]/si',
             function($matches) use ($file_path) {
-                $filename = htmlspecialchars(trim($matches[1]), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                $filename = htmlspecialchars(basename(trim($matches[1])), ENT_QUOTES | ENT_HTML5, 'UTF-8');
                 return '<img class="h-48" src="' . $file_path . '/' . $filename . '">';
             },
             $value_sanitized

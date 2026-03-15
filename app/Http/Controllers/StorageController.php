@@ -14,7 +14,7 @@ class StorageController extends Controller
         $resolvedPath = realpath($basePath . DIRECTORY_SEPARATOR . $path);
 
         // Prevent path traversal: ensure the resolved path stays within the public storage directory
-        if ($resolvedPath === false || !str_starts_with($resolvedPath, $basePath . DIRECTORY_SEPARATOR)) {
+        if ($resolvedPath === false || $resolvedPath === $basePath || !str_starts_with($resolvedPath, $basePath . DIRECTORY_SEPARATOR)) {
             abort(404);
         }
 
