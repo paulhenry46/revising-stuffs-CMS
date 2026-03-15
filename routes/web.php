@@ -176,6 +176,7 @@ Route::middleware([
             Route::get('/types/{type}/edit', [CoAdminController::class, 'editType'])->name('types.edit');
             Route::put('/types/{type}', [CoAdminController::class, 'updateType'])->name('types.update');
             Route::delete('/types/{type}', [CoAdminController::class, 'destroyType'])->name('types.destroy');
+            Route::put('/curricula/{curriculum}/settings', [CoAdminController::class, 'updateCurriculumSettings'])->name('curricula.updateSettings');
         });
     });
     

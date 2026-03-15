@@ -9,7 +9,7 @@
     {{-- Sortable.js --}}
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.1/Sortable.min.js"></script>
 @endif
-@if((Route::is('post.public.view')) or (Route::is('posts.index')) or (Route::is('dashboard')) or (Route::is('post.public.cards.show')) )
+@if((Route::is('post.public.view')) or (Route::is('posts.index')) or (Route::is('dashboard')) or (Route::is('post.public.cards.show')) or (Route::is('posts.all')) )
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 @endif
 @if(Route::is('post.public.view'))
@@ -70,7 +70,7 @@
         </li>
       </ul>
     </div>
-    <a wire:navigate href="{{route('welcome')}}" class="btn btn-ghost text-xl">{{env('APP_NAME')}}</a>
+    <a wire:navigate href="{{route('welcome')}}" class="btn btn-ghost text-xl">{{ isset($subdomainCurriculum) && $subdomainCurriculum->app_name ? $subdomainCurriculum->app_name : env('APP_NAME') }}</a>
   </div>
   <div class="navbar-center hidden lg:flex">
     <ul class="menu menu-horizontal px-1">
@@ -133,7 +133,7 @@
                             <x-application-mark  />
                         @endif
 <nav class="">
-    <p>{{env('APP_NAME')}}</p>
+    <p>{{ isset($subdomainCurriculum) && $subdomainCurriculum->app_name ? $subdomainCurriculum->app_name : env('APP_NAME') }}</p>
     <p>{{__('Version')}} {{env('APP_VERSION')}}</p></br>
     <div class="grid grid-flow-col gap-4">
     <a wire:navigate href="{{route('about.about')}}" class="link link-hover">{{__('About us')}}</a>
