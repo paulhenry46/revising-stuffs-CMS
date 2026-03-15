@@ -14,7 +14,7 @@
                 </div>
                 @if($curriculum->subdomain)
     <a href="https://{{$curriculum->subdomain}}.{{parse_url(config('app.url'), PHP_URL_HOST)}}" target="_blank" class="btn  btn-primary mt-2">
-        {{ __('Go to subdomain site') }}
+        {{ __('Go to curiculum site') }}
     </a>
 @endif
             </div>
