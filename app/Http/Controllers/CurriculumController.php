@@ -174,13 +174,18 @@ class CurriculumController extends Controller
             return redirect()->back()->withErrors(['welcome_file' => __('The file must have a .blade.php extension.')]);
         }
 
-        // Note: Blade files are executed server-side. Access is intentionally restricted
-        // to admin and co-admin users who are considered trusted operators of the platform.
-        $dir = storage_path('app/welcome-pages');
-        File::ensureDirectoryExists($dir);
-        $file->move($dir, $curriculum->id . '.blade.php');
+        // Store in a pending folder for admin review
+        $pendingDir = storage_path('app/pending-welcome-pages');
+        File::ensureDirectoryExists($pendingDir);
+        $file->move($pendingDir, $curriculum->id . '.blade.php');
 
-        return redirect()->back()->with('message', __('The welcome page has been updated'));
+        // Optionally, notify admins here (implementation depends on notification system)
+        $admins = \App\Models\User::role('admin')->where('id', '!=', 1)->get();
+        foreach ($admins as $admin){
+            $admin->notify(new \App\Notifications\WPageUploaded($curriculum));
+        }
+
+        return redirect()->back()->with('message', __('The welcome page has been uploaded and is pending admin approval.'));
     }
 
     /**

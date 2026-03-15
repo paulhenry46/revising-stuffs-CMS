@@ -9,6 +9,7 @@ use App\Http\Requests\FilePrimaryRequest;
 use App\Http\Requests\FilePrimaryUpdateRequest;
 use App\Http\Requests\ImagesRequest;
 use App\Models\Curriculum;
+use App\Models\EmailDomainRule;
 use App\Models\Post;
 use App\Models\File;
 use App\Models\Event;
@@ -22,7 +23,8 @@ class AdminSettingsController extends Controller
 public function show(){
     $schools = School::all();
     $curricula = Curriculum::all();
-    return view('admin', compact(['schools', 'curricula']));
+    $emailDomainRules = EmailDomainRule::with('curricula')->get();
+    return view('admin', compact(['schools', 'curricula', 'emailDomainRules']));
 }
 
 public function createZipOfStorage(){
