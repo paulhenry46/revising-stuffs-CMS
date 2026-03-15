@@ -21,7 +21,7 @@ class AboutController extends Controller
             $query->where('name', 'contributor');
             })
             ->whereHas('posts', function ($query) {
-            $query->where('status', 'published');
+            $query->where('published', true);
             })
             ->whereDoesntHave('roles', function ($query) {
             $query->whereIn('name', ['admin', 'co-admin', 'moderator']);
