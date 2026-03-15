@@ -188,9 +188,10 @@
                                         {{ __('Customize the application name displayed on your curriculum subdomain.') }}
                                     </p>
                                 </div>
+                                <div class="grid grid-cols-2 space-x-2">
                                 @forelse($managedCurricula as $curriculum)
                                     @if($curriculum->subdomain)
-                                    <div class="card bg-base-100 shadow-sm mb-6">
+                                    <div class="card bg-base-100 border-primary border-2  mb-6">
                                         <div class="card-body">
                                             <h2 class="card-title">{{ $curriculum->name }}</h2>
                                             <p class="text-sm text-gray-500">
@@ -216,6 +217,17 @@
                                                     <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
                                                 </div>
                                             </form>
+                                            <div class="mt-4 flex items-center gap-x-4">
+                                                <a href="{{ route('curricula.welcome-page.edit', ['curriculum' => $curriculum->id]) }}" class="btn btn-outline btn-secondary">
+                                                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M240-120q-45 0-89-22t-71-58q26 0 53-20.5t27-59.5q0-50 35-85t85-35q50 0 85 35t35 85q0 66-47 113t-113 47Zm0-80q33 0 56.5-23.5T320-280q0-17-11.5-28.5T280-320q-17 0-28.5 11.5T240-280q0 23-5.5 42T220-202q5 2 10 2h10Zm230-160L360-470l358-358q11-11 27.5-11.5T774-828l54 54q12 12 12 28t-12 28L470-360Zm-190 80Z"/></svg>
+                                                    {{ __('Edit Welcome Page') }}
+                                                </a>
+                                                <a href="{{ route('curricula.logo.edit', ['curriculum' => $curriculum->id]) }}" class="btn btn-outline btn-primary">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0 0v-560 560Zm80-80h400q12 0 18-11t-2-21L586-459q-6-8-16-8t-16 8L450-320l-74-99q-6-8-16-8t-16 8l-80 107q-8 10-2 21t18 11Z"/></svg>
+                                               
+                                                    {{ __('Edit Logo') }}
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
                                     @endif
@@ -225,6 +237,7 @@
                                         <span>{{ __('No curricula with subdomains are assigned to you.') }}</span>
                                     </div>
                                 @endforelse
+                                </div>
                                 @if($managedCurricula->where('subdomain', '!=', null)->isEmpty() && $managedCurricula->isNotEmpty())
                                     <div class="alert alert-info mt-4">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>

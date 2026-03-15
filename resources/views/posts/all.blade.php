@@ -41,7 +41,7 @@
           <th>{{__('Level')}}</th>
           <th>{{__('State')}}</th>
           <th>{{__('Thanks')}}</th>
-          <th>{{__('Donwloads')}}</th>
+          <th>{{__('Downloads')}}</th>
           <th></th>
         </tr>
       </thead>

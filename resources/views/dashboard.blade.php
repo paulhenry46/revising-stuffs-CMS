@@ -176,64 +176,9 @@
                                     </a></li>
                                     <li><a wire:navigate href="{{route('co-admin.index')}}" class="">
                                         <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m297-581 149-243q6-10 15-14.5t19-4.5q10 0 19 4.5t15 14.5l149 243q6 10 6 21t-5 20q-5 9-14 14.5t-21 5.5H331q-12 0-21-5.5T296-540q-5-9-5-20t6-21ZM700-80q-75 0-127.5-52.5T520-260q0-75 52.5-127.5T700-440q75 0 127.5 52.5T880-260q0 75-52.5 127.5T700-80Zm-580-60v-240q0-17 11.5-28.5T160-420h240q17 0 28.5 11.5T440-380v240q0 17-11.5 28.5T400-100H160q-17 0-28.5-11.5T120-140Z"/></svg>                                        
-                                        {{__('Manage courses and types')}}
+                                        {{__('Co-Admin Panel')}}
                                     </a></li>
-                                    @if($user->managedCurricula->count() > 0)
-                                        @if($user->managedCurricula->count() == 1)
-                                            <li>
-                                                <a wire:navigate href="{{ route('curricula.welcome-page.edit', ['curriculum' => $user->managedCurricula->first()->id]) }}" class="">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M240-120q-45 0-89-22t-71-58q26 0 53-20.5t27-59.5q0-50 35-85t85-35q50 0 85 35t35 85q0 66-47 113t-113 47Zm0-80q33 0 56.5-23.5T320-280q0-17-11.5-28.5T280-320q-17 0-28.5 11.5T240-280q0 23-5.5 42T220-202q5 2 10 2h10Zm230-160L360-470l358-358q11-11 27.5-11.5T774-828l54 54q12 12 12 28t-12 28L470-360Zm-190 80Z"/></svg>
-                                                    
-                                                    {{ __('Edit Welcome Page') }}
-                                                </a>
-                                            </li>
-                                        @else
-                                            <li class="dropdown dropdown-hover">
-                                                <label tabindex="0" class="">
-                                                    
-                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M240-120q-45 0-89-22t-71-58q26 0 53-20.5t27-59.5q0-50 35-85t85-35q50 0 85 35t35 85q0 66-47 113t-113 47Zm0-80q33 0 56.5-23.5T320-280q0-17-11.5-28.5T280-320q-17 0-28.5 11.5T240-280q0 23-5.5 42T220-202q5 2 10 2h10Zm230-160L360-470l358-358q11-11 27.5-11.5T774-828l54 54q12 12 12 28t-12 28L470-360Zm-190 80Z"/></svg>
-                                                    {{ __('Edit Welcome Page') }}
-                                                </label>
-                                                <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
-                                                    @foreach($user->managedCurricula as $curriculum)
-                                                        <li>
-                                                            <a wire:navigate href="{{ route('curricula.welcome-page.edit', ['curriculum' => $curriculum->id]) }}">
-                                                                {{ $curriculum->name }}
-                                                            </a>
-                                                        </li>
-                                                    @endforeach
-                                                </ul>
-                                            </li>
-                                        @endif
-                                    @endif
-                                    @if($user->managedCurricula->count() > 0)
-                                        @if($user->managedCurricula->count() == 1)
-                                            <li>
-                                                <a wire:navigate href="{{ route('curricula.logo.edit', ['curriculum' => $user->managedCurricula->first()->id]) }}" class="">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0 0v-560 560Zm80-80h400q12 0 18-11t-2-21L586-459q-6-8-16-8t-16 8L450-320l-74-99q-6-8-16-8t-16 8l-80 107q-8 10-2 21t18 11Z"/></svg>
-                                               
-                                                    {{ __('Edit Logo') }}
-                                                </a>
-                                            </li>
-                                        @else
-                                            <li class="dropdown dropdown-hover">
-                                                <label tabindex="0" class="">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0 0v-560 560Zm80-80h400q12 0 18-11t-2-21L586-459q-6-8-16-8t-16 8L450-320l-74-99q-6-8-16-8t-16 8l-80 107q-8 10-2 21t18 11Z"/></svg>
-                                               
-                                                    {{ __('Edit Logo') }}
-                                                </label>
-                                                <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
-                                                    @foreach($user->managedCurricula as $curriculum)
-                                                        <li>
-                                                            <a wire:navigate href="{{ route('curricula.logo.edit', ['curriculum' => $curriculum->id]) }}">
-                                                                {{ $curriculum->name }}
-                                                            </a>
-                                                        </li>
-                                                    @endforeach
-                                                </ul>
-                                            </li>
-                                        @endif
-                                    @endif
+                                    
     </ul>
   </li>
 </ul>
