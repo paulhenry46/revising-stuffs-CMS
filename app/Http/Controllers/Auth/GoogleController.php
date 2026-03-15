@@ -36,7 +36,8 @@ class GoogleController extends Controller
                 return redirect()->intended('dashboard');
             }
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            \Illuminate\Support\Facades\Log::error('Google OAuth error: ' . $e->getMessage());
+            return redirect()->route('login')->withErrors(['email' => __('Unable to authenticate with Google. Please try again.')]);
         }
     }
 }

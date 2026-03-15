@@ -80,9 +80,16 @@ class CardController extends Controller
      */
     private function replace_values(string $value, string $file_path, bool $create=true){
         $value_sanitized = str_ireplace($this->forbiden_tags, '', $value);
-        $value_temp = str_ireplace('[IMG]', '<img class="h-48" src="'.$file_path.'/', $value_sanitized);
-        $value = str_ireplace('[/IMG]', '">', $value_temp);
-        $new_value = str_ireplace($this->users_tags, $this->users_tags_replaced, $value);
+        // Process [IMG] tags safely using regex to prevent XSS via injected HTML attributes
+        $value_sanitized = preg_replace_callback(
+            '/\[IMG\](.*?)\[\/IMG\]/si',
+            function($matches) use ($file_path) {
+                $filename = htmlspecialchars(trim($matches[1]), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                return '<img class="h-48" src="' . $file_path . '/' . $filename . '">';
+            },
+            $value_sanitized
+        );
+        $new_value = str_ireplace($this->users_tags, $this->users_tags_replaced, $value_sanitized);
         if(str_contains($value, '\(') and (!str_contains($value, '\) \(=')) and ($create)){//Split latex only if latex is detected with \( balise
             return str_ireplace($this->latex_split_tag, $this->latex_split_replaced, $new_value);
         }else{

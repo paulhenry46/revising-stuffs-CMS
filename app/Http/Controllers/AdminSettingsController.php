@@ -30,22 +30,29 @@ public function show(){
 public function createZipOfStorage(){
     $zip = new ZipArchive;
         $zipFileName = 'RSCMS-files'.date("m.d.y").'.zip';
-        if ($zip->open(public_path($zipFileName), ZipArchive::CREATE) === TRUE) {
+        $zipPath = storage_path('app/' . $zipFileName);
+        if ($zip->open($zipPath, ZipArchive::CREATE) === TRUE) {
             foreach (Storage::allFiles('public') as $file) {
                 if (basename($file) !== '.gitignore') {
-                    //dd(''.storage_path().'/app/'.$file.'');
                     $zip->addFile(''.storage_path().'/app/'.$file.'', $file);
                 }
             }
             $zip->close();
-            return response()->download(public_path($zipFileName))->deleteFileAfterSend(true);
+            return response()->download($zipPath)->deleteFileAfterSend(true);
         }
 }
 
 public function createBackupOfDB(){
-    $path =''.storage_path().'/app/export.sql';
-    if(env('DB_CONNECTION') == 'mysql'){
-        exec('MYSQL_PWD="'.env('DB_PASSWORD').'" mysqldump -u '.env('DB_USERNAME').' '.env('DB_DATABASE').' > '.$path.' 2>&1');
+    $path = storage_path('app/export.sql');
+    if(config('database.default') == 'mysql'){
+        $connection = config('database.connections.mysql');
+        $host = escapeshellarg($connection['host']);
+        $port = escapeshellarg((string) $connection['port']);
+        $username = escapeshellarg($connection['username']);
+        $password = escapeshellarg($connection['password']);
+        $database = escapeshellarg($connection['database']);
+        $outPath = escapeshellarg($path);
+        exec('MYSQL_PWD=' . $password . ' mysqldump -h ' . $host . ' -P ' . $port . ' -u ' . $username . ' ' . $database . ' > ' . $outPath . ' 2>&1');
     }
     return response()->download($path)->deleteFileAfterSend(true);
 }
