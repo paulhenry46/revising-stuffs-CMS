@@ -185,6 +185,22 @@
 </div>
 </div>
                 </div>
+
+
+                <input type="radio" name="my_tabs_1" role="tab" class="tab" aria-label="{{__('Welcome Pages')}}" />
+                    <div role="tabpanel" class="tab-content p-10">
+                      <div class="px-4 sm:px-6 lg:px-8">
+                        <div class="sm:flex sm:items-center">
+                          <div class="sm:flex-auto">
+                            <h1 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">{{__('Pending Welcome Pages')}}</h1>
+                            <p class="mt-2 text-sm text-gray-700 dark:text-white">{{__('List of pending welcome pages')}}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <livewire:admin.pending-welcome-pages/>
+                    </div>
+
+
                 <input type="radio" name="my_tabs_1" role="tab" class="tab" aria-label="{{__('Email Domain Rules')}}" />
                 <div role="tabpanel" class="tab-content p-10">
                 <div class="px-4 sm:px-6 lg:px-8">
