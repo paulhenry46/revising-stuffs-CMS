@@ -10,21 +10,26 @@ class StorageController extends Controller
 {
     public function getFile(string $path){
         $headers = [];//Create headers array
-        $new_path = 'public/'.$path.''; //Create the path from url
-        $new_path = Storage::disk('local')->path($new_path); //Create aboslute path
-        $name = basename($new_path);//Create name
-        if(file_exists($new_path)){
+        $basePath = realpath(Storage::disk('local')->path('public'));
+        $resolvedPath = realpath($basePath . DIRECTORY_SEPARATOR . $path);
+
+        // Prevent path traversal: ensure the resolved path stays within the public storage directory
+        if ($resolvedPath === false || $resolvedPath === $basePath || !str_starts_with($resolvedPath, $basePath . DIRECTORY_SEPARATOR)) {
+            abort(404);
+        }
+
+        $name = basename($resolvedPath);//Create name
+        if(file_exists($resolvedPath)){
 
             if(strpos($name, '.dark.pdf')){
                 $canonical_link = url('storage/'.str_replace('.dark.pdf', '.light.pdf',$path).'');
-                //dd($canonical_link);
                 $headers = ['link' =>'<'.$canonical_link.'>; rel="canonical"'];
                 dispatch(new IncrementDownload_count($name, 'primary dark'));
             }elseif(strpos($name, '.light.pdf')){
                 dispatch(new IncrementDownload_count($name, 'primary light'));
             }
 
-            return response()->file($new_path, $headers);
+            return response()->file($resolvedPath, $headers);
         }else{
             abort(404);
         }

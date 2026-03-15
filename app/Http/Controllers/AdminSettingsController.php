@@ -30,22 +30,35 @@ public function show(){
 public function createZipOfStorage(){
     $zip = new ZipArchive;
         $zipFileName = 'RSCMS-files'.date("m.d.y").'.zip';
-        if ($zip->open(public_path($zipFileName), ZipArchive::CREATE) === TRUE) {
+        $zipPath = storage_path('app/' . $zipFileName);
+        if ($zip->open($zipPath, ZipArchive::CREATE) === TRUE) {
             foreach (Storage::allFiles('public') as $file) {
                 if (basename($file) !== '.gitignore') {
-                    //dd(''.storage_path().'/app/'.$file.'');
                     $zip->addFile(''.storage_path().'/app/'.$file.'', $file);
                 }
             }
             $zip->close();
-            return response()->download(public_path($zipFileName))->deleteFileAfterSend(true);
+            return response()->download($zipPath)->deleteFileAfterSend(true);
         }
 }
 
 public function createBackupOfDB(){
-    $path =''.storage_path().'/app/export.sql';
-    if(env('DB_CONNECTION') == 'mysql'){
-        exec('MYSQL_PWD="'.env('DB_PASSWORD').'" mysqldump -u '.env('DB_USERNAME').' '.env('DB_DATABASE').' > '.$path.' 2>&1');
+    $path = storage_path('app/export.sql');
+    if(config('database.default') == 'mysql'){
+        $connection = config('database.connections.mysql');
+        $host = escapeshellarg($connection['host']);
+        $port = escapeshellarg((string) $connection['port']);
+        $username = escapeshellarg($connection['username']);
+        $database = escapeshellarg($connection['database']);
+        // Pass the password via the child-process environment to avoid exposing it in the command string
+        $env = array_merge(getenv() ?: [], ['MYSQL_PWD' => $connection['password']]);
+        $descriptors = [0 => ['pipe', 'r'], 1 => ['file', $path, 'w'], 2 => ['pipe', 'w']];
+        $process = proc_open('mysqldump -h ' . $host . ' -P ' . $port . ' -u ' . $username . ' ' . $database, $descriptors, $pipes, null, $env);
+        if (is_resource($process)) {
+            fclose($pipes[0]);
+            fclose($pipes[2]);
+            proc_close($process);
+        }
     }
     return response()->download($path)->deleteFileAfterSend(true);
 }
