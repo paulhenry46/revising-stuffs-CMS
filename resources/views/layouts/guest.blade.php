@@ -62,7 +62,7 @@
         </li>
       </ul>
     </div>
-    <a wire:navigate href="{{route('welcome')}}" class="btn btn-ghost text-xl">{{env('APP_NAME')}}</a>
+    <a wire:navigate href="{{route('welcome')}}" class="btn btn-ghost text-xl">{{ isset($subdomainCurriculum) && $subdomainCurriculum->app_name ? $subdomainCurriculum->app_name : env('APP_NAME') }}</a>
   </div>
   <div class="navbar-center hidden lg:flex">
     <ul class="menu menu-horizontal px-1">
@@ -122,7 +122,7 @@
                             <x-application-mark  />
                         @endif
 <nav class="">
-    <p>{{env('APP_NAME')}}</p>
+    <p>{{ isset($subdomainCurriculum) && $subdomainCurriculum->app_name ? $subdomainCurriculum->app_name : env('APP_NAME') }}</p>
     <p>{{__('Version')}} {{env('APP_VERSION')}}</p></br>
     <div class="grid grid-flow-col gap-4">
     <a wire:navigate href="{{route('about.about')}}" class="link link-hover">{{__('About us')}}</a>

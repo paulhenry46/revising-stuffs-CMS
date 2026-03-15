@@ -21,6 +21,7 @@
 
 <div class="bg-white/25 dark:bg-base-100/25 gap-6 lg:gap-8 p-6 lg:p-8">
 <x-info-message/>
+<livewire:all-posts-chart lazy />
 <div class="px-4 sm:px-6 lg:px-8">
 <div class="sm:flex sm:items-center">
 <div class="sm:flex-auto">

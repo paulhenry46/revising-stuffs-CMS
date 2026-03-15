@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Course;
+use App\Models\Curriculum;
 use App\Models\Level;
 use App\Models\Type;
 use Illuminate\Support\Str;
@@ -103,8 +104,9 @@ class CoAdminController extends Controller
         $courses = $this->getAccessibleCourses();
         $courseIds = $courses->pluck('id')->toArray();
         $types = Type::whereIn('course_id', $courseIds)->get();
+        $managedCurricula = auth()->user()->managedCurricula;
 
-        return view('co-admin.index', compact('courses', 'types'));
+        return view('co-admin.index', compact('courses', 'types', 'managedCurricula'));
     }
 
     // -------------------------------------------------------------------------
@@ -282,5 +284,24 @@ class CoAdminController extends Controller
         }
 
         return redirect()->route('co-admin.index')->with('warning', __('The type has posts attached. Please delete all of these posts or change their type before deleting this category.'));
+    }
+
+    // -------------------------------------------------------------------------
+    // Curriculum Settings
+    // -------------------------------------------------------------------------
+
+    public function updateCurriculumSettings(Request $request, Curriculum $curriculum)
+    {
+        $this->authorizeCoAdmin();
+        abort_unless(in_array($curriculum->id, $this->getManagedCurriculaIds()), 403, __('You do not have access to this curriculum.'));
+
+        $request->validate([
+            'app_name' => 'nullable|string|max:100',
+        ]);
+
+        $curriculum->app_name = $request->app_name ?: null;
+        $curriculum->save();
+
+        return redirect()->route('co-admin.index', ['tab' => 'settings'])->with('message', __('Settings updated.'));
     }
 }

@@ -1,7 +1,25 @@
 <x-app-layout>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        
+
+@if(isset($subdomainCurriculum))
+<div class="bg-white dark:bg-base-100 overflow-hidden shadow-xl sm:rounded-lg mb-6 border border-primary">
+    <div class="p-6 lg:p-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white">
+                {{__('You are browsing the') }} <span class="text-primary">{{ $subdomainCurriculum->name }}</span> {{__('curriculum')}}
+            </h2>
+            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                {{__('To explore all available curricula, visit the main site.')}}
+            </p>
+        </div>
+        <a href="{{ config('app.url') }}/library" class="btn btn-outline btn-primary shrink-0">
+            {{__('Go to main site')}}
+        </a>
+    </div>
+</div>
+@endif
+
 @foreach($curricula as $curriculum)
 <div class="bg-white dark:bg-base-100 overflow-hidden shadow-xl sm:rounded-lg mt-6">
             <div class="p-6 lg:p-8 flex justify-between">
@@ -12,9 +30,9 @@
 
                     <p>{{__('Taught at')}} @foreach($curriculum->schools as $school) {{$school->name}} @endforeach</p>
                 </div>
-                @if($curriculum->subdomain)
+                @if($curriculum->subdomain && !isset($subdomainCurriculum))
     <a href="https://{{$curriculum->subdomain}}.{{parse_url(config('app.url'), PHP_URL_HOST)}}" target="_blank" class="btn  btn-primary mt-2">
-        {{ __('Go to curiculum site') }}
+        {{ __('Go to curriculum site') }}
     </a>
 @endif
             </div>

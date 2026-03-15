@@ -175,6 +175,64 @@
                                 </div>
                             </div>
                         </div>
+
+                        {{-- Settings Tab --}}
+                        <input type="radio" name="co_admin_tabs" role="tab" class="tab" aria-label="{{ __('Settings') }}" @if(request('tab') === 'settings') checked @endif />
+                        <div role="tabpanel" class="tab-content p-10">
+                            <div class="px-4 sm:px-6 lg:px-8">
+                                <div class="sm:flex-auto mb-6">
+                                    <h1 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
+                                        {{ __('Subdomain Settings') }}
+                                    </h1>
+                                    <p class="mt-2 text-sm text-gray-700 dark:text-white">
+                                        {{ __('Customize the application name displayed on your curriculum subdomain.') }}
+                                    </p>
+                                </div>
+                                @forelse($managedCurricula as $curriculum)
+                                    @if($curriculum->subdomain)
+                                    <div class="card bg-base-100 shadow-sm mb-6">
+                                        <div class="card-body">
+                                            <h2 class="card-title">{{ $curriculum->name }}</h2>
+                                            <p class="text-sm text-gray-500">
+                                                {{ __('Subdomain:') }} <span class="font-mono">{{ $curriculum->subdomain }}.{{ parse_url(config('app.url'), PHP_URL_HOST) }}</span>
+                                            </p>
+                                            <form action="{{ route('co-admin.curricula.updateSettings', $curriculum->id) }}" method="POST" class="mt-4">
+                                                @csrf
+                                                @method('PUT')
+                                                <div class="form-control w-full max-w-md">
+                                                    <label class="label" for="app_name_{{ $curriculum->id }}">
+                                                        <span class="label-text">{{ __('Application name for this subdomain') }}</span>
+                                                    </label>
+                                                    <input type="text" id="app_name_{{ $curriculum->id }}" name="app_name"
+                                                        value="{{ old('app_name', $curriculum->app_name) }}"
+                                                        placeholder="{{ env('APP_NAME') }}"
+                                                        maxlength="100"
+                                                        class="input input-bordered w-full max-w-md" />
+                                                    <label class="label">
+                                                        <span class="label-text-alt text-gray-500">{{ __('Leave empty to use the default application name.') }}</span>
+                                                    </label>
+                                                </div>
+                                                <div class="mt-4">
+                                                    <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    @endif
+                                @empty
+                                    <div class="alert alert-info">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        <span>{{ __('No curricula with subdomains are assigned to you.') }}</span>
+                                    </div>
+                                @endforelse
+                                @if($managedCurricula->where('subdomain', '!=', null)->isEmpty() && $managedCurricula->isNotEmpty())
+                                    <div class="alert alert-info mt-4">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        <span>{{ __('None of your curricula have a subdomain configured. Ask an administrator to set one up.') }}</span>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
