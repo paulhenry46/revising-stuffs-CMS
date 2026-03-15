@@ -32,8 +32,8 @@ public function createZipOfStorage(){
         $zipFileName = 'RSCMS-files'.date("m.d.y").'.zip';
         $zipPath = storage_path('app/' . $zipFileName);
         if ($zip->open($zipPath, ZipArchive::CREATE) === TRUE) {
-            foreach (Storage::allFiles('public') as $file) {
-                if (basename($file) !== '.gitignore') {
+             foreach (Storage::allFiles('./') as $file) {
+                if (!str_starts_with($file, 'livewire-tmp')) {
                     $zip->addFile(''.storage_path().'/app/'.$file.'', $file);
                 }
             }
@@ -59,8 +59,10 @@ public function createBackupOfDB(){
             fclose($pipes[2]);
             proc_close($process);
         }
+        return response()->download($path)->deleteFileAfterSend(true);
+    }else{
+        abort(403, 'Only available with MYSQL database');
     }
-    return response()->download($path)->deleteFileAfterSend(true);
 }
 
 }
