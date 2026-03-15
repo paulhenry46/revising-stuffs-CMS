@@ -1,7 +1,7 @@
 <div class="mt-6 mb-3 card bg-base-100 shadow-xl" x-data="{ open: false, new_deck: false, close(){this.open = false; this.new_deck = false; $wire.name = ''; $wire.color = '';}, open_item(id){$wire.setDeck(id); open = true; my_modal_1.showModal();}, new_item(){this.new_deck = true; this.open = true; my_modal_1.showModal();} }">
     <div class="card-body">
         <div class="flex justify-between gap-x-2">
-            <h2 class="card-title">{{ ('Your decks') }}</h2>
+            <h2 class="card-title">{{ __('Your decks') }}</h2>
             <button x-on:click='new_item()' class="btn btn-primary">
                 <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M440-440v120q0 17 11.5 28.5T480-280q17 0 28.5-11.5T520-320v-120h120q17 0 28.5-11.5T680-480q0-17-11.5-28.5T640-520H520v-120q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640v120H320q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440h120ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Z"></path></svg>
                     {{ __('Create') }}
@@ -23,7 +23,7 @@
             </div>
         </div>
         @empty
-            No decks
+            {{ __('No decks') }}
         @endforelse
     </div>
         

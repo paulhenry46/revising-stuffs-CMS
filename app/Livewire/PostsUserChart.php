@@ -53,7 +53,7 @@ class PostsUserChart extends Component
                 'datasets' => [
                     [
                         'type' => 'line',
-                        'label' => 'Average',
+                        'label' => __('Average'),
                         'data' => $averageLine,
                         'borderColor' => 'rgb(255, 82, 217)',
                         'backgroundColor' => 'rgba(255, 82, 217, 0.2)',
@@ -64,7 +64,7 @@ class PostsUserChart extends Component
                         'borderDash' => [10,5],
                     ],
                     [
-                        'label' => 'Downloads',
+                        'label' => __('Downloads'),
                         'data' => $downloadsByMonth,
                         'fill' => true,
                         'borderColor' => 'rgb(255, 88, 97)',

@@ -16,8 +16,25 @@ class AboutController extends Controller
     }
 
     public function index(){
-        $contributors=User::where('id', '!=', 1)->role('contributor')->get();
-        return view('about.index', compact(['contributors']));
+        $contributors = User::where('id', '!=', 1)
+            ->whereHas('roles', function ($query) {
+            $query->where('name', 'contributor');
+            })
+            ->whereHas('posts', function ($query) {
+            $query->where('status', 'published');
+            })
+            ->whereDoesntHave('roles', function ($query) {
+            $query->whereIn('name', ['admin', 'co-admin', 'moderator']);
+            })
+            ->get();
+
+        $admins = User::where('id', '!=', 1)
+            ->whereHas('roles', function ($query) {
+                $query->whereIn('name', ['admin', 'co-admin', 'moderator']);
+            })
+            ->get();
+
+        return view('about.index', compact(['contributors', 'admins']));
     }
 
 }
