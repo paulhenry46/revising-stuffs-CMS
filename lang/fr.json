@@ -549,5 +549,13 @@
     "Total Downloads" : "Téléchargements total",
     "Downloads by months" : "Téléchargements par mois",
     "Average" : "Moyenne",
-    "Downloads" : "Téléchargements"
+    "Downloads" : "Téléchargements",
+     "Student association subdomains": "Sous-domaine pour associations étudiantes",
+    "With the subdomain feature, each student association can manage a specific curriculum. Students in this curriculum only access resources dedicated to them, ensuring a personalized and tailored experience.": "Grâce à la fonction des sous-domaines, chaque association étudiante peut prendre en charge l'administration d'un cursus spécifique. Les étudiants de ce cursus accèdent uniquement aux ressources qui leur sont dédiées, ce qui garantit une expérience personnalisée et adaptée à leurs besoins.",
+    "Autonomous resource management by the curriculum association": "Gestion autonome des ressources par l'association du cursus",
+    "Dedicated administration for each subdomain": "Administration dédiée pour chaque sous-domaine",
+    "Filtered access: With the subdomain, students only see resources for their curriculum": "Accès filtré : Avec le sous-domaine les étudiants voient uniquement les ressources de leur cursus",
+    "Personalization: On the subdomain, you can modify the homepage (the one you're reading!) and the logo.": "Personalisation : Sur le sous-domaine, vous pouvez modifier la page d'accueil (celle-la même que vous lisez !) et le logo.",
+    "Interested? We can add any curriculum for any association!": "Intéressé ? Nous pouvons rajouter n'importe quel cursus pour n'importe quelle asso !",
+    "Don't hesitate to contact us at:": "N'hésitez pas à nous contacter sur :"
 }

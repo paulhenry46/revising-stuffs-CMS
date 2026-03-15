@@ -5,47 +5,6 @@
                 
                 <div class="">
                     <x-info-message/>
-                    <!--<div class="justify-items-center grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div class="sm:col-span-3 col-span-1 h-full ">
-                            <h1 class="text-4xl text-center dark:text-white">{{__('Welcome to')}} {{env('APP_NAME')}}</h1>
-                            <p class="sm:px-12 text-2xl text-center dark:text-white max-w-4xl">{{__('New resources are added throughout the year to support your revision. Here you\'ll find mind maps, summary sheets and flashcards.')}}</p>
-                        </div>
-
-                        
-                    <div class="col-span-1 h-full ">
-                        <div class="card w-full bg-primary text-primary-content h-full">
-                            <div class="card-body">
-                              <h2 class="card-title">{{__('News')}}</h2>
-                              <p>{{__('In urgent need of revision? This is where you\'ll find the latest resources.')}}</p>
-                              <div class="card-actions justify-end">
-                                <a wire:navigate href="{{route('post.public.news')}}" class="btn">{{__('See')}}</a>
-                              </div>
-                            </div>
-                          </div>
-                    </div>
-                    <div class="col-span-1">
-                        <div class="card w-full bg-secondary text-success-content">
-                            <div class="card-body">
-                              <h2 class="card-title">{{__('Library')}}</h2>
-                              <p>{{__('Need to consult the resources already added to get a head start or review a concept? Just click here!')}}</p>
-                              <div class="card-actions justify-end">
-                                <a wire:navigate href="{{route('post.public.library')}}" class="btn">{{__('See')}}</a>
-                              </div>
-                            </div>
-                          </div>
-                    </div>
-                    <div class="col-span-1 h-full">
-                        <div class="card w-full h-full bg-success text-warning-content">
-                            <div class="card-body">
-                              <h2 class="card-title">{{__('Participate')}}</h2>
-                              <p>{{__('Want to suggest resources? Create an account and let\'s get started!')}}</p>
-                              <div class="card-actions justify-end">
-                                <a wire:navigate href="{{route('register')}}" class="btn">{{__('Register')}}</a>
-                              </div>
-                            </div>
-                          </div>
-                    </div>
-                </div>-->
                 <div class="relative isolate">
       <svg class="absolute inset-x-0 top-0 -z-10 h-256 w-full stroke-gray-200 dark:stroke-gray-900 mask-[radial-gradient(32rem_32rem_at_center,white,transparent)]" aria-hidden="true">
         <defs>
@@ -140,8 +99,37 @@
     </div>
   </div>
 </div>
-    </div>
+</div>
+
+<div class="py-12">
     <div class="">
+        <div class="dark:bg-gray-800 rounded-2xl p-8 ">
+            <h2 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
+                {{ __('Student association subdomains') }}
+            </h2>
+            <p class="mt-4 text-lg text-gray-700 dark:text-gray-200">
+                {{ __("With the subdomain feature, each student association can manage a specific curriculum. Students in this curriculum only access resources dedicated to them, ensuring a personalized and tailored experience.") }}
+            </p>
+            <ul class="mt-6 list-disc list-inside text-gray-700 dark:text-gray-200">
+                <li>{{ __("Autonomous resource management by the curriculum association") }}</li>
+                <li>{{ __("Dedicated administration for each subdomain") }}</li>
+                <li>{{ __("Filtered access: With the subdomain, students only see resources for their curriculum") }}</li>
+                <li>{{ __("Personalization: On the subdomain, you can modify the homepage (the one you're reading!) and the logo.") }}</li>
+            </ul>
+            <p class="text-lg text-gray-900 dark:text-gray-100 mt-3">
+                {{ __("Interested? We can add any curriculum for any association!") }}
+                <br>
+                {{ __("Don't hesitate to contact us at:") }}
+                <span class="font-semibold text-primary">
+                    {{ str_replace('@', '[->AT<-]', env('INSTANCE_MAIL')) }}
+                </span>
+            </p>
+        </div>
+    </div>
+</div>
+<div class='divider divider-primary'></div>
+
+  <div class="">
   <div class="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:flex lg:items-center lg:justify-between lg:px-8">
     <h2 class="text-3xl font-bold tracking-tight dark:text-white text-gray-900 sm:text-4xl">{{__('Ready to dive in?')}}<br>{{__('Start learning right away!')}}</h2>
     <div class="mt-10 flex items-center gap-x-6 lg:mt-0 lg:shrink-0">
