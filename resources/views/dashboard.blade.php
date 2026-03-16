@@ -178,7 +178,12 @@
                                         <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m297-581 149-243q6-10 15-14.5t19-4.5q10 0 19 4.5t15 14.5l149 243q6 10 6 21t-5 20q-5 9-14 14.5t-21 5.5H331q-12 0-21-5.5T296-540q-5-9-5-20t6-21ZM700-80q-75 0-127.5-52.5T520-260q0-75 52.5-127.5T700-440q75 0 127.5 52.5T880-260q0 75-52.5 127.5T700-80Zm-580-60v-240q0-17 11.5-28.5T160-420h240q17 0 28.5 11.5T440-380v240q0 17-11.5 28.5T400-100H160q-17 0-28.5-11.5T120-140Z"/></svg>                                        
                                         {{__('Co-Admin Panel')}}
                                     </a></li>
-                                    
+                                    @if(config('features.latex_enabled'))
+                                    <li><a wire:navigate href="{{route('co-admin.pack.create')}}" class="">
+                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z"/></svg>
+                                        {{__('Generate a post pack')}}
+                                    </a></li>
+                                    @endif
     </ul>
   </li>
 </ul>
@@ -429,6 +434,14 @@
                                         {{__('Manage courses and types')}}
                                     </a>
                                 </div>
+                                @if(config('features.latex_enabled'))
+                                <div class="sm:col-span-1 col-span-2">
+                                    <a wire:navigate href="{{route('co-admin.pack.create')}}" class=" btn btn-neutral w-full">
+                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z"/></svg>
+                                        {{__('Generate a post pack')}}
+                                    </a>
+                                </div>
+                                @endif
                                 </div>
                                 </div>
                             </div>
