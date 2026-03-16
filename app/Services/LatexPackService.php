@@ -145,7 +145,7 @@ class LatexPackService
             . "\\usepackage{lastpage}\n"
             . "\\usepackage{booktabs}\n"
             . "\\usepackage{rotating}\n"
-            . "\\geometry{a4paper, margin=2.5cm}\n\n"
+            . "\\geometry{a4paper, margin=2cm}\n\n"
             . "% Page style with rotated page number at bottom-right\n"
             . "\\pagestyle{fancy}\n"
             . "\\fancyhf{}\n"
