@@ -557,5 +557,8 @@
     "Filtered access: With the subdomain, students only see resources for their curriculum": "Accès filtré : Avec le sous-domaine les étudiants voient uniquement les ressources de leur cursus",
     "Personalization: On the subdomain, you can modify the homepage (the one you're reading!) and the logo.": "Personalisation : Sur le sous-domaine, vous pouvez modifier la page d'accueil (celle-la même que vous lisez !) et le logo.",
     "Interested? We can add any curriculum for any association!": "Intéressé ? Nous pouvons rajouter n'importe quel cursus pour n'importe quelle asso !",
-    "Don't hesitate to contact us at:": "N'hésitez pas à nous contacter sur :"
+    "Don't hesitate to contact us at:": "N'hésitez pas à nous contacter sur :",
+    "You are browsing" : "Vous consultez le cursus",
+    "To explore all available curricula, visit the main site." : "Pour découvrir l'ensemble des cursus, visitez le site principal.",
+    "Go to main site" : "Site principal"
 }

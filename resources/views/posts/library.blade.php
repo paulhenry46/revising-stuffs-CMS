@@ -7,7 +7,7 @@
     <div class="p-6 lg:p-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
             <h2 class="text-xl font-semibold text-gray-900 dark:text-white">
-                {{__('You are browsing the') }} <span class="text-primary">{{ $subdomainCurriculum->name }}</span> {{__('curriculum')}}
+                {{__('You are browsing') }} <span class="text-primary">{{ $subdomainCurriculum->name }}</span>
             </h2>
             <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
                 {{__('To explore all available curricula, visit the main site.')}}
