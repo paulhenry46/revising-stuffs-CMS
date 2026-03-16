@@ -102,7 +102,7 @@ class LatexPackService
         ?string $logoFile,
         array $postPdfs
     ): string {
-        $instanceName = env('INSTANCE_NAME') ?: config('app.name');
+        $instanceName = $curriculum->app_name ?: (env('INSTANCE_NAME') ?: config('app.name'));
 
         // Cover page: logo
         $logoBlock = '';
