@@ -31,11 +31,18 @@
                     <p>{{__('Taught at')}} @foreach($curriculum->schools as $school) {{$school->name}} @endforeach</p>
                 </div>
                 @if($curriculum->subdomain && !isset($subdomainCurriculum))
-    <a href="https://{{$curriculum->subdomain}}.{{parse_url(config('app.url'), PHP_URL_HOST)}}" target="_blank" class="btn  btn-primary mt-2">
+    <a href="https://{{$curriculum->subdomain}}.{{parse_url(config('app.url'), PHP_URL_HOST)}}" target="_blank" class="btn  btn-primary mt-2 sm:flex hidden">
         {{ __('Go to curriculum site') }}
     </a>
 @endif
             </div>
+            @if($curriculum->subdomain && !isset($subdomainCurriculum))
+            <div class="mx-4 my-4 sm:hidden">
+    <a href="https://{{$curriculum->subdomain}}.{{parse_url(config('app.url'), PHP_URL_HOST)}}" target="_blank" class="  btn w-full btn-primary btn-outline mt-2 ">
+        {{ __('Go to curriculum site') }} <div class="badge badge-sm badge-secondary">{{__('New')}}</div>
+    </a>
+    </div>
+@endif
 </div>
         <div class="">
 
