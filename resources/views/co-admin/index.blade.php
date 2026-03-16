@@ -249,7 +249,7 @@
                     </div>
 
                     {{-- Post Pack section (only shown when LaTeX is enabled) --}}
-                    @if(env('LATEX_ENABLED'))
+                    @if(config('features.latex_enabled'))
                     <div class="mt-8 p-6 border border-base-300 rounded-lg">
                         <div class="flex items-center justify-between">
                             <div>

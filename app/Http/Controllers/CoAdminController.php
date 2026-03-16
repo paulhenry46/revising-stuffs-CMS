@@ -294,7 +294,7 @@ class CoAdminController extends Controller
 
     public function packCreate()
     {
-        abort_unless(env('LATEX_ENABLED', false), 404, __('The LaTeX feature is not enabled on this instance.'));
+        abort_unless(config('features.latex_enabled', false), 404, __('The LaTeX feature is not enabled on this instance.'));
         $this->authorizeCoAdmin();
 
         $levelIds        = $this->getAccessibleLevelIds();
@@ -312,7 +312,7 @@ class CoAdminController extends Controller
 
     public function packGenerate(Request $request)
     {
-        abort_unless(env('LATEX_ENABLED', false), 404, __('The LaTeX feature is not enabled on this instance.'));
+        abort_unless(config('features.latex_enabled', false), 404, __('The LaTeX feature is not enabled on this instance.'));
         $this->authorizeCoAdmin();
 
         $request->validate([

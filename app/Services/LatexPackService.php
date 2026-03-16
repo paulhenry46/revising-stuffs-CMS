@@ -80,9 +80,15 @@ class LatexPackService
             return;
         }
         foreach (glob($tmpDir . '/*') as $file) {
-            is_dir($file) ? $this->cleanup($file) : @unlink($file);
+            if (is_dir($file)) {
+                $this->cleanup($file);
+            } elseif (is_writable($file)) {
+                unlink($file);
+            }
         }
-        @rmdir($tmpDir);
+        if (is_writable($tmpDir)) {
+            rmdir($tmpDir);
+        }
     }
 
     // -------------------------------------------------------------------------
