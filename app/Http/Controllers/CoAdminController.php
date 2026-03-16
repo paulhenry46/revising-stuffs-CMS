@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Course;
 use App\Models\Curriculum;
 use App\Models\Level;
+use App\Models\Post;
 use App\Models\Type;
+use App\Services\LatexPackService;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Gate;
 
@@ -284,6 +286,87 @@ class CoAdminController extends Controller
         }
 
         return redirect()->route('co-admin.index')->with('warning', __('The type has posts attached. Please delete all of these posts or change their type before deleting this category.'));
+    }
+
+    // -------------------------------------------------------------------------
+    // Post Pack (LaTeX / PDF generation)
+    // -------------------------------------------------------------------------
+
+    public function packCreate()
+    {
+        abort_unless(env('LATEX_ENABLED', false), 404, __('The LaTeX feature is not enabled on this instance.'));
+        $this->authorizeCoAdmin();
+
+        $levelIds        = $this->getAccessibleLevelIds();
+        $managedCurricula = auth()->user()->managedCurricula;
+
+        $posts = Post::where('published', 1)
+            ->whereIn('level_id', $levelIds)
+            ->with(['user', 'course', 'level', 'files'])
+            ->orderBy('course_id')
+            ->orderBy('title')
+            ->get();
+
+        return view('co-admin.pack.create', compact('posts', 'managedCurricula'));
+    }
+
+    public function packGenerate(Request $request)
+    {
+        abort_unless(env('LATEX_ENABLED', false), 404, __('The LaTeX feature is not enabled on this instance.'));
+        $this->authorizeCoAdmin();
+
+        $request->validate([
+            'pack_title'    => 'required|string|max:200',
+            'post_ids'      => 'required|array|min:1',
+            'post_ids.*'    => 'integer|exists:posts,id',
+            'curriculum_id' => 'required|integer',
+        ]);
+
+        // Ensure the chosen curriculum is managed by this co-admin
+        $curriculaIds = $this->getManagedCurriculaIds();
+        abort_unless(in_array((int) $request->curriculum_id, $curriculaIds), 403, __('Access denied.'));
+
+        $curriculum = Curriculum::findOrFail($request->curriculum_id);
+
+        // Fetch posts in the order chosen by the user, restricting to accessible published posts
+        $levelIds  = $this->getAccessibleLevelIds();
+        $postsById = Post::whereIn('id', $request->post_ids)
+            ->whereIn('level_id', $levelIds)
+            ->where('published', 1)
+            ->with(['user', 'files'])
+            ->get()
+            ->keyBy('id');
+
+        $posts = collect($request->post_ids)
+            ->filter(fn($id) => $postsById->has($id))
+            ->map(fn($id) => $postsById->get($id))
+            ->values()
+            ->all();
+
+        if (empty($posts)) {
+            return back()->with('warning', __('No valid posts selected.'));
+        }
+
+        try {
+            $service = new LatexPackService();
+            $result  = $service->generate($request->pack_title, $posts, $curriculum);
+
+            $pdfPath = $result['pdfPath'];
+            $tmpDir  = $result['tmpDir'];
+
+            // Read the file into memory so we can clean up before sending
+            $pdfContent = file_get_contents($pdfPath);
+            $service->cleanup($tmpDir);
+
+            $filename = Str::slug($request->pack_title) . '.pdf';
+
+            return response($pdfContent, 200, [
+                'Content-Type'        => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            ]);
+        } catch (\RuntimeException $e) {
+            return back()->with('warning', __('PDF generation failed.') . ' ' . $e->getMessage());
+        }
     }
 
     // -------------------------------------------------------------------------

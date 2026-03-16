@@ -247,6 +247,26 @@
                             </div>
                         </div>
                     </div>
+
+                    {{-- Post Pack section (only shown when LaTeX is enabled) --}}
+                    @if(env('LATEX_ENABLED'))
+                    <div class="mt-8 p-6 border border-base-300 rounded-lg">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                    {{ __('Post pack (PDF booklet)') }}
+                                </h2>
+                                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                                    {{ __('Generate a printable PDF booklet by selecting and ordering posts from your curricula.') }}
+                                </p>
+                            </div>
+                            <a href="{{ route('co-admin.pack.create') }}" class="btn btn-primary">
+                                <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z"/></svg>
+                                {{ __('Generate a post pack') }}
+                            </a>
+                        </div>
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>
