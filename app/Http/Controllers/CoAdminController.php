@@ -455,6 +455,9 @@ class CoAdminController extends Controller
 
         // Files attached to those posts
         $files = File::whereIn('post_id', $postIds)
+            ->whereNotNull('file_path')
+            ->where('file_path', 'not like', '%.thumbnail.%')
+            ->where('file_path', 'not like', '%thumbnail.png')
             ->get()
             ->filter(fn($file) => !$this->isThumbnailPath($file->file_path))
             ->values();
@@ -784,17 +787,6 @@ class CoAdminController extends Controller
                 }
             }
 
-            $postsWithCards = collect($data['cards'] ?? [])
-                ->pluck('post_id')
-                ->unique()
-                ->map(fn($oldPostId) => $postIdMap[$oldPostId] ?? null)
-                ->filter()
-                ->values()
-                ->toArray();
-            if (!empty($postsWithCards)) {
-                Post::whereIn('id', $postsWithCards)->update(['cards' => true]);
-            }
-
             // ── Import files (metadata + physical files) ───────────────────────
             $primaryFilesByPost = [];
             foreach ($data['files'] ?? [] as $fileData) {
@@ -844,6 +836,17 @@ class CoAdminController extends Controller
                 $folder = $post->level->curriculum->slug . '/' . $post->level->slug . '/' . $post->course->slug;
                 $filename_thumbnail = $post->id . '-' . $post->slug . '.thumbnail.png';
                 dispatch(new CreateThumbnail($pdfPath, $filename_thumbnail, $folder));
+            }
+
+            $postsWithCards = collect($data['cards'] ?? [])
+                ->pluck('post_id')
+                ->unique()
+                ->map(fn($oldPostId) => $postIdMap[$oldPostId] ?? null)
+                ->filter()
+                ->values()
+                ->toArray();
+            if (!empty($postsWithCards)) {
+                Post::whereIn('id', $postsWithCards)->update(['cards' => true]);
             }
         } finally {
             // Clean up temp directory
