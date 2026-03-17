@@ -167,7 +167,7 @@ class LatexPackService
             . "% Page style with rotated page number at bottom-right\n"
             . "\\pagestyle{fancy}\n"
             . "\\fancyhf{}\n"
-            . "\\fancyfoot[R]{\\rotatebox{90}{\\small\\thepage/\\pageref*{LastPage}}}\n"
+            . "\\fancyfoot[L]{\\rotatebox{90}{\\small\\thepage/\\pageref*{LastPage}}}\n"
             . "\\renewcommand{\\headrulewidth}{0pt}\n"
             . "\\renewcommand{\\footrulewidth}{0pt}\n\n"
             . "\\begin{document}\n\n"
