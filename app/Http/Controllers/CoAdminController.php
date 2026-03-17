@@ -22,6 +22,7 @@ use ZipArchive;
 
 class CoAdminController extends Controller
 {
+    private const DEFAULT_GROUP_ID = 2;
     /**
      * Get the IDs of curricula managed by the authenticated co-admin.
      */
@@ -704,15 +705,12 @@ class CoAdminController extends Controller
                 }
 
                 if (!$newTypeId) {
-                    $newTypeId = Type::where('course_id', $newCourseId)->value('id');
-                }
-                if (!$newTypeId) {
                     continue;
                 }
 
                 $newPost = new Post;
                 $newPost->title        = $postData['title'];
-                $newPost->description  = $postData['description'] ?? $postData['title'];
+                $newPost->description  = $postData['description'] ?? '';
                 $newPost->quizlet_url  = $postData['quizlet_url'] ?? null;
                 $newPost->dark_version = (bool) ($postData['dark_version'] ?? false);
                 $newPost->cards        = (bool) ($postData['cards'] ?? false);
@@ -725,7 +723,7 @@ class CoAdminController extends Controller
                 $newPost->level_id     = $newLevelId;
                 $newPost->type_id      = $newTypeId;
                 $newPost->user_id      = $newUserId ?? auth()->id();
-                $newPost->group_id     = $postData['group_id'] ?? 2;
+                $newPost->group_id     = $postData['group_id'] ?? self::DEFAULT_GROUP_ID;
                 $newPost->school_id    = null;
                 $newPost->save();
                 $postIdMap[$postData['id']] = $newPost->id;
@@ -767,30 +765,40 @@ class CoAdminController extends Controller
                 $cardIdMap[$cardData['id']] = $newCard->id;
             }
 
-            foreach ($data['card_deck'] ?? [] as $pivot) {
-                $newCardId = $cardIdMap[$pivot['card_id']] ?? null;
-                $newDeckId = $deckIdMap[$pivot['deck_id']] ?? null;
-                if ($newCardId && $newDeckId) {
-                    $deck = Deck::find($newDeckId);
-                    $deck?->cards()->syncWithoutDetaching([$newCardId]);
+            $cardDeckGroups = collect($data['card_deck'] ?? [])->groupBy('deck_id');
+            $newDeckIds = array_values($deckIdMap);
+            $decksById = $newDeckIds ? Deck::whereIn('id', $newDeckIds)->get()->keyBy('id') : collect();
+            foreach ($cardDeckGroups as $oldDeckId => $items) {
+                $newDeckId = $deckIdMap[$oldDeckId] ?? null;
+                if (!$newDeckId) {
+                    continue;
+                }
+                $newCardIds = collect($items)
+                    ->map(fn($item) => $cardIdMap[$item['card_id']] ?? null)
+                    ->filter()
+                    ->unique()
+                    ->values()
+                    ->toArray();
+                if (!empty($newCardIds)) {
+                    $decksById->get($newDeckId)?->cards()->syncWithoutDetaching($newCardIds);
                 }
             }
 
             $postsWithCards = collect($data['cards'] ?? [])
                 ->pluck('post_id')
                 ->unique()
+                ->map(fn($oldPostId) => $postIdMap[$oldPostId] ?? null)
+                ->filter()
+                ->values()
                 ->toArray();
-            foreach ($postsWithCards as $oldPostId) {
-                $newPostId = $postIdMap[$oldPostId] ?? null;
-                if ($newPostId) {
-                    Post::whereKey($newPostId)->update(['cards' => true]);
-                }
+            if (!empty($postsWithCards)) {
+                Post::whereIn('id', $postsWithCards)->update(['cards' => true]);
             }
 
             // ── Import files (metadata + physical files) ───────────────────────
             $primaryFilesByPost = [];
             foreach ($data['files'] ?? [] as $fileData) {
-                if (empty($fileData['file_path']) || $this->isThumbnailPath($fileData['file_path'] ?? '')) {
+                if (empty($fileData['file_path']) || $this->isThumbnailPath($fileData['file_path'])) {
                     continue;
                 }
                 $newPostId = $postIdMap[$fileData['post_id']] ?? null;
