@@ -70,7 +70,12 @@ class PostPolicy
      */
     public function update(User $user, Post $post): bool
     {
-        return $user->id === $post->user_id;
+        if( $user->id === $post->user_id){
+            return true;
+        }else{
+            $curriculaIds = $user->getManagedCurriculaIds();
+            return in_array($post->level->curriculum_id, $curriculaIds);
+        }
     }
 
     /**
@@ -78,7 +83,12 @@ class PostPolicy
      */
     public function destroy(User $user, Post $post): bool
     {
-        return $user->id === $post->user_id;
+        if( $user->id === $post->user_id){
+            return true;
+        }else{
+            $curriculaIds = $user->getManagedCurriculaIds();
+            return in_array($post->level->curriculum_id, $curriculaIds);
+        }
     }
 
 }
