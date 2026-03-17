@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\CoAdminLog;
 use App\Models\Course;
 use App\Models\Curriculum;
 use App\Models\Level;
@@ -68,6 +69,20 @@ class CoAdminController extends Controller
             403,
             __('Access denied.')
         );
+    }
+
+    /**
+     * Record a co-admin activity log entry.
+     */
+    private function logAction(string $action, string $subjectType, ?int $subjectId, string $subjectLabel): void
+    {
+        CoAdminLog::create([
+            'user_id'       => auth()->id(),
+            'action'        => $action,
+            'subject_type'  => $subjectType,
+            'subject_id'    => $subjectId,
+            'subject_label' => $subjectLabel,
+        ]);
     }
 
     /**
@@ -149,6 +164,8 @@ class CoAdminController extends Controller
 
         $course->levels()->attach($selectedLevels);
 
+        $this->logAction('created_course', 'Course', $course->id, $course->name);
+
         return redirect()->route('co-admin.index')->with('message', __('The course has been created.'));
     }
 
@@ -188,6 +205,8 @@ class CoAdminController extends Controller
         $course->levels()->detach($accessibleLevelIds);
         $course->levels()->attach($selectedLevels);
 
+        $this->logAction('updated_course', 'Course', $course->id, $course->name);
+
         return redirect()->route('co-admin.index')->with('message', __('The course has been modified.'));
     }
 
@@ -197,7 +216,10 @@ class CoAdminController extends Controller
         $this->authorizeCourseAccess($course);
 
         if ($course->posts()->count() === 0) {
+            $courseName = $course->name;
+            $courseId = $course->id;
             $course->delete();
+            $this->logAction('deleted_course', 'Course', $courseId, $courseName);
             return redirect()->route('co-admin.index')->with('message', __('The course has been deleted.'));
         }
 
@@ -239,6 +261,8 @@ class CoAdminController extends Controller
         $type->course_id = $request->course_id;
         $type->save();
 
+        $this->logAction('created_type', 'Type', $type->id, $type->name);
+
         return redirect()->route('co-admin.index')->with('message', __('The type has been created.'));
     }
 
@@ -272,6 +296,8 @@ class CoAdminController extends Controller
         $type->course_id = $request->course_id;
         $type->save();
 
+        $this->logAction('updated_type', 'Type', $type->id, $type->name);
+
         return redirect()->route('co-admin.index')->with('message', __('The type has been modified.'));
     }
 
@@ -281,7 +307,10 @@ class CoAdminController extends Controller
         $this->authorizeTypeAccess($type);
 
         if ($type->posts()->count() === 0) {
+            $typeName = $type->name;
+            $typeId = $type->id;
             $type->delete();
+            $this->logAction('deleted_type', 'Type', $typeId, $typeName);
             return redirect()->route('co-admin.index')->with('message', __('The type has been deleted.'));
         }
 
@@ -384,6 +413,8 @@ class CoAdminController extends Controller
 
         $curriculum->app_name = $request->app_name ?: null;
         $curriculum->save();
+
+        $this->logAction('updated_curriculum_settings', 'Curriculum', $curriculum->id, $curriculum->name);
 
         return redirect()->route('co-admin.index', ['tab' => 'settings'])->with('message', __('Settings updated.'));
     }

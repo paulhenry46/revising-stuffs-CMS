@@ -338,6 +338,71 @@
 </div>
 </div>
 </div>
+                 </div>
+
+                <input type="radio" name="my_tabs_1" role="tab" class="tab" aria-label="{{__('Co-Admin Activity')}}" />
+                <div role="tabpanel" class="tab-content p-10">
+                    <div class="px-4 sm:px-6 lg:px-8">
+                        <div class="sm:flex sm:items-center">
+                            <div class="sm:flex-auto">
+                                <h1 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">{{__('Co-Admin Activity Log')}}</h1>
+                                <p class="mt-2 text-sm text-gray-700 dark:text-white">{{__('Actions performed by co-admins on courses, types, posts and curriculum settings.')}}</p>
+                            </div>
+                        </div>
+                        <div class="mt-8 flow-root">
+                            <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                                <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                                    <table class="table table-zebra">
+                                        <thead>
+                                            <tr>
+                                                <th>{{__('Date')}}</th>
+                                                <th>{{__('Co-Admin')}}</th>
+                                                <th>{{__('Action')}}</th>
+                                                <th>{{__('Subject')}}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @forelse($coAdminLogs as $log)
+                                            <tr>
+                                                <td class="whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ $log->created_at->format('Y-m-d H:i') }}</td>
+                                                <td class="text-sm font-medium">{{ $log->user->name ?? '—' }}</td>
+                                                <td>
+                                                    @php
+                                                        $actionLabels = [
+                                                            'created_course'             => ['label' => __('Created course'),              'badge' => 'badge-success'],
+                                                            'updated_course'             => ['label' => __('Edited course'),               'badge' => 'badge-info'],
+                                                            'deleted_course'             => ['label' => __('Deleted course'),              'badge' => 'badge-error'],
+                                                            'created_type'               => ['label' => __('Created type'),                'badge' => 'badge-success'],
+                                                            'updated_type'               => ['label' => __('Edited type'),                 'badge' => 'badge-info'],
+                                                            'deleted_type'               => ['label' => __('Deleted type'),                'badge' => 'badge-error'],
+                                                            'updated_curriculum_settings'=> ['label' => __('Edited curriculum settings'), 'badge' => 'badge-warning'],
+                                                            'created_post'               => ['label' => __('Created post'),               'badge' => 'badge-success'],
+                                                            'updated_post'               => ['label' => __('Edited post'),                'badge' => 'badge-info'],
+                                                            'deleted_post'               => ['label' => __('Deleted post'),               'badge' => 'badge-error'],
+                                                        ];
+                                                        $actionInfo = $actionLabels[$log->action] ?? ['label' => $log->action, 'badge' => 'badge-neutral'];
+                                                    @endphp
+                                                    <span class="badge badge-outline {{ $actionInfo['badge'] }}">{{ $actionInfo['label'] }}</span>
+                                                </td>
+                                                <td class="text-sm">
+                                                    <span class="font-medium">{{ $log->subject_label }}</span>
+                                                    <span class="text-gray-400 text-xs ml-1">({{ $log->subject_type }} #{{ $log->subject_id }})</span>
+                                                </td>
+                                            </tr>
+                                            @empty
+                                            <tr>
+                                                <td colspan="4" class="text-center text-gray-400 py-6">{{__('No activity recorded yet.')}}</td>
+                                            </tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
+                                    <div class="mt-4">
+                                        {{ $coAdminLogs->links() }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
