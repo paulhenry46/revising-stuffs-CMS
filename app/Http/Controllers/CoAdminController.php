@@ -9,7 +9,10 @@ use App\Models\Level;
 use App\Models\Post;
 use App\Models\Type;
 use App\Models\File;
+use App\Models\Card;
+use App\Models\Deck;
 use App\Models\User;
+use App\Jobs\CreateThumbnail;
 use App\Services\LatexPackService;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Gate;
@@ -398,6 +401,34 @@ class CoAdminController extends Controller
     // -------------------------------------------------------------------------
 
     /**
+     * Show the export form for selecting a curriculum.
+     */
+    public function showExport()
+    {
+        $this->authorizeCoAdmin();
+        $managedCurricula = auth()->user()->managedCurricula;
+        return view('co-admin.export', compact('managedCurricula'));
+    }
+
+    /**
+     * Export the curriculum selected in the export form.
+     */
+    public function exportSelectedCurriculum(Request $request)
+    {
+        $this->authorizeCoAdmin();
+
+        $request->validate([
+            'curriculum_id' => 'required|integer',
+        ]);
+
+        $curriculaIds = $this->getManagedCurriculaIds();
+        abort_unless(in_array((int) $request->curriculum_id, $curriculaIds), 403, __('Access denied.'));
+
+        $curriculum = Curriculum::findOrFail($request->curriculum_id);
+        return $this->exportCurriculum($curriculum);
+    }
+
+    /**
      * Export the selected curriculum as a ZIP archive containing:
      *  - data.json  (curriculum, levels, courses, types, posts, files, users)
      *  - All PDF / attachment files uploaded for that curriculum.
@@ -417,14 +448,34 @@ class CoAdminController extends Controller
 
         $types = Type::whereIn('course_id', $courseIds)->get();
 
-        $posts = Post::whereIn('level_id', $levelIds)
-            ->with(['files', 'user'])
-            ->get();
+        $posts = Post::whereIn('level_id', $levelIds)->get();
 
         $postIds = $posts->pluck('id')->toArray();
 
         // Files attached to those posts
-        $files = File::whereIn('post_id', $postIds)->get();
+        $files = File::whereIn('post_id', $postIds)
+            ->get()
+            ->filter(fn($file) => !$this->isThumbnailPath($file->file_path))
+            ->values();
+
+        // Decks and cards attached to posts (cards export)
+        $decks = Deck::where('deckable_type', Post::class)
+            ->whereIn('deckable_id', $postIds)
+            ->get();
+        $deckIds = $decks->pluck('id')->toArray();
+
+        $cards = Card::whereIn('post_id', $postIds)->get();
+        $cardIds = $cards->pluck('id')->toArray();
+
+        $cardDeckPivot = DB::table('card_deck')
+            ->whereIn('deck_id', $deckIds)
+            ->whereIn('card_id', $cardIds)
+            ->get()
+            ->map(fn($row) => [
+                'card_id' => $row->card_id,
+                'deck_id' => $row->deck_id,
+            ])
+            ->toArray();
 
         // Users who authored posts in this curriculum (email + name only)
         $users = User::whereIn('id', $posts->pluck('user_id')->filter()->unique()->toArray())
@@ -440,14 +491,53 @@ class CoAdminController extends Controller
             }
         }
 
+        $postsForExport = $posts->map(function (Post $post) {
+            return [
+                'id'           => $post->id,
+                'title'        => $post->title,
+                'description'  => $post->description,
+                'quizlet_url'  => $post->quizlet_url,
+                'dark_version' => (bool) $post->dark_version,
+                'cards'        => (bool) $post->cards,
+                'thanks'       => $post->thanks,
+                'published'    => (bool) $post->published,
+                'pinned'       => (bool) $post->pinned,
+                'slug'         => $post->slug,
+                'course_id'    => $post->course_id,
+                'level_id'     => $post->level_id,
+                'user_id'      => $post->user_id,
+                'type_id'      => $post->type_id,
+                'group_id'     => $post->group_id,
+                'early_access' => (bool) $post->early_access,
+                'school_id'    => $post->school_id,
+                'created_at'   => optional($post->created_at)->toIso8601String(),
+                'updated_at'   => optional($post->updated_at)->toIso8601String(),
+            ];
+        })->values()->toArray();
+
         $data = [
             'curriculum'        => $curriculum->toArray(),
             'levels'            => $levels->toArray(),
             'courses'           => $courses->toArray(),
             'course_level'      => $courseLevelPivot,
             'types'             => $types->toArray(),
-            'posts'             => $posts->map(fn($p) => $p->makeHidden(['likes_count'])->toArray())->values()->toArray(),
+            'posts'             => $postsForExport,
             'files'             => $files->toArray(),
+            'decks'             => $decks->map(fn($deck) => [
+                'id'            => $deck->id,
+                'name'          => $deck->name,
+                'slug'          => $deck->slug,
+                'color'         => $deck->color,
+                'deckable_id'   => $deck->deckable_id,
+                'deckable_type' => $deck->deckable_type,
+            ])->values()->toArray(),
+            'cards'             => $cards->map(fn($card) => [
+                'id'      => $card->id,
+                'front'   => $card->front,
+                'back'    => $card->back,
+                'post_id' => $card->post_id,
+            ])->values()->toArray(),
+            'card_deck'         => $cardDeckPivot,
             'users'             => $users->toArray(),
             'exported_at'       => now()->toIso8601String(),
             'rscms_version'     => '1.0',
@@ -521,7 +611,6 @@ class CoAdminController extends Controller
             abort_unless(is_array($data) && isset($data['curriculum'], $data['levels'], $data['courses'], $data['posts']), 422, __('The data.json file is invalid or corrupted.'));
 
             // ── Import curriculum ─────────────────────────────────────────────
-            $origCurriculumId = $data['curriculum']['id'];
             $newCurriculum = Curriculum::create([
                 'name'        => $data['curriculum']['name'],
                 'slug'        => $this->uniqueSlug('curricula', $data['curriculum']['slug']),
@@ -614,22 +703,96 @@ class CoAdminController extends Controller
                     continue;
                 }
 
+                if (!$newTypeId) {
+                    $newTypeId = Type::where('course_id', $newCourseId)->value('id');
+                }
+                if (!$newTypeId) {
+                    continue;
+                }
+
                 $newPost = new Post;
-                $newPost->title       = $postData['title'];
-                $newPost->slug        = $postData['slug'] ?? Str::slug($postData['title']);
-                $newPost->content     = $postData['content'] ?? null;
-                $newPost->published   = $postData['published'] ?? 0;
-                $newPost->level_id    = $newLevelId;
-                $newPost->course_id   = $newCourseId;
-                $newPost->type_id     = $newTypeId;
-                $newPost->user_id     = $newUserId;
-                $newPost->school_id   = $postData['school_id'] ?? null;
+                $newPost->title        = $postData['title'];
+                $newPost->description  = $postData['description'] ?? $postData['title'];
+                $newPost->quizlet_url  = $postData['quizlet_url'] ?? null;
+                $newPost->dark_version = (bool) ($postData['dark_version'] ?? false);
+                $newPost->cards        = (bool) ($postData['cards'] ?? false);
+                $newPost->thanks       = $postData['thanks'] ?? 0;
+                $newPost->published    = (bool) ($postData['published'] ?? false);
+                $newPost->pinned       = (bool) ($postData['pinned'] ?? false);
+                $newPost->early_access = (bool) ($postData['early_access'] ?? false);
+                $newPost->slug         = $this->uniqueSlug('posts', $postData['slug'] ?? Str::slug($postData['title']));
+                $newPost->course_id    = $newCourseId;
+                $newPost->level_id     = $newLevelId;
+                $newPost->type_id      = $newTypeId;
+                $newPost->user_id      = $newUserId ?? auth()->id();
+                $newPost->group_id     = $postData['group_id'] ?? 2;
+                $newPost->school_id    = null;
                 $newPost->save();
                 $postIdMap[$postData['id']] = $newPost->id;
             }
 
+            // ── Import decks ─────────────────────────────────────────────────
+            $deckIdMap = []; // old id → new id
+            foreach ($data['decks'] ?? [] as $deckData) {
+                $oldPostId = $deckData['deckable_id'] ?? null;
+                $newPostId = $oldPostId ? ($postIdMap[$oldPostId] ?? null) : null;
+                if (!$newPostId) {
+                    continue;
+                }
+
+                $newDeck = new Deck;
+                $newDeck->name          = $deckData['name'] ?? 'main';
+                $newDeck->slug          = $deckData['slug'] ?? null;
+                $newDeck->color         = $deckData['color'] ?? null;
+                $newDeck->deckable_id   = $newPostId;
+                $newDeck->deckable_type = Post::class;
+                $newDeck->save();
+
+                $deckIdMap[$deckData['id']] = $newDeck->id;
+            }
+
+            // ── Import cards ─────────────────────────────────────────────────
+            $cardIdMap = []; // old id → new id
+            foreach ($data['cards'] ?? [] as $cardData) {
+                $newPostId = $postIdMap[$cardData['post_id']] ?? null;
+                if (!$newPostId) {
+                    continue;
+                }
+
+                $newCard = new Card;
+                $newCard->front   = $cardData['front'];
+                $newCard->back    = $cardData['back'];
+                $newCard->post_id = $newPostId;
+                $newCard->save();
+                $cardIdMap[$cardData['id']] = $newCard->id;
+            }
+
+            foreach ($data['card_deck'] ?? [] as $pivot) {
+                $newCardId = $cardIdMap[$pivot['card_id']] ?? null;
+                $newDeckId = $deckIdMap[$pivot['deck_id']] ?? null;
+                if ($newCardId && $newDeckId) {
+                    $deck = Deck::find($newDeckId);
+                    $deck?->cards()->syncWithoutDetaching([$newCardId]);
+                }
+            }
+
+            $postsWithCards = collect($data['cards'] ?? [])
+                ->pluck('post_id')
+                ->unique()
+                ->toArray();
+            foreach ($postsWithCards as $oldPostId) {
+                $newPostId = $postIdMap[$oldPostId] ?? null;
+                if ($newPostId) {
+                    Post::whereKey($newPostId)->update(['cards' => true]);
+                }
+            }
+
             // ── Import files (metadata + physical files) ───────────────────────
+            $primaryFilesByPost = [];
             foreach ($data['files'] ?? [] as $fileData) {
+                if (empty($fileData['file_path']) || $this->isThumbnailPath($fileData['file_path'] ?? '')) {
+                    continue;
+                }
                 $newPostId = $postIdMap[$fileData['post_id']] ?? null;
                 if (!$newPostId) {
                     continue;
@@ -646,6 +809,13 @@ class CoAdminController extends Controller
                     if (is_resource($stream)) {
                         fclose($stream);
                     }
+
+                    $fileType = (string) ($fileData['type'] ?? '');
+                    if (Str::contains($fileType, 'primary light')) {
+                        $primaryFilesByPost[$newPostId] = $newFilePath;
+                    } elseif (Str::contains($fileType, 'primary') && !isset($primaryFilesByPost[$newPostId])) {
+                        $primaryFilesByPost[$newPostId] = $newFilePath;
+                    }
                 }
 
                 $newFile = new File;
@@ -655,6 +825,17 @@ class CoAdminController extends Controller
                 $newFile->post_id        = $newPostId;
                 $newFile->download_count = 0;
                 $newFile->save();
+            }
+
+            // Rebuild thumbnails for imported posts
+            foreach ($primaryFilesByPost as $newPostId => $pdfPath) {
+                $post = Post::find($newPostId);
+                if (!$post) {
+                    continue;
+                }
+                $folder = $post->level->curriculum->slug . '/' . $post->level->slug . '/' . $post->course->slug;
+                $filename_thumbnail = $post->id . '-' . $post->slug . '.thumbnail.png';
+                dispatch(new CreateThumbnail($pdfPath, $filename_thumbnail, $folder));
             }
         } finally {
             // Clean up temp directory
@@ -725,6 +906,19 @@ class CoAdminController extends Controller
         }
 
         return $newCurriculum->slug . '/' . $newLevelSlug . '/' . $newCourseSlug . '/' . $filename;
+    }
+
+    /**
+     * Determine whether a file path represents a thumbnail file.
+     */
+    private function isThumbnailPath(?string $path): bool
+    {
+        if (!$path) {
+            return false;
+        }
+
+        return Str::contains($path, '.thumbnail.')
+            || Str::endsWith($path, 'thumbnail.png');
     }
 
     /**

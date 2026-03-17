@@ -178,6 +178,8 @@ Route::middleware([
             Route::delete('/types/{type}', [CoAdminController::class, 'destroyType'])->name('types.destroy');
             Route::put('/curricula/{curriculum}/settings', [CoAdminController::class, 'updateCurriculumSettings'])->name('curricula.updateSettings');
             Route::get('/curricula/{curriculum}/export', [CoAdminController::class, 'exportCurriculum'])->name('curricula.export');
+            Route::get('/export', [CoAdminController::class, 'showExport'])->name('export.show');
+            Route::post('/export', [CoAdminController::class, 'exportSelectedCurriculum'])->name('export.download');
             Route::get('/import', [CoAdminController::class, 'showImport'])->name('import.show');
             Route::post('/import', [CoAdminController::class, 'importCurriculum'])->name('import.store');
             // Post pack (PDF generation via LaTeX)
