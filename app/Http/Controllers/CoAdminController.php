@@ -459,7 +459,6 @@ class CoAdminController extends Controller
             ->where('file_path', 'not like', '%.thumbnail.%')
             ->where('file_path', 'not like', '%thumbnail.png')
             ->get()
-            ->filter(fn($file) => !$this->isThumbnailPath($file->file_path))
             ->values();
 
         // Decks and cards attached to posts (cards export)
@@ -725,7 +724,10 @@ class CoAdminController extends Controller
                 $newPost->course_id    = $newCourseId;
                 $newPost->level_id     = $newLevelId;
                 $newPost->type_id      = $newTypeId;
-                $newPost->user_id      = $newUserId ?? auth()->id();
+                if (!$newUserId) {
+                    continue;
+                }
+                $newPost->user_id      = $newUserId;
                 $newPost->group_id     = $postData['group_id'] ?? self::DEFAULT_GROUP_ID;
                 $newPost->school_id    = null;
                 $newPost->save();
@@ -790,6 +792,7 @@ class CoAdminController extends Controller
             // ── Import files (metadata + physical files) ───────────────────────
             $primaryFilesByPost = [];
             foreach ($data['files'] ?? [] as $fileData) {
+                // Keep this guard in case the ZIP comes from older or external exports
                 if (empty($fileData['file_path']) || $this->isThumbnailPath($fileData['file_path'])) {
                     continue;
                 }
@@ -829,8 +832,8 @@ class CoAdminController extends Controller
 
             // Rebuild thumbnails for imported posts
             foreach ($primaryFilesByPost as $newPostId => $pdfPath) {
-                $post = Post::find($newPostId);
-                if (!$post) {
+                $post = Post::with(['level.curriculum', 'course'])->find($newPostId);
+                if (!$post || !$post->level || !$post->course || !$post->level->curriculum) {
                     continue;
                 }
                 $folder = $post->level->curriculum->slug . '/' . $post->level->slug . '/' . $post->course->slug;
