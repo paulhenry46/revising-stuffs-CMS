@@ -456,9 +456,8 @@ class CoAdminController extends Controller
         // Files attached to those posts
         $files = File::whereIn('post_id', $postIds)
             ->whereNotNull('file_path')
-            ->where('file_path', 'not like', '%.thumbnail.%')
-            ->where('file_path', 'not like', '%thumbnail.png')
             ->get()
+            ->filter(fn($file) => !$this->isThumbnailPath($file->file_path))
             ->values();
 
         // Decks and cards attached to posts (cards export)
@@ -814,9 +813,9 @@ class CoAdminController extends Controller
                     }
 
                     $fileType = (string) ($fileData['type'] ?? '');
-                    if (Str::contains($fileType, 'primary light')) {
+                    if ($fileType === 'primary light') {
                         $primaryFilesByPost[$newPostId] = $newFilePath;
-                    } elseif (Str::contains($fileType, 'primary') && !isset($primaryFilesByPost[$newPostId])) {
+                    } elseif ($fileType === 'primary dark' && !isset($primaryFilesByPost[$newPostId])) {
                         $primaryFilesByPost[$newPostId] = $newFilePath;
                     }
                 }
@@ -833,7 +832,7 @@ class CoAdminController extends Controller
             // Rebuild thumbnails for imported posts
             foreach ($primaryFilesByPost as $newPostId => $pdfPath) {
                 $post = Post::with(['level.curriculum', 'course'])->find($newPostId);
-                if (!$post || !$post->level || !$post->course || !$post->level->curriculum) {
+                if (!$post?->level?->curriculum || !$post?->course) {
                     continue;
                 }
                 $folder = $post->level->curriculum->slug . '/' . $post->level->slug . '/' . $post->course->slug;
