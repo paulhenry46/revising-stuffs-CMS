@@ -8,9 +8,14 @@ use App\Models\Curriculum;
 use App\Models\Level;
 use App\Models\Post;
 use App\Models\Type;
+use App\Models\File;
+use App\Models\User;
 use App\Services\LatexPackService;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+use ZipArchive;
 
 class CoAdminController extends Controller
 {
@@ -386,5 +391,357 @@ class CoAdminController extends Controller
         $curriculum->save();
 
         return redirect()->route('co-admin.index', ['tab' => 'settings'])->with('message', __('Settings updated.'));
+    }
+
+    // -------------------------------------------------------------------------
+    // Export / Import
+    // -------------------------------------------------------------------------
+
+    /**
+     * Export the selected curriculum as a ZIP archive containing:
+     *  - data.json  (curriculum, levels, courses, types, posts, files, users)
+     *  - All PDF / attachment files uploaded for that curriculum.
+     */
+    public function exportCurriculum(Curriculum $curriculum)
+    {
+        $this->authorizeCoAdmin();
+        abort_unless(in_array($curriculum->id, $this->getManagedCurriculaIds()), 403, __('You do not have access to this curriculum.'));
+
+        // ── Collect data ──────────────────────────────────────────────────────
+        $levels  = $curriculum->levels()->get();
+        $levelIds = $levels->pluck('id')->toArray();
+
+        // Courses linked to at least one level of this curriculum
+        $courses = Course::whereHas('levels', fn($q) => $q->whereIn('levels.id', $levelIds))->get();
+        $courseIds = $courses->pluck('id')->toArray();
+
+        $types = Type::whereIn('course_id', $courseIds)->get();
+
+        $posts = Post::whereIn('level_id', $levelIds)
+            ->with(['files', 'user'])
+            ->get();
+
+        $postIds = $posts->pluck('id')->toArray();
+
+        // Files attached to those posts
+        $files = File::whereIn('post_id', $postIds)->get();
+
+        // Users who authored posts in this curriculum (email + name only)
+        $users = User::whereIn('id', $posts->pluck('user_id')->filter()->unique()->toArray())
+            ->get(['id', 'name', 'email']);
+
+        // Courses → levels pivot for this curriculum only
+        $courseLevelPivot = [];
+        foreach ($courses as $course) {
+            foreach ($course->levels as $level) {
+                if (in_array($level->id, $levelIds)) {
+                    $courseLevelPivot[] = ['course_id' => $course->id, 'level_id' => $level->id];
+                }
+            }
+        }
+
+        $data = [
+            'curriculum'        => $curriculum->toArray(),
+            'levels'            => $levels->toArray(),
+            'courses'           => $courses->toArray(),
+            'course_level'      => $courseLevelPivot,
+            'types'             => $types->toArray(),
+            'posts'             => $posts->map(fn($p) => $p->makeHidden(['likes_count'])->toArray())->values()->toArray(),
+            'files'             => $files->toArray(),
+            'users'             => $users->toArray(),
+            'exported_at'       => now()->toIso8601String(),
+            'rscms_version'     => '1.0',
+        ];
+
+        // ── Build ZIP ─────────────────────────────────────────────────────────
+        $zipFileName = 'RSCMS-curriculum-' . Str::slug($curriculum->name) . '-' . date('Y-m-d') . '.zip';
+        $zipPath = storage_path('app/' . $zipFileName);
+
+        $zip = new ZipArchive;
+        abort_unless($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true, 500, __('Could not create ZIP archive.'));
+
+        // Add JSON data file
+        $zip->addFromString('data.json', json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+        // Add the physical files stored in the public disk
+        foreach ($files as $file) {
+            $storagePath = Storage::disk('public')->path($file->file_path);
+            if (file_exists($storagePath)) {
+                $zip->addFile($storagePath, 'files/' . $file->file_path);
+            }
+        }
+
+        $zip->close();
+
+        return response()->download($zipPath, $zipFileName)->deleteFileAfterSend(true);
+    }
+
+    /**
+     * Show the curriculum import form.
+     */
+    public function showImport()
+    {
+        $this->authorizeCoAdmin();
+        $managedCurricula = auth()->user()->managedCurricula;
+        return view('co-admin.import', compact('managedCurricula'));
+    }
+
+    /**
+     * Import a curriculum from a ZIP archive previously exported by RSCMS.
+     *
+     * The ZIP must contain:
+     *  - data.json
+     *  - files/{original_file_path}   (optional, best-effort)
+     */
+    public function importCurriculum(Request $request)
+    {
+        $this->authorizeCoAdmin();
+
+        $request->validate([
+            'zip_file' => 'required|file|mimes:zip|max:102400',
+        ]);
+
+        $uploadedZip = $request->file('zip_file');
+        $tmpDir = storage_path('app/import-tmp-' . Str::uuid());
+        mkdir($tmpDir, 0700, true);
+
+        try {
+            $zip = new ZipArchive;
+            abort_unless($zip->open($uploadedZip->getRealPath()) === true, 422, __('Could not open the ZIP archive.'));
+            $zip->extractTo($tmpDir);
+            $zip->close();
+
+            $jsonPath = $tmpDir . '/data.json';
+            abort_unless(file_exists($jsonPath), 422, __('The ZIP archive does not contain a valid data.json file.'));
+
+            // Prevent memory exhaustion from an unexpectedly large JSON file
+            abort_unless(filesize($jsonPath) < 50 * 1024 * 1024, 422, __('The data.json file is too large to process.'));
+
+            $data = json_decode(file_get_contents($jsonPath), true);
+            abort_unless(is_array($data) && isset($data['curriculum'], $data['levels'], $data['courses'], $data['posts']), 422, __('The data.json file is invalid or corrupted.'));
+
+            // ── Import curriculum ─────────────────────────────────────────────
+            $origCurriculumId = $data['curriculum']['id'];
+            $newCurriculum = Curriculum::create([
+                'name'        => $data['curriculum']['name'],
+                'slug'        => $this->uniqueSlug('curricula', $data['curriculum']['slug']),
+                'description' => $data['curriculum']['description'] ?? null,
+                'app_name'    => $data['curriculum']['app_name'] ?? null,
+            ]);
+
+            // Attach the importing co-admin to the new curriculum
+            auth()->user()->managedCurricula()->attach($newCurriculum->id);
+
+            // ── Import levels ─────────────────────────────────────────────────
+            $levelIdMap = []; // old id → new id
+            foreach ($data['levels'] as $levelData) {
+                $newLevel = new Level;
+                $newLevel->name          = $levelData['name'];
+                $newLevel->slug          = $this->uniqueSlug('levels', $levelData['slug']);
+                $newLevel->curriculum_id = $newCurriculum->id;
+                $newLevel->save();
+                $levelIdMap[$levelData['id']] = $newLevel->id;
+            }
+
+            // ── Import courses ────────────────────────────────────────────────
+            $courseIdMap = []; // old id → new id
+            foreach ($data['courses'] as $courseData) {
+                // Skip the "all courses" sentinel (id=1)
+                if ($courseData['id'] === 1) {
+                    continue;
+                }
+                $newCourse = new Course;
+                $newCourse->name  = $courseData['name'];
+                $newCourse->slug  = $this->uniqueSlug('courses', $courseData['slug']);
+                $newCourse->color = $courseData['color'];
+                $newCourse->lang  = $courseData['lang'] ?? null;
+                $newCourse->save();
+                $courseIdMap[$courseData['id']] = $newCourse->id;
+            }
+
+            // Restore course–level pivot
+            foreach ($data['course_level'] ?? [] as $pivot) {
+                $newCourseId = $courseIdMap[$pivot['course_id']] ?? null;
+                $newLevelId  = $levelIdMap[$pivot['level_id']] ?? null;
+                if ($newCourseId && $newLevelId) {
+                    $course = Course::find($newCourseId);
+                    $course?->levels()->syncWithoutDetaching([$newLevelId]);
+                }
+            }
+
+            // ── Import types ──────────────────────────────────────────────────
+            $typeIdMap = []; // old id → new id
+            foreach ($data['types'] as $typeData) {
+                $newCourseId = $courseIdMap[$typeData['course_id']] ?? null;
+                if (!$newCourseId) {
+                    continue;
+                }
+                $newType = new Type;
+                $newType->name      = $typeData['name'];
+                $newType->slug      = $this->uniqueSlug('types', $typeData['slug']);
+                $newType->color     = $typeData['color'];
+                $newType->course_id = $newCourseId;
+                $newType->save();
+                $typeIdMap[$typeData['id']] = $newType->id;
+            }
+
+            // ── Import users (email lookup / create placeholder) ───────────────
+            $userIdMap = []; // old id → new User id
+            foreach ($data['users'] ?? [] as $userData) {
+                $existingUser = User::where('email', $userData['email'])->first();
+                if ($existingUser) {
+                    $userIdMap[$userData['id']] = $existingUser->id;
+                } else {
+                    // Create a placeholder account; the user can reset the password
+                    $newUser = User::create([
+                        'name'     => $userData['name'],
+                        'email'    => $userData['email'],
+                        'password' => bcrypt(Str::random(32)),
+                    ]);
+                    $userIdMap[$userData['id']] = $newUser->id;
+                }
+            }
+
+            // ── Import posts ──────────────────────────────────────────────────
+            $postIdMap = []; // old id → new id
+            foreach ($data['posts'] as $postData) {
+                $newLevelId  = $levelIdMap[$postData['level_id']] ?? null;
+                $newCourseId = $courseIdMap[$postData['course_id']] ?? null;
+                $newTypeId   = $typeIdMap[$postData['type_id']] ?? null;
+                $newUserId   = $userIdMap[$postData['user_id']] ?? null;
+
+                if (!$newLevelId || !$newCourseId) {
+                    continue;
+                }
+
+                $newPost = new Post;
+                $newPost->title       = $postData['title'];
+                $newPost->slug        = $postData['slug'] ?? Str::slug($postData['title']);
+                $newPost->content     = $postData['content'] ?? null;
+                $newPost->published   = $postData['published'] ?? 0;
+                $newPost->level_id    = $newLevelId;
+                $newPost->course_id   = $newCourseId;
+                $newPost->type_id     = $newTypeId;
+                $newPost->user_id     = $newUserId;
+                $newPost->school_id   = $postData['school_id'] ?? null;
+                $newPost->save();
+                $postIdMap[$postData['id']] = $newPost->id;
+            }
+
+            // ── Import files (metadata + physical files) ───────────────────────
+            foreach ($data['files'] ?? [] as $fileData) {
+                $newPostId = $postIdMap[$fileData['post_id']] ?? null;
+                if (!$newPostId) {
+                    continue;
+                }
+
+                // Try to remap the file path to the new curriculum/level/course slugs
+                $newFilePath = $this->remapFilePath($fileData['file_path'], $data, $levelIdMap, $courseIdMap, $newCurriculum);
+
+                // Copy physical file from the extracted ZIP using streams to avoid memory pressure
+                $extractedFilePath = $tmpDir . '/files/' . $fileData['file_path'];
+                if (file_exists($extractedFilePath)) {
+                    $stream = fopen($extractedFilePath, 'rb');
+                    Storage::disk('public')->put($newFilePath, $stream);
+                    if (is_resource($stream)) {
+                        fclose($stream);
+                    }
+                }
+
+                $newFile = new File;
+                $newFile->name           = $fileData['name'];
+                $newFile->file_path      = $newFilePath;
+                $newFile->type           = $fileData['type'];
+                $newFile->post_id        = $newPostId;
+                $newFile->download_count = 0;
+                $newFile->save();
+            }
+        } finally {
+            // Clean up temp directory
+            $this->rmdirRecursive($tmpDir);
+        }
+
+        return redirect()->route('co-admin.index', ['tab' => 'settings'])->with('message', __('Curriculum imported successfully.'));
+    }
+
+    // -------------------------------------------------------------------------
+    // Private helpers for import
+    // -------------------------------------------------------------------------
+
+    /**
+     * Return a slug that is unique in the given table, appending a numeric
+     * suffix if necessary.
+     */
+    private function uniqueSlug(string $table, string $base): string
+    {
+        $slug      = $base;
+        $suffix    = 1;
+        while (DB::table($table)->where('slug', $slug)->exists()) {
+            $slug = $base . '-' . $suffix++;
+        }
+        return $slug;
+    }
+
+    /**
+     * Remap a file_path from the exported curriculum to the new curriculum's
+     * slug/level/course structure.
+     *
+     * Original format: {curriculum_slug}/{level_slug}/{course_slug}/{filename}
+     */
+    private function remapFilePath(string $originalPath, array $data, array $levelIdMap, array $courseIdMap, Curriculum $newCurriculum): string
+    {
+        $parts = explode('/', $originalPath);
+        if (count($parts) < 4) {
+            return $newCurriculum->slug . '/' . implode('/', array_slice($parts, 1));
+        }
+
+        // Identify old level slug and course slug from the path
+        $oldLevelSlug  = $parts[1] ?? null;
+        $oldCourseSlug = $parts[2] ?? null;
+        $filename      = implode('/', array_slice($parts, 3));
+
+        // Find matching new level and course slugs
+        $newLevelSlug  = $oldLevelSlug;
+        $newCourseSlug = $oldCourseSlug;
+
+        foreach ($data['levels'] as $levelData) {
+            if ($levelData['slug'] === $oldLevelSlug && isset($levelIdMap[$levelData['id']])) {
+                $newLevel = Level::find($levelIdMap[$levelData['id']]);
+                if ($newLevel) {
+                    $newLevelSlug = $newLevel->slug;
+                }
+                break;
+            }
+        }
+
+        foreach ($data['courses'] as $courseData) {
+            if ($courseData['slug'] === $oldCourseSlug && isset($courseIdMap[$courseData['id']])) {
+                $newCourse = Course::find($courseIdMap[$courseData['id']]);
+                if ($newCourse) {
+                    $newCourseSlug = $newCourse->slug;
+                }
+                break;
+            }
+        }
+
+        return $newCurriculum->slug . '/' . $newLevelSlug . '/' . $newCourseSlug . '/' . $filename;
+    }
+
+    /**
+     * Recursively remove a directory and its contents.
+     */
+    private function rmdirRecursive(string $dir): void
+    {
+        if (!is_dir($dir)) {
+            return;
+        }
+        foreach (scandir($dir) as $item) {
+            if ($item === '.' || $item === '..') {
+                continue;
+            }
+            $path = $dir . '/' . $item;
+            is_dir($path) ? $this->rmdirRecursive($path) : unlink($path);
+        }
+        rmdir($dir);
     }
 }
