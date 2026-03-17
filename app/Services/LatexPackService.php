@@ -7,6 +7,9 @@ use App\Models\Curriculum;
 use App\Models\Post;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\ExecutableFinder;
+use Symfony\Component\Process\Process;
 
 class LatexPackService
 {
@@ -53,19 +56,34 @@ class LatexPackService
         $latex = $this->buildLatex($packTitle, $posts, $curriculum, $logoFile, $postPdfs);
         file_put_contents($tmpDir . '/pack.tex', $latex);
 
-        // Run pdflatex twice so that \pageref{LastPage} is resolved correctly
-        $cmd = sprintf(
-            'cd %s && pdflatex -interaction=nonstopmode -halt-on-error pack.tex > /dev/null 2>&1 && '
-            . 'pdflatex -interaction=nonstopmode -halt-on-error pack.tex > /dev/null 2>&1',
-            escapeshellarg($tmpDir)
-        );
-        exec($cmd, $output, $returnCode);
+        $finder = new ExecutableFinder();
 
-        $pdfFile = $tmpDir . '/pack.pdf';
-        if (!file_exists($pdfFile)) {
-            // Try to get log for diagnostics
-            $log = file_exists($tmpDir . '/pack.log') ? file_get_contents($tmpDir . '/pack.log') : 'No log available.';
-            throw new \RuntimeException('pdflatex failed. Log: ' . substr($log, -2000));
+        $pdflatexPath = $finder->find('pdflatex');
+
+        $command = [$pdflatexPath, '-interaction=nonstopmode', '-halt-on-error', 'pack.tex'];
+
+        // Symfony Process handles the working directory via the second argument
+        $process = new Process($command, $tmpDir);
+
+        try {
+            // Run the first pass
+            $process->mustRun();
+            
+            // Run the second pass for references (\pageref{LastPage})
+            $process->run(); 
+
+            $pdfFile = $tmpDir . '/pack.pdf';
+            
+            if (!$process->isSuccessful() || !file_exists($pdfFile)) {
+                throw new \RuntimeException('PDF generation failed: ' . $process->getErrorOutput());
+            }
+
+        } catch (ProcessFailedException $exception) {
+            // If it fails, we can grab the tail of the log or the process error output
+            $logPath = $tmpDir . '/pack.log';
+            $logTail = file_exists($logPath) ? substr(file_get_contents($logPath), -2000) : $exception->getMessage();
+            
+            throw new \RuntimeException('pdflatex failed. Log/Error: ' . $logTail);
         }
 
         return ['pdfPath' => $pdfFile, 'tmpDir' => $tmpDir];
