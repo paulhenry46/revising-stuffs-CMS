@@ -5,8 +5,17 @@
     <h1 class=" decoration-4 underline decoration-warning text-2xl font-medium text-gray-900 dark:text-white">
         {{$level->name}} - {{$course->name}}
     </h1>
-    <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-8">
-        <div class="sm:col-span-2">
+    <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-8">
+            <div class="sm:col-span-2">
+              <label for="school_year" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('School Year')}}</label>
+              <select wire:model.live="school_year" id="school_year" class="select select-bordered select-primary w-full mt-2">
+                <option value="">{{__('All Years')}}</option>
+                @foreach($school_years as $year)
+                  <option value="{{$year['value']}}">{{$year['label']}}</option>
+                @endforeach
+              </select>
+            </div>
+        <div class="sm:col-span-4">
           <label for="name" class="block text-sm font-medium leading-6 dark:text-white text-gray-900">{{__('Search')}}</label>
           <div class="mt-2">
             <input wire:model.live.debounce.400ms="search" type="text" name="title" id="name" autocomplete="given-name" class="input input-bordered input-primary w-full">
