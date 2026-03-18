@@ -151,7 +151,9 @@
                                                             @endif
                                                         </td>
                                                         <td>{{ $type->posts()->count() }}</td>
-                                                        <td class="flex items-center justify-end gap-2 text-right">
+                                                        <td class="">
+                                                            @if($type->course_id != 1)
+                                                            <div class="flex items-center justify-end gap-2 text-right">
                                                             <a href="{{ route('co-admin.types.edit', $type->id) }}" class="link link-primary">
                                                                 <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/></svg>
                                                                 <span class="sr-only">, {{ $type->name }}</span>
@@ -164,6 +166,8 @@
                                                                     <span class="sr-only">, {{ $type->name }}</span>
                                                                 </button>
                                                             </form>
+                                                        </div>
+                                                            @endif
                                                         </td>
                                                     </tr>
                                                     @endforeach
@@ -174,6 +178,97 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+
+                        {{-- Bulk Import Tab --}}
+                        <input type="radio" name="co_admin_tabs" role="tab" class="tab" aria-label="{{ __('Import') }}" @if(request('tab') === 'import') checked @endif />
+                        <div role="tabpanel" class="tab-content p-10">
+                            <div class="bg-white/25 dark:bg-base-100/25 ">
+                    <x-info-message />
+
+                    <div class="mb-6 alert alert-info">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <div>
+                            <p class="font-semibold">{{ __('Expected ZIP structure') }}</p>
+                            <pre class="mt-1 text-xs font-mono whitespace-pre">Course Name/
+    Fiche C1.pdf
+    Fiche C2.pdf
+Course Name 2/
+    Fiche 1.pdf</pre>
+                            <p class="mt-1 text-xs">{{ __('Folders that do not match any existing course in your curricula will be skipped. All imported posts will be set to unpublished.') }}</p>
+                        </div>
+                    </div>
+
+                    <form action="{{ route('co-admin.bulk-import.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+
+                        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+
+                            {{-- Level --}}
+                            <div class="form-control w-full">
+                                <label class="label" for="level_id">
+                                    <span class="label-text font-semibold">{{ __('Level') }}</span>
+                                </label>
+                                <select id="level_id" name="level_id" class="select select-bordered w-full" required>
+                                    <option value="" disabled {{ old('level_id') ? '' : 'selected' }}>{{ __('Select a level') }}</option>
+                                    @foreach($levels as $level)
+                                        <option value="{{ $level->id }}" {{ old('level_id') == $level->id ? 'selected' : '' }}>
+                                            {{ $level->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('level_id')
+                                    <label class="label"><span class="label-text-alt text-error">{{ $message }}</span></label>
+                                @enderror
+                            </div>
+
+                            {{-- Type --}}
+                            <div class="form-control w-full">
+                                <label class="label" for="type_id">
+                                    <span class="label-text font-semibold">{{ __('Type') }}</span>
+                                </label>
+                                <select id="type_id" name="type_id" class="select select-bordered w-full" required>
+                                    <option value="" disabled {{ old('type_id') ? '' : 'selected' }}>{{ __('Select a type') }}</option>
+                                    @foreach($types as $type)
+                                        <option value="{{ $type->id }}" {{ old('type_id') == $type->id ? 'selected' : '' }}>
+                                            {{ $type->name }}
+                                            @if($type->course)
+                                                ({{ $type->course->name }})
+                                            @endif
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('type_id')
+                                    <label class="label"><span class="label-text-alt text-error">{{ $message }}</span></label>
+                                @enderror
+                            </div>
+
+                        </div>
+
+                        {{-- ZIP file --}}
+                        <div class="form-control w-full mt-6">
+                            <label class="label" for="zip_file">
+                                <span class="label-text font-semibold">{{ __('ZIP Archive') }}</span>
+                            </label>
+                            <input type="file" id="zip_file" name="zip_file" accept=".zip,application/zip,application/x-zip-compressed"
+                                   class="file-input file-input-bordered w-full max-w-lg" required />
+                            @error('zip_file')
+                                <label class="label"><span class="label-text-alt text-error">{{ $message }}</span></label>
+                            @enderror
+                        </div>
+
+                        <div class="mt-6 flex items-center gap-x-4">
+                            <button type="submit" class="btn btn-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
+                                    <path d="M440-320v-326L336-542l-56-58 200-200 200 200-56 58-104-104v326h-80ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/>
+                                </svg>
+                                {{ __('Import') }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
                         </div>
 
                         {{-- Settings Tab --}}

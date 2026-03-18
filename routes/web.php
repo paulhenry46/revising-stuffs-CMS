@@ -180,6 +180,8 @@ Route::middleware([
             // Post pack (PDF generation via LaTeX)
             Route::get('/pack', [CoAdminController::class, 'packCreate'])->name('pack.create');
             Route::post('/pack/generate', [CoAdminController::class, 'packGenerate'])->name('pack.generate');
+            // Bulk ZIP import
+            Route::post('/bulk-import', [CoAdminController::class, 'bulkImportStore'])->name('bulk-import.store');
         });
     });
     
