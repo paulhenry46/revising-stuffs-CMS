@@ -124,10 +124,16 @@ class CoAdminController extends Controller
         $levelIds = $this->getAccessibleLevelIds();
         $courses = $this->getAccessibleCourses();
         $courseIds = $courses->pluck('id')->toArray();
+        $courseIds[] = 1;
         $types = Type::whereIn('course_id', $courseIds)->get();
         $managedCurricula = auth()->user()->managedCurricula;
 
-        return view('co-admin.index', compact('courses', 'types', 'managedCurricula'));
+        $levels = $this->getAccessibleLevels();
+        
+        $types = Type::whereIn('course_id', $courseIds)->get();
+
+
+        return view('co-admin.index', compact('courses', 'types', 'managedCurricula', 'levels'));
     }
 
     // -------------------------------------------------------------------------

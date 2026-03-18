@@ -181,7 +181,6 @@ Route::middleware([
             Route::get('/pack', [CoAdminController::class, 'packCreate'])->name('pack.create');
             Route::post('/pack/generate', [CoAdminController::class, 'packGenerate'])->name('pack.generate');
             // Bulk ZIP import
-            Route::get('/bulk-import', [CoAdminController::class, 'bulkImportCreate'])->name('bulk-import.create');
             Route::post('/bulk-import', [CoAdminController::class, 'bulkImportStore'])->name('bulk-import.store');
         });
     });
