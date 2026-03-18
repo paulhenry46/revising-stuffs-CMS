@@ -433,6 +433,8 @@ class CoAdminController extends Controller
 
         $levels = $this->getAccessibleLevels();
         $courseIds = $this->getAccessibleCourseIds();
+        $courseIds[] = 1;
+        
         $types = Type::whereIn('course_id', $courseIds)->get();
 
         return view('co-admin.bulk-import', compact('levels', 'types'));
@@ -522,7 +524,7 @@ class CoAdminController extends Controller
             $skippedCourses = [];
 
             // Allowed file extensions for primary posts
-            $allowedExtensions = ['pdf', 'jpg', 'jpeg', 'png'];
+            $allowedExtensions = ['pdf'];
 
             // Build a map of accessible courses keyed by normalised name
             $accessibleCourses = $this->getAccessibleCourses()
