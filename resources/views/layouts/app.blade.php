@@ -53,7 +53,7 @@
       <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-1 p-2 shadow-sm bg-base-100 rounded-box w-52">
       <li><a @if(Route::is('post.public.news')) class="active" @endif wire:navigate href="{{route('post.public.news')}}">{{__('New posts')}}</a></li>
       <li><a @if((Route::is('post.public.library')) or (Route::is('post.public.courseView'))) class="active" @endif wire:navigate href="{{route('post.public.library')}}" >{{__('Library')}}</a></li>
-      <li><a @if(Route::is('post.public.favorites')) class="active" @endif wire:navigate  href="{{route('post.public.favorites')}}" >{{__('Suggested posts')}}</a></li>
+      <li><a @if(Route::is('post.public.favorites')) class="active" @endif wire:navigate  href="{{route('post.public.favorites')}}" >{{__('Revising space')}}</a></li>
         <li>
           <a>{{__('Your profile')}}</a>
           <ul class="p-2">
@@ -76,7 +76,7 @@
     <ul class="menu menu-horizontal px-1">
       <li><a @if(Route::is('post.public.news')) class="active" @endif wire:navigate href="{{route('post.public.news')}}">{{__('New posts')}}</a></li>
       <li><a @if((Route::is('post.public.library')) or (Route::is('post.public.courseView'))) class="active" @endif wire:navigate href="{{route('post.public.library')}}" >{{__('Library')}}</a></li>
-      <li><a @if(Route::is('post.public.favorites')) class="active" @endif wire:navigate  href="{{route('post.public.favorites')}}" >{{__('Suggested posts')}}</a></li>
+      <li><a @if(Route::is('post.public.favorites')) class="active" @endif wire:navigate  href="{{route('post.public.favorites')}}" >{{__('Revising space')}}</a></li>
       <li>
         <details>
           <summary>{{__('Your profile')}}</summary>

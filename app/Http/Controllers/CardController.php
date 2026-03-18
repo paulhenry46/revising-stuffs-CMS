@@ -118,7 +118,6 @@ class CardController extends Controller
         $card = New Card;
         $card->front = $this->replace_values($request->front, $file_path);
         $card->back = $this->replace_values($request->back, $file_path);
-        $card->deck_id = $deck->id;
         $card->save();
         if(!$post->cards){
             $post->cards = true;
@@ -170,7 +169,7 @@ class CardController extends Controller
             foreach ($values as $col_index => $value) {
                 $newLine[$cols[$col_index]] = $this->replace_values($value, $file_path);
             }
-            $newLine['post_id'] = $post->id;
+            
             $newLine['updated_at'] = now();
             $newLine['created_at'] = now();
             if ((!array_key_exists('front', $newLine))or(!array_key_exists('back', $newLine))) {

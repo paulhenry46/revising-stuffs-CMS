@@ -28,10 +28,10 @@ class LearnHistory extends Component
 
 private function masteryOfWeek($steps){
 
-    $newsteps = $steps->groupBy('post_id');
+    $newsteps = $steps->groupBy('deck_id');
         $masteryOfPost = [];
         foreach($newsteps as $postSteps){
-            $masteryOfPost[$postSteps->last()->post_id] = $postSteps->last()->mastery;
+            $masteryOfPost[$postSteps->last()->deck_id] = $postSteps->last()->mastery;
         }
 
         $mastery = [];

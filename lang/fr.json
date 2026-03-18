@@ -581,5 +581,12 @@
     "The LaTeX feature is not enabled on this instance.": "La fonctionnalité LaTeX n'est pas activée sur cette instance.",
     "No valid posts selected.": "Aucune fiche valide sélectionnée.",
     "PDF generation failed.": "La génération du PDF a échoué.",
-    "By": "Par"
+    "By": "Par",
+    "Memorising" : "Mémorisation",
+    "A little more effort! You already know many cards!" : "Un petit effort ! Vous conaissez déjà beaucoup de cartes !",
+    "You can now try to upgrade your level. Simply click on Revise button" : "Vous pouvez essayer dès maintenantd'augmenter votre niveau. Appuyez sur le bouton \"Réviser\"",
+    "Medium-term" : "Moyen terme",
+    "Long-term" : "Long terme",
+    "Congrats ! You have learned all the cards ! Now, review them regularly to make sure you don't forget them." : "Bravo, vous avez appris toutes les cartes. Maintenant, revoyez-les régulièrement pour ne plus les oublier.",
+    "Revising space" : "Espace de révisions"
 }
