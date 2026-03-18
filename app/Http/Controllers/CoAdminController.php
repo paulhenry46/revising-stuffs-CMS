@@ -3,15 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Jobs\CreateThumbnail;
 use App\Models\CoAdminLog;
 use App\Models\Course;
 use App\Models\Curriculum;
+use App\Models\File;
 use App\Models\Level;
 use App\Models\Post;
 use App\Models\Type;
 use App\Services\LatexPackService;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Gate;
+use ZipArchive;
 
 class CoAdminController extends Controller
 {
@@ -417,5 +421,235 @@ class CoAdminController extends Controller
         $this->logAction('updated_curriculum_settings', 'Curriculum', $curriculum->id, $curriculum->name);
 
         return redirect()->route('co-admin.index', ['tab' => 'settings'])->with('message', __('Settings updated.'));
+    }
+
+    // -------------------------------------------------------------------------
+    // Bulk ZIP Import
+    // -------------------------------------------------------------------------
+
+    public function bulkImportCreate()
+    {
+        $this->authorizeCoAdmin();
+
+        $levels = $this->getAccessibleLevels();
+        $courseIds = $this->getAccessibleCourseIds();
+        $types = Type::whereIn('course_id', $courseIds)->get();
+
+        return view('co-admin.bulk-import', compact('levels', 'types'));
+    }
+
+    public function bulkImportStore(Request $request)
+    {
+        $this->authorizeCoAdmin();
+
+        $request->validate([
+            'zip_file'  => 'required|file|mimes:zip',
+            'level_id'  => 'required|integer|exists:levels,id',
+            'type_id'   => 'required|integer|exists:types,id',
+        ]);
+
+        // Ensure the selected level and type belong to the co-admin's scope
+        $accessibleLevelIds = $this->getAccessibleLevelIds();
+        abort_unless(in_array((int) $request->level_id, $accessibleLevelIds), 403, __('You do not have access to this level.'));
+
+        $accessibleCourseIds = $this->getAccessibleCourseIds();
+        $type = Type::findOrFail($request->type_id);
+        abort_unless(in_array($type->course_id, $accessibleCourseIds), 403, __('You do not have access to this type.'));
+
+        $level = Level::findOrFail($request->level_id);
+        $curriculum = $level->curriculum;
+
+        // Create a secure temporary directory with restricted permissions
+        $tmpBase = sys_get_temp_dir();
+        $tmpDir  = tempnam($tmpBase, 'rscms_bulk_');
+        unlink($tmpDir);
+        mkdir($tmpDir, 0700, true);
+
+        try {
+            $zip     = new ZipArchive;
+            $zipPath = $request->file('zip_file')->getRealPath();
+
+            if ($zip->open($zipPath) !== true) {
+                return back()->with('warning', __('Could not open the ZIP file.'));
+            }
+
+            // Extract each entry individually to guard against ZIP slip attacks
+            $realTmpDir = realpath($tmpDir);
+            // Maximum uncompressed size per entry: 50 MB
+            $maxEntryBytes = 50 * 1024 * 1024;
+            for ($i = 0; $i < $zip->numFiles; $i++) {
+                $entryName = $zip->getNameIndex($i);
+
+                // Reject entries with obviously dangerous names
+                if (str_contains($entryName, "\0")) {
+                    continue;
+                }
+
+                // Guard against zip bombs: check uncompressed size before extracting
+                $stat = $zip->statIndex($i);
+                if ($stat !== false && $stat['size'] > $maxEntryBytes) {
+                    continue;
+                }
+
+                // Build destination directory and confirm it stays within $tmpDir
+                $destDir = $tmpDir . DIRECTORY_SEPARATOR . dirname($entryName);
+                if (!is_dir($destDir)) {
+                    mkdir($destDir, 0700, true);
+                }
+                $realDestDir = realpath($destDir);
+                if ($realDestDir === false || strncmp($realDestDir, $realTmpDir, strlen($realTmpDir)) !== 0) {
+                    continue; // Skip unsafe paths
+                }
+
+                // Skip directory entries
+                if (str_ends_with($entryName, '/')) {
+                    continue;
+                }
+
+                // Build and validate the final file path
+                $targetFile = $realDestDir . DIRECTORY_SEPARATOR . basename($entryName);
+                $realTargetDir = realpath(dirname($targetFile));
+                if ($realTargetDir === false || strncmp($realTargetDir, $realTmpDir, strlen($realTmpDir)) !== 0) {
+                    continue; // Skip unsafe file paths
+                }
+
+                file_put_contents($targetFile, $zip->getFromIndex($i));
+            }
+            $zip->close();
+
+            $user = auth()->user();
+            $importedCount = 0;
+            $skippedCourses = [];
+
+            // Allowed file extensions for primary posts
+            $allowedExtensions = ['pdf', 'jpg', 'jpeg', 'png'];
+
+            // Build a map of accessible courses keyed by normalised name
+            $accessibleCourses = $this->getAccessibleCourses()
+                ->keyBy(fn(Course $c) => mb_strtolower(trim($c->name)));
+
+            // Iterate over top-level directories in the extracted ZIP
+            $iterator = new \DirectoryIterator($tmpDir);
+            foreach ($iterator as $courseDir) {
+                if ($courseDir->isDot() || !$courseDir->isDir()) {
+                    continue;
+                }
+
+                $courseName = $courseDir->getFilename();
+                // Skip macOS metadata folders
+                if ($courseName === '__MACOSX') {
+                    continue;
+                }
+                $courseKey = mb_strtolower(trim($courseName));
+                if (!$accessibleCourses->has($courseKey)) {
+                    $skippedCourses[] = $courseName;
+                    continue;
+                }
+
+                $course = $accessibleCourses->get($courseKey);
+                $folder = $curriculum->slug . '/' . $level->slug . '/' . $course->slug;
+
+                // Iterate over files inside the course directory
+                $fileIterator = new \DirectoryIterator($courseDir->getPathname());
+                foreach ($fileIterator as $fileInfo) {
+                    if ($fileInfo->isDot() || !$fileInfo->isFile()) {
+                        continue;
+                    }
+
+                    $extension = strtolower($fileInfo->getExtension());
+
+                    // Only process allowed file types
+                    if (!in_array($extension, $allowedExtensions, true)) {
+                        continue;
+                    }
+
+                    $titleRaw = pathinfo($fileInfo->getFilename(), PATHINFO_FILENAME);
+                    $title    = $titleRaw;
+                    $slug     = Str::slug($titleRaw, '-');
+
+                    // Ensure slug uniqueness
+                    $baseSlug    = $slug;
+                    $slugCounter = 1;
+                    while (Post::where('slug', $slug)->exists()) {
+                        $slug = $baseSlug . '-' . $slugCounter++;
+                    }
+
+                    // Create the Post record
+                    $post = new Post;
+                    $post->title        = $title;
+                    $post->description  = '';
+                    $post->type_id      = $type->id;
+                    $post->school_id    = $user->school_id;
+                    $post->dark_version = false;
+                    $post->published    = false;
+                    $post->pinned       = false;
+                    $post->thanks       = 0;
+                    $post->cards        = false;
+                    $post->slug         = $slug;
+                    $post->course_id    = $course->id;
+                    $post->level_id     = $level->id;
+                    $post->user_id      = $user->id;
+                    $post->save();
+
+                    // Store the file using a stream to avoid loading it entirely into memory
+                    $storedFilename = $post->id . '-' . $post->slug . '.light.' . $extension;
+                    $storedPath     = $folder . '/' . $storedFilename;
+                    $stream = fopen($fileInfo->getPathname(), 'rb');
+                    Storage::disk('public')->put($storedPath, $stream);
+                    if (is_resource($stream)) {
+                        fclose($stream);
+                    }
+
+                    // Create the File record (primary light)
+                    $file = new File;
+                    $file->type      = 'primary light';
+                    $file->name      = $storedFilename;
+                    $file->file_path = $storedPath;
+                    $file->post_id   = $post->id;
+                    $file->save();
+
+                    // Dispatch thumbnail generation
+                    $thumbnailFilename = $post->id . '-' . $post->slug . '.thumbnail.png';
+                    dispatch(new CreateThumbnail($storedPath, $thumbnailFilename, $folder));
+
+                    $this->logAction('bulk_imported_post', 'Post', $post->id, $post->title);
+
+                    $importedCount++;
+                }
+            }
+        } finally {
+            // Always clean up the temporary directory
+            $this->deleteTmpDir($tmpDir);
+        }
+
+        if ($importedCount === 0 && empty($skippedCourses)) {
+            return redirect()->route('co-admin.index')->with('warning', __('No posts were imported. The ZIP may be empty or contain no matching course folders.'));
+        }
+
+        $message = trans_choice(':count post(s) imported successfully.', $importedCount, ['count' => $importedCount]);
+        if (!empty($skippedCourses)) {
+            $message .= ' ' . __('The following course folders were not found and were skipped: :courses.', ['courses' => implode(', ', $skippedCourses)]);
+            return redirect()->route('co-admin.index')->with('warning', $message);
+        }
+
+        return redirect()->route('co-admin.index')->with('message', $message);
+    }
+
+    /**
+     * Recursively delete a temporary directory.
+     */
+    private function deleteTmpDir(string $dir): void
+    {
+        if (!is_dir($dir)) {
+            return;
+        }
+        $items = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::CHILD_FIRST
+        );
+        foreach ($items as $item) {
+            $item->isDir() ? rmdir($item->getPathname()) : unlink($item->getPathname());
+        }
+        rmdir($dir);
     }
 }

@@ -176,6 +176,45 @@
                             </div>
                         </div>
 
+                        {{-- Bulk Import Tab --}}
+                        <input type="radio" name="co_admin_tabs" role="tab" class="tab" aria-label="{{ __('Import') }}" @if(request('tab') === 'import') checked @endif />
+                        <div role="tabpanel" class="tab-content p-10">
+                            <div class="px-4 sm:px-6 lg:px-8">
+                                <div class="sm:flex sm:items-center mb-6">
+                                    <div class="sm:flex-auto">
+                                        <h1 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
+                                            {{ __('Bulk ZIP Import') }}
+                                        </h1>
+                                        <p class="mt-2 text-sm text-gray-700 dark:text-white">
+                                            {{ __('Import posts in bulk from a ZIP archive. Each top-level folder must match an existing course name.') }}
+                                        </p>
+                                    </div>
+                                    <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+                                        <a href="{{ route('co-admin.bulk-import.create') }}" class="btn btn-primary">
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
+                                                <path d="M440-320v-326L336-542l-56-58 200-200 200 200-56 58-104-104v326h-80ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/>
+                                            </svg>
+                                            {{ __('Import from ZIP') }}
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="alert alert-info">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <div>
+                                        <p class="font-semibold">{{ __('Expected ZIP structure') }}</p>
+                                        <pre class="mt-1 text-xs font-mono whitespace-pre">Course Name/
+    Fiche C1.pdf
+    Fiche C2.pdf
+Course Name 2/
+    Fiche 1.pdf</pre>
+                                        <p class="mt-2 text-xs">{{ __('The filename (without extension) becomes the post title. All imported posts are set to unpublished.') }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         {{-- Settings Tab --}}
                         <input type="radio" name="co_admin_tabs" role="tab" class="tab" aria-label="{{ __('Settings') }}" @if(request('tab') === 'settings') checked @endif />
                         <div role="tabpanel" class="tab-content p-10">
