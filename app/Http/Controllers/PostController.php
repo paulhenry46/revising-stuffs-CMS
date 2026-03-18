@@ -7,10 +7,12 @@ use App\Http\Requests\PostRequest;
 use App\Jobs\InformUserOfNewPost;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use App\Models\CoAdminLog;
 use App\Models\Post;
 use App\Models\Course;
 use App\Models\Group;
 use App\Models\Level;
+use App\Models\Step;
 use Illuminate\Support\Str;
 
 class PostController extends Controller
@@ -105,6 +107,15 @@ class PostController extends Controller
         if($post->published){
             dispatch(new InformUserOfNewPost($post));
         }
+        if ($user->hasRole('co-admin') && !$user->hasRole('admin')) {
+            CoAdminLog::create([
+                'user_id'       => $user->id,
+                'action'        => 'created_post',
+                'subject_type'  => 'Post',
+                'subject_id'    => $post->id,
+                'subject_label' => $post->title,
+            ]);
+        }
         return redirect()->route('files.primary.create', $post)->with('message', __('The post has been created. Now, you can upload your primary file.'));
     }
 
@@ -180,6 +191,15 @@ class PostController extends Controller
                 $file->save();
             }
         Storage::disk('public')->move(''.$oldCurriculymSlug.'/'.$oldLevelSlug.'/'.$oldCourseSlug.'/'.$post->id.'-'.$oldSlug.'.thumbnail.png', ''.$oldCurriculymSlug.'/'.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png');
+        if ($user->hasRole('co-admin') && !$user->hasRole('admin')) {
+            CoAdminLog::create([
+                'user_id'       => $user->id,
+                'action'        => 'updated_post',
+                'subject_type'  => 'Post',
+                'subject_id'    => $post->id,
+                'subject_label' => $post->title,
+            ]);
+        }
         return redirect()->route('posts.index')->with('message', __('The post has been modified.'));
     }
 
@@ -209,12 +229,28 @@ class PostController extends Controller
             $comment->delete();
         }
          //Delete the cards
-         $cards = $post->cards()->get();
-         foreach ($cards as $card) {
-             $card->delete();
+         $decks = $post->decks()->get();
+            
+         
+         foreach ($decks as $deck) {
+            Step::where('deck_id', $deck->id )->delete();
+             $deck->cards()->delete();
+             $deck->delete();
          }
         //Delete the post
+            $user = Auth::user();
+            $postTitle = $post->title;
+            $postId = $post->id;
             $post->delete();
+            if ($user->hasRole('co-admin') && !$user->hasRole('admin')) {
+                CoAdminLog::create([
+                    'user_id'       => $user->id,
+                    'action'        => 'deleted_post',
+                    'subject_type'  => 'Post',
+                    'subject_id'    => $postId,
+                    'subject_label' => $postTitle,
+                ]);
+            }
             return redirect()->route('posts.index')->with('message', __('The post has been deleted.'));
         
     }

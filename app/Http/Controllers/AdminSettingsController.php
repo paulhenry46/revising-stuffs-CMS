@@ -8,6 +8,7 @@ use App\Http\Requests\FileRequest;
 use App\Http\Requests\FilePrimaryRequest;
 use App\Http\Requests\FilePrimaryUpdateRequest;
 use App\Http\Requests\ImagesRequest;
+use App\Models\CoAdminLog;
 use App\Models\Curriculum;
 use App\Models\EmailDomainRule;
 use App\Models\Post;
@@ -24,7 +25,8 @@ public function show(){
     $schools = School::all();
     $curricula = Curriculum::all();
     $emailDomainRules = EmailDomainRule::with('curricula')->get();
-    return view('admin', compact(['schools', 'curricula', 'emailDomainRules']));
+    $coAdminLogs = CoAdminLog::with('user')->latest()->paginate(50);
+    return view('admin', compact(['schools', 'curricula', 'emailDomainRules', 'coAdminLogs']));
 }
 
 public function createZipOfStorage(){
