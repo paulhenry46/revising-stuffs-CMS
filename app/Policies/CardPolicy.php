@@ -18,14 +18,24 @@ class CardPolicy
     }
     public function list(User $user, Post $post): bool
     {
-        return $user->id === $post->user_id;
+        if( $user->id === $post->user_id){
+            return true;
+        }else{
+            $curriculaIds = $user->getManagedCurriculaIds();
+            return in_array($post->level->curriculum_id, $curriculaIds);
+        }
     }
     /**
      * Determine whether the user can create models.
      */
     public function create(User $user, Post $post): bool
     {
-        return $user->id === $post->user_id;
+        if( $user->id === $post->user_id){
+            return true;
+        }else{
+            $curriculaIds = $user->getManagedCurriculaIds();
+            return in_array($post->level->curriculum_id, $curriculaIds);
+        }
     }
 
     /**
@@ -33,7 +43,20 @@ class CardPolicy
      */
     public function update(User $user, Card $card): bool
     {
-        return $user->id === $card->post->user_id;
+
+        $post = Post::whereHas('decks', function ($query) use ($card) {
+        $query->whereHas('cards', function ($q) use ($card) {
+            $q->where('cards.id', $card->id);
+        });
+    })
+    ->first(); // Retourne un objet Post ou null
+
+        if( $user->id === $post->user_id){
+            return true;
+        }else{
+            $curriculaIds = $user->getManagedCurriculaIds();
+            return in_array($post->level->curriculum_id, $curriculaIds);
+        }
     }
 
     /**
@@ -41,7 +64,7 @@ class CardPolicy
      */
     public function delete(User $user, Card $card): bool
     {
-        return $user->id === $card->post->user_id;
+        return $this->update($user, $card);
     }
 
     public function export(?User $user, Post $post)

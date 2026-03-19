@@ -20,7 +20,12 @@ class FilePolicy
      */
     public function list(User $user, Post $post): bool
     {
-        return $user->id === $post->user_id;
+        if( $user->id === $post->user_id){
+            return true;
+        }else{
+            $curriculaIds = $user->getManagedCurriculaIds();
+            return in_array($post->level->curriculum_id, $curriculaIds);
+        }
     }
 
     /**
@@ -28,7 +33,12 @@ class FilePolicy
      */
     public function create(User $user, Post $post): bool
     {
-        return $user->id === $post->user_id;
+        if( $user->id === $post->user_id){
+            return true;
+        }else{
+            $curriculaIds = $user->getManagedCurriculaIds();
+            return in_array($post->level->curriculum_id, $curriculaIds);
+        }
     }
 
     /**
@@ -36,6 +46,13 @@ class FilePolicy
      */
     public function delete(User $user, File $file): bool
     {
-        return $user->id === $file->post->user_id;
+
+         if( $user->id === $file->post->user_id){
+            return true;
+        }else{
+            $curriculaIds = $user->getManagedCurriculaIds();
+            return in_array($file->post->level->curriculum_id, $curriculaIds);
+        }
+
     }
 }
