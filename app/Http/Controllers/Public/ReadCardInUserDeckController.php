@@ -49,7 +49,8 @@ class ReadCardInUserDeckController extends Controller
     {
         $this->authorize('view', $deck);
         
-        $cards = Card::where('deck_id', '=', $deck->id)->get();
+        $cards = $deck->cards();
+        
         $csvFileName = 'cards-'.$deck->slug.'-'.$deck->id.'.csv';
         $headers = [
             'Content-Type' => 'text/csv',
