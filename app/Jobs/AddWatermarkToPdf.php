@@ -74,6 +74,7 @@ class AddWatermarkToPdf implements ShouldQueue
             copy($sourcePath, $tmpDir . '/' . $safePdf);
 
             $latex = $this->buildLatex($post, $safePdf);
+           
             file_put_contents($tmpDir . '/watermark.tex', $latex);
 
             $finder  = new ExecutableFinder();
@@ -134,7 +135,7 @@ class AddWatermarkToPdf implements ShouldQueue
         $license     = $this->escape($post->user->license ?? 'All rights reserved');
         $monthYear   = Carbon::parse($post->created_at)->translatedFormat('F Y');
         $monthYear   = $this->escape($monthYear);
-        $postUrl     = $this->escape(route('post.feedback', $post->id));
+        $postUrl     = $this->escape(route('post.short', $post->id));
         $safePdfPath = str_replace('\\', '/', $safePdf);
 
         $socialBlock = '';
@@ -163,7 +164,7 @@ class AddWatermarkToPdf implements ShouldQueue
         \\vspace{1cm}
         \\centering
         \\rotatebox{90}{%
-          \\small\\textsf{\\textbf{$author}$socialBlock --- $license --- $monthYear}%
+          \\small\\textsf{\\textbf{{$author}}$socialBlock --- $license --- $monthYear}%
         }
         \\vfill
         \\rotatebox{90}{\\scriptsize\\textsf{An error? Report it on $postUrl}}
@@ -174,7 +175,7 @@ class AddWatermarkToPdf implements ShouldQueue
 }
 
 \\begin{document}
-\\includepdf[pages=-,fitpaper,margin=\\largeurBandeau{} 0 0 0]{$safePdfPath}
+\\includepdf[pages=-,fitpaper,margin=\\largeurBandeau{} 0 0 0]{{$safePdfPath}}
 \\end{document}
 LATEX;
     }
