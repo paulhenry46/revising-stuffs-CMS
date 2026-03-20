@@ -62,7 +62,7 @@ if(env('GOOGLE_AUTH')){
     Route::get('login/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 }
 
-Route::get('/f/{id}', [PostFeedbackController::class, 'show'])->name('post.feedback')->where('id', '[0-9]+');
+Route::get('/f/{post}', [PostController::class, 'short'])->name('post.short')->where('id', '[0-9]+');
 
 //Public Routes
 Route::name('post.public.')->group(function() {

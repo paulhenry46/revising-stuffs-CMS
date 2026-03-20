@@ -18,6 +18,11 @@ use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
+    public function short(Post $post)
+    {
+        return redirect()->route('post.public.view', [$post->slug, $post->id]);
+    }
+
     public function moderate()
     {   
         $this->authorize('moderate', Post::class);
