@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Http\Requests\PostRequest;
+use App\Jobs\AddWatermarkToPdf;
 use App\Jobs\InformUserOfNewPost;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
@@ -169,8 +170,10 @@ class PostController extends Controller
             }
         }
         if($user->hasPermissionTo('publish own posts')){
+            $wasPublished = $post->published;
             $post->published = $request->has('published');
         }else{
+            $wasPublished = $post->published;
             $post->published = false;
         }
         if($user->hasPermissionTo('manage all posts')){
@@ -188,9 +191,29 @@ class PostController extends Controller
                 Storage::disk('public')->move($file->file_path, ''.$post->level->Curriculum->slug.'/'.$post->level->slug.'/'.$post->course->slug.'/'.$file->name.'');
                 //Do it with thumbnail
                 $file->file_path = ''.$post->level->Curriculum->slug.'/'.$post->level->slug.'/'.$post->course->slug.'/'.$file->name.'';
+                // Move or clear the watermarked version if it exists
+                if ($file->watermarked_file_path) {
+                    $oldWatermarkedPath = $file->watermarked_file_path;
+                    $newWatermarkedPath = $this->buildWatermarkedPath($file->file_path);
+                    if (Storage::disk('public')->exists($oldWatermarkedPath)) {
+                        Storage::disk('public')->move($oldWatermarkedPath, $newWatermarkedPath);
+                        $file->watermarked_file_path = $newWatermarkedPath;
+                    } else {
+                        $file->watermarked_file_path = null;
+                    }
+                }
                 $file->save();
             }
         Storage::disk('public')->move(''.$oldCurriculymSlug.'/'.$oldLevelSlug.'/'.$oldCourseSlug.'/'.$post->id.'-'.$oldSlug.'.thumbnail.png', ''.$oldCurriculymSlug.'/'.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png');
+        // If the post just became published, dispatch watermark jobs for all primary files
+        // (dispatched after file moves so the job reads the updated file_path)
+        if (!$wasPublished && $post->published) {
+            foreach ($post->files as $file) {
+                if (in_array($file->type, ['primary light', 'primary dark'])) {
+                    dispatch(new AddWatermarkToPdf($file->id));
+                }
+            }
+        }
         if ($user->hasRole('co-admin') && !$user->hasRole('admin')) {
             CoAdminLog::create([
                 'user_id'       => $user->id,
@@ -204,6 +227,18 @@ class PostController extends Controller
     }
 
     /**
+     * Derive the watermarked file path from the original path.
+     * e.g. "foo/bar/1-slug.light.pdf" => "foo/bar/1-slug.light.watermarked.pdf"
+     */
+    private function buildWatermarkedPath(string $originalPath): string
+    {
+        if (str_ends_with($originalPath, '.pdf')) {
+            return substr($originalPath, 0, -4) . '.watermarked.pdf';
+        }
+        return $originalPath . '.watermarked.pdf';
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(Post $post)
@@ -214,6 +249,10 @@ class PostController extends Controller
             $files = $post->files;
             foreach ($files as $file) {
                 $delete = Storage::disk('public')->delete($file->file_path);
+                // Also delete the watermarked version if it exists
+                if ($file->watermarked_file_path) {
+                    Storage::disk('public')->delete($file->watermarked_file_path);
+                }
                 $file->delete();
             }
         //Delete the thumbnail

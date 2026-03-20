@@ -25,6 +25,7 @@ use App\Http\Controllers\StorageController;
 use App\Http\Middleware\EnsureUserCursusProfileIsCompleted;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Public\ReadCardInUserDeckController;
+use App\Http\Controllers\Public\PostFeedbackController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\CoAdminController;
 use App\Http\Controllers\EmailDomainRuleController;
@@ -60,6 +61,8 @@ if(env('GOOGLE_AUTH')){
     Route::get('login/google', [GoogleController::class, 'redirectToGoogle'])->name('login.google');
     Route::get('login/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 }
+
+Route::get('/f/{id}', [PostFeedbackController::class, 'show'])->name('post.feedback')->where('id', '[0-9]+');
 
 //Public Routes
 Route::name('post.public.')->group(function() {
