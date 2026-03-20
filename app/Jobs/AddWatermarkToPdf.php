@@ -73,8 +73,10 @@ class AddWatermarkToPdf implements ShouldQueue
             $safePdf = 'source.pdf';
             copy($sourcePath, $tmpDir . '/' . $safePdf);
 
-            $latex = $this->buildLatex($post, $safePdf);
-           
+            // Detect page dimensions and page count from the source PDF
+            $pdfInfo = $this->getPdfInfo($tmpDir . '/' . $safePdf);
+
+            $latex = $this->buildLatex($post, $safePdf, $pdfInfo['width'], $pdfInfo['height'], $pdfInfo['pages']);
             file_put_contents($tmpDir . '/watermark.tex', $latex);
 
             $finder  = new ExecutableFinder();
@@ -113,6 +115,48 @@ class AddWatermarkToPdf implements ShouldQueue
     }
 
     /**
+     * Get PDF dimensions (in mm) and page count using pdfinfo.
+     * Falls back to A4 defaults if pdfinfo is unavailable or fails.
+     *
+     * @return array{width: float, height: float, pages: int}
+     */
+    private function getPdfInfo(string $pdfPath): array
+    {
+        $defaults = ['width' => 210.0, 'height' => 297.0, 'pages' => 1];
+
+        $finder = new ExecutableFinder();
+        $pdfInfoPath = $finder->find('pdfinfo');
+        if (!$pdfInfoPath) {
+            Log::info('AddWatermarkToPdf: pdfinfo not found, using A4 defaults.');
+            return $defaults;
+        }
+
+        $process = new Process([$pdfInfoPath, $pdfPath]);
+        $process->run();
+        if (!$process->isSuccessful()) {
+            return $defaults;
+        }
+
+        $output = $process->getOutput();
+
+        $width  = $defaults['width'];
+        $height = $defaults['height'];
+        $pages  = $defaults['pages'];
+
+        // Page size is given in points: "Page size:      595.28 x 841.89 pts (A4)"
+        if (preg_match('/Page size:\s+([\d.]+)\s+x\s+([\d.]+)\s+pts/i', $output, $m)) {
+            $width  = round(floatval($m[1]) * 25.4 / 72, 2);
+            $height = round(floatval($m[2]) * 25.4 / 72, 2);
+        }
+
+        if (preg_match('/Pages:\s+(\d+)/i', $output, $m)) {
+            $pages = (int) $m[1];
+        }
+
+        return ['width' => $width, 'height' => $height, 'pages' => $pages];
+    }
+
+    /**
      * Derive the watermarked file path from the original path.
      * e.g. "foo/bar/1-slug.light.pdf" => "foo/bar/1-slug.light.watermarked.pdf"
      */
@@ -126,56 +170,78 @@ class AddWatermarkToPdf implements ShouldQueue
     }
 
     /**
-     * Build the LaTeX source for the watermarked PDF.
+     * Build the LaTeX source for the watermarked PDF using dynamic page dimensions.
+     *
+     * @param  float  $widthMm   PDF page width in mm
+     * @param  float  $heightMm  PDF page height in mm
+     * @param  int    $pages     Total number of pages in the PDF
      */
-    private function buildLatex(Post $post, string $safePdf): string
+    private function buildLatex(Post $post, string $safePdf, float $widthMm, float $heightMm, int $pages): string
     {
-        $author      = $this->escape($post->user->name ?? '');
-        $socialLink  = $this->escape($post->user->social_network_link ?? '');
-        $license     = $this->escape($post->user->license ?? 'All rights reserved');
-        $monthYear   = Carbon::parse($post->created_at)->translatedFormat('F Y');
-        $monthYear   = $this->escape($monthYear);
-        $postUrl     = $this->escape(route('post.short', $post->id));
+        $author     = $this->escape($post->user->name ?? '');
+        $socialLink = $this->escape($post->user->social_network_link ?? '');
+        $license    = $this->escape($post->user->license ?? 'All rights reserved');
+        $monthYear  = $this->escape(Carbon::parse($post->created_at)->translatedFormat('F Y'));
+        $postUrl    = $this->escape(route('post.short', $post->id));
         $safePdfPath = str_replace('\\', '/', $safePdf);
 
-        $socialBlock = '';
+        // Build the author line for the top of the banner
+        $authorLine = "\\textbf{{$author}}";
         if ($post->user->social_network_link) {
-            $socialBlock = ' \\textbf{(' . $socialLink . ')}';
+            $authorLine .= " ({$socialLink})";
         }
+        $authorLine .= " --- {$license} --- {$monthYear}";
+
+        // The total paper width = original PDF width + 30 mm banner
+        $bannerWidth   = 30;
+        $totalWidth    = round($widthMm + $bannerWidth, 2);
+        $midHeight     = round($heightMm / 2, 2);
+
+        // Build the \foreach page list: {1,...,N}
+        $pageList = $pages > 1 ? "1,...,{$pages}" : '1';
 
         return <<<LATEX
 \\documentclass{article}
 \\usepackage[utf8]{inputenc}
 \\usepackage[T1]{fontenc}
-\\usepackage{pdfpages}
 \\usepackage{graphicx}
-\\usepackage{calc}
 \\usepackage{eso-pic}
 \\usepackage{xcolor}
+\\usepackage{geometry}
+\\usepackage{pgffor}
 \\usepackage{lmodern}
 
-\\newlength{\\largeurBandeau}
-\\setlength{\\largeurBandeau}{3cm}
-
-\\AddToShipoutPictureBG{%
-  \\put(0,0){%
-    \\colorbox{gray!10}{%
-      \\begin{minipage}[t][\\paperheight][t]{\\largeurBandeau}
-        \\vspace{1cm}
-        \\centering
-        \\rotatebox{90}{%
-          \\small\\textsf{\\textbf{{$author}}$socialBlock --- $license --- $monthYear}%
-        }
-        \\vfill
-        \\rotatebox{90}{\\scriptsize\\textsf{An error? Report it on $postUrl}}
-        \\vspace{1cm}
-      \\end{minipage}%
-    }%
-  }%
+% Paper enlarged: PDF width + 30mm banner
+\\geometry{
+  paperwidth={$totalWidth}mm,
+  paperheight={$heightMm}mm,
+  left=0mm, right=0mm, top=0mm, bottom=0mm
 }
 
 \\begin{document}
-\\includepdf[pages=-,fitpaper,margin=\\largeurBandeau{} 0 0 0]{{$safePdfPath}}
+
+% --- BANNER BACKGROUND ---
+\\AddToShipoutPictureBG{%
+  \\AtPageLowerLeft{%
+    \\color{gray!10}\\rule{{$bannerWidth}mm}{{$heightMm}mm}%
+  }%
+}
+
+% --- BANNER TEXT ---
+\\AddToShipoutPictureFG{%
+  \\AtPageLowerLeft{%
+    \\put(5mm,{$midHeight}mm){\\rotatebox{90}{\\small\\textsf{{$authorLine}}}}%
+    \\put(10mm,{$midHeight}mm){\\rotatebox{90}{\\scriptsize\\textsf{An error? Report it on {$postUrl}}}}%
+  }%
+}
+
+% --- RENDER ALL PAGES OF THE PDF ---
+\\foreach \\p in {{$pageList}}{%
+  \\noindent\\hspace*{{$bannerWidth}mm}%
+  \\includegraphics[page=\\p,width={$widthMm}mm]{{$safePdfPath}}%
+  \\clearpage
+}
+
 \\end{document}
 LATEX;
     }

@@ -25,7 +25,6 @@ use App\Http\Controllers\StorageController;
 use App\Http\Middleware\EnsureUserCursusProfileIsCompleted;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Public\ReadCardInUserDeckController;
-use App\Http\Controllers\Public\PostFeedbackController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\CoAdminController;
 use App\Http\Controllers\EmailDomainRuleController;
