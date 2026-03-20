@@ -77,6 +77,7 @@ class AddWatermarkToPdf implements ShouldQueue
             $pdfInfo = $this->getPdfInfo($tmpDir . '/' . $safePdf);
 
             $latex = $this->buildLatex($post, $safePdf, $pdfInfo['width'], $pdfInfo['height'], $pdfInfo['pages']);
+            dd($latex);
             file_put_contents($tmpDir . '/watermark.tex', $latex);
 
             $finder  = new ExecutableFinder();
@@ -195,6 +196,7 @@ class AddWatermarkToPdf implements ShouldQueue
         // The total paper width = original PDF width + 30 mm banner
         $bannerWidth   = 30;
         $totalWidth    = round($widthMm + $bannerWidth, 2);
+        $widthMm2 = $widthMm-1; // Arrondis internes de Latex
         $midHeight     = round($heightMm / 2, 2);
 
         // Build the \foreach page list: {1,...,N}
@@ -210,6 +212,7 @@ class AddWatermarkToPdf implements ShouldQueue
 \\usepackage{geometry}
 \\usepackage{pgffor}
 \\usepackage{lmodern}
+\\usepackage[sfdefault]{FiraSans}
 
 % Paper enlarged: PDF width + 30mm banner
 \\geometry{
@@ -230,15 +233,15 @@ class AddWatermarkToPdf implements ShouldQueue
 % --- BANNER TEXT ---
 \\AddToShipoutPictureFG{%
   \\AtPageLowerLeft{%
-    \\put(5mm,{$midHeight}mm){\\rotatebox{90}{\\small\\textsf{{$authorLine}}}}%
-    \\put(10mm,{$midHeight}mm){\\rotatebox{90}{\\scriptsize\\textsf{An error? Report it on {$postUrl}}}}%
+    \\put(6mm,50mm){\\rotatebox{90}{\\Large\\sffamily\\bfseries $authorLine }}%
+    \\put(14mm,50mm){\\rotatebox{90}{\\normalsize\\sffamily An error? Report it on $postUrl } }%
   }%
 }
 
 % --- RENDER ALL PAGES OF THE PDF ---
 \\foreach \\p in {{$pageList}}{%
   \\noindent\\hspace*{{$bannerWidth}mm}%
-  \\includegraphics[page=\\p,width={$widthMm}mm]{{$safePdfPath}}%
+  \\includegraphics[page=\\p,width={$widthMm2}mm]{{$safePdfPath}}%
   \\clearpage
 }
 
