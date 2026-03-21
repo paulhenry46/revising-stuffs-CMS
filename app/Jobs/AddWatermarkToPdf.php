@@ -183,50 +183,52 @@ class AddWatermarkToPdf implements ShouldQueue
      */
     private function buildLatex(Post $post, string $safePdf, float $widthMm, float $heightMm, int $pages): string
     {
-        $author     = $this->escape($post->user->name ?? '');
-        $socialLink = $this->escape($post->user->social_network_link ?? '');
-        $license    = $this->escape($post->user->license ?? 'All rights reserved');
-        $monthYear  = $this->escape(Carbon::parse($post->created_at)->translatedFormat('F Y'));
-        $postUrl    = $this->escape(route('post.short', $post->id));
-        $safePdfPath = str_replace('\\', '/', $safePdf);
+    // --- PRÉPARATION DES DONNÉES ---
+    $author     = $this->escape($post->user->name ?? 'Anonyme');
+    $license    = $this->escape($post->user->license ?? 'CC BY-SA');
+    $monthYear  = $this->escape(Carbon::parse($post->created_at)->translatedFormat('F Y'));
+    $postUrl    = $this->escape(route('post.short', $post->id));
+    $course   = $this->escape($post->course->name ?? 'Course');
+    $level      = $this->escape($post->level->name ?? 'Level');
+    $safePdfPath = str_replace('\\', '/', $safePdf);
+    $errorMsg   = $this->escape(__('An error? Report it on'));
+    $school = $this->escape($post->user->school->name ?? '');
+    $user_level = $this->escape($post->user->level->name ?? '');
 
-        $iconCode = "";
-        $socialLinkRaw = $post->user->social_network_link;
-        if (!empty($socialLinkRaw)) {
-            $iconName = 'web.png'; // Ton icône par défaut
-            if (str_contains($socialLinkRaw, 'github.com'))    $iconName = 'gh.png';
-            elseif (str_contains($socialLinkRaw, 'tiktok.com'))   $iconName = 'tt.png';
-            elseif (str_contains($socialLinkRaw, 'instagram.com'))$iconName = 'inst.png';
-            elseif (str_contains($socialLinkRaw, 'discord'))       $iconName = 'd.png';
+    // --- LOGIQUE DE L'ICÔNE SOCIALE ---
+    $iconCode = "";
+    $socialLinkRaw = $post->user->social_network_link;
+    if (!empty($socialLinkRaw)) {
+        $iconName = 'web.png';
+        if (str_contains($socialLinkRaw, 'github.com'))    $iconName = 'gh.png';
+        elseif (str_contains($socialLinkRaw, 'tiktok.com'))   $iconName = 'tt.png';
+        elseif (str_contains($socialLinkRaw, 'instagram.com'))$iconName = 'inst.png';
+        elseif (str_contains($socialLinkRaw, 'discord'))       $iconName = 'd.png';
 
-            // Chemin vers ton dossier de ressources (à adapter selon ton serveur)
-            // Attention : LaTeX a besoin du chemin complet ou relatif au dossier de compilation
-            $iconPath = base_path('resources/png/' . $iconName);
-            
-            // On crée la commande LaTeX : un lien autour d'une image de 5mm de large
-            $iconCode = "\\href{{$socialLink}}{\\includegraphics[width=5mm]{{$iconPath}}}";
-        }
+        $iconPath = str_replace('\\', '/', base_path('resources/png/' . $iconName));
+        $iconCode = "\\raisebox{-0.25\height}{ \\href{{$socialLinkRaw}}{\\includegraphics[width=4mm]{{$iconPath}}} }";
+    }
 
-        $licenseIcons = '\\includegraphics[height=5mm]{'. base_path('resources/png/CC.png').'}\\hspace{0.5mm}';
-        if (str_contains($license, 'BY')) $licenseIcons .= '\\includegraphics[height=5mm]{'. base_path('resources/png/BY.png').'}\\hspace{0.5mm}';
-        if (str_contains($license, 'SA')) $licenseIcons .= '\\includegraphics[height=5mm]{'. base_path('resources/png/SA.png').'}\\hspace{0.5mm}';
-        //if (str_contains($license, 'NC')) $licenseIcons .= "\\includegraphics[height=3mm]{resources/png/NC.png}\\hspace{0.5mm}";
-        if (str_contains($license, '0')) $licenseIcons .= '\\includegraphics[height=5mm]{'. base_path('resources/png/0.png').'}\\hspace{0.5mm}';
+    // --- LOGIQUE DES ICÔNES DE LICENCE ---
+    $resPath = str_replace('\\', '/', base_path('resources/png/'));
+    $licenseIcons = "\\includegraphics[height=3.5mm]{{$resPath}CC.png}\\hspace{0.3mm}";
+    if (str_contains($license, 'BY')) $licenseIcons .= "\\includegraphics[height=3.5mm]{{$resPath}BY.png}\\hspace{0.3mm}";
+    if (str_contains($license, 'SA')) $licenseIcons .= "\\includegraphics[height=3.5mm]{{$resPath}SA.png}\\hspace{0.3mm}";
+    if (str_contains($license, '0'))  $licenseIcons .= "\\includegraphics[height=3.5mm]{{$resPath}0.png}\\hspace{0.3mm}";
 
-        // Build the author line for the top of the banner
-        $authorLine = "\\textbf{{$author}} --- {$licenseIcons} --- {$monthYear}";
+    // --- DIMENSIONS ---
+    $bannerWidth = 20; // Réduit à 20mm pour plus d'élégance
+    $totalWidth  = round($widthMm + $bannerWidth, 2);
+    $widthMm2    = $widthMm - 1; 
+    $midHeight   = round($heightMm / 2, 2);
+    $topPos      = $heightMm - 10; // 10mm du bord haut
 
-        // The total paper width = original PDF width + 30 mm banner
-        $bannerWidth   = 20;
-        $totalWidth    = round($widthMm + $bannerWidth, 2);
-        $widthMm2 = $widthMm-1; // Arrondis internes de Latex
-        $midHeight     = round($heightMm / 2, 2);
+    $pageList = $pages > 1 ? "1,...,{$pages}" : '1';
+    $logo_height = $heightMm - 18;
+    $logo_line_height = $logo_height - 10;
+    $logoPath = str_replace('\\', '/', base_path('resources/png/logo.pdf')); 
 
-        // Build the \foreach page list: {1,...,N}
-        $pageList = $pages > 1 ? "1,...,{$pages}" : '1';
-        $errorMsg = __('An error? Report it on');
-
-        return <<<LATEX
+    return <<<LATEX
 \\documentclass{article}
 \\usepackage[utf8]{inputenc}
 \\usepackage[T1]{fontenc}
@@ -236,10 +238,10 @@ class AddWatermarkToPdf implements ShouldQueue
 \\usepackage{geometry}
 \\usepackage{pgffor}
 \\usepackage{lmodern}
+\\usepackage{amsmath}
 \\usepackage[sfdefault]{FiraSans}
 \\usepackage[hidelinks]{hyperref}
 
-% Paper enlarged: PDF width + 30mm banner
 \\geometry{
   paperwidth={$totalWidth}mm,
   paperheight={$heightMm}mm,
@@ -248,25 +250,65 @@ class AddWatermarkToPdf implements ShouldQueue
 
 \\begin{document}
 
-% --- BANNER BACKGROUND ---
+% --- BANNER BACKGROUND & LINE ---
 \\AddToShipoutPictureBG{%
   \\AtPageLowerLeft{%
-    \\color{gray!10}\\rule{{$bannerWidth}mm}{{$heightMm}mm}%
+  \\color{black}\\hspace{{$bannerWidth}mm}\\rule{0.2pt}{{$heightMm}mm}%
+   % \\color{gray!5}\\rule{{$bannerWidth}mm}{{$heightMm}mm}%
+  % \\color{gray!2}\\rule{{$bannerWidth}mm}{{$heightMm}mm}%
+    
   }%
 }
 
-% --- BANNER TEXT ---
+% --- BANNER CONTENT (ARCHIVE STYLE) ---
 \\AddToShipoutPictureFG{%
   \\AtPageLowerLeft{%
-    \\put(4mm,50mm){\\rotatebox{90}{
-        \\Large\\sffamily 
-        {$iconCode}  {$authorLine}
+  \\put(2mm,2mm){\\color{gray!40}\\rule{3mm}{0.2pt}}% Horizontal
+    \\put(2mm,2mm){\\color{gray!40}\\rule{0.2pt}{3mm}}% Vertical
+
+    \\put(15mm,78mm){\\color{gray!40}\\rule{3mm}{0.2pt}}% Horizontal
+    \\put(18mm,75mm){\\color{gray!40}\\rule{0.2pt}{3mm}}% Vertical
+    
+    \\put(5mm,{$logo_height}mm){\\includegraphics[height=8mm]{{$logoPath}}}%
+    
+    % 1. TOP : CLASSIFICATION & SOURCE
+    \\put(10mm,10mm){\\rotatebox{90}{
+        \\fontsize{7}{8}\\selectfont\\ttfamily\\color{black} 
+        FICHES-ET-CARTES.FR $\boldsymbol{\cdot}$ \\MakeUppercase{{$course}} $\boldsymbol{\cdot}$ \\MakeUppercase{{$level}}
     }}%
-    \\put(12mm,50mm){\\rotatebox{90}{\\normalsize\\sffamily \\href{{$postUrl}}{ $errorMsg $postUrl} } }%
+
+    % 2. MIDDLE : AUTHOR & SOCIAL
+    \\put(6.5mm,{$midHeight}mm){\\rotatebox{90}{
+        \\fontsize{10}{12}\\selectfont\\sffamily Written by
+        \\textbf{\\MakeUppercase{{$author}}} {$iconCode}
+    }}%
+
+    \\put(11.5mm,{$midHeight}mm){\\rotatebox{90}{
+        \\fontsize{7}{9}\\selectfont\\sffamily
+        $school $\boldsymbol{\cdot}$ $user_level
+    }}%
+
+    \\put(0mm,80mm){\\color{black}\\rule{20mm}{0.1pt}}
+
+    \\put(0mm,$logo_line_height mm){\\color{black}\\rule{20mm}{0.1pt}}
+
+    % 3. BOTTOM : TECH INFO & LICENSE
+    \\put(4mm,10mm){\\rotatebox{90}{
+        \\fontsize{7}{9}\\selectfont\\ttfamily\\color{black} 
+
+        VER: 01 $\boldsymbol{\cdot}$ ID: {$post->id} $\boldsymbol{\cdot}$ LICENSE\\raisebox{-0.25\height}{ {$licenseIcons} }
+    }}%
+
+    % 4. BOTTOM : LINK & ERROR REPORT
+    \\put(15mm,10mm){\\rotatebox{90}{
+        \\fontsize{6}{8}\\selectfont\\sffamily\\color{black}
+        \\href{{$postUrl}}{{$errorMsg} {$postUrl}}
+    }}%
+
   }%
 }
 
-% --- RENDER ALL PAGES OF THE PDF ---
+% --- RENDER ---
 \\foreach \\p in {{$pageList}}{%
   \\noindent\\hspace*{{$bannerWidth}mm}%
   \\includegraphics[page=\\p,width={$widthMm2}mm]{{$safePdfPath}}%
@@ -275,7 +317,7 @@ class AddWatermarkToPdf implements ShouldQueue
 
 \\end{document}
 LATEX;
-    }
+}
 
     /**
      * Escape special LaTeX characters.
