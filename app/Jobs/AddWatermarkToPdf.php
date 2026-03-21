@@ -207,8 +207,14 @@ class AddWatermarkToPdf implements ShouldQueue
             $iconCode = "\\href{{$socialLink}}{\\includegraphics[width=5mm]{{$iconPath}}}";
         }
 
+        $licenseIcons = '\\includegraphics[height=5mm]{'. base_path('resources/png/CC.png').'}\\hspace{0.5mm}';
+        if (str_contains($license, 'BY')) $licenseIcons .= '\\includegraphics[height=5mm]{'. base_path('resources/png/BY.png').'}\\hspace{0.5mm}';
+        if (str_contains($license, 'SA')) $licenseIcons .= '\\includegraphics[height=5mm]{'. base_path('resources/png/SA.png').'}\\hspace{0.5mm}';
+        //if (str_contains($license, 'NC')) $licenseIcons .= "\\includegraphics[height=3mm]{resources/png/NC.png}\\hspace{0.5mm}";
+        if (str_contains($license, '0')) $licenseIcons .= '\\includegraphics[height=5mm]{'. base_path('resources/png/0.png').'}\\hspace{0.5mm}';
+
         // Build the author line for the top of the banner
-        $authorLine = "\\textbf{{$author}} --- {$license} --- {$monthYear}";
+        $authorLine = "\\textbf{{$author}} --- {$licenseIcons} --- {$monthYear}";
 
         // The total paper width = original PDF width + 30 mm banner
         $bannerWidth   = 20;
