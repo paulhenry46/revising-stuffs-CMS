@@ -222,6 +222,7 @@ class AddWatermarkToPdf implements ShouldQueue
     $widthMm2    = $widthMm - 1; 
     $midHeight   = round($heightMm / 2, 2);
     $topPos      = $heightMm - 10; // 10mm du bord haut
+    $written = __('Written By');
 
     $pageList = $pages > 1 ? "1,...,{$pages}" : '1';
     $logo_height = $heightMm - 18;
@@ -283,7 +284,7 @@ class AddWatermarkToPdf implements ShouldQueue
 
     % 2. MIDDLE : AUTHOR & SOCIAL
     \\put(6.5mm,{$midHeight}mm){\\rotatebox{90}{
-        \\fontsize{10}{12}\\selectfont\\sffamily Written by
+        \\fontsize{10}{12}\\selectfont\\sffamily $written
         \\textbf{\\MakeUppercase{{$author}}} {$iconCode}
     }}%
 
