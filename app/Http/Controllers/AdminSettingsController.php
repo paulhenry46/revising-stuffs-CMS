@@ -35,7 +35,7 @@ public function createZipOfStorage(){
         $zipPath = storage_path('app/' . $zipFileName);
         if ($zip->open($zipPath, ZipArchive::CREATE) === TRUE) {
              foreach (Storage::allFiles('./') as $file) {
-                if (!str_starts_with($file, 'livewire-tmp')) {
+                if (!str_starts_with($file, 'livewire-tmp') && !str_ends_with($file, '.watermarked.pdf')) {
                     $zip->addFile(''.storage_path().'/app/'.$file.'', $file);
                 }
             }
