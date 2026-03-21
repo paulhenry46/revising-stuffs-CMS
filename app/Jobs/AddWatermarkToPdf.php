@@ -35,6 +35,10 @@ class AddWatermarkToPdf implements ShouldQueue
      */
     public function handle(): void
     {
+        if(!config('features.latex_enabled')){
+            return ;
+        }
+        
         $file = File::find($this->fileId);
         if (!$file || !$file->file_path) {
             return;
