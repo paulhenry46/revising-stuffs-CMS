@@ -227,6 +227,10 @@ class AddWatermarkToPdf implements ShouldQueue
     $logo_height = $heightMm - 18;
     $logo_line_height = $logo_height - 10;
     $logoPath = str_replace('\\', '/', base_path('resources/png/logo.pdf')); 
+    
+    $versionNumber = \DB::table('events')
+        ->where('post_id', $post->id)
+        ->count() + 1;
 
     return <<<LATEX
 \\documentclass{article}
@@ -274,7 +278,7 @@ class AddWatermarkToPdf implements ShouldQueue
     % 1. TOP : CLASSIFICATION & SOURCE
     \\put(10mm,10mm){\\rotatebox{90}{
         \\fontsize{7}{8}\\selectfont\\ttfamily\\color{black} 
-        FICHES-ET-CARTES.FR $\boldsymbol{\cdot}$ \\MakeUppercase{{$course}} $\boldsymbol{\cdot}$ \\MakeUppercase{{$level}}
+        \\MakeUppercase{{$this->escape(parse_url(config('app.url'), PHP_URL_HOST)) }} $\boldsymbol{\cdot}$ \\MakeUppercase{{$course}} $\boldsymbol{\cdot}$ \\MakeUppercase{{$level}}
     }}%
 
     % 2. MIDDLE : AUTHOR & SOCIAL
@@ -296,7 +300,7 @@ class AddWatermarkToPdf implements ShouldQueue
     \\put(4mm,10mm){\\rotatebox{90}{
         \\fontsize{7}{9}\\selectfont\\ttfamily\\color{black} 
 
-        VER: 01 $\boldsymbol{\cdot}$ ID: {$post->id} $\boldsymbol{\cdot}$ LICENSE\\raisebox{-0.25\height}{ {$licenseIcons} }
+        VER: 0$versionNumber $\boldsymbol{\cdot}$ ID: {$post->id} $\boldsymbol{\cdot}$ LICENSE\\raisebox{-0.25\height}{ {$licenseIcons} }
     }}%
 
     % 4. BOTTOM : LINK & ERROR REPORT
