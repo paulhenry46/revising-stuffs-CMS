@@ -77,7 +77,7 @@ class AddWatermarkToPdf implements ShouldQueue
             $pdfInfo = $this->getPdfInfo($tmpDir . '/' . $safePdf);
 
             $latex = $this->buildLatex($post, $safePdf, $pdfInfo['width'], $pdfInfo['height'], $pdfInfo['pages']);
-            dd($latex);
+           // dd($latex);
             file_put_contents($tmpDir . '/watermark.tex', $latex);
 
             $finder  = new ExecutableFinder();
@@ -186,21 +186,35 @@ class AddWatermarkToPdf implements ShouldQueue
         $postUrl    = $this->escape(route('post.short', $post->id));
         $safePdfPath = str_replace('\\', '/', $safePdf);
 
-        // Build the author line for the top of the banner
-        $authorLine = "\\textbf{{$author}}";
-        if ($post->user->social_network_link) {
-            $authorLine .= " ({$socialLink})";
+        $iconCode = "";
+        $socialLinkRaw = $post->user->social_network_link;
+        if (!empty($socialLinkRaw)) {
+            $iconName = 'web.png'; // Ton icône par défaut
+            if (str_contains($socialLinkRaw, 'github.com'))    $iconName = 'gh.png';
+            elseif (str_contains($socialLinkRaw, 'tiktok.com'))   $iconName = 'tt.png';
+            elseif (str_contains($socialLinkRaw, 'instagram.com'))$iconName = 'inst.png';
+            elseif (str_contains($socialLinkRaw, 'discord'))       $iconName = 'd.png';
+
+            // Chemin vers ton dossier de ressources (à adapter selon ton serveur)
+            // Attention : LaTeX a besoin du chemin complet ou relatif au dossier de compilation
+            $iconPath = base_path('resources/png/' . $iconName);
+            
+            // On crée la commande LaTeX : un lien autour d'une image de 5mm de large
+            $iconCode = "\\href{{$socialLink}}{\\includegraphics[width=5mm]{{$iconPath}}}";
         }
-        $authorLine .= " --- {$license} --- {$monthYear}";
+
+        // Build the author line for the top of the banner
+        $authorLine = "\\textbf{{$author}} --- {$license} --- {$monthYear}";
 
         // The total paper width = original PDF width + 30 mm banner
-        $bannerWidth   = 30;
+        $bannerWidth   = 20;
         $totalWidth    = round($widthMm + $bannerWidth, 2);
         $widthMm2 = $widthMm-1; // Arrondis internes de Latex
         $midHeight     = round($heightMm / 2, 2);
 
         // Build the \foreach page list: {1,...,N}
         $pageList = $pages > 1 ? "1,...,{$pages}" : '1';
+        $errorMsg = __('An error? Report it on');
 
         return <<<LATEX
 \\documentclass{article}
@@ -213,6 +227,7 @@ class AddWatermarkToPdf implements ShouldQueue
 \\usepackage{pgffor}
 \\usepackage{lmodern}
 \\usepackage[sfdefault]{FiraSans}
+\\usepackage[hidelinks]{hyperref}
 
 % Paper enlarged: PDF width + 30mm banner
 \\geometry{
@@ -233,8 +248,11 @@ class AddWatermarkToPdf implements ShouldQueue
 % --- BANNER TEXT ---
 \\AddToShipoutPictureFG{%
   \\AtPageLowerLeft{%
-    \\put(6mm,50mm){\\rotatebox{90}{\\Large\\sffamily\\bfseries $authorLine }}%
-    \\put(14mm,50mm){\\rotatebox{90}{\\normalsize\\sffamily An error? Report it on $postUrl } }%
+    \\put(4mm,50mm){\\rotatebox{90}{
+        \\Large\\sffamily 
+        {$iconCode}  {$authorLine}
+    }}%
+    \\put(12mm,50mm){\\rotatebox{90}{\\normalsize\\sffamily \\href{{$postUrl}}{ $errorMsg $postUrl} } }%
   }%
 }
 
