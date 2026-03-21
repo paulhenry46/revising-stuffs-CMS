@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Str;
 use App\Jobs\CreateThumbnail;
+use App\Jobs\AddWatermarkToPdf;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Attributes\Locked;
@@ -141,6 +142,14 @@ class EditPrimaryFiles extends Component
 
         if($this->update){
            $this->createEvent();//If there is an update, we create the Event associated
+           // Re-apply watermarks for all primary files of this post if it is published
+           if($this->post->published){
+               foreach($this->post->files as $existingFile){
+                   if(in_array($existingFile->type, ['primary light', 'primary dark'])){
+                       dispatch(new AddWatermarkToPdf($existingFile->id));
+                   }
+               }
+           }
         }else{
             $this->createFile($light_data, 'primary light');//Else, we create the files in BDD
             if($this->dark_version){
@@ -224,5 +233,9 @@ class EditPrimaryFiles extends Component
         $file->file_path = $datas['path'];
         $file->post_id = $this->post->id;
         $file->save();
+        // Dispatch watermark job if the post is already published
+        if($this->post->published){
+            dispatch(new AddWatermarkToPdf($file->id));
+        }
     }
 }

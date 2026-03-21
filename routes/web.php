@@ -61,6 +61,8 @@ if(env('GOOGLE_AUTH')){
     Route::get('login/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 }
 
+Route::get('/f/{post}', [PostController::class, 'short'])->name('post.short')->where('id', '[0-9]+');
+
 //Public Routes
 Route::name('post.public.')->group(function() {
     //The route to accces to all courses of all levels

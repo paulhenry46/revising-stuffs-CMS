@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Jobs\AddWatermarkToPdf;
 use App\Jobs\InformUserOfNewPost;
 use Livewire\Component;
 use App\Models\Level;
@@ -99,6 +100,10 @@ class PostsTable extends Component
          $files = $post->files;
          foreach ($files as $file) {
              $delete = Storage::disk('public')->delete($file->file_path);
+             // Also delete the watermarked version if it exists
+             if ($file->watermarked_file_path) {
+                 Storage::disk('public')->delete($file->watermarked_file_path);
+             }
              $file->delete();
          }
      //Delete the thumbnail
@@ -137,6 +142,11 @@ class PostsTable extends Component
         foreach($posts as $post){
             $post->user->notify(new PostValidated($post));
             dispatch(new InformUserOfNewPost($post));
+            foreach($post->files as $file){
+                if(in_array($file->type, ['primary light', 'primary dark'])){
+                    dispatch(new AddWatermarkToPdf($file->id));
+                }
+            }
         }
         $this->selection = [];
         $this->resetPage();
@@ -160,6 +170,11 @@ class PostsTable extends Component
         if ($post) {
             $post->user->notify(new PostValidated($post));
             dispatch(new InformUserOfNewPost($post));
+            foreach($post->files as $file){
+                if(in_array($file->type, ['primary light', 'primary dark'])){
+                    dispatch(new AddWatermarkToPdf($file->id));
+                }
+            }
         }
         $this->selection = [];
         $this->resetPage();
