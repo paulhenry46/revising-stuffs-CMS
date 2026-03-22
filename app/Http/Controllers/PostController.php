@@ -30,6 +30,12 @@ class PostController extends Controller
         return view('posts.moderate');//->with('posts', $posts);
     }
 
+    public function certify()
+    {
+        $this->authorize('moderate', Post::class);
+        return view('posts.certify');
+    }
+
     public function all()
     {   
         $this->authorize('viewAny', Post::class);

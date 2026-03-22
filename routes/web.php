@@ -26,6 +26,7 @@ use App\Http\Middleware\EnsureUserCursusProfileIsCompleted;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Public\ReadCardInUserDeckController;
 use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\CoAdminController;
 use App\Http\Controllers\EmailDomainRuleController;
 
@@ -41,6 +42,9 @@ use App\Http\Controllers\EmailDomainRuleController;
 */
 
 Route::get('/storage/{path}', [StorageController::class, 'getFile'])->where('path', '.*')->name('storage');
+
+// Public certificate verification
+Route::get('/verify/{certId}', [CertificateController::class, 'verify'])->name('certificates.verify');
 
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 Route::get('/contributor', function () {
@@ -119,6 +123,7 @@ Route::middleware([
     });
     Route::group(['middleware' => ['can:publish all posts']], function () {
         Route::get('/posts/moderate', [PostController::class, 'moderate'])->name('posts.moderate');
+        Route::get('/posts/certify', [PostController::class, 'certify'])->name('posts.certify');
     });
     Route::group(['middleware' => ['can:manage all posts']], function () {
         Route::get('/posts/all', [PostController::class, 'all'])->name('posts.all');
@@ -187,6 +192,14 @@ Route::middleware([
         });
     });
     
+    // Certificates
+    Route::prefix('/certificates')->name('certificates.')->group(function () {
+        Route::get('/', [CertificateController::class, 'index'])->name('index');
+        Route::get('/create', [CertificateController::class, 'create'])->name('create');
+        Route::post('/', [CertificateController::class, 'store'])->name('store');
+        Route::get('/{certificate}/download', [CertificateController::class, 'download'])->name('download');
+    });
+
     //Used to send datas for quiz-mode in cards
     Route::post('/step', [StepController::class, 'create'])->name('step.add');
 

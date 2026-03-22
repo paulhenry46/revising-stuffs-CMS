@@ -81,6 +81,11 @@ class Post extends Model
         }
         return false;
     }
+    public function isCertified(): bool
+    {
+        return $this->certified_at !== null;
+    }
+
     public function downloads(): int{
         $files = $this->files;
         $count = 0;

@@ -124,6 +124,10 @@
                                         {{__('Validate posts')}}
                                     </a>
                                     @endif</li>
+      <li><a wire:navigate href="{{route('posts.certify')}}" class="">
+                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m438-452-58-57q-11-11-27.5-11T324-508q-11 11-11 28t11 28l86 86q12 12 28 12t28-12l170-170q12-12 11.5-28T636-592q-12-12-28.5-12.5T579-593L438-452ZM326-90l-58-98-110-24q-15-3-24-15.5t-7-27.5l11-113-75-86q-10-11-10-26t10-26l75-86-11-113q-2-15 7-27.5t24-15.5l110-24 58-98q8-13 22-17.5t28 1.5l104 44 104-44q14-6 28-1.5t22 17.5l58 98 110 24q15 3 24 15.5t7 27.5l-11 113 75 86q10 11 10 26t-10 26l-75 86 11 113q2 15-7 27.5T802-212l-110 24-58 98q-8 13-22 17.5T584-74l-104-44-104 44q-14 6-28 1.5T326-90Z"/></svg>
+                                        {{__('Certify posts')}}
+                                    </a></li>
     </ul>
   </li>
 </ul>
@@ -157,6 +161,10 @@
                                         {{__('Validate posts')}}
                                     </a>
                                     @endif</li>
+      <li><a wire:navigate href="{{route('posts.certify')}}" class="">
+                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m438-452-58-57q-11-11-27.5-11T324-508q-11 11-11 28t11 28l86 86q12 12 28 12t28-12l170-170q12-12 11.5-28T636-592q-12-12-28.5-12.5T579-593L438-452ZM326-90l-58-98-110-24q-15-3-24-15.5t-7-27.5l11-113-75-86q-10-11-10-26t10-26l75-86-11-113q-2-15 7-27.5t24-15.5l110-24 58-98q8-13 22-17.5t28 1.5l104 44 104-44q14-6 28-1.5t22 17.5l58 98 110 24q15 3 24 15.5t7 27.5l-11 113 75 86q10 11 10 26t-10 26l-75 86 11 113q2 15-7 27.5T802-212l-110 24-58 98q-8 13-22 17.5T584-74l-104-44-104 44q-14 6-28 1.5T326-90Z"/></svg>
+                                        {{__('Certify posts')}}
+                                    </a></li>
     </ul>
   </li>
 </ul>
@@ -295,6 +303,100 @@
                                 
                                 </div>
                             </div>
+                        @php
+                            $certifiedCount = Auth::user()->posts()->whereNotNull('certified_at')->count();
+                            if ($certifiedCount >= 25) {
+                                $contributorLevel = 'official';
+                                $levelLabel = __('Official contributor');
+                                $levelColor = 'success';
+                                $nextTarget = null;
+                                $progressPct = 100;
+                            } elseif ($certifiedCount >= 6) {
+                                $contributorLevel = 'regular';
+                                $levelLabel = __('Regular contributor');
+                                $levelColor = 'warning';
+                                $nextTarget = 25;
+                                $progressPct = (int)(($certifiedCount - 6) / (25 - 6) * 100);
+                            } else {
+                                $contributorLevel = 'beginner';
+                                $levelLabel = __('Beginner contributor');
+                                $levelColor = 'info';
+                                $nextTarget = 6;
+                                $progressPct = (int)($certifiedCount / 6 * 100);
+                            }
+                        @endphp
+                        <div class="pt-2">
+                            <div class="card bg-base-100 shadow-xl">
+                                <div class="card-body">
+                                    <h2 class="card-title">
+                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+                                            <path d="m438-452-58-57q-11-11-27.5-11T324-508q-11 11-11 28t11 28l86 86q12 12 28 12t28-12l170-170q12-12 11.5-28T636-592q-12-12-28.5-12.5T579-593L438-452ZM326-90l-58-98-110-24q-15-3-24-15.5t-7-27.5l11-113-75-86q-10-11-10-26t10-26l75-86-11-113q-2-15 7-27.5t24-15.5l110-24 58-98q8-13 22-17.5t28 1.5l104 44 104-44q14-6 28-1.5t22 17.5l58 98 110 24q15 3 24 15.5t7 27.5l-11 113 75 86q10 11 10 26t-10 26l-75 86 11 113q2 15-7 27.5T802-212l-110 24-58 98q-8 13-22 17.5T584-74l-104-44-104 44q-14 6-28 1.5T326-90Z"/>
+                                        </svg>
+                                        {{__('Contributor level')}}
+                                    </h2>
+
+                                    <div class="flex items-center gap-3 mt-1">
+                                        <span class="badge badge-{{ $levelColor }} badge-lg font-semibold">{{ $levelLabel }}</span>
+                                        <span class="text-sm opacity-60">{{ $certifiedCount }} {{__('certified posts')}}</span>
+                                    </div>
+
+                                    @if($nextTarget !== null)
+                                    <div class="mt-3">
+                                        <div class="flex justify-between text-xs opacity-60 mb-1">
+                                            <span>{{ $certifiedCount }} / {{ $nextTarget }} {{__('certified posts')}}</span>
+                                            <span>{{ $nextTarget - $certifiedCount }} {{__('remaining')}}</span>
+                                        </div>
+                                        <progress class="progress progress-{{ $levelColor }} w-full" value="{{ $progressPct }}" max="100"></progress>
+                                        @if($contributorLevel === 'beginner')
+                                            <p class="text-xs opacity-50 mt-1">{{__('Reach 6 certified posts to unlock Regular contributor: access to your stats.')}}</p>
+                                        @else
+                                            <p class="text-xs opacity-50 mt-1">{{__('Reach 25 certified posts to unlock Official contributor: generate your community certificate.')}}</p>
+                                        @endif
+                                    </div>
+                                    @else
+                                    <div class="mt-3">
+                                        <progress class="progress progress-success w-full" value="100" max="100"></progress>
+                                        <p class="text-xs opacity-50 mt-1">{{__('You have reached the highest contributor level!')}}</p>
+                                    </div>
+                                    @endif
+
+                                    <div class="mt-3 divider text-xs opacity-40">{{__('Levels')}}</div>
+                                    <div class="flex flex-wrap gap-2 text-xs">
+                                        <div class="flex items-center gap-1 {{ $contributorLevel === 'beginner' ? 'font-bold' : 'opacity-50' }}">
+                                            <span class="badge badge-info badge-sm">{{__('Beginner')}}</span>
+                                            <span>0–5</span>
+                                        </div>
+                                        <div class="flex items-center gap-1 {{ $contributorLevel === 'regular' ? 'font-bold' : 'opacity-50' }}">
+                                            <span class="badge badge-warning badge-sm">{{__('Regular')}}</span>
+                                            <span>6–24</span>
+                                        </div>
+                                        <div class="flex items-center gap-1 {{ $contributorLevel === 'official' ? 'font-bold' : 'opacity-50' }}">
+                                            <span class="badge badge-success badge-sm">{{__('Official')}}</span>
+                                            <span>25+</span>
+                                        </div>
+                                    </div>
+
+                                    @if($contributorLevel === 'official' && config('features.latex_enabled'))
+                                    <div class="mt-3">
+                                        <a wire:navigate href="{{ route('certificates.create') }}" class="btn btn-success btn-sm w-full">
+                                            <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18">
+                                                <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/>
+                                            </svg>
+                                            {{__('Generate community certificate')}}
+                                        </a>
+                                    </div>
+                                    @endif
+
+                                    @if($certifiedCount > 0)
+                                    <div class="mt-2">
+                                        <a wire:navigate href="{{ route('certificates.index') }}" class="btn btn-ghost btn-xs">
+                                            {{__('View my certificates')}}
+                                        </a>
+                                    </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
                         @role('moderator')
                         <div class="pt-2 lg:hidden">
                             <div class="card bg-base-100 shadow-xl">
@@ -333,6 +435,12 @@
                                         {{__('Validate posts')}}
                                     </a>
                                     @endif
+                                </div>
+                                <div class="sm:col-span-1 col-span-2">
+                                <a wire:navigate href="{{route('posts.certify')}}" class=" btn btn-neutral w-full">
+                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m438-452-58-57q-11-11-27.5-11T324-508q-11 11-11 28t11 28l86 86q12 12 28 12t28-12l170-170q12-12 11.5-28T636-592q-12-12-28.5-12.5T579-593L438-452ZM326-90l-58-98-110-24q-15-3-24-15.5t-7-27.5l11-113-75-86q-10-11-10-26t10-26l75-86-11-113q-2-15 7-27.5t24-15.5l110-24 58-98q8-13 22-17.5t28 1.5l104 44 104-44q14-6 28-1.5t22 17.5l58 98 110 24q15 3 24 15.5t7 27.5l-11 113 75 86q10 11 10 26t-10 26l-75 86 11 113q2 15-7 27.5T802-212l-110 24-58 98q-8 13-22 17.5T584-74l-104-44-104 44q-14 6-28 1.5T326-90Z"/></svg>
+                                        {{__('Certify posts')}}
+                                    </a>
                                 </div>
                                 @role('admin')
                                 <div class="col-span-2 divider"></div> 
@@ -414,6 +522,12 @@
                                         {{__('Validate posts')}}
                                     </a>
                                     @endif
+                                </div>
+                                <div class="sm:col-span-1 col-span-2">
+                                <a wire:navigate href="{{route('posts.certify')}}" class=" btn btn-neutral w-full">
+                                        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m438-452-58-57q-11-11-27.5-11T324-508q-11 11-11 28t11 28l86 86q12 12 28 12t28-12l170-170q12-12 11.5-28T636-592q-12-12-28.5-12.5T579-593L438-452ZM326-90l-58-98-110-24q-15-3-24-15.5t-7-27.5l11-113-75-86q-10-11-10-26t10-26l75-86-11-113q-2-15 7-27.5t24-15.5l110-24 58-98q8-13 22-17.5t28 1.5l104 44 104-44q14-6 28-1.5t22 17.5l58 98 110 24q15 3 24 15.5t7 27.5l-11 113 75 86q10 11 10 26t-10 26l-75 86 11 113q2 15-7 27.5T802-212l-110 24-58 98q-8 13-22 17.5T584-74l-104-44-104 44q-14 6-28 1.5T326-90Z"/></svg>
+                                        {{__('Certify posts')}}
+                                    </a>
                                 </div>
                                 <div class="col-span-2 divider"></div>
                                 <div class="sm:col-span-1 col-span-2">
