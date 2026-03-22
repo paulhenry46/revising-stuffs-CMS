@@ -123,7 +123,6 @@ Route::middleware([
     });
     Route::group(['middleware' => ['can:publish all posts']], function () {
         Route::get('/posts/moderate', [PostController::class, 'moderate'])->name('posts.moderate');
-        Route::get('/posts/certify', [PostController::class, 'certify'])->name('posts.certify');
     });
     Route::group(['middleware' => ['can:manage all posts']], function () {
         Route::get('/posts/all', [PostController::class, 'all'])->name('posts.all');

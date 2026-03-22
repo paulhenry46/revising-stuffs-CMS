@@ -19,10 +19,21 @@ class PostsTable extends Component
     public array $selection = [];
     public string $reasons = '';
     public string $mass_reasons = '';
-    public function updating($name, $value){
+    public string $certifySearch = '';
+
+    public function updating($name, $value): void
+    {
+        if ($name === 'certifySearch') {
+            $this->resetPage();
+        }
     }
 
-    private function scopedPostQuery()
+    // ------------------------------------------------------------------
+    // Query helpers
+    // ------------------------------------------------------------------
+
+    /** Posts pending validation (unpublished). */
+    private function pendingQuery()
     {
         $user = auth()->user();
         $query = Post::where('published', 0)->where('group_id', '!=', 1);
@@ -34,10 +45,41 @@ class PostsTable extends Component
         return $query;
     }
 
+    private function scopedPostQuery()
+    {
+        return $this->pendingQuery();
+    }
+
     private function scopedPostIds(array $ids): array
     {
-        return $this->scopedPostQuery()->whereIn('id', $ids)->pluck('id')->toArray();
+        return $this->pendingQuery()->whereIn('id', $ids)->pluck('id')->toArray();
     }
+
+    /** Published posts available for certification. */
+    private function publishedQuery()
+    {
+        $user  = auth()->user();
+        $query = Post::where('published', 1)
+            ->where('group_id', '!=', 1)
+            ->when($this->certifySearch, function ($q) {
+                $q->where(function ($q2) {
+                    $q2->where('title', 'LIKE', "%{$this->certifySearch}%")
+                        ->orWhere('description', 'LIKE', "%{$this->certifySearch}%");
+                });
+            });
+
+        if ($user->hasRole('co-admin') && !$user->hasRole('admin')) {
+            $curriculaIds = $user->getManagedCurriculaIds();
+            $levelIds     = Level::whereIn('curriculum_id', $curriculaIds)->pluck('id');
+            $query->whereIn('level_id', $levelIds);
+        }
+
+        return $query;
+    }
+
+    // ------------------------------------------------------------------
+    // Placeholder skeleton
+    // ------------------------------------------------------------------
 
     public function placeholder()
     {
@@ -95,36 +137,38 @@ class PostsTable extends Component
             </div>
         HTML;
     }
-    public function destroyPost(Post $post){
-         //Delete the primary file(s) and complementary file(s)
-         $files = $post->files;
-         foreach ($files as $file) {
-             $delete = Storage::disk('public')->delete($file->file_path);
-             // Also delete the watermarked version if it exists
-             if ($file->watermarked_file_path) {
-                 Storage::disk('public')->delete($file->watermarked_file_path);
-             }
-             $file->delete();
-         }
-     //Delete the thumbnail
-       $delete = Storage::disk('public')->delete(''.$post->level->slug.'/'.$post->course->slug.'/'.$post->id.'-'.$post->slug.'.thumbnail.png');
-     //Delete the event Items
-         $events = $post->events;
-         foreach ($events as $event) {
-             $event->delete();
-         }
-     //Delete the comments
-     $comments = $post->comments;
-         foreach ($comments as $comment) {
-             $comment->delete();
-         }
-     //Delete the post
-         $post->delete();
+
+    // ------------------------------------------------------------------
+    // Validation actions
+    // ------------------------------------------------------------------
+
+    public function destroyPost(Post $post): void
+    {
+        $files = $post->files;
+        foreach ($files as $file) {
+            Storage::disk('public')->delete($file->file_path);
+            if ($file->watermarked_file_path) {
+                Storage::disk('public')->delete($file->watermarked_file_path);
+            }
+            $file->delete();
+        }
+        Storage::disk('public')->delete(
+            $post->level->slug . '/' . $post->course->slug . '/' . $post->id . '-' . $post->slug . '.thumbnail.png'
+        );
+        foreach ($post->events as $event) {
+            $event->delete();
+        }
+        foreach ($post->comments as $comment) {
+            $comment->delete();
+        }
+        $post->delete();
     }
-    public function deletePosts(array $ids){
+
+    public function deletePosts(array $ids): void
+    {
         $safeIds = $this->scopedPostIds($ids);
         $posts = Post::whereIn('id', $safeIds)->get();
-        foreach($posts as $post){
+        foreach ($posts as $post) {
             $title = $post->title;
             $post->user->notify(new PostDeleted($title, $this->mass_reasons));
             $this->destroyPost($post);
@@ -135,15 +179,16 @@ class PostsTable extends Component
         session()->flash('message', __('The post has been deleted.'));
     }
 
-    public function validatePosts(array $ids){
+    public function validatePosts(array $ids): void
+    {
         $safeIds = $this->scopedPostIds($ids);
         Post::whereIn('id', $safeIds)->update(['published' => 1]);
         $posts = Post::whereIn('id', $safeIds)->get();
-        foreach($posts as $post){
+        foreach ($posts as $post) {
             $post->user->notify(new PostValidated($post));
             dispatch(new InformUserOfNewPost($post));
-            foreach($post->files as $file){
-                if(in_array($file->type, ['primary light', 'primary dark'])){
+            foreach ($post->files as $file) {
+                if (in_array($file->type, ['primary light', 'primary dark'])) {
                     dispatch(new AddWatermarkToPdf($file->id));
                 }
             }
@@ -153,8 +198,9 @@ class PostsTable extends Component
         session()->flash('message', __('The posts has been validated.'));
     }
 
-    public function deletePost($id){
-        $post = $this->scopedPostQuery()->where('id', $id)->firstOrFail();
+    public function deletePost($id): void
+    {
+        $post = $this->pendingQuery()->where('id', $id)->firstOrFail();
         $title = $post->title;
         $post->user->notify(new PostDeleted($title, $this->reasons));
         $this->destroyPost($post);
@@ -164,14 +210,15 @@ class PostsTable extends Component
         session()->flash('message', __('The post has been deleted.'));
     }
 
-    public function validatePost($id){
-        $post = $this->scopedPostQuery()->where('id', $id)->first();
-        $this->scopedPostQuery()->where('id', $id)->update(['published' => 1]);
+    public function validatePost($id): void
+    {
+        $post = $this->pendingQuery()->where('id', $id)->first();
+        $this->pendingQuery()->where('id', $id)->update(['published' => 1]);
         if ($post) {
             $post->user->notify(new PostValidated($post));
             dispatch(new InformUserOfNewPost($post));
-            foreach($post->files as $file){
-                if(in_array($file->type, ['primary light', 'primary dark'])){
+            foreach ($post->files as $file) {
+                if (in_array($file->type, ['primary light', 'primary dark'])) {
                     dispatch(new AddWatermarkToPdf($file->id));
                 }
             }
@@ -181,8 +228,41 @@ class PostsTable extends Component
         session()->flash('message', __('The post has been published.'));
     }
 
+    // ------------------------------------------------------------------
+    // Certification actions
+    // ------------------------------------------------------------------
+
+    public function certifyPost(int $id): void
+    {
+        $this->authorize('moderate', Post::class);
+
+        Post::where('id', $id)
+            ->whereIn('id', $this->publishedQuery()->pluck('id'))
+            ->update(['certified_at' => now()]);
+
+        session()->flash('message', __('The post has been certified.'));
+    }
+
+    public function uncertifyPost(int $id): void
+    {
+        $this->authorize('moderate', Post::class);
+
+        Post::where('id', $id)
+            ->whereIn('id', $this->publishedQuery()->pluck('id'))
+            ->update(['certified_at' => null]);
+
+        session()->flash('message', __('The certification has been removed.'));
+    }
+
+    // ------------------------------------------------------------------
+    // Render
+    // ------------------------------------------------------------------
+
     public function render()
     {
-        return view('livewire.posts-table', ['posts' => $this->scopedPostQuery()->paginate(15)]);
+        return view('livewire.posts-table', [
+            'posts'          => $this->pendingQuery()->paginate(15),
+            'publishedPosts' => $this->publishedQuery()->latest()->paginate(15, ['*'], 'certifyPage'),
+        ]);
     }
 }
