@@ -79,12 +79,15 @@ class CertificateController extends Controller
         try {
             $result = $service->generate($certificate, $user, $curriculum);
 
-            return response()->download($result['pdfPath'], 'certificate-' . $certificate->cert_id . '.pdf')
-                ->deleteFileAfterSend(false)
-                ->withHeaders(['Content-Type' => 'application/pdf'])
-                ->then(function () use ($service, $result) {
-                    $service->cleanup($result['tmpDir']);
-                });
+            $response = response()->download($result['pdfPath'], 'certificate-' . $certificate->cert_id . '.pdf')
+                ->deleteFileAfterSend(false);
+
+            // Schedule cleanup after response is sent
+            app()->terminating(function () use ($service, $result) {
+                $service->cleanup($result['tmpDir']);
+            });
+
+            return $response;
         } catch (\RuntimeException $e) {
             return redirect()->route('certificates.index')
                 ->with('message', __('Certificate saved but PDF generation failed: ') . $e->getMessage());
@@ -114,12 +117,15 @@ class CertificateController extends Controller
         try {
             $result = $service->generate($certificate, $user, $curriculum);
 
-            return response()->download($result['pdfPath'], 'certificate-' . $certificate->cert_id . '.pdf')
-                ->deleteFileAfterSend(false)
-                ->withHeaders(['Content-Type' => 'application/pdf'])
-                ->then(function () use ($service, $result) {
-                    $service->cleanup($result['tmpDir']);
-                });
+            $response = response()->download($result['pdfPath'], 'certificate-' . $certificate->cert_id . '.pdf')
+                ->deleteFileAfterSend(false);
+
+            // Schedule cleanup after response is sent
+            app()->terminating(function () use ($service, $result) {
+                $service->cleanup($result['tmpDir']);
+            });
+
+            return $response;
         } catch (\RuntimeException $e) {
             return back()->withErrors(['general' => $e->getMessage()]);
         }

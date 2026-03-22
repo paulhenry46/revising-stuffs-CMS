@@ -169,9 +169,8 @@ class CertificateService
 \\usepackage{booktabs}
 \\usepackage[hidelinks]{hyperref}
 
-\\definecolor{mainblue}{RGB}{30, 58, 95}
-\\definecolor{lightgray}{RGB}{245, 245, 245}
-\\definecolor{accentblue}{RGB}{0, 112, 192}
+\\usepackage[sfdefault]{FiraSans}
+
 \\definecolor{noir-titre}{gray}{0.1}
 \\definecolor{gris-sombre}{gray}{0.4}
 \\definecolor{gris-moyen}{gray}{0.7}
@@ -185,7 +184,7 @@ class CertificateService
 {$logoBlock}    \\end{minipage}
     \\begin{minipage}{5cm}
     {\\color{noir-titre}\\LARGE\\bfseries {$instanceEsc}} \\\\
-    {\\color{gray}\\small \\textit{\\href{{$verifyUrl}}{\\underline{Plateforme d'Entraide}}}}
+    {\\color{gray}\\small \\href{{$verifyUrl}}{ Plateforme d'Entraide Universitaire}}
     \\end{minipage}
 \\end{minipage}
 \\begin{minipage}{0.4\\textwidth}
@@ -231,10 +230,10 @@ La plateforme \\textbf{{$instanceEsc}} atteste par la pr\\'esente de l'implicati
 \\renewcommand{\\arraystretch}{1.5}
 \\rowcolors{2}{gris-tres-clair}{white}
 \\begin{tabularx}{\\textwidth}{lXc}
-    \\toprule
+
     \\textbf{Ann\\'ee} & \\textbf{Unit\\'e d'enseignement} & \\textbf{Ressources Valid\\'ees} \\\\
-    \\midrule
-{$yearRows}    \\midrule
+
+{$yearRows}    
     \\textbf{TOTAL} & & \\textbf{{$totalPostsStr} Fiches} \\\\
     \\bottomrule
 \\end{tabularx}
