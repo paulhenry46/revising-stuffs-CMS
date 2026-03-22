@@ -184,7 +184,7 @@ class CertificateService
 {$logoBlock}    \\end{minipage}
     \\begin{minipage}{5cm}
     {\\color{noir-titre}\\LARGE\\bfseries {$instanceEsc}} \\\\
-    {\\color{gray}\\small \\href{{$verifyUrl}}{ Plateforme d'Entraide Universitaire}}
+    {\\color{gray}\\small \\href{{$verifyUrl}}{Plateforme de Partage}}
     \\end{minipage}
 \\end{minipage}
 \\begin{minipage}{0.4\\textwidth}
