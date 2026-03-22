@@ -80,7 +80,7 @@ class AddWatermarkToPdf implements ShouldQueue
             // Detect page dimensions and page count from the source PDF
             $pdfInfo = $this->getPdfInfo($tmpDir . '/' . $safePdf);
 
-            $latex = $this->buildLatex($post, $safePdf, $pdfInfo['width'], $pdfInfo['height'], $pdfInfo['pages']);
+            $latex = $this->buildLatex($post, $safePdf, $pdfInfo['page_dimensions']);
            // dd($latex);
             file_put_contents($tmpDir . '/watermark.tex', $latex);
 
@@ -120,14 +120,15 @@ class AddWatermarkToPdf implements ShouldQueue
     }
 
     /**
-     * Get PDF dimensions (in mm) and page count using pdfinfo.
+     * Get per-page PDF dimensions (in mm) and page count using pdfinfo.
      * Falls back to A4 defaults if pdfinfo is unavailable or fails.
      *
-     * @return array{width: float, height: float, pages: int}
+     * @return array{pages: int, page_dimensions: array<int, array{0: float, 1: float}>}
      */
     private function getPdfInfo(string $pdfPath): array
     {
-        $defaults = ['width' => 210.0, 'height' => 297.0, 'pages' => 1];
+        $a4 = [210.0, 297.0];
+        $defaults = ['pages' => 1, 'page_dimensions' => [1 => $a4]];
 
         $finder = new ExecutableFinder();
         $pdfInfoPath = $finder->find('pdfinfo');
@@ -136,6 +137,7 @@ class AddWatermarkToPdf implements ShouldQueue
             return $defaults;
         }
 
+        // Get total page count and fallback dimensions from the global pdfinfo output
         $process = new Process([$pdfInfoPath, $pdfPath]);
         $process->run();
         if (!$process->isSuccessful()) {
@@ -144,21 +146,48 @@ class AddWatermarkToPdf implements ShouldQueue
 
         $output = $process->getOutput();
 
-        $width  = $defaults['width'];
-        $height = $defaults['height'];
-        $pages  = $defaults['pages'];
-
-        // Page size is given in points: "Page size:      595.28 x 841.89 pts (A4)"
-        if (preg_match('/Page size:\s+([\d.]+)\s+x\s+([\d.]+)\s+pts/i', $output, $m)) {
-            $width  = round(floatval($m[1]) * 25.4 / 72, 2);
-            $height = round(floatval($m[2]) * 25.4 / 72, 2);
-        }
-
+        $pages = 1;
         if (preg_match('/Pages:\s+(\d+)/i', $output, $m)) {
-            $pages = (int) $m[1];
+            $pages = max(1, (int) $m[1]);
         }
 
-        return ['width' => $width, 'height' => $height, 'pages' => $pages];
+        // Fallback dimensions from the global "Page size:" line (usually page 1)
+        $fallback = $a4;
+        if (preg_match('/Page size:\s+([\d.]+)\s+x\s+([\d.]+)\s+pts/i', $output, $m)) {
+            $fallback = [
+                round(floatval($m[1]) * 25.4 / 72, 2),
+                round(floatval($m[2]) * 25.4 / 72, 2),
+            ];
+        }
+
+        // Get per-page dimensions using pdfinfo -f 1 -l <pages>
+        $perPageProcess = new Process([$pdfInfoPath, '-f', '1', '-l', (string) $pages, $pdfPath]);
+        $perPageProcess->run();
+
+        $pageDimensions = [];
+        if ($perPageProcess->isSuccessful()) {
+            $perPageOutput = $perPageProcess->getOutput();
+            // Output contains lines like: "Page    1 size:      595.28 x 841.89 pts"
+            preg_match_all('/Page\s+(\d+)\s+size:\s+([\d.]+)\s+x\s+([\d.]+)\s+pts/i', $perPageOutput, $matches, PREG_SET_ORDER);
+            foreach ($matches as $match) {
+                $pageNum = (int) $match[1];
+                $pageDimensions[$pageNum] = [
+                    round(floatval($match[2]) * 25.4 / 72, 2),
+                    round(floatval($match[3]) * 25.4 / 72, 2),
+                ];
+            }
+        }
+
+        // Fill in the fallback for any page whose dimensions were not reported
+        for ($i = 1; $i <= $pages; $i++) {
+            if (!isset($pageDimensions[$i])) {
+                $pageDimensions[$i] = $fallback;
+            }
+        }
+
+        ksort($pageDimensions);
+
+        return ['pages' => $pages, 'page_dimensions' => $pageDimensions];
     }
 
     /**
@@ -175,13 +204,11 @@ class AddWatermarkToPdf implements ShouldQueue
     }
 
     /**
-     * Build the LaTeX source for the watermarked PDF using dynamic page dimensions.
+     * Build the LaTeX source for the watermarked PDF using per-page dimensions.
      *
-     * @param  float  $widthMm   PDF page width in mm
-     * @param  float  $heightMm  PDF page height in mm
-     * @param  int    $pages     Total number of pages in the PDF
+     * @param  array<int, array{0: float, 1: float}>  $pageDimensions  Per-page [widthMm, heightMm]
      */
-    private function buildLatex(Post $post, string $safePdf, float $widthMm, float $heightMm, int $pages): string
+    private function buildLatex(Post $post, string $safePdf, array $pageDimensions): string
     {
     // --- PRÉPARATION DES DONNÉES ---
     $author     = $this->escape($post->user->name ?? 'Anonyme');
@@ -216,15 +243,16 @@ class AddWatermarkToPdf implements ShouldQueue
     if (str_contains($license, 'SA')) $licenseIcons .= "\\includegraphics[height=3.5mm]{{$resPath}SA.png}\\hspace{0.3mm}";
     if (str_contains($license, '0'))  $licenseIcons .= "\\includegraphics[height=3.5mm]{{$resPath}0.png}\\hspace{0.3mm}";
 
-    // --- DIMENSIONS ---
+    // --- DIMENSIONS (use first page for banner positioning) ---
     $bannerWidth = 20; // Réduit à 20mm pour plus d'élégance
+    $firstPage   = $pageDimensions[array_key_first($pageDimensions)];
+    $widthMm     = $firstPage[0];
+    $heightMm    = $firstPage[1];
     $totalWidth  = round($widthMm + $bannerWidth, 2);
-    $widthMm2    = $widthMm - 1; 
     $midHeight   = round($heightMm / 2, 2);
     $topPos      = $heightMm - 10; // 10mm du bord haut
     $written = __('Written By');
 
-    $pageList = $pages > 1 ? "1,...,{$pages}" : '1';
     $logo_height = $heightMm - 18;
     $logo_line_height = $logo_height - 10;
     $logoPath = str_replace('\\', '/', base_path('resources/png/logo.pdf')); 
@@ -232,6 +260,20 @@ class AddWatermarkToPdf implements ShouldQueue
     $versionNumber = \DB::table('events')
         ->where('post_id', $post->id)
         ->count() + 1;
+
+    // --- GENERATE PER-PAGE CONTENT ---
+    // Each page may have a different width (and height), so we set \pdfpagewidth
+    // and \pdfpageheight explicitly before including every page.
+    $pageContent = '';
+    foreach ($pageDimensions as $pageNum => [$pageWidth, $pageHeight]) {
+        $pageTotalWidth   = round($pageWidth + $bannerWidth, 2);
+        $pageIncludeWidth = round($pageWidth - 1, 2);
+        $pageContent .= "\\pdfpagewidth={$pageTotalWidth}mm\n";
+        $pageContent .= "\\pdfpageheight={$pageHeight}mm\n";
+        $pageContent .= "\\noindent\\hspace*{{$bannerWidth}mm}%\n";
+        $pageContent .= "  \\includegraphics[page={$pageNum},width={$pageIncludeWidth}mm]{{$safePdfPath}}%\n";
+        $pageContent .= "\\clearpage\n";
+    }
 
     return <<<LATEX
 \\documentclass{article}
@@ -241,7 +283,6 @@ class AddWatermarkToPdf implements ShouldQueue
 \\usepackage{eso-pic}
 \\usepackage{xcolor}
 \\usepackage{geometry}
-\\usepackage{pgffor}
 \\usepackage{lmodern}
 \\usepackage{amsmath}
 \\usepackage[sfdefault]{FiraSans}
@@ -313,13 +354,8 @@ class AddWatermarkToPdf implements ShouldQueue
   }%
 }
 
-% --- RENDER ---
-\\foreach \\p in {{$pageList}}{%
-  \\noindent\\hspace*{{$bannerWidth}mm}%
-  \\includegraphics[page=\\p,width={$widthMm2}mm]{{$safePdfPath}}%
-  \\clearpage
-}
-
+% --- RENDER (per-page dimensions) ---
+$pageContent
 \\end{document}
 LATEX;
 }
