@@ -94,4 +94,8 @@ class Post extends Model
         }
         return $count;
     }
+
+    protected $casts = [
+        'certified_at' => 'datetime',
+    ];
 }
