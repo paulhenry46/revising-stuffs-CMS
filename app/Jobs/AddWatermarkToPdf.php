@@ -243,33 +243,57 @@ class AddWatermarkToPdf implements ShouldQueue
     if (str_contains($license, 'SA')) $licenseIcons .= "\\includegraphics[height=3.5mm]{{$resPath}SA.png}\\hspace{0.3mm}";
     if (str_contains($license, '0'))  $licenseIcons .= "\\includegraphics[height=3.5mm]{{$resPath}0.png}\\hspace{0.3mm}";
 
-    // --- DIMENSIONS (use first page for banner positioning) ---
     $bannerWidth = 20; // Réduit à 20mm pour plus d'élégance
-    $firstPage   = $pageDimensions[array_key_first($pageDimensions)];
-    $widthMm     = $firstPage[0];
-    $heightMm    = $firstPage[1];
-    $totalWidth  = round($widthMm + $bannerWidth, 2);
-    $midHeight   = round($heightMm / 2, 2);
-    $topPos      = $heightMm - 10; // 10mm du bord haut
+    $logoPath = str_replace('\\', '/', base_path('resources/png/logo.pdf'));
     $written = __('Written By');
+    $host = $this->escape(parse_url(config('app.url'), PHP_URL_HOST) ?? '');
 
-    $logo_height = $heightMm - 18;
-    $logo_line_height = $logo_height - 10;
-    $logoPath = str_replace('\\', '/', base_path('resources/png/logo.pdf')); 
-    
     $versionNumber = \DB::table('events')
         ->where('post_id', $post->id)
         ->count() + 1;
 
+    // Use first page dimensions only for the initial \geometry declaration so
+    // LaTeX has a valid paper size before the first page is shipped out.
+    $firstPage      = $pageDimensions[array_key_first($pageDimensions)];
+    $firstTotalWidth = round($firstPage[0] + $bannerWidth, 2);
+    $firstHeight     = $firstPage[1];
+
     // --- GENERATE PER-PAGE CONTENT ---
-    // Each page may have a different width (and height), so we set \pdfpagewidth
-    // and \pdfpageheight explicitly before including every page.
+    // Each page may have different width AND height, so we clear and rebuild the
+    // eso-pic overlays for every page using that page's own dimensions.
     $pageContent = '';
     foreach ($pageDimensions as $pageNum => [$pageWidth, $pageHeight]) {
         $pageTotalWidth   = round($pageWidth + $bannerWidth, 2);
         $pageIncludeWidth = round($pageWidth - 1, 2);
+        $midHeight        = round($pageHeight / 2, 2);
+        $logo_height      = $pageHeight - 18;
+        $logo_line_height = $logo_height - 10;
+
         $pageContent .= "\\pdfpagewidth={$pageTotalWidth}mm\n";
         $pageContent .= "\\pdfpageheight={$pageHeight}mm\n";
+        $pageContent .= "\\ClearShipoutPictureBG\n";
+        $pageContent .= "\\AddToShipoutPictureBG{%\n";
+        $pageContent .= "  \\AtPageLowerLeft{%\n";
+        $pageContent .= "  \\color{black}\\hspace{{$bannerWidth}mm}\\rule{0.2pt}{{$pageHeight}mm}%\n";
+        $pageContent .= "  }%\n";
+        $pageContent .= "}\n";
+        $pageContent .= "\\ClearShipoutPictureFG\n";
+        $pageContent .= "\\AddToShipoutPictureFG{%\n";
+        $pageContent .= "  \\AtPageLowerLeft{%\n";
+        $pageContent .= "  \\put(2mm,2mm){\\color{gray!40}\\rule{3mm}{0.2pt}}%\n";
+        $pageContent .= "    \\put(2mm,2mm){\\color{gray!40}\\rule{0.2pt}{3mm}}%\n";
+        $pageContent .= "    \\put(15mm,78mm){\\color{gray!40}\\rule{3mm}{0.2pt}}%\n";
+        $pageContent .= "    \\put(18mm,75mm){\\color{gray!40}\\rule{0.2pt}{3mm}}%\n";
+        $pageContent .= "    \\put(5mm,{$logo_height}mm){\\includegraphics[height=8mm]{{$logoPath}}}%\n";
+        $pageContent .= "    \\put(10mm,10mm){\\rotatebox{90}{\\fontsize{7}{8}\\selectfont\\ttfamily\\color{black} \\MakeUppercase{{$host}} \$\\boldsymbol{\\cdot}\$ \\MakeUppercase{{$course}} \$\\boldsymbol{\\cdot}\$ \\MakeUppercase{{$level}}}}%\n";
+        $pageContent .= "    \\put(6.5mm,{$midHeight}mm){\\rotatebox{90}{\\fontsize{10}{12}\\selectfont\\sffamily {$written} \\textbf{\\MakeUppercase{{$author}}} {$iconCode}}}%\n";
+        $pageContent .= "    \\put(11.5mm,{$midHeight}mm){\\rotatebox{90}{\\fontsize{7}{9}\\selectfont\\sffamily {$school} \$\\boldsymbol{\\cdot}\$ {$user_level}}}%\n";
+        $pageContent .= "    \\put(0mm,80mm){\\color{black}\\rule{20mm}{0.1pt}}\n";
+        $pageContent .= "    \\put(0mm,{$logo_line_height}mm){\\color{black}\\rule{20mm}{0.1pt}}\n";
+        $pageContent .= "    \\put(4mm,10mm){\\rotatebox{90}{\\fontsize{7}{9}\\selectfont\\ttfamily\\color{black} VER: 0{$versionNumber} \$\\boldsymbol{\\cdot}\$ ID: {$post->id} \$\\boldsymbol{\\cdot}\$ LICENSE\\raisebox{-0.25\\height}{ {$licenseIcons} }}}%\n";
+        $pageContent .= "    \\put(15mm,10mm){\\rotatebox{90}{\\fontsize{6}{8}\\selectfont\\sffamily\\color{black} \\href{{$postUrl}}{{$errorMsg} {$postUrl}}}}%\n";
+        $pageContent .= "  }%\n";
+        $pageContent .= "}\n";
         $pageContent .= "\\noindent\\hspace*{{$bannerWidth}mm}%\n";
         $pageContent .= "  \\includegraphics[page={$pageNum},width={$pageIncludeWidth}mm]{{$safePdfPath}}%\n";
         $pageContent .= "\\clearpage\n";
@@ -289,72 +313,14 @@ class AddWatermarkToPdf implements ShouldQueue
 \\usepackage[hidelinks]{hyperref}
 
 \\geometry{
-  paperwidth={$totalWidth}mm,
-  paperheight={$heightMm}mm,
+  paperwidth={$firstTotalWidth}mm,
+  paperheight={$firstHeight}mm,
   left=0mm, right=0mm, top=0mm, bottom=0mm
 }
 
 \\begin{document}
 
-% --- BANNER BACKGROUND & LINE ---
-\\AddToShipoutPictureBG{%
-  \\AtPageLowerLeft{%
-  \\color{black}\\hspace{{$bannerWidth}mm}\\rule{0.2pt}{{$heightMm}mm}%
-   % \\color{gray!5}\\rule{{$bannerWidth}mm}{{$heightMm}mm}%
-  % \\color{gray!2}\\rule{{$bannerWidth}mm}{{$heightMm}mm}%
-    
-  }%
-}
-
-% --- BANNER CONTENT (ARCHIVE STYLE) ---
-\\AddToShipoutPictureFG{%
-  \\AtPageLowerLeft{%
-  \\put(2mm,2mm){\\color{gray!40}\\rule{3mm}{0.2pt}}% Horizontal
-    \\put(2mm,2mm){\\color{gray!40}\\rule{0.2pt}{3mm}}% Vertical
-
-    \\put(15mm,78mm){\\color{gray!40}\\rule{3mm}{0.2pt}}% Horizontal
-    \\put(18mm,75mm){\\color{gray!40}\\rule{0.2pt}{3mm}}% Vertical
-    
-    \\put(5mm,{$logo_height}mm){\\includegraphics[height=8mm]{{$logoPath}}}%
-    
-    % 1. TOP : CLASSIFICATION & SOURCE
-    \\put(10mm,10mm){\\rotatebox{90}{
-        \\fontsize{7}{8}\\selectfont\\ttfamily\\color{black} 
-        \\MakeUppercase{{$this->escape(parse_url(config('app.url'), PHP_URL_HOST)) }} $\boldsymbol{\cdot}$ \\MakeUppercase{{$course}} $\boldsymbol{\cdot}$ \\MakeUppercase{{$level}}
-    }}%
-
-    % 2. MIDDLE : AUTHOR & SOCIAL
-    \\put(6.5mm,{$midHeight}mm){\\rotatebox{90}{
-        \\fontsize{10}{12}\\selectfont\\sffamily $written
-        \\textbf{\\MakeUppercase{{$author}}} {$iconCode}
-    }}%
-
-    \\put(11.5mm,{$midHeight}mm){\\rotatebox{90}{
-        \\fontsize{7}{9}\\selectfont\\sffamily
-        $school $\boldsymbol{\cdot}$ $user_level
-    }}%
-
-    \\put(0mm,80mm){\\color{black}\\rule{20mm}{0.1pt}}
-
-    \\put(0mm,$logo_line_height mm){\\color{black}\\rule{20mm}{0.1pt}}
-
-    % 3. BOTTOM : TECH INFO & LICENSE
-    \\put(4mm,10mm){\\rotatebox{90}{
-        \\fontsize{7}{9}\\selectfont\\ttfamily\\color{black} 
-
-        VER: 0$versionNumber $\boldsymbol{\cdot}$ ID: {$post->id} $\boldsymbol{\cdot}$ LICENSE\\raisebox{-0.25\height}{ {$licenseIcons} }
-    }}%
-
-    % 4. BOTTOM : LINK & ERROR REPORT
-    \\put(15mm,10mm){\\rotatebox{90}{
-        \\fontsize{6}{8}\\selectfont\\sffamily\\color{black}
-        \\href{{$postUrl}}{{$errorMsg} {$postUrl}}
-    }}%
-
-  }%
-}
-
-% --- RENDER (per-page dimensions) ---
+% --- RENDER (per-page dimensions and banner) ---
 $pageContent
 \\end{document}
 LATEX;
