@@ -4,7 +4,7 @@
         </div>
     </div>
 @auth
-@if(env('FirebasePush') == true)
+@if(env('FCM_PUSH') == true)
 <script type = "module" >
     import {
         initializeApp
@@ -55,7 +55,7 @@ function registerSW(){
     navigator.serviceWorker.register("firebase-messaging-sw.js").then(registration => {
     getToken(messaging, {
         serviceWorkerRegistration: registration,
-        vapidKey: '{{env('FIREBASE_SERVER_KEY')}}'
+        vapidKey: '{{env('FCM_VAPID_PUBLIC_KEY')}}'
     }).then((currentToken) => {
         if (currentToken) {
             console.log("Token is: " + currentToken);

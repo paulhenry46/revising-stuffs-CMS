@@ -9,7 +9,7 @@
           <p>{{__('See the latest posts created')}}</p>
         </div> 
         @auth 
-        @if(env('FirebasePush') == true) <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none justify-center">
+        @if(env('FCM_PUSH') == true) <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none justify-center">
           <button onclick="SWProcess.showModal()" class="btn btn-primary">{{__('Notifications Push')}}</button>
         </div>
 
@@ -54,7 +54,7 @@
         </div> 
         @endauth 
         @guest 
-        @if(env('FirebasePush') == true) <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none justify-center">
+        @if(env('FCM_PUSH') == true) <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none justify-center">
           <button onclick="my_modal_1.showModal()" class=" btn btn-primary">{{__('Notifications Push')}}</button>
         </div> 
         @endif <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none justify-center">

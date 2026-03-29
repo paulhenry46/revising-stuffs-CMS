@@ -16,15 +16,17 @@ class SendPushNotification implements ShouldQueue
     protected string $title;
     protected string $body;
     protected string $user_fcm_token;
+    protected string $url;
 
     /**
      * Create a new job instance.
      */
-    public function __construct(string $title, string $body, string $user_fcm_token)
+    public function __construct(string $title, string $body, string $user_fcm_token, string $url)
     {
         $this->title = $title;
         $this->body = $body;
         $this->user_fcm_token = $user_fcm_token;
+        $this->url  = $url;
     }
 
     /**
@@ -32,7 +34,7 @@ class SendPushNotification implements ShouldQueue
      */
     public function handle(): void
     {
-        $credentialsFilePath = base_path("fcm.json");
+        $credentialsFilePath = env('FCM_SERVICE_ACCOUNT_PATH');
         $client = new \Google_Client();
         $client->setAuthConfig($credentialsFilePath);
         $client->addScope('https://www.googleapis.com/auth/firebase.messaging');
@@ -45,17 +47,30 @@ class SendPushNotification implements ShouldQueue
              "Authorization: Bearer $access_token",
              'Content-Type: application/json'
         ];
-        $content_data = [
-            "title" => $this->title,
-            "body" => $this->body
-        ]; 
-        
-        $data['notification'] =  $content_data;
-        $data['webpush']['fcm_options']['link'] = route('post.public.news');
-        $data['token'] = $this->user_fcm_token;
-    
-        $payload['message'] = $data;
+
+         $payload = [
+            'message' => [
+                'token' => $this->user_fcm_token,
+                'notification' => [
+                    'title' => $this->title,
+                    'body'  => $this->body,
+                ],
+                // Always include data for SW fallback
+                'data' => [
+                    'link' => $this->url,
+                ],
+                'webpush' => [
+                    'fcm_options' => [
+                        'link' => $this->url,
+                    ],
+                ],
+            ],
+        ];
+
         $payload = json_encode($payload);
+
+
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $apiurl);
         curl_setopt($ch, CURLOPT_POST, true);

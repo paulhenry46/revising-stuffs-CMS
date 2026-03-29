@@ -56,7 +56,7 @@ Route::get('/rss/all', [RssController::class, 'posts'])->name('rss.posts');//Gen
 Route::get('/rss/{user}', [RssController::class, 'user'])->name('rss.user');//RSS specific to one user
 
 //Routes USED to use the notifications push
-if(env('FirebasePush')){
+if(env('FCM_PUSH')){
 Route::patch('/fcm-token', [PushNotificationsController::class, 'updateToken'])->name('push.fcmToken');
 }
 

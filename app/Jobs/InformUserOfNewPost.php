@@ -37,8 +37,9 @@ class InformUserOfNewPost implements ShouldQueue
         $title = __('New post of :course was created', ['course' => $this->post->course->name]);
         $body = __('It\'s about :title . Tap to open', ['title' => $this->post->title]);
         //dd($users_token);
+        $postUrl = route('post.public.view', [$this->post->slug, $this->post->id]);
         foreach($users_token as $token){
-            dispatch(new SendPushNotification($title, $body, $token ));
+            dispatch(new SendPushNotification($title, $body, $token, $postUrl ));
         }
     }
 }
