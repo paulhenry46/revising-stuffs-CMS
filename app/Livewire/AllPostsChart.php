@@ -69,23 +69,28 @@ class AllPostsChart extends Component
     private function buildMonthlyChart($postIds): void
     {
         $now = now();
+        $currentMonthStart = $now->copy()->startOfMonth();
+
         $months = collect();
-        for ($i = 11; $i >= 0; $i--) {
-            $months->push($now->copy()->subMonths($i)->format('Y-m'));
+        $cursor = $currentMonthStart->copy()->subMonthsNoOverflow(11);
+        while ($cursor->lte($currentMonthStart)) {
+            $months->push($cursor->copy());
+            $cursor->addMonthNoOverflow();
         }
 
         $downloads = Download::whereIn('post_id', $postIds)
             ->where('downloaded_at', '>=', $now->copy()->subMonths(12)->startOfMonth())
             ->get()
             ->groupBy(function ($item) {
-                return Carbon::parse($item->downloaded_at)->format('Y-m');
+                return Carbon::parse($item->downloaded_at)->startOfMonth()->format('Y-m');
             });
 
         $downloadsByPeriod = $months->map(function ($month) use ($downloads) {
-            return $downloads->has($month) ? $downloads[$month]->count() : 0;
+            $monthKey = $month->format('Y-m');
+            return $downloads->has($monthKey) ? $downloads[$monthKey]->count() : 0;
         });
 
-        $labels = $months->map(fn($m) => Carbon::createFromFormat('Y-m', $m)->translatedFormat('M Y'));
+        $labels = $months->map(fn($month) => $month->translatedFormat('M Y'));
 
         $this->buildChartData($labels, $downloadsByPeriod);
     }

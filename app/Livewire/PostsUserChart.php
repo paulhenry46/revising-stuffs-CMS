@@ -18,9 +18,13 @@ class PostsUserChart extends Component
     public function mount( User $user)
     {
         $now = now();
+        $currentMonthStart = $now->copy()->startOfMonth();
+
         $months = collect();
-        for ($i = 11; $i >= 0; $i--) {
-            $months->push($now->copy()->subMonths($i)->format('Y-m'));
+        $cursor = $currentMonthStart->copy()->subMonthsNoOverflow(11);
+        while ($cursor->lte($currentMonthStart)) {
+            $months->push($cursor->copy());
+            $cursor->addMonthNoOverflow();
         }
 
         // Get all post IDs for this user
@@ -28,14 +32,15 @@ class PostsUserChart extends Component
 
         // Query downloads for these posts, grouped by month
         $downloads = \App\Models\Download::whereIn('post_id', $postIds)
-            ->where('downloaded_at', '>=', $now->copy()->subMonths(12)->startOfMonth())
+            ->where('downloaded_at', '>=', $months->first()->startOfMonth())
             ->get()
             ->groupBy(function ($item) {
-                return \Carbon\Carbon::parse($item->downloaded_at)->format('Y-m');
+                return \Carbon\Carbon::parse($item->downloaded_at)->startOfMonth()->format('Y-m');
             });
 
         $downloadsByMonth = $months->map(function ($month) use ($downloads) {
-            return $downloads->has($month) ? $downloads[$month]->count() : 0;
+            $monthKey = $month->format('Y-m');
+            return $downloads->has($monthKey) ? $downloads[$monthKey]->count() : 0;
         });
 
 
@@ -47,9 +52,7 @@ class PostsUserChart extends Component
         $this->HistoryChart = [
             'type' => 'bar',
             'data' => [
-                'labels' => $months->map(function($m) {
-                    return \Carbon\Carbon::createFromFormat('Y-m', $m)->format('M Y');
-                }),
+                'labels' => $months->map(fn($month) => $month->translatedFormat('M Y')),
                 'datasets' => [
                     [
                         'type' => 'line',

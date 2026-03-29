@@ -1,4 +1,4 @@
-<div class="mt-6 mb-3 card bg-base-100">
+<div class=" mb-3 card bg-base-100">
     <div class="card-body">
       <div class='flex justify-between'>
         <h2 class="card-title">{{__('Downloads by months')}}</h2>
