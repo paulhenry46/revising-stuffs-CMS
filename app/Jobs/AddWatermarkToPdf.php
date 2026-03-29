@@ -10,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -80,7 +81,7 @@ class AddWatermarkToPdf implements ShouldQueue
             // Detect page dimensions and page count from the source PDF
             $pdfInfo = $this->getPdfInfo($tmpDir . '/' . $safePdf);
 
-            $latex = $this->buildLatex($post, $safePdf, $pdfInfo['width'], $pdfInfo['height'], $pdfInfo['pages']);
+            $latex = $this->buildLatex($post, $safePdf, $pdfInfo['width'], $pdfInfo['height']);
            // dd($latex);
             file_put_contents($tmpDir . '/watermark.tex', $latex);
 
@@ -105,13 +106,22 @@ class AddWatermarkToPdf implements ShouldQueue
                 return null;
             }
 
+            $finalPdf = $outputPdf;
+            if (($pdfInfo['pages'] ?? 1) > 1) {
+                $mergedPdf = $this->mergeFirstPageWithRemaining($tmpDir, $outputPdf, $tmpDir . '/' . $safePdf, (int) $pdfInfo['pages'], $file->id);
+                if (!$mergedPdf) {
+                    return null;
+                }
+                $finalPdf = $mergedPdf;
+            }
+
             // Build the destination path: same folder/name as original but with .watermarked before the extension
             $originalRelativePath = $file->file_path;
             $watermarkedRelativePath = $this->buildWatermarkedPath($originalRelativePath);
 
             $destinationPath = Storage::disk('public')->path($watermarkedRelativePath);
             Storage::disk('public')->makeDirectory(dirname($watermarkedRelativePath));
-            copy($outputPdf, $destinationPath);
+            copy($finalPdf, $destinationPath);
 
             return $watermarkedRelativePath;
         } finally {
@@ -179,9 +189,8 @@ class AddWatermarkToPdf implements ShouldQueue
      *
      * @param  float  $widthMm   PDF page width in mm
      * @param  float  $heightMm  PDF page height in mm
-     * @param  int    $pages     Total number of pages in the PDF
      */
-    private function buildLatex(Post $post, string $safePdf, float $widthMm, float $heightMm, int $pages): string
+    private function buildLatex(Post $post, string $safePdf, float $widthMm, float $heightMm): string
     {
     // --- PRÉPARATION DES DONNÉES ---
     $author     = $this->escape($post->user->name ?? 'Anonyme');
@@ -224,12 +233,11 @@ class AddWatermarkToPdf implements ShouldQueue
     $topPos      = $heightMm - 10; // 10mm du bord haut
     $written = __('Written By');
 
-    $pageList = $pages > 1 ? "1,...,{$pages}" : '1';
     $logo_height = $heightMm - 18;
     $logo_line_height = $logo_height - 10;
     $logoPath = str_replace('\\', '/', base_path('resources/png/logo.pdf')); 
     
-    $versionNumber = \DB::table('events')
+    $versionNumber = DB::table('events')
         ->where('post_id', $post->id)
         ->count() + 1;
 
@@ -256,7 +264,7 @@ class AddWatermarkToPdf implements ShouldQueue
 \\begin{document}
 
 % --- BANNER BACKGROUND & LINE ---
-\\AddToShipoutPictureBG{%
+\\AddToShipoutPictureBG*{%
   \\AtPageLowerLeft{%
   \\color{black}\\hspace{{$bannerWidth}mm}\\rule{0.2pt}{{$heightMm}mm}%
    % \\color{gray!5}\\rule{{$bannerWidth}mm}{{$heightMm}mm}%
@@ -266,7 +274,7 @@ class AddWatermarkToPdf implements ShouldQueue
 }
 
 % --- BANNER CONTENT (ARCHIVE STYLE) ---
-\\AddToShipoutPictureFG{%
+\\AddToShipoutPictureFG*{%
   \\AtPageLowerLeft{%
   \\put(2mm,2mm){\\color{gray!40}\\rule{3mm}{0.2pt}}% Horizontal
     \\put(2mm,2mm){\\color{gray!40}\\rule{0.2pt}{3mm}}% Vertical
@@ -313,16 +321,89 @@ class AddWatermarkToPdf implements ShouldQueue
   }%
 }
 
-% --- RENDER ---
-\\foreach \\p in {{$pageList}}{%
-  \\noindent\\hspace*{{$bannerWidth}mm}%
-  \\includegraphics[page=\\p,width={$widthMm2}mm]{{$safePdfPath}}%
-  \\clearpage
-}
+% --- RENDER FIRST PAGE (WITH WATERMARK) ---
+\\pdfpagewidth={$totalWidth}mm
+\\pdfpageheight={$heightMm}mm
+\\noindent\\hspace*{{$bannerWidth}mm}%
+\\includegraphics[page=1,width={$widthMm2}mm]{{$safePdfPath}}%
 
 \\end{document}
 LATEX;
 }
+
+    /**
+     * Merge the generated first-page watermark PDF with pages 2..N from the original PDF.
+     */
+    private function mergeFirstPageWithRemaining(string $tmpDir, string $firstPagePdf, string $sourcePdf, int $pages, int $fileId): ?string
+    {
+        if ($pages <= 1) {
+            return $firstPagePdf;
+        }
+
+        $mergedPdf = $tmpDir . '/watermark-merged.pdf';
+        $finder = new ExecutableFinder();
+
+        $qpdfPath = $finder->find('qpdf');
+        if ($qpdfPath) {
+            $process = new Process([
+                $qpdfPath,
+                '--empty',
+                '--pages',
+                $firstPagePdf,
+                '1',
+                $sourcePdf,
+                '2-z',
+                '--',
+                $mergedPdf,
+            ]);
+            $process->run();
+
+            if ($process->isSuccessful() && file_exists($mergedPdf)) {
+                return $mergedPdf;
+            }
+
+            Log::warning('AddWatermarkToPdf: qpdf merge failed for file ' . $fileId . ': ' . $process->getErrorOutput());
+        }
+
+        $pdfSeparatePath = $finder->find('pdfseparate');
+        $pdfUnitePath = $finder->find('pdfunite');
+        if ($pdfSeparatePath && $pdfUnitePath) {
+            $splitPattern = $tmpDir . '/source-page-%d.pdf';
+            $splitProcess = new Process([
+                $pdfSeparatePath,
+                '-f',
+                '2',
+                '-l',
+                (string) $pages,
+                $sourcePdf,
+                $splitPattern,
+            ]);
+            $splitProcess->run();
+
+            if ($splitProcess->isSuccessful()) {
+                $remainingPages = glob($tmpDir . '/source-page-*.pdf') ?: [];
+                natsort($remainingPages);
+                $remainingPages = array_values($remainingPages);
+
+                if (!empty($remainingPages)) {
+                    $mergeArgs = array_merge([$pdfUnitePath, $firstPagePdf], $remainingPages, [$mergedPdf]);
+                    $mergeProcess = new Process($mergeArgs);
+                    $mergeProcess->run();
+
+                    if ($mergeProcess->isSuccessful() && file_exists($mergedPdf)) {
+                        return $mergedPdf;
+                    }
+
+                    Log::warning('AddWatermarkToPdf: pdfunite merge failed for file ' . $fileId . ': ' . $mergeProcess->getErrorOutput());
+                }
+            } else {
+                Log::warning('AddWatermarkToPdf: pdfseparate split failed for file ' . $fileId . ': ' . $splitProcess->getErrorOutput());
+            }
+        }
+
+        Log::error('AddWatermarkToPdf: no working PDF merge strategy found for file ' . $fileId . ' (tried qpdf and pdfseparate/pdfunite).');
+        return null;
+    }
 
     /**
      * Escape special LaTeX characters.
