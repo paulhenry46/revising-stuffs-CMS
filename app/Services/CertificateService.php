@@ -123,7 +123,7 @@ class CertificateService
             [$start, $end] = $this->parseAcademicYear($year);
             $posts = Post::where('user_id', $user->id)
                 ->whereNotNull('certified_at')
-                ->when($start && $end, fn($q) => $q->whereBetween('certified_at', [$start, $end]))
+                ->when($start && $end, fn($q) => $q->whereBetween('created_at', [$start, $end]))
                 ->with('course')
                 ->get();
 

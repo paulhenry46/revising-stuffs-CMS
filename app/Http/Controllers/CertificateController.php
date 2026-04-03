@@ -68,7 +68,7 @@ class CertificateController extends Controller
         if (!empty($dateRanges)) {
             $query->where(function ($q) use ($dateRanges) {
                 foreach ($dateRanges as [$start, $end]) {
-                    $q->orWhereBetween('certified_at', [$start, $end]);
+                    $q->orWhereBetween('created_at', [$start, $end]);
                 }
             });
         }
