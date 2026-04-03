@@ -51,9 +51,37 @@ class CertificateController extends Controller
             'years.*' => ['required', 'string', 'max:20'],
         ]);
 
-        // Count total views for this user's posts
-        $postIds    = Post::where('user_id', $user->id)->pluck('id')->toArray();
-        $totalViews = File::whereIn('post_id', $postIds)->sum('download_count');
+        // Build query to get posts within the selected years
+        $query = Post::where('user_id', $user->id)
+            ->whereNotNull('certified_at');
+
+        // Filter by selected years
+        $dateRanges = [];
+        foreach ($validated['years'] as $year) {
+            [$start, $end] = $service->parseAcademicYear($year);
+            if ($start && $end) {
+                $dateRanges[] = [$start, $end];
+            }
+        }
+
+        // Apply date range filters
+        if (!empty($dateRanges)) {
+            $query->where(function ($q) use ($dateRanges) {
+                foreach ($dateRanges as [$start, $end]) {
+                    $q->orWhereBetween('certified_at', [$start, $end]);
+                }
+            });
+        }
+
+        $posts = $query->get();
+        $certifiedCount = $posts->count();
+
+        // Calculate total views from these posts
+        $totalViews = 0;
+        if ($certifiedCount > 0) {
+            $postIds = $posts->pluck('id')->toArray();
+            $totalViews = File::whereIn('post_id', $postIds)->sum('download_count');
+        }
 
         $certificate = Certificate::create([
             'user_id'     => $user->id,

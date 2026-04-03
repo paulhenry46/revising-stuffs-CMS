@@ -264,7 +264,7 @@ LATEX;
      * Parse an academic year string like "2024 - 2025" into a date range.
      * Returns [start, end] as strings suitable for whereBetween, or [null, null].
      */
-    private function parseAcademicYear(string $year): array
+    public function parseAcademicYear(string $year): array
     {
         // Matches "2024 - 2025", "2024-2025", "2024/2025", etc.
         if (preg_match('/(\d{4})\s*[-\/]\s*(\d{4})/', $year, $m)) {
