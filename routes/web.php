@@ -43,6 +43,12 @@ use App\Http\Controllers\EmailDomainRuleController;
 
 Route::get('/storage/{path}', [StorageController::class, 'getFile'])->where('path', '.*')->name('storage');
 
+Route::get('/firebase-messaging-sw.js', function () {
+    return response()
+        ->view('pwa.firebase-messaging-sw')
+        ->header('Content-Type', 'application/javascript');
+})->name('pwa.firebase-messaging-sw');
+
 // Public certificate verification
 Route::get('/verify/{certId}', [CertificateController::class, 'verify'])->name('certificates.verify');
 

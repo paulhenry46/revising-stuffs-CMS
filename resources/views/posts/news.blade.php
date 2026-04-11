@@ -52,7 +52,7 @@ function requestNotiffactionPermission(){
 
 function registerSW(){
 
-    navigator.serviceWorker.register("firebase-messaging-sw.js").then(registration => {
+    navigator.serviceWorker.register("{{ route('pwa.firebase-messaging-sw') }}").then(registration => {
     getToken(messaging, {
         serviceWorkerRegistration: registration,
         vapidKey: '{{env('FCM_VAPID_PUBLIC_KEY')}}'
