@@ -17,6 +17,8 @@ class ExtractPdfExcerpt implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    private const WORD_LIMIT = 200;
+
     protected int $postId;
 
     protected string $pdfPath;
@@ -67,8 +69,9 @@ class ExtractPdfExcerpt implements ShouldQueue
             return;
         }
 
-        $words = preg_split('/\s+/u', $text, 201, PREG_SPLIT_NO_EMPTY) ?: [];
-        $excerpt = implode(' ', array_slice($words, 0, 200));
+        $splitLimit = self::WORD_LIMIT + 1;
+        $words = preg_split('/\s+/u', $text, $splitLimit, PREG_SPLIT_NO_EMPTY) ?: [];
+        $excerpt = implode(' ', array_slice($words, 0, self::WORD_LIMIT));
 
         PdfExcerpt::updateOrCreate(
             ['post_id' => $this->postId],

@@ -162,7 +162,7 @@
                 <p>{{$post->description}}</p>
                 @if($post->pdfExcerpt && $post->pdfExcerpt->excerpt)
                 <h2 class="card-title mb-2 mt-4">{{__('PDF excerpt')}}</h2>
-                <p>{{$post->pdfExcerpt->excerpt}}</p>
+                <p>{{ e($post->pdfExcerpt->excerpt) }}</p>
                 @endif
 
                   <ul class="mt-4 menu menu-lg bg-white dark:bg-base-100 w-full rounded-box">
@@ -562,7 +562,7 @@
                 <p>{{$post->description}}</p>
                 @if($post->pdfExcerpt && $post->pdfExcerpt->excerpt)
                 <h2 class="card-title mb-2 mt-4">{{__('PDF excerpt')}}</h2>
-                <p>{{$post->pdfExcerpt->excerpt}}</p>
+                <p>{{ e($post->pdfExcerpt->excerpt) }}</p>
                 @endif
                 <h2 class="card-title mb-2 mt-4">{{__('Download')}}</h2>
                   <ul class="mt-4 menu menu-lg bg-white dark:bg-base-100 w-full rounded-box">

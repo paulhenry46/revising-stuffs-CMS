@@ -123,7 +123,6 @@ class EditPrimaryFiles extends Component
                 'update_type' => $this->update_type,
                 'light_image_library' => $this->light_image_library,
                 'dark_image_library' => $this->dark_image_library,
-                '',
             ],
             // Validation rules to apply...
             $this->rules(),
@@ -142,7 +141,7 @@ class EditPrimaryFiles extends Component
 
             // Process Dark Files/images
             if ($this->dark_version) {
-                if (empty($this->light_image_files)) {
+                if (empty($this->dark_image_files)) {
                     $dark_data = $this->processNumericFile('dark_file', 'dark');
                 } else {
                     $dark_data = $this->processHandWrittenFiles($this->dark_image_files, $this->dark_image_library);
