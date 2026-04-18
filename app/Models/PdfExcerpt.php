@@ -11,6 +11,10 @@ class PdfExcerpt extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'toc' => 'array',
+    ];
+
     public function post()
     {
         return $this->belongsTo(Post::class);

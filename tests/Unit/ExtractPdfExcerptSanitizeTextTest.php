@@ -20,4 +20,33 @@ class ExtractPdfExcerptSanitizeTextTest extends TestCase
 
         $this->assertSame('Révision été 2026 chapitre 4', ExtractPdfExcerpt::sanitizeText($input));
     }
+
+    public function test_it_parses_flat_toc_from_pdftk_dump_data(): void
+    {
+        $dumpData = <<<'TXT'
+BookmarkBegin
+BookmarkTitle: Applications linéaires
+BookmarkLevel: 1
+BookmarkPageNumber: 1
+BookmarkBegin
+BookmarkTitle: Images et noyaux
+BookmarkLevel: 2
+BookmarkPageNumber: 3
+PageMediaBegin
+PageMediaNumber: 1
+TXT;
+
+        $this->assertSame([
+            [
+                'title' => 'Applications linéaires',
+                'level' => 1,
+                'page' => 1,
+            ],
+            [
+                'title' => 'Images et noyaux',
+                'level' => 2,
+                'page' => 3,
+            ],
+        ], ExtractPdfExcerpt::parseTocDumpData($dumpData));
+    }
 }

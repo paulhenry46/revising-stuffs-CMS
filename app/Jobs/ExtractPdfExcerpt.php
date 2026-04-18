@@ -43,39 +43,15 @@ class ExtractPdfExcerpt implements ShouldQueue
         }
 
         $finder = new ExecutableFinder;
-        $pdfToTextPath = $finder->find('pdftotext');
-        if (! $pdfToTextPath) {
-            Log::warning('ExtractPdfExcerpt: pdftotext not found, skipping post '.$this->postId);
-
-            return;
-        }
-
-        $process = new Process([$pdfToTextPath, '-nopgbrk', $sourcePath, '-']);
-        $process->run();
-
-        if (! $process->isSuccessful()) {
-            Log::warning('ExtractPdfExcerpt: pdftotext failed for post '.$this->postId.': '.$process->getErrorOutput());
-
-            return;
-        }
-
-        $text = self::sanitizeText((string) $process->getOutput());
-        if ($text === '') {
-            PdfExcerpt::updateOrCreate(
-                ['post_id' => $this->postId],
-                ['excerpt' => null]
-            );
-
-            return;
-        }
-
-        $splitLimit = self::WORD_LIMIT + 1;
-        $words = preg_split('/\s+/u', $text, $splitLimit, PREG_SPLIT_NO_EMPTY) ?: [];
-        $excerpt = implode(' ', array_slice($words, 0, self::WORD_LIMIT));
+        $excerpt = self::extractExcerpt($finder, $sourcePath, $this->postId);
+        $toc = self::extractToc($finder, $sourcePath, $this->postId);
 
         PdfExcerpt::updateOrCreate(
             ['post_id' => $this->postId],
-            ['excerpt' => $excerpt]
+            [
+                'excerpt' => $excerpt,
+                'toc' => $toc,
+            ]
         );
     }
 
@@ -84,5 +60,74 @@ class ExtractPdfExcerpt implements ShouldQueue
         $text = preg_replace('/[^\p{Latin}\p{N}\s]/u', ' ', $text) ?? '';
 
         return preg_replace('/\s+/u', ' ', trim($text)) ?? '';
+    }
+
+    /**
+     * @return array<int, array{title: string, level: int, page: int}>|null
+     */
+    public static function extractToc(ExecutableFinder $finder, string $sourcePath, int $postId): ?array
+    {
+        $pdfTkPath = $finder->find('pdftk');
+        if (! $pdfTkPath) {
+            Log::warning('ExtractPdfExcerpt: pdftk not found, TOC skipped for post '.$postId);
+
+            return null;
+        }
+
+        $process = new Process([$pdfTkPath, $sourcePath, 'dump_data']);
+        $process->run();
+
+        if (! $process->isSuccessful()) {
+            Log::warning('ExtractPdfExcerpt: pdftk failed for post '.$postId.': '.$process->getErrorOutput());
+
+            return null;
+        }
+
+        return self::parseTocDumpData((string) $process->getOutput());
+    }
+
+    public static function extractExcerpt(ExecutableFinder $finder, string $sourcePath, int $postId): ?string
+    {
+        $pdfToTextPath = $finder->find('pdftotext');
+        if (! $pdfToTextPath) {
+            Log::warning('ExtractPdfExcerpt: pdftotext not found, excerpt skipped for post '.$postId);
+
+            return null;
+        }
+
+        $process = new Process([$pdfToTextPath, '-nopgbrk', $sourcePath, '-']);
+        $process->run();
+
+        if (! $process->isSuccessful()) {
+            Log::warning('ExtractPdfExcerpt: pdftotext failed for post '.$postId.': '.$process->getErrorOutput());
+
+            return null;
+        }
+
+        $text = self::sanitizeText((string) $process->getOutput());
+        if ($text === '') {
+            return null;
+        }
+
+        $splitLimit = self::WORD_LIMIT + 1;
+        $words = preg_split('/\s+/u', $text, $splitLimit, PREG_SPLIT_NO_EMPTY) ?: [];
+
+        return implode(' ', array_slice($words, 0, self::WORD_LIMIT));
+    }
+
+    /**
+     * @return array<int, array{title: string, level: int, page: int}>
+     */
+    public static function parseTocDumpData(string $dumpData): array
+    {
+        preg_match_all('/BookmarkBegin\s+BookmarkTitle:\s*(.+?)\s+BookmarkLevel:\s*(\d+)\s+BookmarkPageNumber:\s*(\d+)/su', $dumpData, $matches, PREG_SET_ORDER);
+
+        return collect($matches)->map(function (array $match) {
+            return [
+                'title' => trim($match[1]),
+                'level' => (int) $match[2],
+                'page' => (int) $match[3],
+            ];
+        })->values()->all();
     }
 }
