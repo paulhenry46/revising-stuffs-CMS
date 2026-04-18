@@ -29,7 +29,7 @@ BookmarkTitle: Applications lin&eacute;aires
 BookmarkLevel: 1
 BookmarkPageNumber: 1
 BookmarkBegin
-BookmarkTitle: Images et noyaux
+BookmarkTitle: Images et noyaux \u00C9
 BookmarkLevel: 2
 BookmarkPageNumber: 3
 PageMediaBegin
@@ -43,7 +43,7 @@ TXT;
                 'page' => 1,
             ],
             [
-                'title' => 'Images et noyaux',
+                'title' => 'Images et noyaux É',
                 'level' => 2,
                 'page' => 3,
             ],

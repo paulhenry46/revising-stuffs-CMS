@@ -124,13 +124,20 @@ class ExtractPdfExcerpt implements ShouldQueue
         preg_match_all('/BookmarkBegin\s+BookmarkTitle:\s*(.+?)\s+BookmarkLevel:\s*(\d+)\s+BookmarkPageNumber:\s*(\d+)/su', $dumpData, $matches, PREG_SET_ORDER);
 
         return collect($matches)->map(function (array $match) {
-            $decodedTitle = html_entity_decode(trim($match[1]), ENT_QUOTES | ENT_HTML5, 'UTF-8');
-
             return [
-                'title' => $decodedTitle,
+                'title' => self::decodeTocTitle(trim($match[1])),
                 'level' => (int) $match[2],
                 'page' => (int) $match[3],
             ];
         })->values()->all();
+    }
+
+    private static function decodeTocTitle(string $title): string
+    {
+        $title = html_entity_decode($title, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        return preg_replace_callback('/\\\\u([0-9a-fA-F]{4})/u', function (array $match): string {
+            return mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UCS-2BE');
+        }, $title) ?? $title;
     }
 }
