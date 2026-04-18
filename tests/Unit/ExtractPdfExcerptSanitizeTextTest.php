@@ -25,7 +25,7 @@ class ExtractPdfExcerptSanitizeTextTest extends TestCase
     {
         $dumpData = <<<'TXT'
 BookmarkBegin
-BookmarkTitle: Applications linéaires
+BookmarkTitle: Applications lin&eacute;aires
 BookmarkLevel: 1
 BookmarkPageNumber: 1
 BookmarkBegin
