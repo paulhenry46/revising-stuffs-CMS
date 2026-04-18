@@ -20,6 +20,7 @@ return new class extends Migration
                 ->onDelete('cascade')
                 ->unique();
             $table->text('excerpt')->nullable();
+            $table->json('toc')->nullable();
         });
     }
 
