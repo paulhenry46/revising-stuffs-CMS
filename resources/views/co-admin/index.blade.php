@@ -21,7 +21,7 @@
                 <div class="bg-white/25 dark:bg-base-100/25 gap-6 lg:gap-8 p-6 lg:p-8">
                     <x-info-message />
 
-                    <div role="tablist" class="tabs tabs-bordered">
+                    <div role="tablist" class="tabs tabs-border">
                         {{-- Courses Tab --}}
                         <input type="radio" name="co_admin_tabs" role="tab" class="tab" aria-label="{{ __('Courses') }}" checked />
                         <div role="tabpanel" class="tab-content p-10">

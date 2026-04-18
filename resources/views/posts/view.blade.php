@@ -160,6 +160,7 @@
 @endif
                 <h2 class="card-title mb-2 mt-4">{{__('Description')}}</h2>
                 <p>{{$post->description}}</p>
+                
 
                   <ul class="mt-4 menu menu-lg bg-white dark:bg-base-100 w-full rounded-box">
                   @foreach($post->files as $file)
@@ -348,7 +349,58 @@
                       {{__('Nobody commented that post.')}}
                     </div> @endforelse
                 </div>
-                <div class="col-span-3 lg:col-span-1"> @if( ($files->contains('type', 'source')) or ($files->contains('type', 'exercise')) or ($files->contains('type', 'other')) or ($files->contains('type', 'exercise correction'))) <ul class="menu dark:bg-base-200 bg-white w-full rounded-box">
+                <div class="col-span-3 lg:col-span-1"> 
+
+                  @if($post->pdfExcerpt && ($post->pdfExcerpt->excerpt || (is_array($post->pdfExcerpt->toc) && count($post->pdfExcerpt->toc) > 0)))
+                <div class="collapse collapse-arrow bg-base-100 mb-4 rounded-lg">
+                  <input type="checkbox" aria-label="{{__('Toggle PDF details')}}" />
+                  <div class="collapse-title text-lg font-semibold">{{__('PDF details')}}</div>
+                  <div class="collapse-content">
+                    <div role="tablist" class="tabs tabs-border">
+                      <input type="radio" name="pdf_details_desktop_{{$post->id}}" role="tab" class="tab" aria-label="{{__('Excerpt')}}"  />
+                      <div role="tabpanel" class="tab-content pt-4">
+                        @if($post->pdfExcerpt->excerpt)
+                        <p>{{ $post->pdfExcerpt->excerpt }}</p>
+                        @else
+                        <p>{{__('No excerpt available.')}}</p>
+                        @endif
+                      </div>
+                      <input type="radio" name="pdf_details_desktop_{{$post->id}}" role="tab" class="tab" aria-label="{{__('TOC')}}" checked />
+                      <div role="tabpanel" class="tab-content pt-4">
+                        @if(is_array($post->pdfExcerpt->toc) && count($post->pdfExcerpt->toc) > 0)
+                        <ul class="space-y-2">
+                          @foreach($post->pdfExcerpt->toc as $tocItem)
+                          @php
+                          $tocLevel = max(1, (int) ($tocItem['level'] ?? 1));
+                          @endphp
+                          <li class="flex items-start justify-between gap-2" style="padding-left: {{($tocLevel - 1) * 1.25}}rem;">
+                            <span class="
+                            @if ($tocLevel == 1)
+                              decoration-4 underline decoration-primary
+                            @elseif ($tocLevel == 2)
+                            decoration-4 underline decoration-secondary
+                            @endif
+                            "
+                            
+                            >{{ $tocItem['title'] ?? '' }}</span>
+                            @if(!empty($tocItem['page']))
+                            <span class="badge badge-outline badge-sm">{{__('Page')}} {{$tocItem['page']}}</span>
+                            @endif
+                          </li>
+                          @endforeach
+                        </ul>
+                        @else
+                        <p>{{__('No table of contents available.')}}</p>
+                        @endif
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                @endif
+                  
+                  
+                  
+                  @if( ($files->contains('type', 'source')) or ($files->contains('type', 'exercise')) or ($files->contains('type', 'other')) or ($files->contains('type', 'exercise correction'))) <ul class="menu dark:bg-base-200 bg-white w-full rounded-box">
                     <li>
                       <h2 class="card-title ">{{__('Complementary files')}}</h2>
                       <ul> @foreach($files as $file) @if($file->type == 'source') <li>
@@ -468,7 +520,12 @@
                         </div>
                       </div>
                     </div>
+
+
+                    
+
                   </div>
+                  
                 </div>
               </div>
               </section>
@@ -556,7 +613,8 @@
 @endif
                 <h2 class="card-title mb-2 mt-4">{{__('Description')}}</h2>
                 <p>{{$post->description}}</p>
-                <h2 class="card-title mb-2 mt-4">{{__('Download')}}</h2>
+                
+                
                   <ul class="mt-4 menu menu-lg bg-white dark:bg-base-100 w-full rounded-box">
                   @foreach($post->files as $file)
                     @if ($file->type == 'primary light')
@@ -816,6 +874,56 @@
                           </ol>
                     </div>
                   </div>
+
+
+                  @if($post->pdfExcerpt && ($post->pdfExcerpt->excerpt || (is_array($post->pdfExcerpt->toc) && count($post->pdfExcerpt->toc) > 0)))
+                <div class="collapse collapse-arrow bg-base-100 mt-4 rounded-lg">
+                  <input type="checkbox" aria-label="{{__('Toggle PDF details')}}" />
+                  <div class="collapse-title text-lg font-semibold">{{__('PDF details')}}</div>
+                  <div class="collapse-content">
+                    <div role="tablist" class="tabs tabs-border">
+                      <input type="radio" name="pdf_details_mobile_{{$post->id}}" role="tab" class="tab" aria-label="{{__('Excerpt')}}"  />
+                      <div role="tabpanel" class="tab-content pt-4">
+                        @if($post->pdfExcerpt->excerpt)
+                        <p>{{ $post->pdfExcerpt->excerpt }}</p>
+                        @else
+                        <p>{{__('No excerpt available.')}}</p>
+                        @endif
+                      </div>
+                      <input type="radio" name="pdf_details_mobile_{{$post->id}}" role="tab" class="tab" aria-label="{{__('TOC')}}" checked />
+                      <div role="tabpanel" class="tab-content pt-4">
+                        @if(is_array($post->pdfExcerpt->toc) && count($post->pdfExcerpt->toc) > 0)
+                        <ul class="space-y-2">
+                          @foreach($post->pdfExcerpt->toc as $tocItem)
+                          @php
+                          $tocLevel = max(1, (int) ($tocItem['level'] ?? 1));
+                          @endphp
+                          <li class="flex items-start justify-between gap-2" style="padding-left: {{($tocLevel - 1) * 1.25}}rem;">
+                            <span class="
+                            @if ($tocLevel == 1)
+                              decoration-4 underline decoration-primary
+                            @elseif ($tocLevel == 2)
+                            decoration-4 underline decoration-secondary
+                            @endif
+                            "
+                            
+                            >{{ $tocItem['title'] ?? '' }}</span>
+                            @if(!empty($tocItem['page']))
+                            <span class="badge badge-outline badge-sm">{{__('Page')}} {{$tocItem['page']}}</span>
+                            @endif
+                          </li>
+                          @endforeach
+                        </ul>
+                        @else
+                        <p>{{__('No table of contents available.')}}</p>
+                        @endif
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                @endif
+
+
                 </div>
               </div>
             </div>

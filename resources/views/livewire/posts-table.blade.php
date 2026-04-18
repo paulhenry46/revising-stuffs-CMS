@@ -25,7 +25,7 @@
 <div class="bg-white/25 dark:bg-base-100/25 gap-6 lg:gap-8 p-6 lg:p-8">
     <x-info-message/>
 
-    <div role="tablist" class="tabs tabs-bordered mb-6">
+    <div role="tablist" class="tabs tabs-border mb-6">
 
         {{-- TAB 1: Posts to validate --}}
         <input type="radio" name="moderate_tabs" role="tab" class="tab"
