@@ -21,7 +21,7 @@ class ExtractPdfExcerptSanitizeTextTest extends TestCase
         $this->assertSame('Révision été 2026 chapitre 4', ExtractPdfExcerpt::sanitizeText($input));
     }
 
-    public function test_it_parses_flat_toc_from_mutool_outline(): void
+    public function test_it_parses_hierarchical_toc_from_mutool_outline(): void
     {
         $outline = <<<'TXT'
 +       "Applications linéaires"        #nameddest=chapter.2
