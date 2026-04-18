@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Jobs\ExtractPdfExcerpt;
+use App\Models\PdfExcerpt;
 use PHPUnit\Framework\TestCase;
 
 class ExtractPdfExcerptSanitizeTextTest extends TestCase
@@ -48,5 +49,23 @@ TXT;
                 'page' => 3,
             ],
         ], ExtractPdfExcerpt::parseTocDumpData($dumpData));
+    }
+
+    public function test_pdf_excerpt_json_encoding_keeps_utf8_characters_unescaped(): void
+    {
+        $model = new class extends PdfExcerpt
+        {
+            public function encodeForStorage($value): string
+            {
+                return $this->asJson($value);
+            }
+        };
+
+        $json = $model->encodeForStorage([
+            ['title' => 'Électrostatique', 'level' => 2, 'page' => 1],
+        ]);
+
+        $this->assertStringContainsString('Électrostatique', $json);
+        $this->assertStringNotContainsString('\u00c9', strtolower($json));
     }
 }

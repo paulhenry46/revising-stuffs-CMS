@@ -15,6 +15,11 @@ class PdfExcerpt extends Model
         'toc' => 'array',
     ];
 
+    protected function asJson($value, $flags = 0)
+    {
+        return json_encode($value, $flags | JSON_UNESCAPED_UNICODE);
+    }
+
     public function post()
     {
         return $this->belongsTo(Post::class);
