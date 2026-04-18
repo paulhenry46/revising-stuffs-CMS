@@ -120,6 +120,7 @@ class ExtractPdfExcerpt implements ShouldQueue
      */
     public static function parseTocDumpData(string $dumpData): array
     {
+        // Matches each BookmarkBegin block from `pdftk <file> dump_data` as: title, level, page.
         preg_match_all('/BookmarkBegin\s+BookmarkTitle:\s*(.+?)\s+BookmarkLevel:\s*(\d+)\s+BookmarkPageNumber:\s*(\d+)/su', $dumpData, $matches, PREG_SET_ORDER);
 
         return collect($matches)->map(function (array $match) {
