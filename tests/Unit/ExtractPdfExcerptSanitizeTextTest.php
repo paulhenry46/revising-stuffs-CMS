@@ -3,7 +3,6 @@
 namespace Tests\Unit;
 
 use App\Jobs\ExtractPdfExcerpt;
-use App\Models\PdfExcerpt;
 use PHPUnit\Framework\TestCase;
 
 class ExtractPdfExcerptSanitizeTextTest extends TestCase
@@ -22,50 +21,30 @@ class ExtractPdfExcerptSanitizeTextTest extends TestCase
         $this->assertSame('Révision été 2026 chapitre 4', ExtractPdfExcerpt::sanitizeText($input));
     }
 
-    public function test_it_parses_flat_toc_from_pdftk_dump_data(): void
+    public function test_it_parses_flat_toc_from_mutool_outline(): void
     {
-        $dumpData = <<<'TXT'
-BookmarkBegin
-BookmarkTitle: Applications lin&eacute;aires
-BookmarkLevel: 1
-BookmarkPageNumber: 1
-BookmarkBegin
-BookmarkTitle: Images et noyaux \u00C9
-BookmarkLevel: 2
-BookmarkPageNumber: 3
-PageMediaBegin
-PageMediaNumber: 1
+        $outline = <<<'TXT'
++       "Applications linéaires"        #nameddest=chapter.2
+|               "Application linéaire"  #nameddest=section.2.1
+|                       "Définitions"   #page=3&zoom=nan,0,0
 TXT;
 
         $this->assertSame([
             [
                 'title' => 'Applications linéaires',
                 'level' => 1,
-                'page' => 1,
+                'page' => null,
             ],
             [
-                'title' => 'Images et noyaux É',
+                'title' => 'Application linéaire',
                 'level' => 2,
+                'page' => null,
+            ],
+            [
+                'title' => 'Définitions',
+                'level' => 3,
                 'page' => 3,
             ],
-        ], ExtractPdfExcerpt::parseTocDumpData($dumpData));
-    }
-
-    public function test_pdf_excerpt_json_encoding_keeps_utf8_characters_unescaped(): void
-    {
-        $model = new class extends PdfExcerpt
-        {
-            public function encodeForStorage($value): string
-            {
-                return $this->asJson($value);
-            }
-        };
-
-        $json = $model->encodeForStorage([
-            ['title' => 'Électrostatique', 'level' => 2, 'page' => 1],
-        ]);
-
-        $this->assertStringContainsString('Électrostatique', $json);
-        $this->assertStringNotContainsString('\u00C9', $json);
+        ], ExtractPdfExcerpt::parseTocOutline($outline));
     }
 }

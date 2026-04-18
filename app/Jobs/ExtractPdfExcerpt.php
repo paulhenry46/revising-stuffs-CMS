@@ -63,27 +63,27 @@ class ExtractPdfExcerpt implements ShouldQueue
     }
 
     /**
-     * @return array<int, array{title: string, level: int, page: int}>|null
+     * @return array<int, array{title: string, level: int, page: int|null}>|null
      */
     public static function extractToc(ExecutableFinder $finder, string $sourcePath, int $postId): ?array
     {
-        $pdfTkPath = $finder->find('pdftk');
-        if (! $pdfTkPath) {
-            Log::warning('ExtractPdfExcerpt: pdftk not found, TOC skipped for post '.$postId);
+        $mutoolPath = $finder->find('mutool');
+        if (! $mutoolPath) {
+            Log::warning('ExtractPdfExcerpt: mutool not found, TOC skipped for post '.$postId);
 
             return null;
         }
 
-        $process = new Process([$pdfTkPath, $sourcePath, 'dump_data']);
+        $process = new Process([$mutoolPath, 'show', $sourcePath, 'outline']);
         $process->run();
 
         if (! $process->isSuccessful()) {
-            Log::warning('ExtractPdfExcerpt: pdftk failed for post '.$postId.': '.$process->getErrorOutput());
+            Log::warning('ExtractPdfExcerpt: mutool failed for post '.$postId.': '.$process->getErrorOutput());
 
             return null;
         }
 
-        return self::parseTocDumpData((string) $process->getOutput());
+        return self::parseTocOutline((string) $process->getOutput());
     }
 
     public static function extractExcerpt(ExecutableFinder $finder, string $sourcePath, int $postId): ?string
@@ -116,36 +116,38 @@ class ExtractPdfExcerpt implements ShouldQueue
     }
 
     /**
-     * @return array<int, array{title: string, level: int, page: int}>
+     * @return array<int, array{title: string, level: int, page: int|null}>
      */
-    public static function parseTocDumpData(string $dumpData): array
+    public static function parseTocOutline(string $outline): array
     {
-        // Matches each BookmarkBegin block from `pdftk <file> dump_data` as: title, level, page.
-        preg_match_all('/BookmarkBegin\s+BookmarkTitle:\s*(.+?)\s+BookmarkLevel:\s*(\d+)\s+BookmarkPageNumber:\s*(\d+)/su', $dumpData, $matches, PREG_SET_ORDER);
+        return collect(preg_split('/\R/u', $outline) ?: [])
+            ->map(function (string $line): ?array {
+                if (! preg_match('/"([^"]+)"/u', $line, $titleMatch, PREG_OFFSET_CAPTURE)) {
+                    return null;
+                }
 
-        return collect($matches)->map(function (array $match) {
-            return [
-                'title' => self::decodeTocTitle(trim($match[1])),
-                'level' => (int) $match[2],
-                'page' => (int) $match[3],
-            ];
-        })->values()->all();
-    }
+                $title = trim($titleMatch[1][0]);
+                if ($title === '') {
+                    return null;
+                }
 
-    private static function decodeTocTitle(string $title): string
-    {
-        $title = html_entity_decode($title, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                $quoteOffset = $titleMatch[0][1];
+                $prefix = str_replace("\t", '        ', substr($line, 0, $quoteOffset));
+                $level = max(1, intdiv(strlen($prefix) + 1, 8));
 
-        $decodedTitle = preg_replace_callback('/\\\\u([0-9a-fA-F]{4})/u', function (array $match): string {
-            return mb_convert_encoding(pack('n', hexdec($match[1])), 'UTF-8', 'UCS-2BE');
-        }, $title);
+                $page = null;
+                if (preg_match('/#page=(\d+)/i', $line, $pageMatch)) {
+                    $page = (int) $pageMatch[1];
+                }
 
-        if ($decodedTitle === null) {
-            Log::warning('ExtractPdfExcerpt: failed to decode TOC unicode escapes', ['title' => $title]);
-
-            return $title;
-        }
-
-        return $decodedTitle;
+                return [
+                    'title' => $title,
+                    'level' => $level,
+                    'page' => $page,
+                ];
+            })
+            ->filter()
+            ->values()
+            ->all();
     }
 }
