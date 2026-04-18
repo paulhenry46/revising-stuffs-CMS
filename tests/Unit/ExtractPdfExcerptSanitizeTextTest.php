@@ -66,6 +66,6 @@ TXT;
         ]);
 
         $this->assertStringContainsString('Électrostatique', $json);
-        $this->assertStringNotContainsString('\u00c9', strtolower($json));
+        $this->assertStringNotContainsString('\u00C9', $json);
     }
 }

@@ -15,6 +15,7 @@ class PdfExcerpt extends Model
         'toc' => 'array',
     ];
 
+    /** Keep accented TOC titles readable in serialized JSON output. */
     protected function asJson($value, $flags = 0)
     {
         return json_encode($value, $flags | JSON_UNESCAPED_UNICODE);
