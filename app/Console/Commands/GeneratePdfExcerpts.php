@@ -13,7 +13,7 @@ class GeneratePdfExcerpts extends Command
      *
      * @var string
      */
-    protected $signature = 'rscms:generatePdfExcerpts';
+    protected $signature = 'rscms:generatePdfExcerpts {--queued : Dispatch jobs to the queue instead of running synchronously}';
 
     /**
      * The console command description.
@@ -46,6 +46,8 @@ class GeneratePdfExcerpts extends Command
             return 0;
         }
 
+        $runQueued = (bool) $this->option('queued');
+
         $bar = $this->output->createProgressBar($posts->count());
         $bar->start();
 
@@ -59,14 +61,19 @@ class GeneratePdfExcerpts extends Command
                 continue;
             }
 
-            ExtractPdfExcerpt::dispatch($post->id, $lightFile->file_path);
+            if ($runQueued) {
+                ExtractPdfExcerpt::dispatch($post->id, $lightFile->file_path);
+            } else {
+                ExtractPdfExcerpt::dispatchSync($post->id, $lightFile->file_path);
+            }
             $dispatched++;
             $bar->advance();
         }
 
         $bar->finish();
         $this->newLine();
-        $this->info("Dispatched excerpt generation for {$dispatched} post(s).");
+        $modeLabel = $runQueued ? 'queued' : 'synchronous';
+        $this->info("Dispatched excerpt generation for {$dispatched} post(s) in {$modeLabel} mode.");
 
         return 0;
     }
