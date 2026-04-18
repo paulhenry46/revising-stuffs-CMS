@@ -163,6 +163,12 @@ class ExtractPdfExcerpt implements ShouldQueue
 
         return $entries->map(function (array $entry) use ($baseIndent): array {
             $relativeIndent = max(0, $entry['indent'] - $baseIndent);
+            if ($relativeIndent % self::MUTOOL_INDENT_SIZE !== 0) {
+                Log::warning('ExtractPdfExcerpt: unexpected mutool TOC indentation', [
+                    'title' => $entry['title'],
+                    'relative_indent' => $relativeIndent,
+                ]);
+            }
             $levelOffset = (int) ($relativeIndent / self::MUTOOL_INDENT_SIZE);
             $level = $levelOffset + self::MIN_TOC_LEVEL;
 

@@ -55,6 +55,7 @@ TXT;
 ??      "Préfixe inattendu" #nameddest=section.2.1
 TXT;
 
+        // Non-standard prefixes are tolerated; level is inferred from quote offset indentation.
         $this->assertSame([
             [
                 'title' => 'Sans préfixe',
