@@ -59,7 +59,7 @@ class ExtractPdfExcerpt implements ShouldQueue
             return;
         }
 
-        $text = trim((string) $process->getOutput());
+        $text = self::sanitizeText((string) $process->getOutput());
         if ($text === '') {
             PdfExcerpt::updateOrCreate(
                 ['post_id' => $this->postId],
@@ -77,5 +77,12 @@ class ExtractPdfExcerpt implements ShouldQueue
             ['post_id' => $this->postId],
             ['excerpt' => $excerpt]
         );
+    }
+
+    public static function sanitizeText(string $text): string
+    {
+        $text = preg_replace('/[^\p{Latin}\p{N}\s]/u', ' ', $text) ?? '';
+
+        return preg_replace('/\s+/u', ' ', trim($text)) ?? '';
     }
 }
