@@ -141,7 +141,7 @@ class ExtractPdfExcerpt implements ShouldQueue
         }, $title);
 
         if ($decodedTitle === null) {
-            Log::warning('ExtractPdfExcerpt: failed to decode TOC unicode escapes');
+            Log::warning('ExtractPdfExcerpt: failed to decode TOC unicode escapes', ['title' => $title]);
 
             return $title;
         }
