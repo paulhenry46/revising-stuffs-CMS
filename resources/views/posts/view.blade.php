@@ -374,7 +374,15 @@
                           $tocLevel = max(1, (int) ($tocItem['level'] ?? 1));
                           @endphp
                           <li class="flex items-start justify-between gap-2" style="padding-left: {{($tocLevel - 1) * 1.25}}rem;">
-                            <span>{{ $tocItem['title'] ?? '' }}</span>
+                            <span class="
+                            @if ($tocLevel == 1)
+                              decoration-4 underline decoration-primary
+                            @elseif ($tocLevel == 2)
+                            decoration-4 underline decoration-secondary
+                            @endif
+                            "
+                            
+                            >{{ $tocItem['title'] ?? '' }}</span>
                             @if(!empty($tocItem['page']))
                             <span class="badge badge-outline badge-sm">{{__('Page')}} {{$tocItem['page']}}</span>
                             @endif
@@ -873,7 +881,7 @@
                   <input type="checkbox" aria-label="{{__('Toggle PDF details')}}" />
                   <div class="collapse-title text-lg font-semibold">{{__('PDF details')}}</div>
                   <div class="collapse-content">
-                    <div role="tablist" class="tabs tabs-bordered">
+                    <div role="tablist" class="tabs tabs-border">
                       <input type="radio" name="pdf_details_mobile_{{$post->id}}" role="tab" class="tab" aria-label="{{__('Excerpt')}}"  />
                       <div role="tabpanel" class="tab-content pt-4">
                         @if($post->pdfExcerpt->excerpt)
@@ -891,7 +899,15 @@
                           $tocLevel = max(1, (int) ($tocItem['level'] ?? 1));
                           @endphp
                           <li class="flex items-start justify-between gap-2" style="padding-left: {{($tocLevel - 1) * 1.25}}rem;">
-                            <span>{{ $tocItem['title'] ?? '' }}</span>
+                            <span class="
+                            @if ($tocLevel == 1)
+                              decoration-4 underline decoration-primary
+                            @elseif ($tocLevel == 2)
+                            decoration-4 underline decoration-secondary
+                            @endif
+                            "
+                            
+                            >{{ $tocItem['title'] ?? '' }}</span>
                             @if(!empty($tocItem['page']))
                             <span class="badge badge-outline badge-sm">{{__('Page')}} {{$tocItem['page']}}</span>
                             @endif
