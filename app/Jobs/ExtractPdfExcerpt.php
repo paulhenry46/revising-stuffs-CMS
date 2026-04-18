@@ -136,8 +136,16 @@ class ExtractPdfExcerpt implements ShouldQueue
     {
         $title = html_entity_decode($title, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 
-        return preg_replace_callback('/\\\\u([0-9a-fA-F]{4})/u', function (array $match): string {
+        $decodedTitle = preg_replace_callback('/\\\\u([0-9a-fA-F]{4})/u', function (array $match): string {
             return mb_convert_encoding(pack('n', hexdec($match[1])), 'UTF-8', 'UCS-2BE');
-        }, $title) ?? $title;
+        }, $title);
+
+        if ($decodedTitle === null) {
+            Log::warning('ExtractPdfExcerpt: failed to decode TOC unicode escapes');
+
+            return $title;
+        }
+
+        return $decodedTitle;
     }
 }
