@@ -162,7 +162,7 @@
                 <p>{{$post->description}}</p>
                 @if($post->pdfExcerpt && ($post->pdfExcerpt->excerpt || (is_array($post->pdfExcerpt->toc) && count($post->pdfExcerpt->toc) > 0)))
                 <div class="collapse collapse-arrow bg-base-100 mt-4 rounded-lg">
-                  <input type="checkbox" />
+                  <input type="checkbox" aria-label="{{__('Toggle PDF details')}}" />
                   <div class="collapse-title text-lg font-semibold">{{__('PDF details')}}</div>
                   <div class="collapse-content">
                     <div role="tablist" class="tabs tabs-bordered">
@@ -594,7 +594,7 @@
                 <p>{{$post->description}}</p>
                 @if($post->pdfExcerpt && ($post->pdfExcerpt->excerpt || (is_array($post->pdfExcerpt->toc) && count($post->pdfExcerpt->toc) > 0)))
                 <div class="collapse collapse-arrow bg-base-100 mt-4 rounded-lg">
-                  <input type="checkbox" />
+                  <input type="checkbox" aria-label="{{__('Toggle PDF details')}}" />
                   <div class="collapse-title text-lg font-semibold">{{__('PDF details')}}</div>
                   <div class="collapse-content">
                     <div role="tablist" class="tabs tabs-bordered">
