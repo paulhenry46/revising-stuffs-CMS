@@ -73,7 +73,8 @@ class GeneratePdfExcerpts extends Command
         $bar->finish();
         $this->newLine();
         $modeLabel = $runQueued ? 'queued' : 'synchronous';
-        $this->info("Dispatched excerpt generation for {$dispatched} post(s) in {$modeLabel} mode.");
+        $actionLabel = $runQueued ? 'Dispatched' : 'Processed';
+        $this->info("{$actionLabel} excerpt generation for {$dispatched} post(s) in {$modeLabel} mode.");
 
         return 0;
     }
