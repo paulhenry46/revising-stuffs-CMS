@@ -47,4 +47,25 @@ TXT;
             ],
         ], ExtractPdfExcerpt::parseTocOutline($outline));
     }
+
+    public function test_it_parses_outline_lines_even_with_inconsistent_prefixes(): void
+    {
+        $outline = <<<'TXT'
+"Sans préfixe" #page=2
+??      "Préfixe inattendu" #nameddest=section.2.1
+TXT;
+
+        $this->assertSame([
+            [
+                'title' => 'Sans préfixe',
+                'level' => 1,
+                'page' => 2,
+            ],
+            [
+                'title' => 'Préfixe inattendu',
+                'level' => 1,
+                'page' => null,
+            ],
+        ], ExtractPdfExcerpt::parseTocOutline($outline));
+    }
 }

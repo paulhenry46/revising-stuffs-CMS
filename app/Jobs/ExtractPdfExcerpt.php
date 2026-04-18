@@ -135,7 +135,7 @@ class ExtractPdfExcerpt implements ShouldQueue
 
                 $quoteOffset = $titleMatch[0][1];
                 $prefix = str_replace("\t", '        ', substr($line, 0, $quoteOffset));
-                $level = max(1, intdiv(strlen($prefix) + 1, self::MUTOOL_INDENT_SIZE));
+                $level = max(1, intdiv(strlen($prefix), self::MUTOOL_INDENT_SIZE));
 
                 $page = null;
                 if (preg_match('/#page=(\d+)/i', $line, $pageMatch)) {
