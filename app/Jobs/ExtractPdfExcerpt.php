@@ -124,7 +124,7 @@ class ExtractPdfExcerpt implements ShouldQueue
      */
     public static function parseTocOutline(string $outline): array
     {
-        return collect(preg_split('/\R/u', $outline) ?: [])
+        $entries = collect(preg_split('/\R/u', $outline) ?: [])
             ->map(function (string $line): ?array {
                 if (! preg_match('/"([^"]+)"/u', $line, $titleMatch, PREG_OFFSET_CAPTURE)) {
                     return null;
@@ -136,8 +136,8 @@ class ExtractPdfExcerpt implements ShouldQueue
                 }
 
                 $quoteOffset = $titleMatch[0][1];
-                $prefix = str_replace("\t", '        ', substr($line, 0, $quoteOffset));
-                $level = max(self::MIN_TOC_LEVEL, intdiv(mb_strlen($prefix, 'UTF-8'), self::MUTOOL_INDENT_SIZE));
+                $prefix = str_replace("\t", str_repeat(' ', self::MUTOOL_INDENT_SIZE), substr($line, 0, $quoteOffset));
+                $indentLength = mb_strlen($prefix, 'UTF-8');
 
                 $page = null;
                 if (preg_match('/#page=(\d+)/i', $line, $pageMatch)) {
@@ -146,12 +146,27 @@ class ExtractPdfExcerpt implements ShouldQueue
 
                 return [
                     'title' => $title,
-                    'level' => $level,
+                    'indent' => $indentLength,
                     'page' => $page,
                 ];
             })
             ->filter()
-            ->values()
-            ->all();
+            ->values();
+
+        if ($entries->isEmpty()) {
+            return [];
+        }
+
+        $baseIndent = (int) $entries->min('indent');
+
+        return $entries->map(function (array $entry) use ($baseIndent): array {
+            $level = intdiv(max(0, $entry['indent'] - $baseIndent), self::MUTOOL_INDENT_SIZE) + self::MIN_TOC_LEVEL;
+
+            return [
+                'title' => $entry['title'],
+                'level' => $level,
+                'page' => $entry['page'],
+            ];
+        })->all();
     }
 }

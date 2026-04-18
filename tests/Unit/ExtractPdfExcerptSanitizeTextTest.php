@@ -63,7 +63,7 @@ TXT;
             ],
             [
                 'title' => 'Préfixe inattendu',
-                'level' => 1,
+                'level' => 2,
                 'page' => null,
             ],
         ], ExtractPdfExcerpt::parseTocOutline($outline));
