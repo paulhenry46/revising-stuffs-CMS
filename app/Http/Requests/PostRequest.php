@@ -34,6 +34,7 @@ class PostRequest extends FormRequest
             'public' => '',
             'published' => '',
             'pinned' => '',
+            'hidden_on_subdomain' => '',
             'date' => ''
 
         ];

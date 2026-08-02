@@ -33,6 +33,9 @@ class NewPosts extends Component
             ->when($subdomainLevelIds, function($query) use ($subdomainLevelIds) {
                 $query->whereIn('level_id', $subdomainLevelIds);
             })
+            ->when($subdomainCurriculum, function($query) {
+                $query->where('hidden_on_subdomain', false);
+            })
             ->when($this->restricted, function($query){
                 return $query->where('level_id', auth()->user()->level_id)
                              ->whereIn('course_id', auth()->user()->courses_id);

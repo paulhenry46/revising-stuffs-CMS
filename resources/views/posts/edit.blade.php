@@ -153,7 +153,9 @@
                                 <p id="published-description" class="text-gray-500 dark:text-gray-400">{{__('Publish this article if all is fine.')}}</p>
                               </div>
                             </div>
-                          </div> @can('manage all posts') <div class="sm:col-span-3">
+                          </div> 
+                          @can('manage all posts') 
+                          <div class="sm:col-span-3">
                             <div class="relative flex items-start">
                               <div class="flex h-6 items-center">
                                 <input {{ (old('pinned', $post->pinned) === 1) ? 'checked' : '' }} id="pinned" aria-describedby="public-description" name="pinned" type="checkbox" class="checkbox checkbox-warning checkbox-sm" />
@@ -161,6 +163,17 @@
                               <div class="ml-3 text-sm leading-6">
                                 <label for="pinned" class="font-medium text-gray-900 dark:text-white">{{__('Pin post')}}</label>
                                 <p id="pinned-description" class="text-gray-500 dark:text-gray-400">{{__('Highlight this post on the news page')}}</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="sm:col-span-3">
+                            <div class="relative flex items-start">
+                              <div class="flex h-6 items-center">
+                                <input {{ (old('hidden_on_subdomain', $post->hidden_on_subdomain) === 1) ? 'checked' : '' }} id="hidden_on_subdomain" aria-describedby="public-description" name="hidden_on_subdomain" type="checkbox" class="checkbox checkbox-error checkbox-sm" />
+                              </div>
+                              <div class="ml-3 text-sm leading-6">
+                                <label for="hidden_on_subdomain" class="font-medium text-gray-900 dark:text-white">{{__('Hide on subdomain')}}</label>
+                                <p id="hidden_on_subdomain-description" class="text-gray-500 dark:text-gray-400">{{__('Hide this post on the subdomain')}}</p>
                               </div>
                             </div>
                           </div>

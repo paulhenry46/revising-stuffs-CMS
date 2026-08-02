@@ -35,9 +35,11 @@ class Library extends Component
     public $cards = false;
     #[Url(as: 'quizlet')]
     public $quizlet = false;
+    private $subdomainCurriculum;
 
     public function mount(Level $level, Course $course)
     {
+        $this->subdomainCurriculum = app()->bound('subdomainCurriculum') ? app('subdomainCurriculum') : null;
         $this->course = $course;
         $this->level = $level;
         // Populate available school years from posts
@@ -118,6 +120,9 @@ class Library extends Component
                         $query->whereBetween('created_at', [$selected['start'], $selected['end']]);
                     }
                 })
+            ->when($this->subdomainCurriculum, function($query) {
+                $query->where('hidden_on_subdomain', false);
+            })
                 
             ->get(),
             //'courses' => $courses = Course::all(),

@@ -99,11 +99,13 @@ class PostController extends Controller
         }
         if($user->hasPermissionTo('manage all posts')){
             $post->pinned = $request->has('pinned');
+            $post->hidden_on_subdomain = $request->has('hidden_on_subdomain');
             if($request->date !== NULL){
                 $post->created_at = $request->date;
             }
         }else{
             $post->pinned = false;
+            $post->hidden_on_subdomain = false;
         }
         $post->slug = Str::slug($request->title, '-');
         $post->course_id = $request->course_id;
@@ -183,8 +185,10 @@ class PostController extends Controller
         }
         if($user->hasPermissionTo('manage all posts')){
             $post->pinned = $request->has('pinned');
+            $post->hidden_on_subdomain = $request->has('hidden_on_subdomain');
         }else{
             $post->pinned = false;
+            $post->hidden_on_subdomain = false;
         }
         $post->slug = Str::slug($request->title, '-');
         $post->course_id = $request->course_id;
